@@ -6,7 +6,21 @@
   "journal": "Carnet de voyage",
   "settings": "Paramètres",
   "back": "Retour à l’accueil",
-  "prototype": "Troisième escale · La boussole à deux aiguilles",
+  "prototype": "Prototype · Premiers voyages",
+  "notebook": {
+    "progress": "{count} / {total} destinations découvertes",
+    "newDiscovery": "Nouvelle découverte !",
+    "alreadyVisited": "Déjà visité",
+    "newMarker": "★ Nouveau",
+    "unknown": "Lieu inconnu",
+    "savedNotice": "Le carnet est enregistré dans ce navigateur. Effacer les données du site efface aussi le carnet.",
+    "unavailable": "Sauvegarde indisponible · mémoire seule",
+    "page": "Page {page} / {pages}",
+    "previous": "← Précédent",
+    "next": "Suivant →",
+    "back": "Retour au carnet",
+    "placeholder": "Illustration provisoire"
+  },
   "compass": {
     "instructions": "Choisissez une aiguille, puis précédent ou suivant.",
     "needle": "Aiguille {number}",
@@ -29,25 +43,186 @@
     "home": "Accueil",
     "travel": "Voyager",
     "missing": "Placez deux éléments différents pour préparer le départ.",
-    "ready": "La valise est prête ! Vous pouvez valider votre choix.",
+    "ready": "La valise est prête pour le départ.",
     "confirmed": "Choix validé ! Les destinations arrivent à la prochaine étape.",
     "palette": "À emporter",
     "scope": "Prototype · préparation uniquement"
   },
   "elements": {
-    "tree": { "name": "Arbre" },
-    "mushroom": { "name": "Champignon" },
-    "water": { "name": "Eau" },
-    "fire": { "name": "Feu" },
-    "rock": { "name": "Rocher" },
-    "palm": { "name": "Palmier" },
-    "snow": { "name": "Neige" },
-    "cloud": { "name": "Nuage" },
-    "ruins": { "name": "Ruines" },
-    "crystal": { "name": "Cristal" }
+    "tree": {
+      "name": "Arbre"
+    },
+    "mushroom": {
+      "name": "Champignon"
+    },
+    "water": {
+      "name": "Eau"
+    },
+    "fire": {
+      "name": "Feu"
+    },
+    "rock": {
+      "name": "Rocher"
+    },
+    "palm": {
+      "name": "Palmier"
+    },
+    "snow": {
+      "name": "Neige"
+    },
+    "cloud": {
+      "name": "Nuage"
+    },
+    "ruins": {
+      "name": "Ruines"
+    },
+    "crystal": {
+      "name": "Cristal"
+    }
   },
   "temporary": {
     "journal": "Le carnet de voyage prendra place ici. Cet écran est temporaire.",
     "settings": "Les paramètres prendront place ici. Cet écran est temporaire."
+  },
+  "journey": {
+    "charges": "Boussole : {charges} / {max} charges",
+    "departing": "La valise se ferme… En route !",
+    "continue": "Continuer",
+    "finish": "Voir le bilan",
+    "voidTitle": "Le Néant",
+    "voidStory": "Aucun monde ne répond à cette association. La boussole vacille.",
+    "cost": "−{cost} charge(s) · {charges} / {max} restantes",
+    "firstVisit": "Première visite de cette session",
+    "revisit": "Déjà visité pendant cette session",
+    "artwork": "Illustration provisoire · histoire à venir",
+    "unknown": "Destination inconnue",
+    "story": "Histoire à écrire — texte provisoire.",
+    "summaryTitle": "Fin du voyage",
+    "summaryStats": "{count} lieux uniques · {void} passage(s) au Néant",
+    "noVisits": "Aucune destination visitée cette fois-ci. Une nouvelle valise vous attend !",
+    "nextPlaces": "Autres lieux · {page} / {pages}",
+    "visits": "{name} ({count} visite(s))"
+  },
+  "destinations": {
+    "archipel_azur": {
+      "title": "L'Archipel d'Azur",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "cimes_eternelles": {
+      "title": "Les Cimes éternelles",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "mycelia": {
+      "title": "Mycélia",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "ruines_englouties": {
+      "title": "Les Ruines englouties",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "coeur_de_braise": {
+      "title": "Le Cœur de braise",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "iles_suspendues": {
+      "title": "Les Îles suspendues",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "marais_des_lucioles": {
+      "title": "Le Marais des lucioles",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "desert_de_cristal": {
+      "title": "Le Désert de cristal",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "palais_de_givre": {
+      "title": "Le Palais de givre",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "temple_oublie": {
+      "title": "Le Temple oublié",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "ile_des_cendres": {
+      "title": "L'Île des cendres",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "grottes_sporiferes": {
+      "title": "Les Grottes sporifères",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "canopee_des_brumes": {
+      "title": "La Canopée des brumes",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "recif_de_verre": {
+      "title": "Le Récif de verre",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "jardins_du_zenith": {
+      "title": "Les Jardins du zénith",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "cite_immobile": {
+      "title": "La Cité immobile",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "sylve_prismatique": {
+      "title": "La Sylve prismatique",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "necropole_ardente": {
+      "title": "La Nécropole ardente",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "foret_du_silence": {
+      "title": "La Forêt du silence",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "sanctuaire_des_spores": {
+      "title": "Le Sanctuaire des spores",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "royaume_des_spores_celestes": {
+      "title": "Le Royaume des spores célestes",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "tempete_ecarlate": {
+      "title": "La Tempête écarlate",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "atoll_boreal": {
+      "title": "L'Atoll boréal",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "vestiges_celestes": {
+      "title": "Les Vestiges célestes",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "mer_figee": {
+      "title": "La Mer figée",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "jungle_incandescente": {
+      "title": "La Jungle incandescente",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "jardins_de_gemmes": {
+      "title": "Les Jardins de gemmes",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "empire_des_sables": {
+      "title": "L'Empire des sables",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "faille_des_contraires": {
+      "title": "La Faille des contraires",
+      "story": "Histoire à écrire — texte provisoire."
+    },
+    "observatoire_des_etoiles": {
+      "title": "L'Observatoire des étoiles",
+      "story": "Histoire à écrire — texte provisoire."
+    }
   }
 }

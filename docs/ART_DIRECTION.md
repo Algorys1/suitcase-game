@@ -32,6 +32,8 @@ La valise est un **visuel 2D dessiné en vue trois-quarts isométrique stylisée
 
 ### Hiérarchie à l'écran de préparation
 
+**Retour du premier playtest :** les commandes actuelles de rotation ne sont pas intuitives. Lors du futur habillage, prototyper une commande visuellement liée à chaque aiguille ; des molettes latérales ont été proposées comme piste, sans choix définitif à ce stade. Tester la compréhension de l'interaction avec le dessin réel de la boussole, à la souris et au toucher. Voir [le retour détaillé](COMPASS_AND_STICKERS.md).
+
 1. **Valise et ses deux emplacements** : sujet principal, immédiatement identifiable.
 2. **Boussole de sélection** : dix symboles, deux aiguilles distinctes par leur forme et leur couleur, commandes par crans et noms des éléments lisibles. La palette actuelle est un repli provisoire.
 3. **Charges de la boussole** : énergie restante lisible d'un coup d'œil, visuellement distincte des deux choix d'éléments.

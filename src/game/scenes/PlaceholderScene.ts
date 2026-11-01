@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import texts from '../../data/fr.json';
 import { createMenu } from '../ui/menu';
 
-export type PlaceholderPage = 'journal' | 'settings';
+export type PlaceholderPage = 'settings';
 
 export class PlaceholderScene extends Phaser.Scene {
   constructor() {
@@ -11,7 +11,6 @@ export class PlaceholderScene extends Phaser.Scene {
 
   create({ page }: { page: PlaceholderPage }): void {
     const titles: Record<PlaceholderPage, string> = {
-      journal: texts.journal,
       settings: texts.settings,
     };
 

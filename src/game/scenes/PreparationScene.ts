@@ -6,7 +6,12 @@ import type { ElementId, SlotIndex, Slots } from '../../domain/preparation';
 import { createButton } from '../ui/menu';
 import type { MenuButton } from '../ui/menu';
 import { drawSuitcase } from '../ui/suitcase';
+import { drawClosedSuitcase } from '../ui/suitcase';
 import { drawCompass, NEEDLE_MARKS } from '../ui/compass';
+import { beginTravel, createSession, revealResult } from '../../domain/session';
+import type { SessionState } from '../../domain/session';
+import { BALANCE } from '../../domain/compass';
+import { progressStore } from '../../services/storage';
 
 const copy = texts.preparation;
 const compassCopy = texts.compass;
@@ -19,15 +24,22 @@ export class PreparationScene extends Phaser.Scene {
   private message = '';
   private focusName: string | null = null;
   private controls: Control[] = [];
+  private session: SessionState = createSession();
 
   constructor() { super('preparation'); }
 
-  create(): void {
+  create({ session }: { session?: SessionState } = {}): void {
+    this.session = session ?? createSession();
+    if (this.session.phase !== 'preparation' || this.session.charges <= 0) {
+      this.scene.start('home');
+      return;
+    }
     this.slots = initialCompassSelection();
     this.activeNeedle = 0;
     this.paletteVisible = false;
     this.message = '';
     this.focusName = null;
+    this.cameras.main.resetFX();
     const canvas = this.game.canvas;
     canvas.setAttribute('aria-label', copy.title);
     canvas.tabIndex = 0;
@@ -62,7 +74,24 @@ export class PreparationScene extends Phaser.Scene {
     this.render();
   }
 
+  private depart(): void {
+    const next = beginTravel(this.session, this.slots, progressStore.read().discoveredDestinationIds);
+    if (next === this.session) return;
+    this.session = next;
+    if (next.lastTrip?.destinationId !== null && next.lastTrip?.destinationId !== undefined) {
+      progressStore.discover(next.lastTrip.destinationId);
+    }
+    this.message = texts.journey.departing;
+    this.render();
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reducedMotion) this.cameras.main.fadeOut(350, 182, 154, 232);
+    this.time.delayedCall(reducedMotion ? 0 : 350, () => {
+      this.scene.start('result', { session: revealResult(this.session) });
+    });
+  }
+
   private onKeyDown = (event: KeyboardEvent): void => {
+    if (this.session.phase !== 'preparation') { event.preventDefault(); return; }
     if (event.altKey || event.ctrlKey || event.metaKey) return;
     const index = this.controls.findIndex(control => control.name === this.focusName);
     if (event.key === 'Tab') {
@@ -96,9 +125,10 @@ export class PreparationScene extends Phaser.Scene {
   }
 
   private button(x: number, y: number, width: number, options: MenuButton & { name: string }): void {
-    if (!options.disabled) this.controls.push({ name: options.name, action: options.action });
+    const disabled = options.disabled || this.session.phase !== 'preparation';
+    if (!disabled) this.controls.push({ name: options.name, action: options.action });
     createButton(this, x, y, width, 44, {
-      ...options, focused: this.focusName === options.name,
+      ...options, disabled, focused: this.focusName === options.name,
       action: () => {
         this.game.canvas.focus({ preventScroll: true });
         this.focusName = options.name;
@@ -120,7 +150,7 @@ export class PreparationScene extends Phaser.Scene {
     const controlsWidth = split ? contentWidth - dialWidth - 20 : contentWidth;
     const controlsX = split ? left + contentWidth - controlsWidth / 2 : width / 2;
     const footerY = height - 32;
-    const statusY = height - 88;
+    const statusY = height - 104;
     const caseHeight = split ? Math.min(short ? 70 : 220, height - 280)
       : Math.min(150, 66 + Math.max(0, height - 568) * 0.35);
     const caseTop = statusY - caseHeight - 8;
@@ -175,14 +205,22 @@ export class PreparationScene extends Phaser.Scene {
     }
 
     const suitcaseWidth = Math.min(controlsWidth, 580);
-    const positions = drawSuitcase(this, controlsX, caseTop, suitcaseWidth, caseHeight);
+    let positions: ReturnType<typeof drawSuitcase> | null = null;
+    if (this.session.phase === 'travelling') {
+      drawClosedSuitcase(this, controlsX, caseTop, suitcaseWidth, caseHeight);
+    } else {
+      positions = drawSuitcase(this, controlsX, caseTop, suitcaseWidth, caseHeight);
+    }
     for (const index of [0, 1] as const) {
+      if (positions === null) break;
       const id = this.slots[index];
       this.text(positions[index].x, positions[index].y - 10,
         id === null ? copy.empty : texts.elements[id].name,
         suitcaseWidth < 350 ? 12 : 17, suitcaseWidth * 0.29, true).setName(`slot-label-${index}`);
     }
-    this.text(controlsX, statusY, status, 13, controlsWidth).setName('preparation-status');
+    const charges = texts.journey.charges.replace('{charges}', String(this.session.charges))
+      .replace('{max}', String(BALANCE.initialCharges));
+    this.text(controlsX, statusY, charges + '\n' + status, 13, controlsWidth).setName('preparation-status');
     if (split && height >= 600) {
       this.text(dialX, dialBottom + 24, compassCopy.keyboard, 14, dialWidth);
     }
@@ -198,14 +236,10 @@ export class PreparationScene extends Phaser.Scene {
     });
     this.button(width / 2 + footerButtonWidth + 8, footerY, footerButtonWidth, {
       name: 'travel', label: copy.travel, fontSize: 16, primary: true, disabled: !ready,
-      action: () => {
-        if (!isReady(this.slots)) return;
-        this.message = copy.confirmed;
-        this.render();
-      },
+      action: () => this.depart(),
     });
     this.game.canvas.setAttribute('aria-description', [
-      ...this.slots.map((id, index) => compassCopy.needle.replace('{number}', String(index + 1))
+      charges, ...this.slots.map((id, index) => compassCopy.needle.replace('{number}', String(index + 1))
         + ': ' + (id === null ? copy.empty : texts.elements[id].name)), status, compassCopy.keyboard,
     ].join('. '));
   }

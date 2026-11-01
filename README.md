@@ -2,7 +2,7 @@
 
 Jeu expérimental de découverte fantastique, créé pour l'**Indie Park Game Jam #6** (thème : **Voyage**).
 
-> **Statut :** étape 3 / phase A — boussole de sélection. Deux aiguilles commandent les deux emplacements de la valise par crans de 36°. Une paire identique bloque Voyager. La palette reste disponible comme repli. La résolution des destinations, les charges, le carnet et les autocollants restent à implémenter.
+> **Statut :** étape 5 — carnet permanent et sauvegarde locale. Les découvertes survivent aux nouvelles parties et au rechargement ; le carnet affiche les lieux connus et masque les autres. Voyages, charges et bilan de session restent jouables. Le choix de langue dans l'interface et les autocollants restent à implémenter.
 
 > **Extension :** [boussole à aiguilles et autocollants](docs/COMPASS_AND_STICKERS.md). La phase A est implémentée avec des visuels temporaires et reste à valider en playtest. Les phases B/C ne sont pas commencées.
 
@@ -32,18 +32,27 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 1. Cliquer sur **Commencer un voyage**.
 2. Choisir l'aiguille **▲ 1** ou **◆ 2**, puis utiliser **Précédent / Suivant**. Les dix positions suivent l'ordre de `elements.json`, depuis Arbre en haut, dans le sens horaire. Après Cristal, le cran suivant revient à Arbre.
 3. Les emplacements reflètent immédiatement les aiguilles, même si elles pointent sur le même élément : un message signale alors le doublon et Voyager reste désactivé. **Palette** affiche une sélection directe pour l'aiguille active ; **Boussole** revient au cadran sans changer les choix.
-4. **Voyager** s'active uniquement lorsque deux éléments différents sont placés. Dans cette étape, il confirme le choix avec un message ; il ne résout aucune recette et ne consomme aucune charge.
+4. **Voyager** s'active uniquement pour deux éléments différents et une boussole non épuisée. Le départ ferme la valise, verrouille les commandes et résout la paire une seule fois. Une destination coûte **1 charge**, une revisite aussi ; le Néant coûte **2 charges**, avec un minimum de zéro.
 5. **Accueil** permet de revenir au menu. Chaque nouvelle préparation commence sur **Arbre / Arbre**, aiguille 1 active : le départ est donc bloqué jusqu'à un choix distinct. Ce réglage de prototype est constant et reste à évaluer en playtest. Le redimensionnement conserve les choix, l'aiguille active et le mode d'affichage.
 6. Au clavier : **1 / 2** choisit l'aiguille, **← / →** la déplace, **Tab / Maj+Tab** déplace le focus et **Entrée / Espace** active le bouton. Un contour marque le focus ; Tab peut quitter le jeu aux extrémités du parcours.
+7. Le résultat affiche le nom, le coût et les charges restantes. **Continuer** ouvre une préparation Arbre / Arbre avec les charges restantes ; à zéro, **Voir le bilan** présente les lieux de la session, le nombre de visites et les passages au Néant. Les listes longues se parcourent avec **Autres lieux**.
+8. Un nouveau voyage depuis l'accueil repart toujours à **10 charges**, avec une liste de visites de session vide ; le carnet permanent est conservé. Chaque première découverte est sauvegardée dès le départ accepté, avant sa révélation. Un rechargement perd la session en cours et revient à l'accueil, en conservant les découvertes sauvegardées.
+9. **Carnet de voyage** présente les 30 lieux sur plusieurs pages : les lieux inconnus restent masqués, sans nom ni recette. Cliquer/toucher un lieu connu ouvre sa fiche avec une vignette et une histoire provisoires ; le retour conserve la page consultée. L'accueil et le bilan affichent la progression sur 30 ; les nouveaux lieux de la session sont marqués **★ Nouveau**.
+10. Le carnet est enregistré **dans ce navigateur**. Effacer les données du site le supprime aussi. Si le stockage est indisponible, un message indique que le carnet reste uniquement en mémoire jusqu'au rechargement ; le jeu continue de fonctionner.
 
 ### Choix techniques actuels
 
-- Trois scènes : `HomeScene`, `PreparationScene` et `PlaceholderScene`, partagée entre carnet et paramètres. Pas de scène de chargement sans assets à charger.
+- Sept scènes : accueil, préparation, résultat, bilan, carnet, fiche de destination et paramètres provisoires. La transition de voyage reste dans la préparation. `JournalScene` gère la grille paginée et `JournalEntryScene` les fiches connues.
 - La logique pure de préparation est dans `src/domain/preparation.ts` ; `src/domain/compassSelection.ts` ajoute le réglage initial et la rotation par crans, sans Phaser. Boussole et palette partagent les mêmes emplacements et la même validation du départ. Une sélection provisoire en doublon est visible mais ne permet pas de voyager.
+- `recipes.ts` charge et valide les 30 recettes, indexées par paire non ordonnée. `compass.ts` centralise les valeurs provisoires 10 / 1 / 2 ; `session.ts` gère les phases préparation → voyage → résultat → préparation ou fin. Le débit a lieu à l'acceptation du départ, jamais dans une animation ou un redimensionnement.
 - Affichage Phaser en mode `RESIZE` : panneau centré et largeur bornée sur desktop, texte redisposé et boutons conservant une taille tactile sur petit écran. Les décorations secondaires sont masquées sur les fenêtres peu hautes.
 - Formes et police système temporaires, sans téléchargement de police, image ou autre ressource distante. La valise est dessinée en perspective ; dix pictogrammes simples entourent le cadran. Les aiguilles se distinguent par leur forme (triangle / losange), leur couleur et leur numéro. Les noms des choix restent visibles dans les commandes et la valise.
-- Textes d'interface dans `src/data/fr.json` et `en.json`. L'affichage reste en français pour cette étape ; choix de langue et persistance seront ajoutés ultérieurement.
-- Quinze tests protègent les catalogues, la préparation et la sélection par boussole : tours complets, rebouclage, 100 états possibles dont 10 doublons invalides, 45 paires non ordonnées valides, sélection commune et libellés FR/EN. Aucun module de résolution, de charges, de sauvegarde ou de carnet n'est encore implémenté.
+- Textes d'interface dans `src/data/fr.json` et `en.json`. L'affichage reste en français ; le sélecteur FR/EN viendra à l'étape suivante. Le format de sauvegarde valide et conserve déjà la préférence `language` (`fr` par défaut), sans l'écraser lors d'une découverte.
+- Les 30 noms français sont repris du tableau approuvé dans `GAME_DESIGN.md`, sans changer les catalogues. Les histoires sont explicitement des textes d'attente ; les titres anglais portent la mention « title pending translation ». Aucun récit ni traduction éditoriale définitive n'est inventé.
+- **38 tests** protègent les catalogues, les 45 combinaisons dans les deux ordres, le cycle de session et la progression permanente : revisites entre parties, sauvegardes absentes ou corrompues, filtrage des IDs inconnus, déduplication, langue, stockage bloqué et collection complète.
+- `services/storage.ts` conserve uniquement `{ schemaVersion: 1, discoveredDestinationIds, language }` sous la clé `suitcase-game.progress.v1`. L'accès à `localStorage`, la lecture et l'écriture sont protégés ; une indisponibilité utilise la progression en mémoire. Aucune session ni charge n'est sauvegardée.
+- Le résultat distingue désormais **Nouvelle découverte ! / Déjà visité** selon le carnet global. `session.ts` conserve séparément les nouveaux IDs de la session pour le bilan. Le Néant ne débloque rien et les revisites coûtent toujours 1 charge.
+- La transition dure 350 ms ; la préférence système de réduction des animations supprime le fondu. La boussole affiche ses charges numériquement dans la préparation, y compris en mode palette.
 - Vite peut signaler un bundle supérieur à 500 Ko : le moteur Phaser représente l'essentiel du fichier. Cet avertissement n'empêche pas le build.
 
 ### Vérifications de l'étape 1
@@ -61,7 +70,7 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 - Le redimensionnement conserve les objets et la sélection ; retour à l'accueil, nouveau départ, rechargement, carnet et paramètres restent fonctionnels.
 - Le build servi sous `/jam/` a passé les parcours desktop et mobile sans erreur JavaScript ni ressource HTTP manquante. Les illustrations et les objets restent des visuels temporaires.
 
-### Vérifications de la phase A
+### Vérifications de la phase A (historique)
 
 - **15 tests Vitest** réussis, ainsi que TypeScript strict et le build Vite.
 - Chrome headless : 1280 × 720, 1920 × 1080, 800 × 600, 900 × 500, 600 × 568, 360 × 640, 320 × 568 et 640 × 360. Rotations complètes, rebouclage, correspondance aiguilles/valise, blocage des doublons, palette et nouveau départ contrôlés à la souris et au toucher simulé.
@@ -69,15 +78,32 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 - Build servi sous `/jam/` vérifié en desktop, portrait et paysage, sans erreur JavaScript ni ressource HTTP manquante. Captures contrôlées visuellement.
 - Firefox, un appareil tactile réel et la publication itch.io restent à tester. L'ergonomie et le réglage initial attendent la validation en playtest ; la résolution et les charges ne sont pas encore disponibles.
 
+### Vérifications de l'étape 4 (historique)
+
+- **25 tests Vitest** réussis ; vérification TypeScript et build Vite réussis.
+- Parcours complets dans Chrome headless en 1280 × 720, 800 × 600, 320 × 568, 360 × 640 et 640 × 360 : sept voyages avec revisite, Néant, épuisement, bilan paginé puis nouveau départ.
+- Build servi sous `/jam/` vérifié en desktop, portrait et paysage, y compris titre long, absence de chevauchement avec les boutons et poursuite du résultat au clavier.
+- Doubles clics, coûts 1 / 2, passage de 1 à 0 avant le Néant, nouvelle session à 10, préférence de réduction des animations, retour aux menus et rechargement vérifiés sans erreur JavaScript ni ressource HTTP manquante.
+- Les catalogues et dépendances sont inchangés. Firefox, appareil tactile réel et page itch.io publiée restent à vérifier avant publication.
+
+### Vérifications de l'étape 5
+
+- **38 tests Vitest** réussis ; TypeScript strict et build Vite réussis.
+- Chrome headless en 1280 × 720, 800 × 600, 320 × 568, 360 × 640 et 640 × 360 : trente fiches, pagination complète, titres longs, retour à la bonne page et clavier vérifiés. Les lieux inconnus restent masqués et inactifs.
+- Découverte sauvegardée avant la révélation et conservée après rechargement, revisite entre deux sessions, absence de doublon et de découverte pour le Néant, nouveaux lieux du bilan et compteur permanent vérifiés.
+- Sauvegardes absentes, corrompues ou contenant des IDs inconnus/dupliqués, préférence de langue préservée, carnet complet toujours jouable et stockage entièrement bloqué testés. Le repli en mémoire conserve les découvertes pendant la navigation et affiche l'indisponibilité.
+- Les mêmes parcours passent sur le build sous `/jam/` en desktop, portrait et paysage, sans erreur JavaScript ni ressource HTTP manquante. Les captures ont été contrôlées visuellement ; les illustrations et histoires restent provisoires.
+- Catalogues et dépendances inchangés. Firefox, appareil tactile réel et publication itch.io restent à vérifier avant publication.
+
 ## Concept
 
-Une valise magique permet de voyager vers des destinations fantastiques. Le joueur choisit **deux éléments** parmi une palette de **dix**, les place dans les deux emplacements de la valise, puis déclenche un voyage. La combinaison révèle un lieu, ou mène au **Néant** si aucune destination ne correspond.
+Une valise magique permet de voyager vers des destinations fantastiques. Le joueur choisit **deux éléments** parmi **dix**, avec les deux aiguilles de la boussole, puis déclenche un voyage. La combinaison révèle un lieu, ou mène au **Néant** si aucune destination ne correspond.
 
 Le but est de découvrir le plus de lieux possible au fil des parties et de remplir un **carnet de voyage permanent**.
 
 ## Boucle de jeu prévue
 
-Les [deux aiguilles de la boussole](docs/COMPASS_AND_STICKERS.md) sélectionnent les éléments et remplissent automatiquement la valise ; la palette reste un repli provisoire. La suite du voyage décrite ci-dessous reste à implémenter.
+Les [deux aiguilles de la boussole](docs/COMPASS_AND_STICKERS.md) sélectionnent les éléments et remplissent automatiquement la valise ; la palette reste un repli provisoire. La boucle ci-dessous et le carnet permanent sont jouables, avec des visuels et histoires temporaires.
 
 1. Depuis l'accueil, choisir **Commencer un voyage**.
 2. Découvrir la valise et les dix symboles du cadran.
@@ -94,7 +120,7 @@ Les [deux aiguilles de la boussole](docs/COMPASS_AND_STICKERS.md) sélectionnent
 - **−1 charge** pour une destination valide, même déjà découverte.
 - **−2 charges** pour le Néant.
 - La boussole ne descend jamais sous zéro ; la partie s'achève lorsqu'elle atteint zéro.
-- Les découvertes sont conservées entre les parties dans le navigateur.
+- Les découvertes sont conservées entre les parties dans ce navigateur, si le stockage local est disponible.
 
 Ces valeurs sont des hypothèses de prototype, **pas un équilibrage définitif**.
 
@@ -152,7 +178,7 @@ Les versions exactes et leurs dépendances transitives sont verrouillées dans `
 
 ## Priorités de production
 
-La phase A de sélection par aiguilles est implémentée et attend un playtest. Après validation, la prochaine étape est la résolution des recettes et les charges. Le déblocage des autocollants dépendra des premières découvertes et du carnet ; la décoration viendra après la boucle jouable. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md) avant de planifier chaque étape.
+La sélection par aiguilles, les voyages avec charges et le carnet permanent sont implémentés. Le choix de langue dans l'interface reste à ajouter. La progression permanente permet désormais de préparer les phases d'autocollants et de décoration, après validation des étapes correspondantes. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md). La rotation des aiguilles reste à repenser lors de l'habillage, conformément au premier retour de playtest.
 
 1. Prototype jouable avec graphismes temporaires : deux emplacements, choix des éléments, résolution d'une recette.
 2. Boucle complète : boussole, Néant, écran de résultat, fin de partie.

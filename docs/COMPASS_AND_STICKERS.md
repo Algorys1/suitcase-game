@@ -4,7 +4,7 @@
 > **Statut :** proposition à prototyper, **non encore validée en jeu**  
 > **Références :** `docs/GAME_DESIGN.md`, `docs/ART_DIRECTION.md`, `docs/TECHNICAL.md`, `src/data/elements.json`, `src/data/destinations.json`.
 
-> **Avancement :** phase A implémentée avec visuels temporaires ; validation en playtest encore attendue. Phases B/C non commencées. Les charges et les vrais voyages ne sont pas encore implémentés.
+> **Avancement :** phase A, voyages, charges 10 / 1 / 2, bilan et carnet permanent sont implémentés avec visuels temporaires. Les découvertes sont sauvegardées entre parties et rechargements, avec repli en mémoire si le stockage est bloqué. Phases B/C non commencées : aucun autocollant ni disposition décorative n'est encore ajouté à la sauvegarde. Équilibrage et ergonomie restent à évaluer en playtest.
 
 ## 1. Objectif
 
@@ -177,5 +177,12 @@ type StickerDecoration = {
 ## 8. Points volontairement ouverts
 
 À décider après un premier prototype : placement exact de la boussole à l'écran, position du bouton de décoration, nombre final de places pour les autocollants, rotation directe au doigt et éventuel nombre de destinations supplémentaire. **Ne pas ajouter de destinations dans cette tâche.**
+
+### Premier retour de playtest — premiers voyages
+
+- Le système fonctionne et suscite l'envie de tester d'autres associations, malgré les graphismes provisoires. Ce premier retour soutient l'intention de curiosité ; il ne constitue pas encore une validation générale de l'équilibrage.
+- La commande actuelle de rotation des aiguilles est jugée peu intuitive. Son fonctionnement technique est vérifié, mais son ergonomie reste à retravailler avec le futur habillage.
+- **Piste proposée par le joueur, à prototyper :** des molettes sur les côtés de la boussole. Leur association visuelle avec chaque aiguille doit être immédiatement compréhensible ; la forme précise de l'interaction reste à choisir et à tester à la souris et au toucher.
+- Lors de cette reprise, évaluer explicitement la compréhension des commandes et la facilité à choisir une paire. Préserver les crans, les deux choix et la validation du départ ; ne pas considérer les boutons précédent/suivant actuels comme l'interface définitive.
 
 > **Instruction pour Codex :** ce document complète les spécifications existantes. En cas de contradiction sur la **méthode de sélection**, privilégier ici les aiguilles de la boussole ; pour les **recettes, la dépense d'énergie, le carnet et la fin de partie**, conserver `GAME_DESIGN.md`. Implémenter par étapes et ne pas commencer les phases suivantes sans validation.

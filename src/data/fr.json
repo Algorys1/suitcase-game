@@ -6,7 +6,17 @@
   "journal": "Carnet de voyage",
   "settings": "Paramètres",
   "back": "Retour à l’accueil",
-  "prototype": "Deuxième escale · Préparer sa valise",
+  "prototype": "Troisième escale · La boussole à deux aiguilles",
+  "compass": {
+    "instructions": "Choisissez une aiguille, puis précédent ou suivant.",
+    "needle": "Aiguille {number}",
+    "previous": "← Précédent",
+    "next": "Suivant →",
+    "duplicate": "Même élément : tournez une aiguille pour pouvoir voyager.",
+    "palette": "Palette",
+    "compass": "Boussole",
+    "keyboard": "Clavier : 1 / 2 pour l’aiguille, ← / → pour tourner. Tab et Entrée pour les boutons."
+  },
   "preparation": {
     "title": "Préparez votre valise",
     "instructions": "Choisissez un élément, puis un emplacement.",

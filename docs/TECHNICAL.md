@@ -4,7 +4,7 @@
 > **Références :** `README.md`, `docs/GAME_DESIGN.md`, `docs/ART_DIRECTION.md`.  
 > **Cible :** jeu HTML5 autonome, exécutable directement dans le navigateur et publiable sur itch.io.
 
-> **Extension à prototyper :** [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md) définit la sélection cible par aiguilles et les autocollants cosmétiques. Ces fonctions ne sont pas encore implémentées ni validées en jeu. Réutiliser les modules existants ; les modèles ci-dessous décrivent le socle et devront être étendus au fil des phases validées.
+> **Extension :** [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md) définit la sélection par aiguilles et les autocollants cosmétiques. La phase A est implémentée avec visuels temporaires, en attente de playtest ; les autocollants ne sont pas implémentés. Les modèles ci-dessous décrivent le socle et seront étendus au fil des phases validées.
 
 ## 1. Objectifs et contraintes
 
@@ -203,7 +203,7 @@ export const BALANCE = {
 
 - Phase A : les deux aiguilles pilotent les mêmes IDs d'éléments que la préparation actuelle. Garder une logique pure partagée pour la validité de la paire et empêcher tout départ incomplet ou en doublon ; ne pas dupliquer les règles dans une seconde interface.
 - Le choix d'aiguille active et ses orientations sont transitoires. Aucun débit de charge lors d'un changement de sélection. Le cas de deux aiguilles sur le même symbole doit être affiché comme invalide, sans résolution de recette.
-- Le comportement initial et la réinitialisation des aiguilles restent à définir lors du prototype ; ne pas déduire silencieusement une paire par défaut du modèle actuel à emplacements vides.
+- Le réglage initial de phase A est **Arbre / Arbre**, aiguille 1 active, à chaque nouvelle préparation. `compassSelection.ts` utilise l'ordre de `elements.json` pour les crans et le rebouclage ; `preparation.ts` partage les deux IDs et la validation `isReady` avec la palette de repli. Le doublon transitoire est affiché, mais le départ reste bloqué. Aucun état d'énergie n'est ajouté à la sélection.
 - Phases B/C : déduire les autocollants disponibles des IDs de destinations découvertes. Sauvegarder uniquement la disposition supplémentaire, avec 6 positions proposées, distinctes des deux emplacements de sélection.
 - Valider les IDs et les doublons invalides à la lecture de la décoration. Une sauvegarde ancienne sans décoration doit charger des positions vides ; conserver la récupération gracieuse du carnet et de la langue.
 - Les nouveaux contrôles et messages restent externalisés en FR/EN. Les critères de test propres à chaque phase sont dans [l'extension](COMPASS_AND_STICKERS.md).

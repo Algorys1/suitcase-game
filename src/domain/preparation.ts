@@ -18,14 +18,19 @@ type Placement =
   | { ok: true; slots: Slots }
   | { ok: false; reason: 'duplicate' | 'unknown'; slots: Slots };
 
+/** A draft choice may contain a duplicate; isReady remains the departure gate. */
+export function selectElement(slots: Slots, index: SlotIndex, element: ElementId): Slots {
+  const next: [ElementId | null, ElementId | null] = [...slots];
+  next[index] = element;
+  return next;
+}
+
 export function placeElement(slots: Slots, index: SlotIndex, element: string): Placement {
   if (!isElementId(element)) return { ok: false, reason: 'unknown', slots };
   if (slots[index === 0 ? 1 : 0] === element) {
     return { ok: false, reason: 'duplicate', slots };
   }
-  const next: [ElementId | null, ElementId | null] = [...slots];
-  next[index] = element;
-  return { ok: true, slots: next };
+  return { ok: true, slots: selectElement(slots, index, element) };
 }
 
 export function removeElement(slots: Slots, index: SlotIndex): Slots {

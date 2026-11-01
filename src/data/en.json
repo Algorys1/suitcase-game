@@ -6,7 +6,17 @@
   "journal": "Travel journal",
   "settings": "Settings",
   "back": "Back to home",
-  "prototype": "Second stop · Pack your suitcase",
+  "prototype": "Third stop · The two-needle compass",
+  "compass": {
+    "instructions": "Choose a needle, then previous or next.",
+    "needle": "Needle {number}",
+    "previous": "← Previous",
+    "next": "Next →",
+    "duplicate": "Same element: turn one needle before travelling.",
+    "palette": "Palette",
+    "compass": "Compass",
+    "keyboard": "Keyboard: 1 / 2 to pick a needle, ← / → to turn. Tab and Enter for buttons."
+  },
   "preparation": {
     "title": "Pack your suitcase",
     "instructions": "Choose an element, then a slot.",

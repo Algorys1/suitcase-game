@@ -4,6 +4,8 @@
 > **Statut :** proposition à prototyper, **non encore validée en jeu**  
 > **Références :** `docs/GAME_DESIGN.md`, `docs/ART_DIRECTION.md`, `docs/TECHNICAL.md`, `src/data/elements.json`, `src/data/destinations.json`.
 
+> **Avancement :** phase A implémentée avec visuels temporaires ; validation en playtest encore attendue. Phases B/C non commencées. Les charges et les vrais voyages ne sont pas encore implémentés.
+
 ## 1. Objectif
 
 Renforcer l'identité du jeu sans modifier sa boucle centrale : **choisir deux éléments → fermer la valise → voyager → découvrir une destination ou le Néant**.
@@ -38,6 +40,10 @@ La boussole remplit ainsi **deux fonctions séparées** :
 - Si les deux aiguilles pointent sur le même élément, afficher une indication claire et **désactiver Voyager**.
 - Le joueur peut modifier son choix autant qu'il le souhaite avant le départ.
 - À l'ouverture d'une nouvelle préparation, les aiguilles peuvent revenir à une position par défaut ; choisir une règle constante et documentée.
+
+**Choix du prototype de phase A :** à chaque nouvelle préparation, les deux aiguilles pointent sur **Arbre**, avec l'aiguille 1 active. Les deux emplacements affichent ce choix identique et Voyager est bloqué jusqu'à une sélection distincte. L'ordre horaire suit `elements.json` depuis Arbre à 12 h. Les crans s'appliquent immédiatement, sans animation bloquante. Le redimensionnement et la bascule palette/boussole conservent les choix. Ce réglage reste à évaluer en playtest.
+
+**Commandes disponibles :** boutons ▲ 1 / ◆ 2 et précédent/suivant ; raccourcis clavier 1 / 2, flèches gauche/droite, Tab / Maj+Tab et Entrée / Espace, avec focus visible. La palette de repli choisit directement l'élément de l'aiguille active, avec la même validation du départ.
 
 ### 2.3 Animation et accessibilité
 

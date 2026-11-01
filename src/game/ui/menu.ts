@@ -1,12 +1,13 @@
 import Phaser from 'phaser';
 import texts from '../../data/fr.json';
 
-type MenuButton = {
+export type MenuButton = {
   label: string;
   action: () => void;
   primary?: boolean;
   disabled?: boolean;
   selected?: boolean;
+  focused?: boolean;
   fontSize?: number;
   name?: string;
 };
@@ -52,6 +53,10 @@ export function createButton(
     background.lineStyle(hover || pressed || button.selected ? 3 : 1.5, ink,
       hover || pressed || button.selected ? 0.85 : 0.3);
     background.strokeRoundedRect(x - width / 2, y - height / 2, width, height, 14);
+    if (button.focused) {
+      background.lineStyle(3, ink);
+      background.strokeRoundedRect(x - width / 2 - 4, y - height / 2 - 4, width + 8, height + 8, 17);
+    }
     label.setY(y + (pressed ? 2 : 0));
   };
 

@@ -1,155 +1,212 @@
 import Phaser from 'phaser';
-import elements from '../../data/elements.json';
 import texts from '../../data/fr.json';
-import { emptySlots, isElementId, isReady, placeElement, removeElement } from '../../domain/preparation';
+import { isReady, selectElement } from '../../domain/preparation';
+import { compassElements, initialCompassSelection, rotateSelection } from '../../domain/compassSelection';
 import type { ElementId, SlotIndex, Slots } from '../../domain/preparation';
 import { createButton } from '../ui/menu';
+import type { MenuButton } from '../ui/menu';
 import { drawSuitcase } from '../ui/suitcase';
+import { drawCompass, NEEDLE_MARKS } from '../ui/compass';
 
 const copy = texts.preparation;
-const fontFamily = '"Trebuchet MS", Arial, sans-serif';
+const compassCopy = texts.compass;
+type Control = { name: string; action: () => void };
 
 export class PreparationScene extends Phaser.Scene {
-  private slots: Slots = emptySlots();
-  private selected: ElementId | null = null;
+  private slots: Slots = initialCompassSelection();
+  private activeNeedle: SlotIndex = 0;
+  private paletteVisible = false;
   private message = '';
+  private focusName: string | null = null;
+  private controls: Control[] = [];
 
-  constructor() {
-    super('preparation');
-  }
+  constructor() { super('preparation'); }
 
   create(): void {
-    this.slots = emptySlots();
-    this.selected = null;
+    this.slots = initialCompassSelection();
+    this.activeNeedle = 0;
+    this.paletteVisible = false;
     this.message = '';
-    this.game.canvas.setAttribute('aria-label', copy.title);
+    this.focusName = null;
+    const canvas = this.game.canvas;
+    canvas.setAttribute('aria-label', copy.title);
+    canvas.tabIndex = 0;
+    canvas.focus({ preventScroll: true });
+    canvas.addEventListener('keydown', this.onKeyDown);
     this.render();
     this.scale.on(Phaser.Scale.Events.RESIZE, this.render, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.scale.off(Phaser.Scale.Events.RESIZE, this.render, this);
+      canvas.removeEventListener('keydown', this.onKeyDown);
+      canvas.removeAttribute('tabindex');
+      canvas.removeAttribute('aria-description');
+      this.controls = [];
     });
   }
 
-  private place(index: SlotIndex): void {
-    if (this.selected === null) {
-      this.message = copy.choose;
-    } else {
-      const result = placeElement(this.slots, index, this.selected);
-      this.slots = result.slots;
-      this.message = result.ok ? '' : copy[result.reason];
-      if (result.ok) this.selected = null;
-    }
+  private chooseNeedle(index: SlotIndex): void {
+    this.activeNeedle = index;
+    this.message = '';
     this.render();
   }
 
+  private rotate(direction: -1 | 1): void {
+    this.slots = rotateSelection(this.slots, this.activeNeedle, direction);
+    this.message = '';
+    this.render();
+  }
+
+  private chooseElement(element: ElementId): void {
+    this.slots = selectElement(this.slots, this.activeNeedle, element);
+    this.message = '';
+    this.render();
+  }
+
+  private onKeyDown = (event: KeyboardEvent): void => {
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    const index = this.controls.findIndex(control => control.name === this.focusName);
+    if (event.key === 'Tab') {
+      const next = index < 0 ? (event.shiftKey ? this.controls.length - 1 : 0) : index + (event.shiftKey ? -1 : 1);
+      const control = this.controls[next];
+      this.focusName = control?.name ?? null;
+      // At either end, allow native Tab to leave the canvas (no keyboard trap).
+      if (control) event.preventDefault();
+      this.render();
+    } else if (event.key === '1' || event.key === '2') {
+      event.preventDefault();
+      const needle = event.key === '1' ? 0 : 1;
+      this.focusName = `needle-${needle}`;
+      this.chooseNeedle(needle);
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.focusName = event.key === 'ArrowLeft' ? 'previous' : 'next';
+      this.rotate(event.key === 'ArrowLeft' ? -1 : 1);
+    } else if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.controls[index]?.action();
+    }
+  };
+
   private text(x: number, y: number, value: string, size: number, width: number, bold = false) {
     return this.add.text(x, y, value, {
-      fontFamily, fontSize: size, fontStyle: bold ? 'bold' : 'normal',
-      color: '#302a37', align: 'center',
+      fontFamily: '"Trebuchet MS", Arial, sans-serif', fontSize: size,
+      fontStyle: bold ? 'bold' : 'normal', color: '#302a37', align: 'center',
       wordWrap: { width, useAdvancedWrap: true },
     }).setOrigin(0.5, 0).setPadding(2);
   }
 
+  private button(x: number, y: number, width: number, options: MenuButton & { name: string }): void {
+    if (!options.disabled) this.controls.push({ name: options.name, action: options.action });
+    createButton(this, x, y, width, 44, {
+      ...options, focused: this.focusName === options.name,
+      action: () => {
+        this.game.canvas.focus({ preventScroll: true });
+        this.focusName = options.name;
+        options.action();
+      },
+    });
+  }
+
   private render(): void {
     this.children.removeAll(true);
+    this.controls = [];
     const { width, height } = this.scale;
-    const split = width >= 900 || (width >= 600 && height < 600);
-    const short = height < 600;
+    const split = width >= 600;
+    const short = height < 500;
     const contentWidth = Math.min(width - 24, 1100);
     const left = (width - contentWidth) / 2;
+    const dialWidth = split ? contentWidth * 0.48 : contentWidth;
+    const dialX = split ? left + dialWidth / 2 : width / 2;
+    const controlsWidth = split ? contentWidth - dialWidth - 20 : contentWidth;
+    const controlsX = split ? left + contentWidth - controlsWidth / 2 : width / 2;
     const footerY = height - 32;
-    const paletteWidth = split ? (short ? contentWidth * 0.48 : 350) : contentWidth;
-    const paletteX = split ? left + contentWidth - paletteWidth / 2 : width / 2;
-    const columns = split && !short ? 2 : width >= 600 && !split ? 5 : 3;
-    const tileHeight = split && !short ? 60 : 48;
-    const gap = 6;
-    const rows = Math.ceil(elements.length / columns);
-    const paletteHeight = rows * (tileHeight + gap) - gap;
-    const paletteTop = split ? (short ? 74 : Math.max(135, (height - paletteHeight) / 2))
-      : footerY - 40 - paletteHeight;
-    const caseWidth = split ? contentWidth - paletteWidth - 24 : contentWidth;
-    const caseX = split ? left + caseWidth / 2 : width / 2;
-    const statusTop = split ? height - 124 : paletteTop - 46;
-    const caseTop = short ? 78 : 86;
-    const availableCaseHeight = statusTop - caseTop - 52;
-    const illustrationWidth = Math.min(caseWidth, 620);
-    const illustrationTop = caseTop + Math.max(0, (availableCaseHeight - illustrationWidth * 270 / 520) / 2);
+    const statusY = height - 88;
+    const caseHeight = split ? Math.min(short ? 70 : 220, height - 280)
+      : Math.min(150, 66 + Math.max(0, height - 568) * 0.35);
+    const caseTop = statusY - caseHeight - 8;
+    const stepY = split ? (short ? 156 : 184) : caseTop - 30;
+    const needleY = stepY - 50;
+    const dialBottom = split ? (short ? height - 70 : Math.min(height - 130, 560)) : needleY - 30;
+    const dialTop = short ? 74 : 78;
+    const dialY = (dialTop + dialBottom - 20) / 2;
+    const radius = Math.max(70, Math.min(150, (dialWidth - 86) / 2, (dialBottom - dialTop - 24) / 2));
     const ready = isReady(this.slots);
+    const status = this.message || (ready ? copy.ready : compassCopy.duplicate);
 
     const background = this.add.graphics();
     background.fillStyle(0xb69ae8, 0.12).fillCircle(width * 0.12, height * 0.25, 160);
     background.fillStyle(0x59c9c2, 0.12).fillCircle(width * 0.95, height * 0.8, 180);
-    this.text(width / 2, 10, copy.title, short ? 22 : width < 600 ? 24 : 32, contentWidth, true);
-    this.text(width / 2, short ? 39 : width < 600 ? 43 : 51,
-      this.selected ? copy.selected.replace('{element}', texts.elements[this.selected].name) : copy.instructions,
-      short || width < 600 ? 14 : 17, contentWidth);
+    this.text(width / 2, 8, copy.title, short || !split ? 23 : 32, contentWidth, true);
+    this.text(width / 2, short || !split ? 39 : 48, compassCopy.instructions, short || !split ? 13 : 17, contentWidth);
 
-    const slotPositions = drawSuitcase(this, caseX, illustrationTop, illustrationWidth, availableCaseHeight);
+    // Register the four main commands first for a consistent keyboard focus order.
+    const controlButtonWidth = Math.min(250, (controlsWidth - 12) / 2);
     for (const index of [0, 1] as const) {
-      const position = slotPositions[index];
-      const element = this.slots[index];
-      const targetWidth = Math.max(44, illustrationWidth * 0.29);
-      const targetHeight = Math.max(44, Math.min(illustrationWidth * 0.13, availableCaseHeight * 0.25));
-      const label = element ? texts.elements[element].name : copy.empty;
-      this.text(position.x, position.y - 12, label, illustrationWidth < 350 ? 13 : 18, targetWidth, true);
-      let pressed = false;
-      this.add.zone(position.x, position.y, targetWidth, targetHeight)
-        .setName(`slot-${index}`).setInteractive({ useHandCursor: true })
-        .on('pointerdown', () => { pressed = true; })
-        .on('pointerout', () => { pressed = false; })
-        .on('pointerup', () => {
-          if (pressed) this.place(index);
-          pressed = false;
+      const id = this.slots[index];
+      const name = id === null ? copy.empty : texts.elements[id].name;
+      this.button(controlsX + (index === 0 ? -1 : 1) * (controlButtonWidth + 12) / 2,
+        needleY, controlButtonWidth, {
+          name: `needle-${index}`, label: `${NEEDLE_MARKS[index]} ${index + 1} · ${name}`,
+          fontSize: controlButtonWidth < 160 ? 13 : 17, selected: this.activeNeedle === index,
+          action: () => this.chooseNeedle(index),
         });
-      const removeX = caseX + (index === 0 ? -1 : 1) * caseWidth / 4;
-      createButton(this, removeX, statusTop - 30, Math.min(150, caseWidth / 2 - 12), 44, {
-        name: `remove-${index}`, label: `${copy.remove} ${index + 1}`, fontSize: 14,
-        disabled: element === null,
-        action: () => {
-          this.slots = removeElement(this.slots, index);
-          this.message = '';
-          this.render();
-        },
+    }
+    this.button(controlsX - (controlButtonWidth + 12) / 2, stepY, controlButtonWidth, {
+      name: 'previous', label: compassCopy.previous, fontSize: 16, action: () => this.rotate(-1),
+    });
+    this.button(controlsX + (controlButtonWidth + 12) / 2, stepY, controlButtonWidth, {
+      name: 'next', label: compassCopy.next, fontSize: 16, action: () => this.rotate(1),
+    });
+
+    if (this.paletteVisible) {
+      const columns = dialWidth >= 380 ? 2 : 3;
+      const rows = Math.ceil(compassElements.length / columns);
+      const tileWidth = (dialWidth - (columns - 1) * 8) / columns;
+      const paletteTop = dialY - (rows * 50 - 6) / 2;
+      compassElements.forEach((id, index) => {
+        this.button(dialX - dialWidth / 2 + tileWidth / 2 + (index % columns) * (tileWidth + 8),
+          paletteTop + 22 + Math.floor(index / columns) * 50, tileWidth, {
+            name: `element-${id}`, label: texts.elements[id].name, fontSize: tileWidth < 110 ? 12 : 16,
+            selected: this.slots[this.activeNeedle] === id, action: () => this.chooseElement(id),
+          });
       });
+    } else {
+      drawCompass(this, dialX, dialY, radius, this.slots, this.activeNeedle, texts.elements);
     }
 
-    this.text(caseX, statusTop, this.message || (ready ? copy.ready : copy.missing),
-      14, caseWidth).setName('preparation-status');
-    if (split && !short) {
-      this.text(paletteX, paletteTop - 38, copy.palette, 22, paletteWidth, true);
+    const suitcaseWidth = Math.min(controlsWidth, 580);
+    const positions = drawSuitcase(this, controlsX, caseTop, suitcaseWidth, caseHeight);
+    for (const index of [0, 1] as const) {
+      const id = this.slots[index];
+      this.text(positions[index].x, positions[index].y - 10,
+        id === null ? copy.empty : texts.elements[id].name,
+        suitcaseWidth < 350 ? 12 : 17, suitcaseWidth * 0.29, true).setName(`slot-label-${index}`);
     }
-    const tileWidth = (paletteWidth - gap * (columns - 1)) / columns;
-    elements.forEach(({ id }, index) => {
-      if (!isElementId(id)) return;
-      const selected = id === this.selected;
-      const packed = this.slots.includes(id);
-      const label = `${selected ? '› ' : packed ? '✓ ' : ''}${texts.elements[id].name}`;
-      createButton(this,
-        paletteX - paletteWidth / 2 + tileWidth / 2 + (index % columns) * (tileWidth + gap),
-        paletteTop + tileHeight / 2 + Math.floor(index / columns) * (tileHeight + gap),
-        tileWidth, tileHeight, {
-          name: `element-${id}`, label, selected, fontSize: tileWidth < 110 ? 12 : 16,
-          action: () => {
-            this.selected = selected ? null : id;
-            this.message = '';
-            this.render();
-          },
-        });
-    });
+    this.text(controlsX, statusY, status, 13, controlsWidth).setName('preparation-status');
+    if (split && height >= 600) {
+      this.text(dialX, dialBottom + 24, compassCopy.keyboard, 14, dialWidth);
+    }
 
-    const footerWidth = Math.min(contentWidth, 620);
-    const buttonWidth = Math.min(220, (footerWidth - 16) / 2);
-    createButton(this, width / 2 - (buttonWidth + 16) / 2, footerY, buttonWidth, 44, {
-      label: copy.home, name: 'home', action: () => this.scene.start('home'),
+    const footerWidth = Math.min(contentWidth, 650);
+    const footerButtonWidth = (footerWidth - 16) / 3;
+    this.button(width / 2 - footerButtonWidth - 8, footerY, footerButtonWidth, {
+      name: 'home', label: copy.home, fontSize: 16, action: () => this.scene.start('home'),
     });
-    createButton(this, width / 2 + (buttonWidth + 16) / 2, footerY, buttonWidth, 44, {
-      label: copy.travel, name: 'travel', primary: true, disabled: !ready,
+    this.button(width / 2, footerY, footerButtonWidth, {
+      name: 'toggle-palette', label: this.paletteVisible ? compassCopy.compass : compassCopy.palette,
+      fontSize: 15, action: () => { this.paletteVisible = !this.paletteVisible; this.render(); },
+    });
+    this.button(width / 2 + footerButtonWidth + 8, footerY, footerButtonWidth, {
+      name: 'travel', label: copy.travel, fontSize: 16, primary: true, disabled: !ready,
       action: () => {
         if (!isReady(this.slots)) return;
         this.message = copy.confirmed;
         this.render();
       },
     });
-    if (split && !short) this.text(width / 2, height - 80, copy.scope, 12, contentWidth);
+    this.game.canvas.setAttribute('aria-description', [
+      ...this.slots.map((id, index) => compassCopy.needle.replace('{number}', String(index + 1))
+        + ': ' + (id === null ? copy.empty : texts.elements[id].name)), status, compassCopy.keyboard,
+    ].join('. '));
   }
 }

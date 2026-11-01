@@ -60,7 +60,7 @@ L'écran présente :
 
 Interaction cible à prototyper : choisir l'aiguille active puis utiliser précédent/suivant pour la déplacer par crans de **36°**. La valise reflète immédiatement les deux éléments sélectionnés. Tourner une aiguille ne coûte rien ; deux aiguilles sur le même élément rendent le départ invalide et désactivent Voyager. La rotation directe à la souris ou au doigt est facultative.
 
-Le prototype actuel utilise encore la palette : sélectionner un élément, l'affecter à un emplacement, le remplacer ou le retirer. Cette interface peut être conservée provisoirement comme repli ou outil de debug, en partageant la même logique de sélection.
+Le prototype de phase A utilise les aiguilles ; une palette de repli permet de choisir directement l'élément de l'aiguille active. Les deux interfaces partagent la même sélection et la même validation du départ. À l'ouverture d'une préparation, les aiguilles pointent provisoirement toutes deux sur Arbre, aiguille 1 active : le joueur doit rendre les deux choix distincts avant de valider.
 
 **Règle de simplicité :** pas de placement libre, de voisinage, de rotation ni de taille variable. Les deux emplacements sont des choix d'objets, pas une grille spatiale. L'ordre gauche/droite n'influence jamais la destination.
 
@@ -83,7 +83,7 @@ Après le résultat :
 - Si les charges restantes sont **supérieures à zéro**, retour à la valise pour une nouvelle association. **Par défaut, vider les deux emplacements** pour rendre la nouvelle tentative explicite (choix UX à vérifier en playtest).
 - Si les charges restantes sont **égales à zéro**, afficher l'écran de **fin de voyage**.
 
-Pour le prototype à aiguilles, la règle de réinitialisation des aiguilles et des emplacements reste à choisir et à documenter lors de la phase A de l'extension. Le vidage indiqué ci-dessus décrit le comportement de référence de la préparation par palette.
+Pour le prototype à aiguilles, la règle de réinitialisation retenue est **Arbre / Arbre, aiguille 1 active**, avec départ bloqué jusqu'à deux choix distincts. Elle s'applique à chaque nouvelle préparation ; son intégration après un vrai voyage viendra avec la boucle de jeu. Le vidage indiqué ci-dessus décrit l'ancienne préparation par placement direct.
 
 La boussole ne peut jamais passer sous zéro : `charges = max(0, charges - coût)`.
 
@@ -195,7 +195,7 @@ Ne pas ajouter de bonus de recharge, d'économie secondaire ou de mécanique de 
 | Situation | Comportement attendu |
 | --- | --- |
 | 0 ou 1 élément placé | Bouton Voyager désactivé |
-| Même élément sélectionné deux fois | Départ interdit et indication claire ; avec les aiguilles, Voyager reste désactivé tant que les deux choix sont identiques. La palette actuelle refuse le placement en doublon. |
+| Même élément sélectionné deux fois | Départ interdit et indication claire ; la valise reflète le doublon. Aiguilles et palette de repli utilisent la même validation du départ. |
 | Éléments placés dans l'ordre inverse | Même destination |
 | Paire sans recette | Néant ; coût 2 |
 | Destination déjà débloquée | Résultat normal ; pas de nouveau déblocage |

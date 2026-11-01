@@ -2,9 +2,9 @@
 
 Jeu expérimental de découverte fantastique, créé pour l'**Indie Park Game Jam #6** (thème : **Voyage**).
 
-> **Statut :** étape 2 — préparation de la valise. L'accueil ouvre une valise à deux emplacements et une palette de dix éléments. Placement, remplacement et retrait sont fonctionnels ; les doublons sont refusés. Les destinations, la boussole et le carnet restent à implémenter.
+> **Statut :** étape 3 / phase A — boussole de sélection. Deux aiguilles commandent les deux emplacements de la valise par crans de 36°. Une paire identique bloque Voyager. La palette reste disponible comme repli. La résolution des destinations, les charges, le carnet et les autocollants restent à implémenter.
 
-> **Évolution documentée, non implémentée :** [boussole à aiguilles et autocollants](docs/COMPASS_AND_STICKERS.md). Cette proposition reste à prototyper et à valider en jeu ; les instructions ci-dessous décrivent le prototype actuel.
+> **Extension :** [boussole à aiguilles et autocollants](docs/COMPASS_AND_STICKERS.md). La phase A est implémentée avec des visuels temporaires et reste à valider en playtest. Les phases B/C ne sont pas commencées.
 
 ## Lancer le prototype
 
@@ -30,19 +30,20 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 ### Utiliser la valise
 
 1. Cliquer sur **Commencer un voyage**.
-2. Choisir un élément dans la palette, puis cliquer/toucher un emplacement pour le placer. Recliquer sur l'élément sélectionné annule sa sélection.
-3. Pour remplacer un objet, sélectionner un autre élément et toucher l'emplacement occupé. **Retirer 1 / Retirer 2** vide l'emplacement correspondant.
+2. Choisir l'aiguille **▲ 1** ou **◆ 2**, puis utiliser **Précédent / Suivant**. Les dix positions suivent l'ordre de `elements.json`, depuis Arbre en haut, dans le sens horaire. Après Cristal, le cran suivant revient à Arbre.
+3. Les emplacements reflètent immédiatement les aiguilles, même si elles pointent sur le même élément : un message signale alors le doublon et Voyager reste désactivé. **Palette** affiche une sélection directe pour l'aiguille active ; **Boussole** revient au cadran sans changer les choix.
 4. **Voyager** s'active uniquement lorsque deux éléments différents sont placés. Dans cette étape, il confirme le choix avec un message ; il ne résout aucune recette et ne consomme aucune charge.
-5. **Accueil** permet de revenir au menu. Un nouveau départ ouvre une valise vide. Le redimensionnement de la fenêtre conserve la préparation en cours.
+5. **Accueil** permet de revenir au menu. Chaque nouvelle préparation commence sur **Arbre / Arbre**, aiguille 1 active : le départ est donc bloqué jusqu'à un choix distinct. Ce réglage de prototype est constant et reste à évaluer en playtest. Le redimensionnement conserve les choix, l'aiguille active et le mode d'affichage.
+6. Au clavier : **1 / 2** choisit l'aiguille, **← / →** la déplace, **Tab / Maj+Tab** déplace le focus et **Entrée / Espace** active le bouton. Un contour marque le focus ; Tab peut quitter le jeu aux extrémités du parcours.
 
 ### Choix techniques actuels
 
 - Trois scènes : `HomeScene`, `PreparationScene` et `PlaceholderScene`, partagée entre carnet et paramètres. Pas de scène de chargement sans assets à charger.
-- La logique pure de préparation est dans `src/domain/preparation.ts` : deux emplacements typés, contrôle des identifiants, refus des doublons, remplacement, retrait et validité du départ. La scène gère uniquement l'affichage et les interactions.
+- La logique pure de préparation est dans `src/domain/preparation.ts` ; `src/domain/compassSelection.ts` ajoute le réglage initial et la rotation par crans, sans Phaser. Boussole et palette partagent les mêmes emplacements et la même validation du départ. Une sélection provisoire en doublon est visible mais ne permet pas de voyager.
 - Affichage Phaser en mode `RESIZE` : panneau centré et largeur bornée sur desktop, texte redisposé et boutons conservant une taille tactile sur petit écran. Les décorations secondaires sont masquées sur les fenêtres peu hautes.
-- Formes et police système temporaires, sans téléchargement de police, image ou autre ressource distante. La valise est dessinée en perspective ; les objets sont provisoirement représentés par leurs noms. La palette suit le catalogue JSON existant.
+- Formes et police système temporaires, sans téléchargement de police, image ou autre ressource distante. La valise est dessinée en perspective ; dix pictogrammes simples entourent le cadran. Les aiguilles se distinguent par leur forme (triangle / losange), leur couleur et leur numéro. Les noms des choix restent visibles dans les commandes et la valise.
 - Textes d'interface dans `src/data/fr.json` et `en.json`. L'affichage reste en français pour cette étape ; choix de langue et persistance seront ajoutés ultérieurement.
-- Huit tests protègent l'intégrité des catalogues et la préparation, dont les 45 paires distinctes dans les deux ordres, les doublons, les retraits, les remplacements et les noms FR/EN. Aucun module de résolution, boussole, sauvegarde ou carnet n'est encore implémenté.
+- Quinze tests protègent les catalogues, la préparation et la sélection par boussole : tours complets, rebouclage, 100 états possibles dont 10 doublons invalides, 45 paires non ordonnées valides, sélection commune et libellés FR/EN. Aucun module de résolution, de charges, de sauvegarde ou de carnet n'est encore implémenté.
 - Vite peut signaler un bundle supérieur à 500 Ko : le moteur Phaser représente l'essentiel du fichier. Cet avertissement n'empêche pas le build.
 
 ### Vérifications de l'étape 1
@@ -60,6 +61,14 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 - Le redimensionnement conserve les objets et la sélection ; retour à l'accueil, nouveau départ, rechargement, carnet et paramètres restent fonctionnels.
 - Le build servi sous `/jam/` a passé les parcours desktop et mobile sans erreur JavaScript ni ressource HTTP manquante. Les illustrations et les objets restent des visuels temporaires.
 
+### Vérifications de la phase A
+
+- **15 tests Vitest** réussis, ainsi que TypeScript strict et le build Vite.
+- Chrome headless : 1280 × 720, 1920 × 1080, 800 × 600, 900 × 500, 600 × 568, 360 × 640, 320 × 568 et 640 × 360. Rotations complètes, rebouclage, correspondance aiguilles/valise, blocage des doublons, palette et nouveau départ contrôlés à la souris et au toucher simulé.
+- Navigation clavier, focus visible, conservation de l'état au redimensionnement, rechargement et menus existants vérifiés. Textes et zones interactives restent dans le cadre ; les boutons ne se chevauchent pas sur les formats testés.
+- Build servi sous `/jam/` vérifié en desktop, portrait et paysage, sans erreur JavaScript ni ressource HTTP manquante. Captures contrôlées visuellement.
+- Firefox, un appareil tactile réel et la publication itch.io restent à tester. L'ergonomie et le réglage initial attendent la validation en playtest ; la résolution et les charges ne sont pas encore disponibles.
+
 ## Concept
 
 Une valise magique permet de voyager vers des destinations fantastiques. Le joueur choisit **deux éléments** parmi une palette de **dix**, les place dans les deux emplacements de la valise, puis déclenche un voyage. La combinaison révèle un lieu, ou mène au **Néant** si aucune destination ne correspond.
@@ -68,11 +77,11 @@ Le but est de découvrir le plus de lieux possible au fil des parties et de remp
 
 ## Boucle de jeu prévue
 
-La sélection par palette décrite ici correspond au prototype actuel. Pour la cible à prototyper, les [deux aiguilles de la boussole](docs/COMPASS_AND_STICKERS.md) sélectionnent les éléments et remplissent automatiquement la valise.
+Les [deux aiguilles de la boussole](docs/COMPASS_AND_STICKERS.md) sélectionnent les éléments et remplissent automatiquement la valise ; la palette reste un repli provisoire. La suite du voyage décrite ci-dessous reste à implémenter.
 
 1. Depuis l'accueil, choisir **Commencer un voyage**.
-2. Découvrir une valise vide et la palette de dix éléments.
-3. Placer deux éléments (ordre indifférent), puis cliquer sur **Voyager**.
+2. Découvrir la valise et les dix symboles du cadran.
+3. Choisir deux éléments différents avec les aiguilles (ordre indifférent), puis cliquer sur **Voyager**.
 4. La valise se referme ; une courte animation révèle le résultat.
 5. Si la combinaison est valide, afficher la destination, son nom et son illustration ; sinon, afficher le Néant.
 6. Déduire les charges de la boussole, puis revenir à la valise tant qu'il reste de l'énergie.
@@ -89,13 +98,13 @@ La sélection par palette décrite ici correspond au prototype actuel. Pour la c
 
 Ces valeurs sont des hypothèses de prototype, **pas un équilibrage définitif**.
 
-### Extension à prototyper : aiguilles et autocollants
+### Extension : aiguilles et autocollants
 
-- **Phase A — priorité haute :** sélectionner une aiguille puis la déplacer par crans de 36° avec des commandes précédent/suivant. Les dix symboles correspondent aux dix éléments existants ; les deux emplacements reflètent les choix. Tourner est gratuit ; Voyager reste désactivé si les choix sont identiques. La palette peut servir de repli pendant le prototype.
+- **Phase A — implémentée, à valider en playtest :** sélectionner une aiguille puis la déplacer par crans de 36° avec des commandes précédent/suivant. Les dix symboles correspondent aux dix éléments existants ; les deux emplacements reflètent les choix. Tourner ne déclenche aucune dépense ; Voyager reste désactivé si les choix sont identiques. La palette sert de repli pendant le prototype.
 - **Phase B — priorité moyenne :** chaque première découverte permanente débloque un autocollant cosmétique. Maximum 30, sans doublon lors des revisites et sans récompense pour le Néant. Les déblocages se déduisent du carnet.
 - **Phase C — après la boucle jouable :** décorer le couvercle fermé, avec **6 positions fixes proposées**. Placement, remplacement et retrait sans perte de l'autocollant ; disposition persistante et anciennes sauvegardes compatibles.
 
-Les recettes, les charges et la fin de session restent inchangées. La position initiale des aiguilles, l'emplacement du bouton de décoration et le nombre final de positions décoratives restent à déterminer. Chaque phase sera validée avant de commencer la suivante ; aucune de ces fonctionnalités n'est encore disponible dans le prototype.
+Les recettes, les coûts prévus et la fin de session restent inchangés. Le réglage initial provisoire est Arbre / Arbre, aiguille 1 active ; le bouton de décoration et le nombre final de positions décoratives restent à déterminer. Chaque phase sera validée avant de commencer la suivante ; les autocollants ne sont pas encore disponibles.
 
 ## Contenu prévu
 
@@ -123,7 +132,7 @@ Les identifiants, recettes et références d'assets et de traductions sont déj�
 - **PNG / WebP** pour les assets.
 - **localStorage** pour le carnet et les préférences.
 - **JSON** pour les données et traductions.
-- **Vitest 5.0.5** pour les tests des catalogues et de la préparation (résolution et charges aux étapes suivantes).
+- **Vitest 5.0.5** pour les tests des catalogues, de la préparation et de la sélection par boussole (résolution et charges aux étapes suivantes).
 
 Le jeu doit être **jouable directement dans le navigateur sur itch.io**, sans téléchargement d'exécutable.
 
@@ -143,7 +152,7 @@ Les versions exactes et leurs dépendances transitives sont verrouillées dans `
 
 ## Priorités de production
 
-L'extension ajoute une phase A prioritaire pour prototyper la sélection par aiguilles en réutilisant la préparation existante. Le déblocage des autocollants dépendra des premières découvertes et du carnet ; la décoration viendra après la boucle jouable. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md) avant de planifier chaque étape.
+La phase A de sélection par aiguilles est implémentée et attend un playtest. Après validation, la prochaine étape est la résolution des recettes et les charges. Le déblocage des autocollants dépendra des premières découvertes et du carnet ; la décoration viendra après la boucle jouable. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md) avant de planifier chaque étape.
 
 1. Prototype jouable avec graphismes temporaires : deux emplacements, choix des éléments, résolution d'une recette.
 2. Boucle complète : boussole, Néant, écran de résultat, fin de partie.

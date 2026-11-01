@@ -1,0 +1,43 @@
+{
+  "title": "The world fits in a suitcase",
+  "eyebrow": "INDIE PARK GAME JAM #6 · TRAVEL",
+  "invitation": "What if the things I packed decided where I went?",
+  "start": "Start a journey",
+  "journal": "Travel journal",
+  "settings": "Settings",
+  "back": "Back to home",
+  "prototype": "Second stop · Pack your suitcase",
+  "preparation": {
+    "title": "Pack your suitcase",
+    "instructions": "Choose an element, then a slot.",
+    "selected": "{element} selected: tap a slot.",
+    "choose": "First choose an element from the palette.",
+    "duplicate": "This element is already packed. Choose a different one.",
+    "unknown": "This element is not available.",
+    "empty": "Empty",
+    "remove": "Remove",
+    "home": "Home",
+    "travel": "Travel",
+    "missing": "Pack two different elements to prepare your journey.",
+    "ready": "Your suitcase is ready! You can confirm your choice.",
+    "confirmed": "Choice confirmed! Destinations will arrive in the next stage.",
+    "palette": "Things to pack",
+    "scope": "Prototype · packing only"
+  },
+  "elements": {
+    "tree": { "name": "Tree" },
+    "mushroom": { "name": "Mushroom" },
+    "water": { "name": "Water" },
+    "fire": { "name": "Fire" },
+    "rock": { "name": "Rock" },
+    "palm": { "name": "Palm tree" },
+    "snow": { "name": "Snow" },
+    "cloud": { "name": "Cloud" },
+    "ruins": { "name": "Ruins" },
+    "crystal": { "name": "Crystal" }
+  },
+  "temporary": {
+    "journal": "The travel journal will go here. This is a temporary screen.",
+    "settings": "Settings will go here. This is a temporary screen."
+  }
+}

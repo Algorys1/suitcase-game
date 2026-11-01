@@ -1,0 +1,43 @@
+{
+  "title": "Le monde tient dans une valise",
+  "eyebrow": "INDIE PARK GAME JAM #6 · VOYAGE",
+  "invitation": "Et si ce que j’emporte décidait de l’endroit où je vais ?",
+  "start": "Commencer un voyage",
+  "journal": "Carnet de voyage",
+  "settings": "Paramètres",
+  "back": "Retour à l’accueil",
+  "prototype": "Deuxième escale · Préparer sa valise",
+  "preparation": {
+    "title": "Préparez votre valise",
+    "instructions": "Choisissez un élément, puis un emplacement.",
+    "selected": "{element} sélectionné : touchez un emplacement.",
+    "choose": "Choisissez d’abord un élément dans la palette.",
+    "duplicate": "Cet élément est déjà dans la valise. Choisissez-en un autre.",
+    "unknown": "Cet élément n’est pas disponible.",
+    "empty": "Vide",
+    "remove": "Retirer",
+    "home": "Accueil",
+    "travel": "Voyager",
+    "missing": "Placez deux éléments différents pour préparer le départ.",
+    "ready": "La valise est prête ! Vous pouvez valider votre choix.",
+    "confirmed": "Choix validé ! Les destinations arrivent à la prochaine étape.",
+    "palette": "À emporter",
+    "scope": "Prototype · préparation uniquement"
+  },
+  "elements": {
+    "tree": { "name": "Arbre" },
+    "mushroom": { "name": "Champignon" },
+    "water": { "name": "Eau" },
+    "fire": { "name": "Feu" },
+    "rock": { "name": "Rocher" },
+    "palm": { "name": "Palmier" },
+    "snow": { "name": "Neige" },
+    "cloud": { "name": "Nuage" },
+    "ruins": { "name": "Ruines" },
+    "crystal": { "name": "Cristal" }
+  },
+  "temporary": {
+    "journal": "Le carnet de voyage prendra place ici. Cet écran est temporaire.",
+    "settings": "Les paramètres prendront place ici. Cet écran est temporaire."
+  }
+}

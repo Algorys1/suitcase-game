@@ -1,0 +1,302 @@
+[
+  {
+    "id": "archipel_azur",
+    "elements": [
+      "water",
+      "palm"
+    ],
+    "titleKey": "destinations.archipel_azur.title",
+    "storyKey": "destinations.archipel_azur.story",
+    "image": "assets/destinations/archipel_azur.webp"
+  },
+  {
+    "id": "cimes_eternelles",
+    "elements": [
+      "rock",
+      "snow"
+    ],
+    "titleKey": "destinations.cimes_eternelles.title",
+    "storyKey": "destinations.cimes_eternelles.story",
+    "image": "assets/destinations/cimes_eternelles.webp"
+  },
+  {
+    "id": "mycelia",
+    "elements": [
+      "mushroom",
+      "tree"
+    ],
+    "titleKey": "destinations.mycelia.title",
+    "storyKey": "destinations.mycelia.story",
+    "image": "assets/destinations/mycelia.webp"
+  },
+  {
+    "id": "ruines_englouties",
+    "elements": [
+      "water",
+      "ruins"
+    ],
+    "titleKey": "destinations.ruines_englouties.title",
+    "storyKey": "destinations.ruines_englouties.story",
+    "image": "assets/destinations/ruines_englouties.webp"
+  },
+  {
+    "id": "coeur_de_braise",
+    "elements": [
+      "fire",
+      "rock"
+    ],
+    "titleKey": "destinations.coeur_de_braise.title",
+    "storyKey": "destinations.coeur_de_braise.story",
+    "image": "assets/destinations/coeur_de_braise.webp"
+  },
+  {
+    "id": "iles_suspendues",
+    "elements": [
+      "rock",
+      "cloud"
+    ],
+    "titleKey": "destinations.iles_suspendues.title",
+    "storyKey": "destinations.iles_suspendues.story",
+    "image": "assets/destinations/iles_suspendues.webp"
+  },
+  {
+    "id": "marais_des_lucioles",
+    "elements": [
+      "water",
+      "mushroom"
+    ],
+    "titleKey": "destinations.marais_des_lucioles.title",
+    "storyKey": "destinations.marais_des_lucioles.story",
+    "image": "assets/destinations/marais_des_lucioles.webp"
+  },
+  {
+    "id": "desert_de_cristal",
+    "elements": [
+      "rock",
+      "crystal"
+    ],
+    "titleKey": "destinations.desert_de_cristal.title",
+    "storyKey": "destinations.desert_de_cristal.story",
+    "image": "assets/destinations/desert_de_cristal.webp"
+  },
+  {
+    "id": "palais_de_givre",
+    "elements": [
+      "snow",
+      "crystal"
+    ],
+    "titleKey": "destinations.palais_de_givre.title",
+    "storyKey": "destinations.palais_de_givre.story",
+    "image": "assets/destinations/palais_de_givre.webp"
+  },
+  {
+    "id": "temple_oublie",
+    "elements": [
+      "tree",
+      "ruins"
+    ],
+    "titleKey": "destinations.temple_oublie.title",
+    "storyKey": "destinations.temple_oublie.story",
+    "image": "assets/destinations/temple_oublie.webp"
+  },
+  {
+    "id": "ile_des_cendres",
+    "elements": [
+      "fire",
+      "palm"
+    ],
+    "titleKey": "destinations.ile_des_cendres.title",
+    "storyKey": "destinations.ile_des_cendres.story",
+    "image": "assets/destinations/ile_des_cendres.webp"
+  },
+  {
+    "id": "grottes_sporiferes",
+    "elements": [
+      "mushroom",
+      "rock"
+    ],
+    "titleKey": "destinations.grottes_sporiferes.title",
+    "storyKey": "destinations.grottes_sporiferes.story",
+    "image": "assets/destinations/grottes_sporiferes.webp"
+  },
+  {
+    "id": "canopee_des_brumes",
+    "elements": [
+      "tree",
+      "cloud"
+    ],
+    "titleKey": "destinations.canopee_des_brumes.title",
+    "storyKey": "destinations.canopee_des_brumes.story",
+    "image": "assets/destinations/canopee_des_brumes.webp"
+  },
+  {
+    "id": "recif_de_verre",
+    "elements": [
+      "water",
+      "crystal"
+    ],
+    "titleKey": "destinations.recif_de_verre.title",
+    "storyKey": "destinations.recif_de_verre.story",
+    "image": "assets/destinations/recif_de_verre.webp"
+  },
+  {
+    "id": "jardins_du_zenith",
+    "elements": [
+      "palm",
+      "cloud"
+    ],
+    "titleKey": "destinations.jardins_du_zenith.title",
+    "storyKey": "destinations.jardins_du_zenith.story",
+    "image": "assets/destinations/jardins_du_zenith.webp"
+  },
+  {
+    "id": "cite_immobile",
+    "elements": [
+      "snow",
+      "ruins"
+    ],
+    "titleKey": "destinations.cite_immobile.title",
+    "storyKey": "destinations.cite_immobile.story",
+    "image": "assets/destinations/cite_immobile.webp"
+  },
+  {
+    "id": "sylve_prismatique",
+    "elements": [
+      "tree",
+      "crystal"
+    ],
+    "titleKey": "destinations.sylve_prismatique.title",
+    "storyKey": "destinations.sylve_prismatique.story",
+    "image": "assets/destinations/sylve_prismatique.webp"
+  },
+  {
+    "id": "necropole_ardente",
+    "elements": [
+      "fire",
+      "ruins"
+    ],
+    "titleKey": "destinations.necropole_ardente.title",
+    "storyKey": "destinations.necropole_ardente.story",
+    "image": "assets/destinations/necropole_ardente.webp"
+  },
+  {
+    "id": "foret_du_silence",
+    "elements": [
+      "tree",
+      "snow"
+    ],
+    "titleKey": "destinations.foret_du_silence.title",
+    "storyKey": "destinations.foret_du_silence.story",
+    "image": "assets/destinations/foret_du_silence.webp"
+  },
+  {
+    "id": "sanctuaire_des_spores",
+    "elements": [
+      "mushroom",
+      "ruins"
+    ],
+    "titleKey": "destinations.sanctuaire_des_spores.title",
+    "storyKey": "destinations.sanctuaire_des_spores.story",
+    "image": "assets/destinations/sanctuaire_des_spores.webp"
+  },
+  {
+    "id": "royaume_des_spores_celestes",
+    "elements": [
+      "mushroom",
+      "cloud"
+    ],
+    "titleKey": "destinations.royaume_des_spores_celestes.title",
+    "storyKey": "destinations.royaume_des_spores_celestes.story",
+    "image": "assets/destinations/royaume_des_spores_celestes.webp"
+  },
+  {
+    "id": "tempete_ecarlate",
+    "elements": [
+      "fire",
+      "cloud"
+    ],
+    "titleKey": "destinations.tempete_ecarlate.title",
+    "storyKey": "destinations.tempete_ecarlate.story",
+    "image": "assets/destinations/tempete_ecarlate.webp"
+  },
+  {
+    "id": "atoll_boreal",
+    "elements": [
+      "palm",
+      "snow"
+    ],
+    "titleKey": "destinations.atoll_boreal.title",
+    "storyKey": "destinations.atoll_boreal.story",
+    "image": "assets/destinations/atoll_boreal.webp"
+  },
+  {
+    "id": "vestiges_celestes",
+    "elements": [
+      "cloud",
+      "ruins"
+    ],
+    "titleKey": "destinations.vestiges_celestes.title",
+    "storyKey": "destinations.vestiges_celestes.story",
+    "image": "assets/destinations/vestiges_celestes.webp"
+  },
+  {
+    "id": "mer_figee",
+    "elements": [
+      "water",
+      "snow"
+    ],
+    "titleKey": "destinations.mer_figee.title",
+    "storyKey": "destinations.mer_figee.story",
+    "image": "assets/destinations/mer_figee.webp"
+  },
+  {
+    "id": "jungle_incandescente",
+    "elements": [
+      "tree",
+      "fire"
+    ],
+    "titleKey": "destinations.jungle_incandescente.title",
+    "storyKey": "destinations.jungle_incandescente.story",
+    "image": "assets/destinations/jungle_incandescente.webp"
+  },
+  {
+    "id": "jardins_de_gemmes",
+    "elements": [
+      "mushroom",
+      "crystal"
+    ],
+    "titleKey": "destinations.jardins_de_gemmes.title",
+    "storyKey": "destinations.jardins_de_gemmes.story",
+    "image": "assets/destinations/jardins_de_gemmes.webp"
+  },
+  {
+    "id": "empire_des_sables",
+    "elements": [
+      "palm",
+      "ruins"
+    ],
+    "titleKey": "destinations.empire_des_sables.title",
+    "storyKey": "destinations.empire_des_sables.story",
+    "image": "assets/destinations/empire_des_sables.webp"
+  },
+  {
+    "id": "faille_des_contraires",
+    "elements": [
+      "fire",
+      "snow"
+    ],
+    "titleKey": "destinations.faille_des_contraires.title",
+    "storyKey": "destinations.faille_des_contraires.story",
+    "image": "assets/destinations/faille_des_contraires.webp"
+  },
+  {
+    "id": "observatoire_des_etoiles",
+    "elements": [
+      "cloud",
+      "crystal"
+    ],
+    "titleKey": "destinations.observatoire_des_etoiles.title",
+    "storyKey": "destinations.observatoire_des_etoiles.story",
+    "image": "assets/destinations/observatoire_des_etoiles.webp"
+  }
+]

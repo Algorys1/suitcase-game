@@ -1,0 +1,52 @@
+[
+  {
+    "id": "tree",
+    "nameKey": "elements.tree.name",
+    "image": "assets/elements/tree.webp"
+  },
+  {
+    "id": "mushroom",
+    "nameKey": "elements.mushroom.name",
+    "image": "assets/elements/mushroom.webp"
+  },
+  {
+    "id": "water",
+    "nameKey": "elements.water.name",
+    "image": "assets/elements/water.webp"
+  },
+  {
+    "id": "fire",
+    "nameKey": "elements.fire.name",
+    "image": "assets/elements/fire.webp"
+  },
+  {
+    "id": "rock",
+    "nameKey": "elements.rock.name",
+    "image": "assets/elements/rock.webp"
+  },
+  {
+    "id": "palm",
+    "nameKey": "elements.palm.name",
+    "image": "assets/elements/palm.webp"
+  },
+  {
+    "id": "snow",
+    "nameKey": "elements.snow.name",
+    "image": "assets/elements/snow.webp"
+  },
+  {
+    "id": "cloud",
+    "nameKey": "elements.cloud.name",
+    "image": "assets/elements/cloud.webp"
+  },
+  {
+    "id": "ruins",
+    "nameKey": "elements.ruins.name",
+    "image": "assets/elements/ruins.webp"
+  },
+  {
+    "id": "crystal",
+    "nameKey": "elements.crystal.name",
+    "image": "assets/elements/crystal.webp"
+  }
+]

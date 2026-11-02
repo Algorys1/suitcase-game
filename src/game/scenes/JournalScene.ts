@@ -69,7 +69,7 @@ export class JournalScene extends Phaser.Scene {
 
   private render(): void {
     const texts = getTexts();
-    this.children.removeAll(true);
+    this.children.getAll().forEach(child => child.destroy());
     this.controls = [];
     const { width, height } = this.scale;
     const short = height < 500 && width >= 600;

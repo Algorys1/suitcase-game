@@ -7,6 +7,7 @@ import { destinations } from '../../domain/recipes';
 import { preloadPostcards } from '../ui/postcard';
 import { preloadSouvenirs } from '../ui/souvenir';
 import { prepareIllustrationTextures } from '../ui/illustrationTextures';
+import { preloadPreparationArt } from '../ui/preparationArt';
 
 export class HomeScene extends Phaser.Scene {
   constructor() {
@@ -16,6 +17,7 @@ export class HomeScene extends Phaser.Scene {
   preload(): void {
     preloadPostcards(this);
     preloadSouvenirs(this);
+    preloadPreparationArt(this);
   }
 
   create(): void {

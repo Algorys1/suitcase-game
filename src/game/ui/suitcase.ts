@@ -1,6 +1,14 @@
 import Phaser from 'phaser';
 
 export function drawClosedSuitcase(scene: Phaser.Scene, x: number, y: number, width: number, height: number): void {
+  if (scene.textures.exists('preparation-suitcase_closed')) {
+    const image = scene.add.image(x, y + height, 'preparation-suitcase_closed')
+      .setOrigin(0.5, 1).setName('suitcase-closed-art');
+    const open = scene.textures.get('preparation-suitcase_open').get();
+    const openWidth = Math.min(width, height * open.width / open.height);
+    image.setScale(Math.min(openWidth / image.width, height / image.height));
+    return;
+  }
   const graphics = scene.add.graphics({ x: x - width / 2, y }).setScale(width / 520, Math.min(width / 520, height / 270));
   const points = [[15, 125], [390, 75], [510, 185], [135, 235]]
     .map(([px = 0, py = 0]) => new Phaser.Math.Vector2(px, py));
@@ -11,8 +19,26 @@ export function drawClosedSuitcase(scene: Phaser.Scene, x: number, y: number, wi
   graphics.fillStyle(0xf6c96b).fillRoundedRect(190, 229, 22, 21, 4).fillRoundedRect(393, 202, 22, 21, 4);
 }
 
-/** Temporary illustrated perspective: a lid, a tray and exactly two compartments. */
+/** Two fixed anchors in the illustrated tray; no spatial inventory rules. */
 export function drawSuitcase(scene: Phaser.Scene, x: number, y: number, width: number, height: number) {
+  if (scene.textures.exists('preparation-suitcase_open')) {
+    const image = scene.add.image(x, y, 'preparation-suitcase_open').setOrigin(0.5, 0).setName('suitcase-art');
+    image.setScale(Math.min(width / image.width, height / image.height));
+    const w = image.displayWidth, h = image.displayHeight;
+    const left = x - w / 2;
+    // Centres and writable areas measured on the illustrated copper inlays.
+    const labelWidth = w * 0.33;
+    const labelHeight = h * 0.048;
+    const labelAngle = -2;
+    return [
+      { x: left + w * 0.28, y: y + h * 0.72, size: h * 0.26,
+        labelX: left + w * 0.355, labelY: y + h * 0.816, labelWidth, labelHeight, labelAngle },
+      { x: left + w * 0.72, y: y + h * 0.70, size: h * 0.26,
+        labelX: left + w * 0.74, labelY: y + h * 0.802,
+        labelWidth, labelHeight, labelAngle },
+    ] as const;
+  }
+  // Keep the original geometry as a readable fallback if an image fails to load.
   const scale = width / 520;
   const verticalScale = Math.min(scale, height / 270);
   const graphics = scene.add.graphics({ x: x - width / 2, y }).setScale(scale, verticalScale);
@@ -35,7 +61,11 @@ export function drawSuitcase(scene: Phaser.Scene, x: number, y: number, width: n
   graphics.fillRoundedRect(393, 202, 22, 21, 4);
 
   return [
-    { x: x - width / 2 + 173 * scale, y: y + 162 * verticalScale },
-    { x: x - width / 2 + 349 * scale, y: y + 138 * verticalScale },
+    { x: x - width / 2 + 173 * scale, y: y + 162 * verticalScale, size: 65 * verticalScale,
+      labelX: x - width / 2 + 173 * scale, labelY: y + 220 * verticalScale, labelWidth: 160 * scale,
+      labelHeight: 20, labelAngle: -7 },
+    { x: x - width / 2 + 349 * scale, y: y + 138 * verticalScale, size: 65 * verticalScale,
+      labelX: x - width / 2 + 349 * scale, labelY: y + 196 * verticalScale, labelWidth: 160 * scale,
+      labelHeight: 20, labelAngle: -7 },
   ] as const;
 }

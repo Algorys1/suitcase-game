@@ -38,6 +38,7 @@
     }
   },
   "compass": {
+    "chargeCount": "{charges} / {max}",
     "instructions": "Faites glisser une aiguille vers un symbole.",
     "paletteInstructions": "Choisissez une aiguille, puis un élément.",
     "turnPrevious": "↶",
@@ -46,8 +47,8 @@
     "previous": "← Précédent",
     "next": "Suivant →",
     "duplicate": "Même élément : tournez une aiguille pour pouvoir voyager.",
-    "palette": "Palette",
-    "compass": "Boussole",
+    "palette": "Choisir par liste",
+    "compass": "Voir la boussole",
     "keyboard": "Clavier : 1 / 2 pour l’aiguille, ← / → pour tourner. Tab et Entrée pour les boutons."
   },
   "preparation": {

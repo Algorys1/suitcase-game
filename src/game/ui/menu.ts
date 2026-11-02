@@ -16,6 +16,10 @@ export type MenuButton = {
   name?: string;
   labelOffsetY?: number;
   stationery?: boolean;
+  plateColor?: number;
+  plateAngle?: number;
+  plateHeight?: number;
+  textOnly?: boolean;
 };
 
 type MenuContent = {
@@ -147,13 +151,41 @@ export function createButton(
     fontStyle: 'bold',
     color: button.disabled ? '#776e70' : button.stationery ? '#533d2b' : '#302a37',
     align: 'center',
-    wordWrap: { width: width - (button.stationery ? 36 : 12), useAdvancedWrap: true },
-  }).setOrigin(0.5).setPadding(2);
+    wordWrap: { width: width - (button.stationery && width >= 100 ? 36 : button.plateColor !== undefined ? 10 : 12), useAdvancedWrap: true },
+  }).setOrigin(0.5).setPadding(2).setName(button.name ? `${button.name}-label` : '');
   const target = scene.add.zone(x, y, width, height).setName(button.name ?? button.label);
   if (!button.disabled) target.setInteractive({ useHandCursor: true });
   let pressed = false;
 
   const draw = (hover = false): void => {
+    if (button.plateColor !== undefined || button.textOnly) {
+      background.clear();
+      const plateHeight = button.plateHeight ?? 22;
+      label.setColor(button.disabled ? '#857460' : button.textOnly ? '#533d2b' : '#573520');
+      if (button.plateColor !== undefined) {
+        // Copper and its recess are painted into the suitcase asset.
+        // Only the localized engraving and interaction feedback are rendered here.
+        background.setPosition(x, y).setAngle(button.plateAngle ?? 0);
+        label.setWordWrapWidth(0).setAngle(button.plateAngle ?? 0);
+        label.setScale(Math.min(1, (width - 6) / label.width), 0.9);
+        label.setShadow(0, 1, '#edbb87', 0, false, true);
+        if (button.selected || button.focused || hover) {
+          const half = Math.min(16, width * 0.18);
+          background.lineStyle(button.focused ? 2 : 1, button.plateColor, button.disabled ? 0.3 : 0.85)
+            .lineBetween(-half, plateHeight * 0.4, half, plateHeight * 0.4);
+        }
+        label.setY(y);
+        return;
+      } else if (hover && !button.disabled) {
+        background.lineStyle(1, 0x533d2b, 0.8)
+          .lineBetween(x - label.width / 2, y + label.height / 2 + 2, x + label.width / 2, y + label.height / 2 + 2);
+      }
+      if (button.focused) {
+        background.lineStyle(2, button.textOnly ? 0x79543f : 0xf1d496).strokeRoundedRect(x - width / 2 - 2, y - height / 2, width + 4, height, 9);
+      }
+      label.setY(y + (pressed ? 1 : 0));
+      return;
+    }
     if (button.stationery) {
       background.clear();
       const left = x - width / 2;
@@ -201,7 +233,7 @@ export function createButton(
       if (hover && !button.disabled) {
         background.lineStyle(1, 0x79543f, 0.7).lineBetween(x - label.width / 2, top + height - 8, x + label.width / 2, top + height - 8);
       }
-      if (button.focused) {
+      if (button.focused || button.selected) {
         background.lineStyle(2, 0x634827).strokeRoundedRect(x - width / 2 - 3, y - height / 2 - 3, width + 6, height + 6, 10);
       }
       label.setY(y + (pressed ? 1 : 0));
@@ -252,7 +284,7 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
   const render = (): void => {
     stopReveal?.();
     stopReveal = undefined;
-    scene.children.removeAll(true);
+    scene.children.getAll().forEach(child => child.destroy());
     if (content.postcard !== undefined) {
       stopReveal = renderPostcardMenu(scene, content, content.postcard, focusIndex,
         firstRender && content.reveal !== undefined && !motion.matches);

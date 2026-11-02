@@ -1,0 +1,19 @@
+{
+  "tool": "image_gen",
+  "transparent_background": true,
+  "edits": [
+    {
+      "input": "vial_full.png",
+      "output": "vial_empty_draft.png",
+      "prompt": "Use case: precise-object-edit. Input is the exact target sprite. Produce its EMPTY energy state, preserving exact canvas dimensions, framing, glass chamber shape, glass reflections, lower metal foot, side fittings, neck socket and all their pixel positions.\nTwo specific edits only:\n1. Remove ALL golden star dust, suspended grains, stars, glow and colored light from INSIDE the glass. The chamber is completely empty clear glass, faint neutral ivory/teal tint, largely transparent to the alpha background. Preserve the same glass highlights, edge thickness and metal details. No golden dots or stars remaining inside.\n2. Rework ONLY the top brass saddle (above the neck socket): the reference's deep upward horns are too curved. Make the top mounting bar a LOW shallow crescent, still the same width, with its center at the same attachment point immediately above the socket but with the ends rising only slightly. It is meant to hug the bottom rim of a MUCH LARGER compass. Its upper edge should rise at the ends by only about one tenth of its width, not the deep bowl in the reference. Keep restrained engraved brass craftsmanship matching the rest. Leave transparent space where the old high horns were; do not move or resize the rest of the vial to fill that space.\nNo cork, no stopper, no added cap, no loop or chain. No compass, no text, no other objects. Preserve real alpha transparency and the richly hand-painted style. This is a precisely aligned companion sprite for game compositing, not a new layout."
+    },
+    {
+      "inputs": [
+        "vial_empty_draft.png",
+        "vial_full.png"
+      ],
+      "output": "vial_empty.png",
+      "prompt": "Use case: precise-object-edit. Image 1 is the edit target; image 2 is a reference for the original GLASS quality only.\nFix ONLY the glass chamber in image 1. It currently has a thick white frosted ring and a cut-out hole, which is incorrect. Replace that with a continuous, elegant smooth empty glass volume like image 2 but WITHOUT any gold dust, stars or light inside. The entire glass interior must have a uniform soft translucent neutral champagne-grey tint, no hard cut-out boundaries or hole, no opaque white fog, no mottled alpha noise. Keep slender highlights only at the outer glass sides, and a clean quiet interior. It should read as an empty transparent glass reservoir, not a white frame.\nKeep ALL metal in image 1 exactly unchanged including the SHALLOW curved top saddle, neck socket, shoulder metal, side fittings and bottom foot. Keep exact canvas dimensions, silhouette, framing, scale and all pixel positions. Do not restore the deep top horns from image 2. Do not add a cork, lid, stopper, contents, writing or other object. Preserve transparent background outside the fixture and painted game-art finish."
+    }
+  ]
+}

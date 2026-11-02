@@ -7,11 +7,13 @@ import { createButton } from '../ui/menu';
 import type { MenuButton } from '../ui/menu';
 import { drawSuitcase } from '../ui/suitcase';
 import { drawClosedSuitcase } from '../ui/suitcase';
-import { drawCompass, NEEDLE_MARKS } from '../ui/compass';
+import { drawCompass } from '../ui/compass';
 import { beginTravel, createSession, revealResult } from '../../domain/session';
 import type { SessionState } from '../../domain/session';
 import { BALANCE } from '../../domain/compass';
 import { progressStore } from '../../services/storage';
+import { drawElement, drawPreparationDesk } from '../ui/preparationArt';
+import { drawChargeVial } from '../ui/chargeVial';
 
 type Control = { name: string; action: () => void };
 
@@ -190,7 +192,7 @@ export class PreparationScene extends Phaser.Scene {
   private text(x: number, y: number, value: string, size: number, width: number, bold = false) {
     return this.add.text(x, y, value, {
       fontFamily: '"Trebuchet MS", Arial, sans-serif', fontSize: size,
-      fontStyle: bold ? 'bold' : 'normal', color: '#302a37', align: 'center',
+      fontStyle: bold ? 'bold' : 'normal', color: '#493626', align: 'center',
       wordWrap: { width, useAdvancedWrap: true },
     }).setOrigin(0.5, 0).setPadding(2);
   }
@@ -199,7 +201,7 @@ export class PreparationScene extends Phaser.Scene {
     const disabled = options.disabled || this.session.phase !== 'preparation' || this.drag !== null;
     if (!disabled) this.controls.push({ name: options.name, action: options.action });
     createButton(this, x, y, width, 44, {
-      ...options, disabled, focused: this.focusName === options.name,
+      stationery: true, ...options, disabled, focused: this.focusName === options.name,
       action: () => {
         this.game.canvas.focus({ preventScroll: true });
         this.focusName = options.name;
@@ -212,54 +214,41 @@ export class PreparationScene extends Phaser.Scene {
     const texts = getTexts();
     const copy = texts.preparation;
     const compassCopy = texts.compass;
-    this.children.removeAll(true);
+    // DisplayList.removeAll(true) only detaches objects in Phaser 4.
+    // Destroy them to release text textures, input targets and event listeners.
+    this.children.getAll().forEach(child => child.destroy());
     this.controls = [];
     const { width, height } = this.scale;
     const split = width >= 600;
     const short = height < 500;
-    const contentWidth = Math.min(width - 24, 1100);
+    const contentWidth = Math.min(width - 32, 1100);
     const left = (width - contentWidth) / 2;
-    const dialWidth = split ? contentWidth * 0.48 : contentWidth;
+    const dialWidth = split ? contentWidth * (this.paletteVisible && short ? 0.62 : 0.44) : contentWidth;
     const dialX = split ? left + dialWidth / 2 : width / 2;
     const controlsWidth = split ? contentWidth - dialWidth - 20 : contentWidth;
     const controlsX = split ? left + contentWidth - controlsWidth / 2 : width / 2;
-    const footerY = height - 32;
-    const statusY = height - 104;
-    const caseHeight = split ? Math.min(short ? 110 : 220, height - 230)
-      : Math.min(150, 100 + Math.max(0, height - 568) * 0.25);
-    const caseTop = statusY - caseHeight - 8;
-    const dialTop = short ? 86 : 100;
-    const dialBottom = split ? Math.min(height - 120, 520) : caseTop - 70;
-    const radius = Math.min(190, (dialWidth - 32) / 2, (dialBottom - dialTop) / 2);
+    const footerY = height - 30;
+    const statusY = height - (split ? 86 : 104);
+    const caseHeight = split ? Math.min(460, statusY - (short ? 76 : 90))
+      : Math.min(205, Math.max(156, height * 0.26));
+    const caseTop = statusY - caseHeight + (split ? -10 : 8);
+    const vialHeight = split ? (short ? 60 : 90) : this.paletteVisible ? 44 : 64;
+    const dialTop = short || !split ? 68 : 76;
+    const dialBottom = split ? statusY - vialHeight + 6 : caseTop - vialHeight - 4;
+    const radius = Math.min(198, (dialWidth - 20) / 2, (dialBottom - dialTop) / 2);
     const dialY = (dialTop + dialBottom) / 2;
     this.dial = { x: dialX, y: dialY, radius };
     // Twelve cells: ten elements and the two step controls kept in the fallback.
     const paletteColumns = short ? 4 : 3;
-    const paletteHeight = Math.ceil(compassElements.length / paletteColumns) * 50 - 6;
-    const needleY = dialY + Math.max(radius, paletteHeight / 2) + 36;
     const ready = isReady(this.slots);
     const status = this.message || (ready ? copy.ready : compassCopy.duplicate);
 
-    const background = this.add.graphics();
-    background.fillStyle(0xb69ae8, 0.12).fillCircle(width * 0.12, height * 0.25, 160);
-    background.fillStyle(0x59c9c2, 0.12).fillCircle(width * 0.95, height * 0.8, 180);
-    this.text(width / 2, 8, copy.title, short || !split ? 23 : 32, contentWidth, true);
-    this.text(width / 2, short || !split ? 39 : 48,
+    drawPreparationDesk(this, width, height);
+    this.text(width / 2, 8, copy.title, short || !split ? 23 : 30, contentWidth, true);
+    this.text(width / 2, short || !split ? 39 : 46,
       this.paletteVisible ? compassCopy.paletteInstructions : compassCopy.instructions,
-      short || !split ? 13 : 17, contentWidth);
+      short || !split ? 13 : 15, contentWidth).setColor('#68523e');
 
-    // Selection labels also choose the active needle for keyboard and fallback palette.
-    const controlButtonWidth = Math.min(250, (dialWidth - 12) / 2);
-    for (const index of [0, 1] as const) {
-      const id = this.slots[index];
-      const name = id === null ? copy.empty : texts.elements[id].name;
-      this.button(dialX + (index === 0 ? -1 : 1) * (controlButtonWidth + 12) / 2,
-        needleY, controlButtonWidth, {
-          name: `needle-${index}`, label: `${NEEDLE_MARKS[index]} ${index + 1} · ${name}`,
-          fontSize: controlButtonWidth < 160 ? 13 : 17, selected: this.activeNeedle === index,
-          action: () => this.chooseNeedle(index),
-        });
-    }
     if (this.paletteVisible) {
       const columns = paletteColumns;
       const rows = Math.ceil(compassElements.length / columns);
@@ -283,6 +272,7 @@ export class PreparationScene extends Phaser.Scene {
     } else {
       drawCompass(this, dialX, dialY, radius, this.slots, this.activeNeedle, texts.elements, {
         disabled: this.session.phase !== 'preparation' || this.drag !== null,
+        charged: this.session.charges > 0,
         dragAngle: this.drag?.angle ?? null,
         grab: (index, pointer) => this.grabNeedle(index, pointer),
         select: id => this.chooseElement(id),
@@ -299,29 +289,46 @@ export class PreparationScene extends Phaser.Scene {
     for (const index of [0, 1] as const) {
       if (positions === null) break;
       const id = this.slots[index];
-      this.text(positions[index].x, positions[index].y - 10,
-        id === null ? copy.empty : texts.elements[id].name,
-        suitcaseWidth < 350 ? 12 : 17, suitcaseWidth * 0.29, true).setName(`slot-label-${index}`);
+      const position = positions[index];
+      const figurine = id === null ? undefined : drawElement(this, id, position.x, position.y, position.size);
+      figurine?.setOrigin(0.5, 1).setName(`slot-figurine-${index}`);
+      // Copper inlays follow the front rim above the clasps and select each needle.
+      const plateWidth = position.labelWidth;
+      this.button(position.labelX, position.labelY, plateWidth, {
+        name: `needle-${index}`, label: id === null ? copy.empty : texts.elements[id].name,
+        stationery: false, plateColor: index === 0 ? 0x78cdbb : 0xc2a0e4,
+        plateAngle: position.labelAngle, plateHeight: position.labelHeight,
+        fontSize: plateWidth < 85 ? 10 : plateWidth < 115 ? 12 : 15,
+        selected: this.activeNeedle === index, action: () => this.chooseNeedle(index),
+      });
     }
     const charges = texts.journey.charges.replace('{charges}', String(this.session.charges))
       .replace('{max}', String(BALANCE.initialCharges));
-    this.text(controlsX, statusY, charges + '\n' + status, 13, controlsWidth).setName('preparation-status');
-    if (split && height >= 600) {
-      const hint = this.text(dialX, needleY + 34, compassCopy.keyboard, 14, dialWidth).setName('keyboard-hint');
-      if (hint.y + hint.height > footerY - 30) hint.destroy();
-    }
+    const paletteBottom = dialY + (Math.ceil(12 / paletteColumns) * 50 - 6) / 2;
+    const vialTop = this.paletteVisible ? Math.max(dialY + radius - 8, paletteBottom + 4) : dialY + radius - 8;
+    drawChargeVial(this, dialX, vialTop, vialHeight, this.session.charges, BALANCE.initialCharges,
+      !this.paletteVisible);
+    const count = compassCopy.chargeCount.replace('{charges}', String(this.session.charges))
+      .replace('{max}', String(BALANCE.initialCharges));
+    this.text(split ? dialX : dialX + 48, split ? vialTop + vialHeight - 1 : vialTop + 26,
+      count, split ? 15 : 13, 72, true)
+      .setName('preparation-charges');
+    if (split) {
+      this.text(controlsX, statusY, status, 13, controlsWidth).setName('preparation-status');
+    } else this.text(controlsX, statusY + 12, status, 12, controlsWidth).setName('preparation-status');
 
     const footerWidth = Math.min(contentWidth, 650);
     const footerButtonWidth = (footerWidth - 16) / 3;
     this.button(width / 2 - footerButtonWidth - 8, footerY, footerButtonWidth, {
-      name: 'home', label: copy.home, fontSize: 16, action: () => this.scene.start('home'),
+      name: 'home', label: copy.home, fontSize: split ? 16 : 13, action: () => this.scene.start('home'),
     });
     this.button(width / 2, footerY, footerButtonWidth, {
       name: 'toggle-palette', label: this.paletteVisible ? compassCopy.compass : compassCopy.palette,
-      fontSize: 15, action: () => { this.paletteVisible = !this.paletteVisible; this.render(); },
+      stationery: false, textOnly: true,
+      fontSize: split ? 15 : 12, action: () => { this.paletteVisible = !this.paletteVisible; this.render(); },
     });
     this.button(width / 2 + footerButtonWidth + 8, footerY, footerButtonWidth, {
-      name: 'travel', label: copy.travel, fontSize: 16, primary: true, disabled: !ready,
+      name: 'travel', label: copy.travel, fontSize: split ? 18 : 13, primary: true, disabled: !ready,
       action: () => this.depart(),
     });
     this.game.canvas.setAttribute('aria-description', [

@@ -4,13 +4,22 @@ import { createMenu } from '../ui/menu';
 import { createSession } from '../../domain/session';
 import { progressStore } from '../../services/storage';
 import { destinations } from '../../domain/recipes';
+import { preloadPostcards } from '../ui/postcard';
+import { preloadSouvenirs } from '../ui/souvenir';
+import { prepareIllustrationTextures } from '../ui/illustrationTextures';
 
 export class HomeScene extends Phaser.Scene {
   constructor() {
     super('home');
   }
 
+  preload(): void {
+    preloadPostcards(this);
+    preloadSouvenirs(this);
+  }
+
   create(): void {
+    prepareIllustrationTextures(this);
     const texts = getTexts();
 
     createMenu(this, {

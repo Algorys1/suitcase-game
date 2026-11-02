@@ -4,7 +4,7 @@
 > **Statut :** proposition à prototyper, **non encore validée en jeu**  
 > **Références :** `docs/GAME_DESIGN.md`, `docs/ART_DIRECTION.md`, `docs/TECHNICAL.md`, `src/data/elements.json`, `src/data/destinations.json`.
 
-> **Avancement :** phase A, voyages, charges 10 / 1 / 2, bilan et carnet permanent sont implémentés avec visuels temporaires. Les découvertes sont sauvegardées entre parties et rechargements, avec repli en mémoire si le stockage est bloqué. Phases B/C non commencées : aucun autocollant ni disposition décorative n'est encore ajouté à la sauvegarde. Équilibrage et ergonomie restent à évaluer en playtest.
+> **Avancement :** phase A, voyages, charges 10 / 1 / 2, bilan et carnet permanent sont implémentés. La manipulation directe des aiguilles est retenue après essai. La **phase B commence avec trois autocollants souvenirs pilotes**, visibles sous les histoires des destinations découvertes. Leur disponibilité se déduit du carnet, sans nouveau champ de sauvegarde. La phase C n'est pas commencée. [Pilotes et vérification](SOUVENIR_PILOTS.md).
 
 ## 1. Objectif
 
@@ -97,7 +97,7 @@ Pour limiter la complexité, utiliser une **vue de la valise fermée** avec quel
 
 - Petits pictogrammes cartoon simples, colorés et immédiatement reconnaissables.
 - Silhouette lisible à petite taille, contour doux, peu de détails.
-- Un motif par destination, par exemple : palmier pour l'Archipel d'Azur, champignon lumineux pour Mycélia, volcan pour le Cœur de braise.
+- Un souvenir rapporté du voyage par destination : le joueur a écarté les rappels d'ingrédients (palmier, champignon, volcan). Les trois motifs pilotes retenus sont un coquillage magique pour l'Archipel d'Azur, une lanterne à spores pour Mycélia et une fiole de braise éternelle pour le Cœur de braise.
 - Garder une marge et une ombre discrète pour donner l'impression d'un autocollant collé sur le cuir.
 - Les 30 illustrations peuvent être produites progressivement ; prévoir un pictogramme temporaire par destination pendant le développement.
 
@@ -147,6 +147,10 @@ type StickerDecoration = {
 - Tester sur desktop et écran tactile réduit.
 
 **Phase B — Déblocage des autocollants (priorité moyenne)**
+
+**Retour du joueur :** les trois souvenirs, le carnet et la présentation sur étiquette kraft sont retenus. Les autocollants restent entièrement à l'intérieur de l'étiquette, légèrement inclinés ; le scotch suffit à évoquer le souvenir collé. Le joueur demande un commit de cette étape. Cette validation porte sur le pilote de trois destinations ; les 27 autres motifs restent à concevoir et la phase C n'est pas commencée.
+
+**Pilote courant :** trois souvenirs illustrés et nommés en FR/EN, affichés dans le résultat et dans les fiches connues du carnet. Les anciennes sauvegardes donnent déjà accès aux souvenirs de leurs lieux découverts ; aucun déblocage séparé n'est enregistré. Les autres motifs et la décoration attendent la validation de ces exemples.
 
 - Associer chaque destination à un motif temporaire.
 - Débloquer l'autocollant lors de la première découverte.

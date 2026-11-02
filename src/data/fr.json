@@ -28,6 +28,15 @@
     "back": "Retour au carnet",
     "placeholder": "Illustration provisoire"
   },
+  "stickers": {
+    "new": "Nouvel autocollant !",
+    "kept": "Souvenir de voyage",
+    "names": {
+      "seashell": "Coquillage des horizons",
+      "sporeLantern": "Lanterne à spores",
+      "emberVial": "Braise éternelle"
+    }
+  },
   "compass": {
     "instructions": "Faites glisser une aiguille vers un symbole.",
     "paletteInstructions": "Choisissez une aiguille, puis un élément.",
@@ -116,7 +125,7 @@
   "destinations": {
     "archipel_azur": {
       "title": "L'Archipel d'Azur",
-      "story": "Histoire à écrire — texte provisoire."
+      "story": "Ici, les vagues rapportent des éclats de ciel. Sous les palmiers, on dit qu’en écoutant un coquillage, on entend la mer du prochain voyage."
     },
     "cimes_eternelles": {
       "title": "Les Cimes éternelles",
@@ -124,7 +133,7 @@
     },
     "mycelia": {
       "title": "Mycélia",
-      "story": "Histoire à écrire — texte provisoire."
+      "story": "À la tombée du jour, les champignons allument leurs fenêtres. Leurs spores éclairent les sentiers, pour que même les voyageurs égarés trouvent une porte accueillante."
     },
     "ruines_englouties": {
       "title": "Les Ruines englouties",
@@ -132,7 +141,7 @@
     },
     "coeur_de_braise": {
       "title": "Le Cœur de braise",
-      "story": "Histoire à écrire — texte provisoire."
+      "story": "Sous la pierre sombre, le monde garde un cœur incandescent. Chaque braise qui s’envole emporte un peu de sa chaleur vers les terres où l’hiver s’attarde."
     },
     "iles_suspendues": {
       "title": "Les Îles suspendues",

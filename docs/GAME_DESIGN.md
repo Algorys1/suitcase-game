@@ -4,11 +4,13 @@
 > **Jam :** Indie Park Game Jam #6 — thème « Voyage ».  
 > **Portée :** jeu solo, jouable dans un navigateur, sessions courtes, progression de collection persistante.
 
-> **Avancement du prototype — étape 6 :** voyages, Néant, charges 10 / 1 / 2, bilan et carnet permanent sont jouables. Les paramètres proposent FR/EN, avec application immédiate et sauvegarde du choix sans perte des découvertes. Tous les écrans et les éléments utilisent la langue choisie ; illustrations, histoires et titres anglais des destinations restent provisoires. La session est perdue au rechargement, mais le carnet et la langue restent enregistrés dans ce navigateur si le stockage est disponible. Les autocollants restent à ajouter.
+> **Avancement du prototype — étape 6 :** voyages, Néant, charges 10 / 1 / 2, bilan et carnet permanent sont jouables. Les paramètres proposent FR/EN, avec application immédiate et sauvegarde du choix sans perte des découvertes. Tous les écrans et les éléments utilisent la langue choisie ; illustrations, histoires et titres anglais des destinations restent provisoires. La session est perdue au rechargement, mais le carnet et la langue restent enregistrés dans ce navigateur si le stockage est disponible. Trois autocollants souvenirs prototypent la phase B sous les histoires ; la décoration de la valise reste à ajouter après validation.
 
 > **Complément :** [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md), proposition à prototyper, non encore validée en jeu. Il prime pour la méthode de sélection par deux aiguilles ; le présent document conserve la référence des recettes, de l'énergie, du carnet et de la fin de session. Les autocollants ajoutent une progression cosmétique, sans bonus de gameplay.
 
 ## 1. Intention
+
+**Habillage pilote en cours :** trois destinations du catalogue disposent d'illustrations et de propositions d'histoires FR/EN intégrées aux résultats et au carnet : l'Archipel d'Azur, Mycélia et le Cœur de braise. Le joueur a validé le style des trois illustrations après essai. [Les histoires et le nouvel habillage des fenêtres](DESTINATION_PILOTS.md) restent à valider. Les recettes, charges, découvertes et règles de session ne changent pas.
 
 Le joueur prépare une valise magique en y plaçant **exactement deux éléments distincts**, puis part vers une destination fantastique déterminée par leur association. Il cherche à découvrir les **30 lieux** du carnet au fil de plusieurs parties, tout en ménageant l'énergie limitée d'une boussole.
 

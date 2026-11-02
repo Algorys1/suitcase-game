@@ -6,7 +6,7 @@
 
 > **Avancement — étape 6 :** préparation, recettes/Néant, charges, bilan et carnet permanent paginé sont implémentés. Les paramètres FR/EN appliquent et sauvegardent le choix immédiatement. `services/i18n.ts` fournit les catalogues typés et la résolution des clés de contenu avec repli français. `services/storage.ts` conserve le schéma v1 et les découvertes lors d'un changement de langue ; les erreurs de stockage utilisent un état en mémoire avec une indication non bloquante. La session n'est pas sauvegardée. Histoires et titres anglais de destinations restent provisoires.
 
-> **Extension :** [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md) définit la sélection par aiguilles et les autocollants cosmétiques. La phase A est implémentée avec visuels temporaires, en attente de playtest ; les autocollants ne sont pas implémentés. Les modèles ci-dessous décrivent le socle et seront étendus au fil des phases validées.
+> **Extension :** [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md) définit la sélection par aiguilles et les autocollants cosmétiques. La phase A est implémentée ; la manipulation directe est retenue. Trois autocollants souvenirs prototypent la phase B dans les résultats et fiches du carnet, sans modifier la sauvegarde. La phase C reste à valider avant implémentation.
 
 ## 1. Objectifs et contraintes
 
@@ -211,6 +211,15 @@ export const BALANCE = {
 - Les nouveaux contrôles et messages restent externalisés en FR/EN. Les critères de test propres à chaque phase sont dans [l'extension](COMPASS_AND_STICKERS.md).
 
 ## 8. Interface, affichage et assets
+
+- **Réduction des illustrations :** le rendu utilise un filtrage trilinéaire (`LINEAR_MIPMAP_LINEAR`). Phaser 4.2.1 ne génère ces niveaux réduits que pour des textures de dimensions puissances de deux. `ui/illustrationTextures.ts` prépare donc une fois, après chargement dans `HomeScene`, un cache canvas de 1024 px maximum avec lissage de qualité élevée ; le cadre exclut le remplissage transparent et conserve le ratio original. Les fichiers sources et WebP restent inchangés. Les retours à l'accueil réutilisent ce cache, et un asset rechargé est préparé à nouveau.
+- **Découpe des autocollants :** deux filtres Phaser 4 en espace écran ajoutent un liseré blanc et une ombre légère autour de la silhouette. Ils suivent l'opacité de l'autocollant et sont détruits avec lui. En repli Canvas, les images restent visibles sans ces effets WebGL.
+
+- **Souvenirs pilotes :** `souvenirs.json` fournit trois associations destination/asset/clé de traduction. `domain/souvenirs.ts` déduit la disponibilité du carnet, sans Phaser et sans état supplémentaire. `HomeScene` précharge les trois WebP transparents via `ui/souvenir.ts`. Le nom reste lisible si la texture manque. Le rendu et les effets réutilisent le cycle des cartes ; les scènes passent seulement le souvenir autorisé. [Détails des pilotes](SOUVENIR_PILOTS.md).
+
+- **Pilotes illustrés :** `src/data/pilotDestinations.json` contient uniquement les trois IDs dont les fichiers sont fournis. `HomeScene.preload()` charge leurs chemins depuis le catalogue via la base Vite relative. `ui/postcard.ts` partage les textures entre résultats et carnet, conserve leur ratio et utilise le dessin temporaire si une texture manque. Aucun chargement n'est demandé pour les 27 assets non produits.
+- `ui/menu.ts` présente les résultats et fiches en deux colonnes en paysage, ou avec l'image entre le titre et l'histoire en portrait. Les PNG sources et prompts sont conservés dans `designs/destinations/pilot-v1/` ; seuls les WebP de `public/assets/destinations/` sont distribués. Voir [les pilotes](DESTINATION_PILOTS.md).
+- `ui/notebook.ts` dessine le papier et la reliure avec un grain déterministe, et gère les fondus/étincelles de révélation. `ResultScene` transmet uniquement le statut nouvelle découverte/revisite, le coût et le contenu déjà résolus. Le rendu ne débite aucune charge et ne modifie pas le carnet. Les effets sont annulés au redimensionnement, à la navigation clavier, à l'activation de la réduction des animations et à la sortie de scène ; ils ne repartent pas lors d'un nouveau rendu. Les fiches du carnet restent statiques.
 
 - Scène de préparation cible : valise au centre, **deux emplacements**, boussole à dix symboles et deux aiguilles, charges lisibles, bouton Voyager.
 - La manipulation directe des aiguilles est le prototype courant : glisser une pointe ou un contrepoids, ou sélectionner une aiguille puis cliquer un symbole. `elementAtAngle` convertit l'angle en élément par crans de 36°, puis la sélection commune est réutilisée. Les commandes précédent/suivant restent au clavier et dans la palette de repli. Le geste est transitoire, ne coûte aucune charge et bloque le départ ; les écouteurs de pointeur sont nettoyés à la sortie de scène.

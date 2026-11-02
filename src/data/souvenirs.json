@@ -1,0 +1,5 @@
+[
+  { "destinationId": "archipel_azur", "image": "assets/stickers/archipel_azur.webp", "nameKey": "stickers.names.seashell" },
+  { "destinationId": "mycelia", "image": "assets/stickers/mycelia.webp", "nameKey": "stickers.names.sporeLantern" },
+  { "destinationId": "coeur_de_braise", "image": "assets/stickers/coeur_de_braise.webp", "nameKey": "stickers.names.emberVial" }
+]

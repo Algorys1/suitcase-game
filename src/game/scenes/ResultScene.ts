@@ -6,6 +6,8 @@ import type { SessionState } from '../../domain/session';
 import { createMenu } from '../ui/menu';
 import { destinations } from '../../domain/recipes';
 import { progressStore } from '../../services/storage';
+import { hasPostcard } from '../ui/postcard';
+import { souvenirForDestination } from '../../domain/souvenirs';
 
 export class ResultScene extends Phaser.Scene {
   constructor() { super('result'); }
@@ -17,15 +19,20 @@ export class ResultScene extends Phaser.Scene {
     const destination = trip.destinationId === null ? null : getDestinationTexts(trip.destinationId);
     const cost = texts.journey.cost.replace('{cost}', String(trip.cost))
       .replace('{charges}', String(session.charges)).replace('{max}', String(BALANCE.initialCharges));
+    const postcard = destinations.findIndex(entry => entry.id === trip.destinationId);
     const description = destination
-      ? [trip.isNewDiscovery ? texts.notebook.newDiscovery : texts.notebook.alreadyVisited, cost, destination.story, texts.journey.artwork].join('\n\n')
+      ? destination.story + (hasPostcard(this, postcard) ? '' : '\n\n' + texts.journey.artwork)
       : [texts.journey.voidStory, cost].join('\n\n');
     const isVoid = trip.destinationId === null;
     this.cameras.main.setBackgroundColor(isVoid ? '#24243e' : '#fff4df');
     createMenu(this, {
       title: isVoid ? texts.journey.voidTitle : destination?.title ?? texts.journey.unknown,
       description, dark: isVoid,
-      postcard: isVoid ? undefined : destinations.findIndex(entry => entry.id === trip.destinationId),
+      caption: isVoid ? undefined : (trip.isNewDiscovery ? texts.notebook.newDiscovery : texts.notebook.alreadyVisited),
+      detail: isVoid ? undefined : cost,
+      reveal: isVoid ? undefined : trip.isNewDiscovery ? 'new' : 'revisit',
+      postcard: isVoid ? undefined : postcard,
+      souvenir: souvenirForDestination(trip.destinationId, progressStore.read().discoveredDestinationIds),
       footer: progressStore.persistent ? undefined : texts.notebook.unavailable,
       buttons: [{
         label: session.charges === 0 ? texts.journey.finish : texts.journey.continue,

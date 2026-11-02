@@ -36,7 +36,7 @@ describe('résolution des recettes', () => {
     expect(resolveRecipe('tree', 'water')).toBeNull();
   });
 
-  it('fournit les titres et textes provisoires aux clés du catalogue en FR et EN', () => {
+  it('fournit les titres et histoires aux clés du catalogue en FR et EN', () => {
     const french: Record<string, { title: string; story: string }> = fr.destinations;
     const english: typeof french = en.destinations;
     expect(Object.keys(french).sort()).toEqual(destinations.map(({ id }) => id).sort());
@@ -45,8 +45,9 @@ describe('résolution des recettes', () => {
       expect(destination.titleKey).toBe(`destinations.${destination.id}.title`);
       expect(destination.storyKey).toBe(`destinations.${destination.id}.story`);
       expect(french[destination.id]?.title).toBeTruthy();
-      expect(french[destination.id]?.story).toContain('provisoire');
-      expect(english[destination.id]?.title).toContain('title pending');
+      expect(french[destination.id]?.story.trim()).toBeTruthy();
+      expect(english[destination.id]?.title.trim()).toBeTruthy();
+      expect(english[destination.id]?.story.trim()).toBeTruthy();
     }
     expect(french.archipel_azur?.title).toBe("L'Archipel d'Azur");
     expect(french.coeur_de_braise?.title).toBe('Le Cœur de braise');

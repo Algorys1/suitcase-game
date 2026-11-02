@@ -1,9 +1,23 @@
 import { describe, expect, it } from 'vitest';
 import elements from '../data/elements.json';
 import destinations from '../data/destinations.json';
+import pilotIds from '../data/pilotDestinations.json';
+
+const illustrations = import.meta.glob('../../public/assets/destinations/*.webp', {
+  eager: true, query: '?url', import: 'default',
+});
 
 // Guard the supplied catalogue without implementing recipe resolution yet.
 describe('catalogue de référence', () => {
+  it('livre les trois illustrations pilotes aux chemins du catalogue', () => {
+    expect(pilotIds).toHaveLength(3);
+    expect(new Set(pilotIds).size).toBe(pilotIds.length);
+    for (const id of pilotIds) {
+      const destination = destinations.find(entry => entry.id === id);
+      expect(destination, id).toBeDefined();
+      expect(illustrations).toHaveProperty(`../../public/${destination?.image}`);
+    }
+  });
   it('conserve 10 éléments et 30 destinations avec des identifiants uniques', () => {
     expect(elements).toHaveLength(10);
     expect(new Set(elements.map(({ id }) => id)).size).toBe(10);

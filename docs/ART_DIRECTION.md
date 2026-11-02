@@ -8,6 +8,8 @@
 
 ## 1. Intention visuelle
 
+**Première série pilote validée visuellement par le joueur :** l'Archipel d'Azur, Mycélia et le Cœur de braise disposent de cartes peintes 4:3, aux formes arrondies et aux ombres douces. Les palettes turquoise/sable, mousse/violet et braise/prune déclinent une même intention chaleureuse. Ce style est retenu pour la suite ; les histoires FR/EN restent des propositions. [Détails, sources et prompts](DESTINATION_PILOTS.md).
+
 **Promesse :** une valise enchantée qui ressemble à une boîte à jouets et ouvre sur des cartes postales de mondes impossibles.
 
 Mots-clés : **lisible, chaleureux, rond, féerique, joyeux, léger**.
@@ -137,6 +139,10 @@ Le Néant doit contraster avec les destinations colorées sans donner l'impressi
 
 ## 8. Interface et typographie
 
+**Habillage courant des résultats et fiches :** carnet ouvert sur un fond vert sombre, reliure caramel, papier crème avec grain discret et pli central cousu en paysage, exactement au milieu de deux pages de même largeur. Deux coins dorés fixent la carte ; titre, mention de découverte et coût sont hiérarchisés sur la page voisine. En portrait, la page devient unique et place la carte avant l'histoire. Après retour du joueur, les boutons verts ont été remplacés par des languettes de papier aux bords déchirés, fixées par deux morceaux de scotch translucide en haut à droite et en bas à gauche, avec texte brun, survol souligné et focus contrasté. Le papier est dessiné localement dans Phaser, sans ressource ni police distante. Cet habillage attend le retour du joueur avant sa déclinaison aux autres fenêtres.
+
+**Révélation courante :** carte en fondu de 360 ms, puis texte (délai 140 ms, durée 280 ms). Six étincelles dorées s'éteignent en moins de 700 ms lors d'une première découverte. Une revisite utilise un fondu plus court, sans étincelles. Continuer reste disponible ; les fiches du carnet s'affichent immédiatement. La préférence système de réduction des animations supprime ces effets, y compris si elle est activée pendant la révélation. Redimensionner ou naviguer au clavier termine la révélation sur un écran entièrement visible.
+
 - Panneaux inspirés de pages de carnet, d'étiquettes de bagage et de papier crème.
 - Boutons larges, états normal / survol / appui / désactivé clairement différenciés.
 - Police sans-serif arrondie, avec caractères français complets (accents, apostrophes) et bonne lisibilité en anglais ; vérifier la licence avant intégration.
@@ -146,6 +152,12 @@ Le Néant doit contraster avec les destinations colorées sans donner l'impressi
 - Boussole : **charges numériques lisibles** en plus de tout effet décoratif ou jauge.
 
 ### Autocollants — extension à prototyper
+
+**Lisibilité sur le carnet :** le contour crème des sources se confondait avec le papier. Le rendu ajoute désormais un liseré blanc et une ombre portée légère autour de la silhouette. Le filtrage des réductions est lissé pour éviter les contours crénelés des grandes images affichées en petit.
+
+**Nouvel essai de support demandé par le joueur :** étiquette de bagage en kraft brun, œillet à droite, scotch en haut, nom du souvenir écrit sur l'étiquette. Le sticker reste légèrement incliné mais tient entièrement dans les limites du kraft, selon le retour du joueur ; le scotch suffit à évoquer le souvenir collé. Le support reste sous l'histoire et s'adapte aux petits écrans ; sa présentation est retenue après essai du joueur.
+
+**Direction retenue après échange avec le joueur :** représenter des objets rapportés des voyages, plutôt que répéter leurs ingrédients. La première série associe le coquillage des horizons à l'Archipel d'Azur, la lanterne à spores à Mycélia et la braise éternelle en fiole au Cœur de braise. Cartoon peint, contour brun et bord crème découpé, fond transparent. Les trois dessins sont intégrés sous les histoires pour validation ; la décoration de la valise viendra ensuite. [Sources, noms et portée du pilote](SOUVENIR_PILOTS.md).
 
 - Pictogrammes cartoon par destination, avec silhouettes simples, marge et ombre discrète ; utiliser des motifs temporaires avant les illustrations définitives.
 - Présenter la décoration sur le couvercle fermé, avec **6 positions fixes proposées**, espacées et lisibles en perspective. Ces positions ne sont pas les deux emplacements d'éléments dans la valise.

@@ -28,6 +28,15 @@
     "back": "Back to journal",
     "placeholder": "Temporary artwork"
   },
+  "stickers": {
+    "new": "New sticker!",
+    "kept": "Travel keepsake",
+    "names": {
+      "seashell": "Seashell of horizons",
+      "sporeLantern": "Spore lantern",
+      "emberVial": "Eternal ember"
+    }
+  },
   "compass": {
     "instructions": "Drag a needle towards a symbol.",
     "paletteInstructions": "Choose a needle, then an element.",
@@ -115,24 +124,24 @@
   },
   "destinations": {
     "archipel_azur": {
-      "title": "Destination 01 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Azure Archipelago",
+      "story": "Here, the waves bring back fragments of sky. Beneath the palms, they say a seashell lets you hear the sea of your next journey."
     },
     "cimes_eternelles": {
       "title": "Destination 02 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "mycelia": {
-      "title": "Destination 03 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "Mycelia",
+      "story": "At dusk, the mushrooms light their windows. Their spores illuminate the paths, so even lost travellers can find a welcoming door."
     },
     "ruines_englouties": {
       "title": "Destination 04 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "coeur_de_braise": {
-      "title": "Destination 05 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Ember Heart",
+      "story": "Beneath the dark stone, the world keeps a glowing heart. Each drifting ember carries a little of its warmth to lands where winter lingers."
     },
     "iles_suspendues": {
       "title": "Destination 06 (title pending)",

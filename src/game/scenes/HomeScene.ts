@@ -15,6 +15,9 @@ export class HomeScene extends Phaser.Scene {
   }
 
   preload(): void {
+    if (!this.textures.exists('home-departure')) {
+      this.load.image('home-departure', `${import.meta.env.BASE_URL}assets/home/departure.webp`);
+    }
     preloadPostcards(this);
     preloadSouvenirs(this);
     preloadPreparationArt(this);

@@ -60,6 +60,12 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 - La transition dure 350 ms ; la préférence système de réduction des animations supprime le fondu. La boussole affiche ses charges numériquement dans la préparation, y compris en mode palette.
 - Vite peut signaler un bundle supérieur à 500 Ko : le moteur Phaser représente l'essentiel du fichier. Cet avertissement n'empêche pas le build.
 
+### Accueil illustré
+
+Une première composition à valider présente la valise fermée, le carnet prune et une boussole sur la table de préparation. Le titre FR/EN reste du texte net ; l'illustration passe sous le titre en portrait. Le départ utilise la languette de papier existante, le carnet affiche la progression permanente et les paramètres restent accessibles. Souris, toucher et clavier conservent les trois actions du menu.
+
+Illustration produite avec l'outil intégré `image_gen` : [source PNG](designs/home/hero-v1/departure.png), [prompt et références](designs/home/hero-v1/prompt.json), [export WebP transparent](public/assets/home/departure.webp) (366 Kio). Le décor existant est réutilisé. Si l'illustration manque, la valise fermée sert de repli.
+
 ### Habillage de l'écran de préparation
 
 - Fiole illustrée à essayer : verre en goutte, poussière d'étoiles et monture en laiton peinte, sans bouchon, intégrée au bord de la boussole. Le verre et le métal restent fixes tandis que la poussière diminue avec les charges ; compteur conservé. Sources [pleine](designs/preparation/vial-v2/vial_full.png) / [vide](designs/preparation/vial-v2/vial_empty.png), [prompt initial](designs/preparation/vial-v2/prompt-full.json) et [prompts d'édition](designs/preparation/vial-v2/prompts-empty.json), produits avec l'outil intégré `image_gen`. Exports `public/assets/preparation/vial_full.webp` et `vial_empty.webp` (490 Ko au total). Rendu dynamique dans `game/ui/chargeVial.ts`, sans nouvelle règle de jeu.

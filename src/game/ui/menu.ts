@@ -4,6 +4,7 @@ import { drawPostcard } from './postcard';
 import { drawNotebook, drawDiamond, revealPostcard } from './notebook';
 import { drawSouvenir } from './souvenir';
 import type { Souvenir } from '../../domain/souvenirs';
+import { drawPreparationDesk } from './preparationArt';
 
 export type MenuButton = {
   label: string;
@@ -38,6 +39,68 @@ type MenuContent = {
 
 const fontFamily = '"Trebuchet MS", Arial, sans-serif';
 const ink = 0x302a37;
+
+/** A departure table, with a separate portrait composition and localized live text. */
+function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: number): void {
+  const { width, height } = scene.scale;
+  const landscape = width >= 600;
+  const short = height < 450;
+  const innerWidth = Math.min(width - 40, 1160);
+  const left = (width - innerWidth) / 2;
+  const columnWidth = landscape ? innerWidth * 0.44 : Math.min(innerWidth, 440);
+  const center = landscape ? left + columnWidth / 2 : width / 2;
+  drawPreparationDesk(scene, width, height);
+
+  const ornament = scene.add.graphics();
+  ornament.lineStyle(1, 0x9a7041, 0.35).strokeRoundedRect(10, 10, width - 20, height - 20, 8);
+  const words = (y: number, value: string, size: number, color = '#65452e') => scene.add.text(center, y, value, {
+    fontFamily, fontSize: size, color, align: 'center',
+    wordWrap: { width: columnWidth - 8, useAdvancedWrap: true },
+  }).setOrigin(0.5, 0).setPadding(2);
+  words(landscape ? height * 0.10 : 22, getTexts().eyebrow, short || !landscape ? 10 : 11)
+    .setName('home-eyebrow');
+  const titleY = landscape ? height * 0.19 : 50;
+  const title = scene.add.text(center, titleY, getTexts().homeTitle, {
+    fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'bold',
+    fontSize: landscape ? Math.min(short ? 31 : 48, columnWidth / 8.3) : width < 360 ? 29 : 34,
+    color: '#513322', align: 'center', lineSpacing: 1,
+  }).setOrigin(0.5, 0).setPadding(3).setName('menu-title');
+  const ruleY = title.y + title.height + (short ? 8 : 15);
+  ornament.lineStyle(1, 0xaa7c43, 0.65)
+    .lineBetween(center - 45, ruleY, center - 12, ruleY)
+    .lineBetween(center + 12, ruleY, center + 45, ruleY);
+  ornament.fillStyle(0xaa7c43);
+  drawDiamond(ornament, center, ruleY, 4);
+  const description = words(ruleY + (short ? 9 : 14), content.description, short || !landscape ? 14 : 17)
+    .setName('menu-description');
+
+  const startY = landscape ? height * 0.69 : height - 166;
+  const buttonWidth = Math.min(columnWidth - 12, 282);
+  const buttonHeight = short ? 44 : 48;
+  const journalY = startY + (short ? 49 : 57);
+  const settingsY = height - 33;
+  const positions = [startY, journalY, settingsY];
+
+  const artKey = scene.textures.exists('home-departure') ? 'home-departure' : 'preparation-suitcase_closed';
+  if (scene.textures.exists(artKey)) {
+    const artTop = landscape ? height * 0.14 : description.y + description.height + 10;
+    const artBottom = landscape ? height * 0.87 : startY - buttonHeight / 2 - 14;
+    const artWidth = landscape ? innerWidth * 0.55 : Math.min(innerWidth, 460);
+    const artX = landscape ? left + innerWidth * 0.735 : center;
+    const art = scene.add.image(artX, (artTop + artBottom) / 2, artKey).setName('home-departure');
+    art.setScale(Math.min(artWidth / art.width, Math.max(0, artBottom - artTop) / art.height));
+  }
+
+  content.buttons.forEach((button, index) => createButton(scene,
+    landscape && index === 2 ? width - 110 : center, positions[index] ?? settingsY,
+    index === 2 ? Math.min(buttonWidth, 170) : buttonWidth, buttonHeight,
+    { ...button, focused: index === focusIndex, stationery: index === 0, textOnly: index !== 0,
+      fontSize: index === 2 ? 14 : short ? 16 : 18 }));
+  if (content.footer) {
+    words(journalY + buttonHeight / 2 + 1, content.footer, short || width < 360 ? 11 : 12)
+      .setName('home-progress');
+  }
+}
 
 /** Art-led layout shared by a travel result and its permanent journal entry. */
 function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard: number, focusIndex: number,
@@ -285,6 +348,11 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
     stopReveal?.();
     stopReveal = undefined;
     scene.children.getAll().forEach(child => child.destroy());
+    if (content.home) {
+      renderHomeMenu(scene, content, focusIndex);
+      firstRender = false;
+      return;
+    }
     if (content.postcard !== undefined) {
       stopReveal = renderPostcardMenu(scene, content, content.postcard, focusIndex,
         firstRender && content.reveal !== undefined && !motion.matches);

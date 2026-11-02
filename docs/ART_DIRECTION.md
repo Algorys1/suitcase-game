@@ -8,6 +8,8 @@
 
 ## 1. Intention visuelle
 
+**Accueil proposé, à valider en jeu :** une table de départ commune à la préparation, avec une nature morte illustrée réunissant valise fermée, carnet prune et boussole. Une lueur discrète traverse la jointure de la valise. Titre en sérif brun, commande de départ sur papier déchiré, accès au carnet et progression plus discrets ; les textes FR/EN restent rendus par le jeu. La composition se réorganise en portrait. [Source](../designs/home/hero-v1/departure.png) et [prompt de l'outil intégré image_gen](../designs/home/hero-v1/prompt.json).
+
 **Première série pilote validée visuellement par le joueur :** l'Archipel d'Azur, Mycélia et le Cœur de braise disposent de cartes peintes 4:3, aux formes arrondies et aux ombres douces. Les palettes turquoise/sable, mousse/violet et braise/prune déclinent une même intention chaleureuse. Ce style est retenu pour la suite ; les histoires FR/EN restent des propositions. [Détails, sources et prompts](DESTINATION_PILOTS.md).
 
 **Promesse :** une valise enchantée qui ressemble à une boîte à jouets et ouvre sur des cartes postales de mondes impossibles.

@@ -1,0 +1,10 @@
+{
+  "tool": "image_gen (built-in)",
+  "intent": "generate",
+  "references": [
+    "../../preparation/assets-v1/suitcase_closed.png",
+    "../../preparation/assets-v1/compass_dial.png"
+  ],
+  "transparent_background": true,
+  "prompt": "Use case: illustration-story.\nAsset type: transparent hero still-life for the home screen of a cozy fantasy travel browser game.\nInput images: Image 1 is the reference for the existing caramel leather suitcase identity, proportions, chunky brass corners, double straps and handle; Image 2 is the reference for the cream and gold compass materials. These are reference objects, not a background to edit.\nPrimary request: paint a cohesive inviting still-life of that CLOSED travel suitcase, with a small closed travel journal leaning against its front left corner and a magic compass resting on top of the suitcase. All three objects sit together in the same 2D three-quarter illustrated perspective with believable contact shadows. The suitcase remains the hero, seen from above and the front, and takes up most of the composition. Journal in muted plum leather, cream page edges, brass corner details, small embossed compass-rose emblem, no writing. Compass a true navigational compass with two pointed stylized needles, one turquoise and one violet, not a watch; no watch crown, no numbers. A very subtle turquoise and warm golden light escapes the suitcase lid seam, with only a few tiny golden sparks immediately around it. Warm storybook painted style matching the provided suitcase, crisp generous shapes, rich but soft shading, no photorealism, no pixel art.\nComposition: compact landscape arrangement, entire objects visible with comfortable transparent margins, approximately 4:3 aspect ratio. Soft local contact shadows only, genuine alpha transparent background, no table, no environment, no rectangular backdrop. No lettering, labels, UI, banners, stickers, characters, landscape or loose decorative clutter. Preserve the distinctive reference suitcase."
+}

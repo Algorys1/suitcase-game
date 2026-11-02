@@ -34,7 +34,7 @@ La boussole remplit ainsi **deux fonctions séparées** :
 
 - Chaque aiguille a une couleur et une forme distinctes, reconnaissables sans dépendre uniquement de la couleur.
 - Le joueur choisit l'aiguille active puis la tourne, au clic/toucher, par crans de **36°** entre dix positions.
-- Les boutons « précédent / suivant » constituent l'interaction minimale obligatoire. La rotation directe à la souris ou au doigt est **facultative**, à ajouter seulement si elle reste robuste.
+- **Direction choisie après le prototype à molettes :** orienter directement les aiguilles par glisser à la souris ou au doigt. Les commandes précédent/suivant restent disponibles au clavier et dans la palette de repli. Le clic sur un symbole règle aussi l'aiguille active.
 - Les aiguilles s'aimantent exactement sur un symbole ; aucun positionnement imprécis.
 - La valise reflète immédiatement la paire sélectionnée ; l'ordre des aiguilles ne modifie pas la destination.
 - Si les deux aiguilles pointent sur le même élément, afficher une indication claire et **désactiver Voyager**.
@@ -43,7 +43,7 @@ La boussole remplit ainsi **deux fonctions séparées** :
 
 **Choix du prototype de phase A :** à chaque nouvelle préparation, les deux aiguilles pointent sur **Arbre**, avec l'aiguille 1 active. Les deux emplacements affichent ce choix identique et Voyager est bloqué jusqu'à une sélection distincte. L'ordre horaire suit `elements.json` depuis Arbre à 12 h. Les crans s'appliquent immédiatement, sans animation bloquante. Le redimensionnement et la bascule palette/boussole conservent les choix. Ce réglage reste à évaluer en playtest.
 
-**Commandes disponibles :** boutons ▲ 1 / ◆ 2 et précédent/suivant ; raccourcis clavier 1 / 2, flèches gauche/droite, Tab / Maj+Tab et Entrée / Espace, avec focus visible. La palette de repli choisit directement l'élément de l'aiguille active, avec la même validation du départ.
+**Commandes disponibles — manipulation directe :** saisir la pointe ou le contrepoids d'une aiguille (zones de 44 × 44 px), puis la faire pivoter. La lance ajourée ▲ 1 est turquoise ; l'aiguille ◆ 2 est violette et porte une lentille saisissable. Le mouvement reste continu visuellement pendant le geste ; les emplacements indiquent le symbole le plus proche et l'aiguille s'aligne exactement au relâchement. Aucun départ n'est possible pendant le geste. La zone proche du pivot ignore les mouvements pour éviter les sauts ; Échap, sortie du cadre, perte de focus, annulation tactile ou redimensionnement terminent le geste en conservant la dernière sélection. Les boutons de noms permettent aussi de choisir l'aiguille, notamment en cas de superposition, puis un clic/toucher sur un symbole règle cette aiguille. Raccourcis 1 / 2, flèches gauche/droite, Tab / Maj+Tab et Entrée / Espace conservés. La palette garde les dix éléments et les deux commandes ↶ / ↷ par crans, avec la même validation du départ.
 
 ### 2.3 Animation et accessibilité
 
@@ -176,7 +176,7 @@ type StickerDecoration = {
 
 ## 8. Points volontairement ouverts
 
-À décider après un premier prototype : placement exact de la boussole à l'écran, position du bouton de décoration, nombre final de places pour les autocollants, rotation directe au doigt et éventuel nombre de destinations supplémentaire. **Ne pas ajouter de destinations dans cette tâche.**
+À décider après un premier prototype : placement exact de la boussole à l'écran, position du bouton de décoration et nombre final de places pour les autocollants. La manipulation directe des aiguilles est désormais la direction choisie, avec une ergonomie à tester. **Ne pas ajouter de destinations dans cette tâche.**
 
 ### Premier retour de playtest — premiers voyages
 
@@ -184,5 +184,13 @@ type StickerDecoration = {
 - La commande actuelle de rotation des aiguilles est jugée peu intuitive. Son fonctionnement technique est vérifié, mais son ergonomie reste à retravailler avec le futur habillage.
 - **Piste proposée par le joueur, à prototyper :** des molettes sur les côtés de la boussole. Leur association visuelle avec chaque aiguille doit être immédiatement compréhensible ; la forme précise de l'interaction reste à choisir et à tester à la souris et au toucher.
 - Lors de cette reprise, évaluer explicitement la compréhension des commandes et la facilité à choisir une paire. Préserver les crans, les deux choix et la validation du départ ; ne pas considérer les boutons précédent/suivant actuels comme l'interface définitive.
+
+### Reprise visuelle — prototype à molettes (historique)
+
+Le joueur a demandé de prototyper un cercle doré, un cadran crème, dix pictogrammes et deux molettes latérales. Les planches dans `designs/` servent de références d'ambiance (laiton, cuir, papier et miniatures), sans modifier le catalogue ni les règles. Le dessin utilise les formes Phaser existantes : rose des vents, aiguilles effilées indépendantes et contrepoids différents, sans couronne de montre. Les sélections identiques restent visibles grâce à deux cercles concentriques sur leur pictogramme ; Voyager reste bloqué. Sur petit écran, les noms sélectionnés sont conservés sous le cadran, tandis que les dix noms autour du cadran sont masqués pour préserver la lisibilité. L'énergie reste dans un bloc distinct près de la valise.
+
+Cette version a été essayée puis remplacée : le joueur trouve les molettes trop proches d'une montre et préfère orienter les aiguilles directement. Le nouveau prototype conserve le cadran et ajoute une lance ajourée et une petite lentille sur les aiguilles, comme pistes visuelles pour une boussole magique. Ces détails graphiques et l'ergonomie du geste restent à valider en playtest. Les phases B/C restent non commencées.
+
+**Premier retour sur la manipulation directe :** le joueur la juge « beaucoup mieux et plus intuitive » et demande de conserver cette version dans un commit. La direction d'interaction est retenue ; les détails graphiques, les animations et l'équilibrage restent à travailler. Ce retour ne lance pas les phases B/C.
 
 > **Instruction pour Codex :** ce document complète les spécifications existantes. En cas de contradiction sur la **méthode de sélection**, privilégier ici les aiguilles de la boussole ; pour les **recettes, la dépense d'énergie, le carnet et la fin de partie**, conserver `GAME_DESIGN.md`. Implémenter par étapes et ne pas commencer les phases suivantes sans validation.

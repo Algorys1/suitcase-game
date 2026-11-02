@@ -2,6 +2,8 @@
 
 Jeu expérimental de découverte fantastique, créé pour l'**Indie Park Game Jam #6** (thème : **Voyage**).
 
+**Projet itch.io :** [The world in a suitcase](https://algorys1.itch.io/the-world-in-a-suitcase). **Format d'intégration prévu : 960 × 540 px (16:9)**, référence principale pour la composition et la lisibilité de l'interface. Le jeu conserve son adaptation aux autres tailles de fenêtre.
+
 > **Statut :** étape 6 — paramètres et interface FR/EN. La langue se choisit dans les paramètres, s'applique immédiatement et reste enregistrée avec le carnet. Accueil, préparation, résultats, bilan, carnet et fiches utilisent le même choix. Histoires, illustrations et titres anglais des destinations restent provisoires ; les autocollants ne sont pas encore implémentés.
 
 > **Extension :** [boussole à aiguilles et autocollants](docs/COMPASS_AND_STICKERS.md). La phase A est implémentée avec des visuels temporaires et reste à valider en playtest. Les phases B/C ne sont pas commencées.
@@ -30,8 +32,8 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 ### Utiliser la valise
 
 1. Cliquer sur **Commencer un voyage**.
-2. Choisir l'aiguille **▲ 1** ou **◆ 2**, puis utiliser **Précédent / Suivant**. Les dix positions suivent l'ordre de `elements.json`, depuis Arbre en haut, dans le sens horaire. Après Cristal, le cran suivant revient à Arbre.
-3. Les emplacements reflètent immédiatement les aiguilles, même si elles pointent sur le même élément : un message signale alors le doublon et Voyager reste désactivé. **Palette** affiche une sélection directe pour l'aiguille active ; **Boussole** revient au cadran sans changer les choix.
+2. **Faire glisser une aiguille** depuis sa pointe ou son contrepoids pour l'orienter. La lance ajourée **▲ 1** est turquoise ; l'aiguille **◆ 2** est violette et porte une petite lentille saisissable. L'aiguille suit le geste puis s'aligne sur le symbole le plus proche au relâchement. On peut aussi sélectionner l'aiguille avec son bouton de nom, puis cliquer/toucher un symbole du cadran. Les dix positions suivent l'ordre de `elements.json`, depuis Arbre en haut, dans le sens horaire.
+3. Les emplacements reflètent immédiatement le symbole le plus proche, même si les deux choix sont identiques : un message signale alors le doublon et Voyager reste désactivé. **Palette** affiche une sélection directe pour l'aiguille active et conserve les boutons **↶ / ↷** par crans de 36° ; **Boussole** revient au cadran sans changer les choix. Les boutons de noms permettent de choisir sans ambiguïté une aiguille lorsque les deux se superposent. Pendant un glisser, les autres commandes sont verrouillées. Échap, sortie du cadre, perte de focus ou redimensionnement terminent le geste sur le dernier symbole sélectionné.
 4. **Voyager** s'active uniquement pour deux éléments différents et une boussole non épuisée. Le départ ferme la valise, verrouille les commandes et résout la paire une seule fois. Une destination coûte **1 charge**, une revisite aussi ; le Néant coûte **2 charges**, avec un minimum de zéro.
 5. **Accueil** permet de revenir au menu. Chaque nouvelle préparation commence sur **Arbre / Arbre**, aiguille 1 active : le départ est donc bloqué jusqu'à un choix distinct. Ce réglage de prototype est constant et reste à évaluer en playtest. Le redimensionnement conserve les choix, l'aiguille active et le mode d'affichage.
 6. Au clavier : **1 / 2** choisit l'aiguille, **← / →** la déplace, **Tab / Maj+Tab** déplace le focus et **Entrée / Espace** active le bouton. Un contour marque le focus ; Tab peut quitter le jeu aux extrémités du parcours.
@@ -44,14 +46,14 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 ### Choix techniques actuels
 
 - Sept scènes : accueil, préparation, résultat, bilan, carnet, fiche de destination et `SettingsScene`. La transition de voyage reste dans la préparation. `JournalScene` gère la grille paginée et `JournalEntryScene` les fiches connues ; la scène temporaire des paramètres a été remplacée.
-- La logique pure de préparation est dans `src/domain/preparation.ts` ; `src/domain/compassSelection.ts` ajoute le réglage initial et la rotation par crans, sans Phaser. Boussole et palette partagent les mêmes emplacements et la même validation du départ. Une sélection provisoire en doublon est visible mais ne permet pas de voyager.
+- La logique pure de préparation est dans `src/domain/preparation.ts` ; `src/domain/compassSelection.ts` ajoute le réglage initial, la rotation par crans et l'aimantation d'un angle vers un élément, sans Phaser. Boussole et palette partagent les mêmes emplacements et la même validation du départ. Une sélection provisoire en doublon est visible mais ne permet pas de voyager.
 - `recipes.ts` charge et valide les 30 recettes, indexées par paire non ordonnée. `compass.ts` centralise les valeurs provisoires 10 / 1 / 2 ; `session.ts` gère les phases préparation → voyage → résultat → préparation ou fin. Le débit a lieu à l'acceptation du départ, jamais dans une animation ou un redimensionnement.
 - Affichage Phaser en mode `RESIZE` : panneau centré et largeur bornée sur desktop, texte redisposé et boutons conservant une taille tactile sur petit écran. Les décorations secondaires sont masquées sur les fenêtres peu hautes.
-- Formes et police système temporaires, sans téléchargement de police, image ou autre ressource distante. La valise est dessinée en perspective ; dix pictogrammes simples entourent le cadran. Les aiguilles se distinguent par leur forme (triangle / losange), leur couleur et leur numéro. Les noms des choix restent visibles dans les commandes et la valise.
+- Formes et police système temporaires, sans téléchargement de police, image ou autre ressource distante. La valise est dessinée en perspective ; la boussole présente un cercle de laiton, un cadran crème, une rose des vents et dix pictogrammes. Deux aiguilles indépendantes, une lance ajourée et une flèche avec lentille, se manipulent directement par des prises de 44 × 44 px. Les molettes latérales ont été retirées après le retour du joueur. Les noms des choix restent visibles sous le cadran et dans la valise ; les noms autour du cadran sont réservés aux grands formats.
 - `services/i18n.ts` sélectionne `fr.json` ou `en.json` à partir de la préférence sauvegardée (`fr` par défaut). Les scènes lisent les textes à leur création ou au rendu, sans conserver un catalogue français figé. La page applique aussi la langue au titre de l'onglet et à l'attribut HTML `lang` dès le démarrage.
 - Les clés d'interface sont typées et vérifiées dans les deux catalogues, avec les mêmes paramètres `{…}`. Les clés dynamiques des destinations passent par un résolveur avec repli français, puis texte générique lisible si la clé est inconnue.
 - Les 30 noms français sont repris du tableau approuvé dans `GAME_DESIGN.md`, sans changer les catalogues. Les histoires sont explicitement des textes d'attente ; les titres anglais portent la mention courte « title pending », adaptée aux cartes du carnet. Aucun récit ni traduction éditoriale définitive n'est inventé.
-- **44 tests** protègent les catalogues, les 45 combinaisons dans les deux ordres, le cycle de session, la progression permanente et les langues : clés manquantes, paramètres, repli de traduction, sauvegarde du choix, stockage bloqué et préservation des découvertes.
+- **45 tests** protègent les catalogues, les 45 combinaisons dans les deux ordres, la sélection (dont l'aimantation et le passage par le nord), le cycle de session, la progression permanente et les langues : clés manquantes, paramètres, repli de traduction, sauvegarde du choix, stockage bloqué et préservation des découvertes.
 - `services/storage.ts` conserve uniquement `{ schemaVersion: 1, discoveredDestinationIds, language }` sous la clé `suitcase-game.progress.v1`. L'accès à `localStorage`, la lecture et l'écriture sont protégés ; une indisponibilité utilise la progression en mémoire. Aucune session ni charge n'est sauvegardée.
 - Le résultat distingue désormais **Nouvelle découverte ! / Déjà visité** selon le carnet global. `session.ts` conserve séparément les nouveaux IDs de la session pour le bilan. Le Néant ne débloque rien et les revisites coûtent toujours 1 charge.
 - La transition dure 350 ms ; la préférence système de réduction des animations supprime le fondu. La boussole affiche ses charges numériquement dans la préparation, y compris en mode palette.
@@ -105,6 +107,21 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 - Les mêmes parcours passent sur le build sous `/jam/` en 1280 × 720, 320 × 568 et 640 × 360, sans erreur JavaScript ni ressource HTTP manquante. Les captures ont été contrôlées visuellement. Firefox et appareil tactile réel restent à vérifier avant publication.
 - Titres anglais de destinations raccourcis en « Destination 01 (title pending) » pour rester lisibles sur les cartes ; les histoires restent des textes d'attente dans les deux langues.
 
+### Vérifications du prototype de boussole à molettes (historique)
+
+- **Format itch.io 960 × 540 px :** build local servi sous `/jam/` vérifié dans Chrome headless en FR/EN : molettes, sélection, palette, départ, retour, clavier et redimensionnement. Captures contrôlées visuellement, sans dépassement des textes ni chevauchement des commandes, et sans erreur JavaScript/HTTP. Ce contrôle local ne valide pas encore l'iframe publiée sur itch.io.
+- **44 tests Vitest**, TypeScript strict et build Vite réussis. Recettes, coûts, catalogue et sauvegarde inchangés ; aucune dépendance ajoutée.
+- Chrome headless en FR/EN : 1280 × 720, 1920 × 1080, 800 × 600, 900 × 500, 600 × 568, 360 × 640, 320 × 568 et 640 × 360. Rotations indépendantes complètes, rebouclage dans les deux sens, absence de dépense, doublons bloqués, synchronisation avec les emplacements, palette, départ verrouillé et retour à la préparation vérifiés à la souris ou au toucher simulé.
+- Clavier 1/2, flèches, Tab, Entrée/Espace, focus, état conservé au redimensionnement et rechargement vérifiés. Les zones interactives ne se chevauchent pas ; textes, commandes et aide clavier restent dans l'espace disponible. Captures contrôlées sur desktop, portrait et paysage.
+- La version finale passe les mêmes huit formats dans les deux langues depuis le build sous `/jam/`, sans erreur JavaScript ni ressource HTTP manquante. Firefox, appareil tactile réel et iframe itch.io restent à vérifier avant publication. La compréhension des molettes attend le retour du joueur.
+
+### Vérifications de la manipulation directe des aiguilles
+
+- **45 tests Vitest**, TypeScript strict et build Vite réussis. Un test couvre l'aimantation aux dix symboles, les frontières de crans, le passage par le nord et les angles invalides. Les recettes, coûts et sauvegardes sont conservés.
+- Build servi sous `/jam/` dans Chrome headless en FR/EN : 960 × 540, 1280 × 720, 800 × 600, 320 × 568, 360 × 640 et 640 × 360. Glisser des deux aiguilles et de la lentille, sélection des dix symboles par clic/toucher, indépendance des choix, absence de coût, palette et commandes par crans, départ verrouillé pendant le geste et retour au jeu vérifiés. Les essais tactiles démarrent avec l'émulation activée avant le chargement de Phaser.
+- Clavier, passage par le nord, zone neutre du pivot, Échap, perte de focus, redimensionnement pendant le geste, sortie du cadre, annulation tactile et rechargement vérifiés. Aucun blocage ni erreur JavaScript/HTTP ; Chrome signale toutefois une intervention interne à Phaser lors du `preventDefault` sur un `touchcancel` non annulable. L'annulation fonctionne malgré ce message.
+- Après ajustement de la superposition des aiguilles, les parcours passent à nouveau en FR/EN en 960 × 540, 320 × 568 et 640 × 360. Captures desktop, portrait et paysage contrôlées visuellement. L'essai du joueur, Firefox, un appareil tactile réel et l'iframe itch.io restent à vérifier.
+
 ## Concept
 
 Une valise magique permet de voyager vers des destinations fantastiques. Le joueur choisit **deux éléments** parmi **dix**, avec les deux aiguilles de la boussole, puis déclenche un voyage. La combinaison révèle un lieu, ou mène au **Néant** si aucune destination ne correspond.
@@ -136,7 +153,7 @@ Ces valeurs sont des hypothèses de prototype, **pas un équilibrage définitif*
 
 ### Extension : aiguilles et autocollants
 
-- **Phase A — implémentée, à valider en playtest :** sélectionner une aiguille puis la déplacer par crans de 36° avec des commandes précédent/suivant. Les dix symboles correspondent aux dix éléments existants ; les deux emplacements reflètent les choix. Tourner ne déclenche aucune dépense ; Voyager reste désactivé si les choix sont identiques. La palette sert de repli pendant le prototype.
+- **Phase A — implémentée, à valider en playtest :** orienter directement les aiguilles par glisser ou choisir un symbole pour l'aiguille active. La sélection s'aimante aux dix crans de 36° ; les deux emplacements reflètent les choix. Tourner ne déclenche aucune dépense ; Voyager reste désactivé pendant le geste ou si les choix sont identiques. Le clavier et la palette avec commandes par crans servent de repli.
 - **Phase B — priorité moyenne :** chaque première découverte permanente débloque un autocollant cosmétique. Maximum 30, sans doublon lors des revisites et sans récompense pour le Néant. Les déblocages se déduisent du carnet.
 - **Phase C — après la boucle jouable :** décorer le couvercle fermé, avec **6 positions fixes proposées**. Placement, remplacement et retrait sans perte de l'autocollant ; disposition persistante et anciennes sauvegardes compatibles.
 
@@ -188,7 +205,7 @@ Les versions exactes et leurs dépendances transitives sont verrouillées dans `
 
 ## Priorités de production
 
-La sélection par aiguilles, les voyages, le carnet permanent et les paramètres FR/EN sont implémentés. Les phases d'autocollants et de décoration pourront suivre après validation des étapes correspondantes ; les textes éditoriaux et les assets définitifs restent à produire. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md). La rotation des aiguilles reste à repenser lors de l'habillage, conformément au premier retour de playtest.
+La sélection par aiguilles, les voyages, le carnet permanent et les paramètres FR/EN sont implémentés. Les phases d'autocollants et de décoration pourront suivre après validation des étapes correspondantes ; les textes éditoriaux et les assets définitifs restent à produire. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md). Après essai, le joueur juge la manipulation directe des aiguilles beaucoup mieux et plus intuitive que les molettes. Cette direction est retenue ; les détails visuels, les animations et les essais sur appareil tactile réel restent à travailler.
 
 1. Prototype jouable avec graphismes temporaires : deux emplacements, choix des éléments, résolution d'une recette.
 2. Boucle complète : boussole, Néant, écran de résultat, fin de partie.

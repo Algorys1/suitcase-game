@@ -29,7 +29,10 @@
     "placeholder": "Illustration provisoire"
   },
   "compass": {
-    "instructions": "Choisissez une aiguille, puis précédent ou suivant.",
+    "instructions": "Faites glisser une aiguille vers un symbole.",
+    "paletteInstructions": "Choisissez une aiguille, puis un élément.",
+    "turnPrevious": "↶",
+    "turnNext": "↷",
     "needle": "Aiguille {number}",
     "previous": "← Précédent",
     "next": "Suivant →",

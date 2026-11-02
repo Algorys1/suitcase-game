@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { getTexts } from '../../services/i18n';
 import { isReady, selectElement } from '../../domain/preparation';
-import { compassElements, initialCompassSelection, rotateSelection } from '../../domain/compassSelection';
+import { compassAngle, compassElements, elementAtAngle, initialCompassSelection, rotateSelection } from '../../domain/compassSelection';
 import type { ElementId, SlotIndex, Slots } from '../../domain/preparation';
 import { createButton } from '../ui/menu';
 import type { MenuButton } from '../ui/menu';
@@ -23,6 +23,8 @@ export class PreparationScene extends Phaser.Scene {
   private focusName: string | null = null;
   private controls: Control[] = [];
   private session: SessionState = createSession();
+  private dial = { x: 0, y: 0, radius: 1 };
+  private drag: { pointerId: number; needle: SlotIndex; offset: number; angle: number } | null = null;
 
   constructor() { super('preparation'); }
 
@@ -37,16 +39,31 @@ export class PreparationScene extends Phaser.Scene {
     this.paletteVisible = false;
     this.message = '';
     this.focusName = null;
+    this.drag = null;
     this.cameras.main.resetFX();
     const canvas = this.game.canvas;
     canvas.setAttribute('aria-label', getTexts().preparation.title);
     canvas.tabIndex = 0;
     canvas.focus({ preventScroll: true });
     canvas.addEventListener('keydown', this.onKeyDown);
+    canvas.addEventListener('touchcancel', this.finishDrag);
+    window.addEventListener('blur', this.finishDrag);
+    this.input.on('pointermove', this.moveNeedle, this);
+    this.input.on('pointerup', this.releaseNeedle, this);
+    this.input.on('pointerupoutside', this.releaseNeedle, this);
+    this.input.on('gameout', this.finishDrag);
     this.render();
-    this.scale.on(Phaser.Scale.Events.RESIZE, this.render, this);
+    this.scale.on(Phaser.Scale.Events.RESIZE, this.onResize, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      this.scale.off(Phaser.Scale.Events.RESIZE, this.render, this);
+      this.scale.off(Phaser.Scale.Events.RESIZE, this.onResize, this);
+      this.input.off('pointermove', this.moveNeedle, this);
+      this.input.off('pointerup', this.releaseNeedle, this);
+      this.input.off('pointerupoutside', this.releaseNeedle, this);
+      this.input.off('gameout', this.finishDrag);
+      canvas.removeEventListener('touchcancel', this.finishDrag);
+      window.removeEventListener('blur', this.finishDrag);
+      canvas.style.cursor = '';
+      this.drag = null;
       canvas.removeEventListener('keydown', this.onKeyDown);
       canvas.removeAttribute('tabindex');
       canvas.removeAttribute('aria-description');
@@ -54,25 +71,76 @@ export class PreparationScene extends Phaser.Scene {
     });
   }
 
+  private onResize(): void {
+    this.drag = null;
+    this.game.canvas.style.cursor = '';
+    this.render();
+  }
+
+  private grabNeedle(index: SlotIndex, pointer: Phaser.Input.Pointer): void {
+    if (this.drag || this.session.phase !== 'preparation' || !pointer.primaryDown) return;
+    const id = this.slots[index];
+    if (id === null) return;
+    const angle = compassAngle(id);
+    const bearing = Math.atan2(pointer.x - this.dial.x, this.dial.y - pointer.y) * 180 / Math.PI;
+    this.drag = { pointerId: pointer.id, needle: index, offset: bearing - angle, angle };
+    this.activeNeedle = index;
+    this.focusName = `needle-${index}`;
+    this.game.canvas.focus({ preventScroll: true });
+    this.render();
+    this.game.canvas.style.cursor = 'grabbing';
+  }
+
+  private moveNeedle(pointer: Phaser.Input.Pointer): void {
+    if (!this.drag || pointer.id !== this.drag.pointerId) return;
+    if (!pointer.isDown) { this.finishDrag(); return; }
+    const dx = pointer.x - this.dial.x;
+    const dy = pointer.y - this.dial.y;
+    // Ignore the pivot's dead zone, where a tiny motion would flip direction.
+    if (Math.hypot(dx, dy) < Math.max(16, this.dial.radius * 0.14)) return;
+    this.drag.angle = Math.atan2(dx, -dy) * 180 / Math.PI - this.drag.offset;
+    const element = elementAtAngle(this.drag.angle);
+    if (element === null) return;
+    this.slots = selectElement(this.slots, this.drag.needle, element);
+    this.message = '';
+    this.render();
+    this.game.canvas.style.cursor = 'grabbing';
+  }
+
+  private releaseNeedle(pointer: Phaser.Input.Pointer): void {
+    if (this.drag?.pointerId === pointer.id) this.finishDrag();
+  }
+
+  private finishDrag = (): void => {
+    if (!this.drag) return;
+    this.drag = null;
+    this.game.canvas.style.cursor = '';
+    this.render();
+  };
+
   private chooseNeedle(index: SlotIndex): void {
     this.activeNeedle = index;
     this.message = '';
     this.render();
   }
 
-  private rotate(direction: -1 | 1): void {
-    this.slots = rotateSelection(this.slots, this.activeNeedle, direction);
+  private rotate(direction: -1 | 1, needle: SlotIndex = this.activeNeedle): void {
+    if (this.session.phase !== 'preparation') return;
+    this.activeNeedle = needle;
+    this.slots = rotateSelection(this.slots, needle, direction);
     this.message = '';
     this.render();
   }
 
   private chooseElement(element: ElementId): void {
+    if (this.drag || this.session.phase !== 'preparation') return;
     this.slots = selectElement(this.slots, this.activeNeedle, element);
     this.message = '';
     this.render();
   }
 
   private depart(): void {
+    if (this.drag) return;
     const next = beginTravel(this.session, this.slots, progressStore.read().discoveredDestinationIds);
     if (next === this.session) return;
     this.session = next;
@@ -90,6 +158,11 @@ export class PreparationScene extends Phaser.Scene {
 
   private onKeyDown = (event: KeyboardEvent): void => {
     if (this.session.phase !== 'preparation') { event.preventDefault(); return; }
+    if (this.drag) {
+      if (event.key === 'Escape') this.finishDrag();
+      event.preventDefault();
+      return;
+    }
     if (event.altKey || event.ctrlKey || event.metaKey) return;
     const index = this.controls.findIndex(control => control.name === this.focusName);
     if (event.key === 'Tab') {
@@ -106,7 +179,7 @@ export class PreparationScene extends Phaser.Scene {
       this.chooseNeedle(needle);
     } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
-      this.focusName = event.key === 'ArrowLeft' ? 'previous' : 'next';
+      this.focusName = `needle-${this.activeNeedle}`;
       this.rotate(event.key === 'ArrowLeft' ? -1 : 1);
     } else if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -123,7 +196,7 @@ export class PreparationScene extends Phaser.Scene {
   }
 
   private button(x: number, y: number, width: number, options: MenuButton & { name: string }): void {
-    const disabled = options.disabled || this.session.phase !== 'preparation';
+    const disabled = options.disabled || this.session.phase !== 'preparation' || this.drag !== null;
     if (!disabled) this.controls.push({ name: options.name, action: options.action });
     createButton(this, x, y, width, 44, {
       ...options, disabled, focused: this.focusName === options.name,
@@ -152,15 +225,18 @@ export class PreparationScene extends Phaser.Scene {
     const controlsX = split ? left + contentWidth - controlsWidth / 2 : width / 2;
     const footerY = height - 32;
     const statusY = height - 104;
-    const caseHeight = split ? Math.min(short ? 70 : 220, height - 280)
-      : Math.min(150, 66 + Math.max(0, height - 568) * 0.35);
+    const caseHeight = split ? Math.min(short ? 110 : 220, height - 230)
+      : Math.min(150, 100 + Math.max(0, height - 568) * 0.25);
     const caseTop = statusY - caseHeight - 8;
-    const stepY = split ? (short ? 156 : 184) : caseTop - 30;
-    const needleY = stepY - 50;
-    const dialBottom = split ? (short ? height - 70 : Math.min(height - 130, 560)) : needleY - 30;
-    const dialTop = short ? 74 : 78;
-    const dialY = (dialTop + dialBottom - 20) / 2;
-    const radius = Math.max(70, Math.min(150, (dialWidth - 86) / 2, (dialBottom - dialTop - 24) / 2));
+    const dialTop = short ? 86 : 100;
+    const dialBottom = split ? Math.min(height - 120, 520) : caseTop - 70;
+    const radius = Math.min(190, (dialWidth - 32) / 2, (dialBottom - dialTop) / 2);
+    const dialY = (dialTop + dialBottom) / 2;
+    this.dial = { x: dialX, y: dialY, radius };
+    // Twelve cells: ten elements and the two step controls kept in the fallback.
+    const paletteColumns = short ? 4 : 3;
+    const paletteHeight = Math.ceil(compassElements.length / paletteColumns) * 50 - 6;
+    const needleY = dialY + Math.max(radius, paletteHeight / 2) + 36;
     const ready = isReady(this.slots);
     const status = this.message || (ready ? copy.ready : compassCopy.duplicate);
 
@@ -168,29 +244,24 @@ export class PreparationScene extends Phaser.Scene {
     background.fillStyle(0xb69ae8, 0.12).fillCircle(width * 0.12, height * 0.25, 160);
     background.fillStyle(0x59c9c2, 0.12).fillCircle(width * 0.95, height * 0.8, 180);
     this.text(width / 2, 8, copy.title, short || !split ? 23 : 32, contentWidth, true);
-    this.text(width / 2, short || !split ? 39 : 48, compassCopy.instructions, short || !split ? 13 : 17, contentWidth);
+    this.text(width / 2, short || !split ? 39 : 48,
+      this.paletteVisible ? compassCopy.paletteInstructions : compassCopy.instructions,
+      short || !split ? 13 : 17, contentWidth);
 
-    // Register the four main commands first for a consistent keyboard focus order.
-    const controlButtonWidth = Math.min(250, (controlsWidth - 12) / 2);
+    // Selection labels also choose the active needle for keyboard and fallback palette.
+    const controlButtonWidth = Math.min(250, (dialWidth - 12) / 2);
     for (const index of [0, 1] as const) {
       const id = this.slots[index];
       const name = id === null ? copy.empty : texts.elements[id].name;
-      this.button(controlsX + (index === 0 ? -1 : 1) * (controlButtonWidth + 12) / 2,
+      this.button(dialX + (index === 0 ? -1 : 1) * (controlButtonWidth + 12) / 2,
         needleY, controlButtonWidth, {
           name: `needle-${index}`, label: `${NEEDLE_MARKS[index]} ${index + 1} · ${name}`,
           fontSize: controlButtonWidth < 160 ? 13 : 17, selected: this.activeNeedle === index,
           action: () => this.chooseNeedle(index),
         });
     }
-    this.button(controlsX - (controlButtonWidth + 12) / 2, stepY, controlButtonWidth, {
-      name: 'previous', label: compassCopy.previous, fontSize: 16, action: () => this.rotate(-1),
-    });
-    this.button(controlsX + (controlButtonWidth + 12) / 2, stepY, controlButtonWidth, {
-      name: 'next', label: compassCopy.next, fontSize: 16, action: () => this.rotate(1),
-    });
-
     if (this.paletteVisible) {
-      const columns = dialWidth >= 380 ? 2 : 3;
+      const columns = paletteColumns;
       const rows = Math.ceil(compassElements.length / columns);
       const tileWidth = (dialWidth - (columns - 1) * 8) / columns;
       const paletteTop = dialY - (rows * 50 - 6) / 2;
@@ -201,8 +272,21 @@ export class PreparationScene extends Phaser.Scene {
             selected: this.slots[this.activeNeedle] === id, action: () => this.chooseElement(id),
           });
       });
+      for (const [index, direction] of [[10, -1], [11, 1]] as const) {
+        this.button(dialX - dialWidth / 2 + tileWidth / 2 + (index % columns) * (tileWidth + 8),
+          paletteTop + 22 + Math.floor(index / columns) * 50, tileWidth, {
+            name: direction === -1 ? 'previous' : 'next',
+            label: direction === -1 ? compassCopy.turnPrevious : compassCopy.turnNext,
+            fontSize: 22, action: () => this.rotate(direction),
+          });
+      }
     } else {
-      drawCompass(this, dialX, dialY, radius, this.slots, this.activeNeedle, texts.elements);
+      drawCompass(this, dialX, dialY, radius, this.slots, this.activeNeedle, texts.elements, {
+        disabled: this.session.phase !== 'preparation' || this.drag !== null,
+        dragAngle: this.drag?.angle ?? null,
+        grab: (index, pointer) => this.grabNeedle(index, pointer),
+        select: id => this.chooseElement(id),
+      });
     }
 
     const suitcaseWidth = Math.min(controlsWidth, 580);
@@ -223,7 +307,8 @@ export class PreparationScene extends Phaser.Scene {
       .replace('{max}', String(BALANCE.initialCharges));
     this.text(controlsX, statusY, charges + '\n' + status, 13, controlsWidth).setName('preparation-status');
     if (split && height >= 600) {
-      this.text(dialX, dialBottom + 24, compassCopy.keyboard, 14, dialWidth);
+      const hint = this.text(dialX, needleY + 34, compassCopy.keyboard, 14, dialWidth).setName('keyboard-hint');
+      if (hint.y + hint.height > footerY - 30) hint.destroy();
     }
 
     const footerWidth = Math.min(contentWidth, 650);

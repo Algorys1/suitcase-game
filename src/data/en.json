@@ -29,7 +29,10 @@
     "placeholder": "Temporary artwork"
   },
   "compass": {
-    "instructions": "Choose a needle, then previous or next.",
+    "instructions": "Drag a needle towards a symbol.",
+    "paletteInstructions": "Choose a needle, then an element.",
+    "turnPrevious": "↶",
+    "turnNext": "↷",
     "needle": "Needle {number}",
     "previous": "← Previous",
     "next": "Next →",

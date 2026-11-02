@@ -60,7 +60,7 @@ L'écran présente :
 - Les charges restantes, lisibles sur la boussole ou à proximité et distinctes de la sélection.
 - Un bouton **Voyager**, inactif tant que deux éléments distincts ne sont pas placés.
 
-Interaction cible à prototyper : choisir l'aiguille active puis utiliser précédent/suivant pour la déplacer par crans de **36°**. La valise reflète immédiatement les deux éléments sélectionnés. Tourner une aiguille ne coûte rien ; deux aiguilles sur le même élément rendent le départ invalide et désactivent Voyager. La rotation directe à la souris ou au doigt est facultative.
+Interaction cible à prototyper, précisée après le retour du joueur : orienter directement les aiguilles à la souris ou au doigt, avec aimantation aux crans de **36°**. Choisir une aiguille puis cliquer un symbole permet aussi de la régler ; les commandes précédent/suivant restent au clavier et dans la palette de repli. La valise reflète immédiatement les deux éléments sélectionnés. Tourner une aiguille ne coûte rien ; pendant le geste ou lorsque les choix sont identiques, Voyager est désactivé.
 
 Le prototype de phase A utilise les aiguilles ; une palette de repli permet de choisir directement l'élément de l'aiguille active. Les deux interfaces partagent la même sélection et la même validation du départ. À l'ouverture d'une préparation, les aiguilles pointent provisoirement toutes deux sur Arbre, aiguille 1 active : le joueur doit rendre les deux choix distincts avant de valider.
 

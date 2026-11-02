@@ -213,9 +213,9 @@ export const BALANCE = {
 ## 8. Interface, affichage et assets
 
 - Scène de préparation cible : valise au centre, **deux emplacements**, boussole à dix symboles et deux aiguilles, charges lisibles, bouton Voyager.
-- Sélectionner une aiguille puis utiliser précédent/suivant par crans de 36° constitue l'interaction minimale. La rotation directe est facultative. La palette actuelle peut rester provisoirement comme repli/debug.
+- La manipulation directe des aiguilles est le prototype courant : glisser une pointe ou un contrepoids, ou sélectionner une aiguille puis cliquer un symbole. `elementAtAngle` convertit l'angle en élément par crans de 36°, puis la sélection commune est réutilisée. Les commandes précédent/suivant restent au clavier et dans la palette de repli. Le geste est transitoire, ne coûte aucune charge et bloque le départ ; les écouteurs de pointeur sont nettoyés à la sortie de scène.
 - Résolution logique indépendante des coordonnées ou des assets.
-- Dimensions de référence possibles : 1280 × 720, avec mise à l'échelle Phaser adaptée à la fenêtre ; vérifier les petites résolutions et la lisibilité.
+- Dimensions d'intégration itch.io retenues : **960 × 540 px (16:9)**. Utiliser ce format comme référence principale de composition et de test ; conserver le redimensionnement Phaser et vérifier aussi les petites résolutions et la lisibilité.
 - Prévoir des cibles tactiles suffisamment larges, états sélectionné/désactivé, et contraste du texte.
 - La valise est une **illustration 2D isométrique**, pas un inventaire physique avec collisions.
 - Éviter les chemins d'assets absolus incompatibles avec un hébergement sous sous-chemin ; utiliser une base Vite relative (`base: './'`) et vérifier les chargements dans le ZIP final.
@@ -244,12 +244,14 @@ export const BALANCE = {
 
 ## 10. Build et publication itch.io
 
+Page du projet fournie par le développeur : [The world in a suitcase](https://algorys1.itch.io/the-world-in-a-suitcase). Taille d'intégration prévue : **Width 960 px / Height 540 px**. Ces informations ne constituent pas une vérification du build actuellement hébergé.
+
 1. Initialiser le projet avec les versions stables réellement disponibles, puis **verrouiller le lockfile**.
 2. Scripts attendus : `dev`, `build`, `preview`, `test` (les commandes exactes sont définies dans `package.json` lors de l'initialisation).
 3. Vérifier `npm run build`, puis servir le dossier `dist/` localement avec `npm run preview`.
 4. Créer une archive ZIP du **contenu** de `dist/`, avec `index.html` directement à la racine du ZIP (et non un dossier `dist/` parent).
 5. Sur itch.io, choisir le type de projet HTML / jouable dans le navigateur et téléverser le ZIP.
-6. Configurer la taille d'intégration et tester la page publiée en navigation réelle, y compris sauvegarde, traductions, son et assets.
+6. Configurer la taille d'intégration à **960 × 540 px** et tester la page publiée en navigation réelle, y compris sauvegarde, traductions, son et assets.
 7. Vérifier les règles actualisées de la Game Jam avant publication, notamment les éventuelles obligations de déclaration des outils utilisés.
 
 Ne pas supposer qu'un build réussi garantit le bon fonctionnement dans l'iframe itch.io : **tester le jeu publié**.

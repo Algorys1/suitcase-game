@@ -2,11 +2,24 @@ import { describe, expect, it } from 'vitest';
 import catalogue from '../data/elements.json';
 import fr from '../data/fr.json';
 import en from '../data/en.json';
-import { compassAngle, compassElements, COMPASS_STEP_DEGREES, initialCompassSelection, rotateSelection } from '../domain/compassSelection';
+import { compassAngle, compassElements, COMPASS_STEP_DEGREES, elementAtAngle, initialCompassSelection, rotateSelection } from '../domain/compassSelection';
 import { emptySlots, isReady, selectElement } from '../domain/preparation';
 import type { Slots } from '../domain/preparation';
 
 describe('boussole de sélection', () => {
+  it('aimante une rotation directe, y compris de part et d’autre du nord', () => {
+    for (const id of compassElements) {
+      const angle = compassAngle(id);
+      for (const offset of [-17.9, 0, 17.9, 360, -720]) {
+        expect(elementAtAngle(angle + offset)).toBe(id);
+      }
+    }
+    expect(elementAtAngle(18)).toBe('mushroom');
+    expect(elementAtAngle(342)).toBe('tree');
+    expect(elementAtAngle(-19)).toBe('crystal');
+    expect(elementAtAngle(NaN)).toBeNull();
+    expect(elementAtAngle(Infinity)).toBeNull();
+  });
   it('suit les dix éléments du catalogue, par crans de 36° depuis le haut', () => {
     expect(compassElements).toEqual(catalogue.map(({ id }) => id));
     expect(COMPASS_STEP_DEGREES).toBe(36);

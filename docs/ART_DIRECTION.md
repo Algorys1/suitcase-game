@@ -34,12 +34,16 @@ La valise est un **visuel 2D dessiné en vue trois-quarts isométrique stylisée
 
 **Retour du premier playtest :** les commandes actuelles de rotation ne sont pas intuitives. Lors du futur habillage, prototyper une commande visuellement liée à chaque aiguille ; des molettes latérales ont été proposées comme piste, sans choix définitif à ce stade. Tester la compréhension de l'interaction avec le dessin réel de la boussole, à la souris et au toucher. Voir [le retour détaillé](COMPASS_AND_STICKERS.md).
 
+**Prototype visuel courant :** cadran crème, cerclage de laiton, rose des vents et deux aiguilles en pointe indépendantes. Après essai, le joueur a préféré orienter directement les aiguilles : les molettes évoquaient trop une montre. La lance turquoise ▲ 1 est ajourée ; l'aiguille violette ◆ 2 porte une petite lentille cerclée de laiton, également saisissable. Ces détails sont des propositions pour évoquer un instrument magique, à valider visuellement en jeu. Les planches de `designs/` inspirent les matières et les couleurs ; leurs éléments, compteurs et mises en page ne sont pas des spécifications. Les graphismes restent des formes simples modifiables.
+
 1. **Valise et ses deux emplacements** : sujet principal, immédiatement identifiable.
 2. **Boussole de sélection** : dix symboles, deux aiguilles distinctes par leur forme et leur couleur, commandes par crans et noms des éléments lisibles. La palette actuelle est un repli provisoire.
 3. **Charges de la boussole** : énergie restante lisible d'un coup d'œil, visuellement distincte des deux choix d'éléments.
 4. **Bouton Voyager** : action principale, activée seulement avec deux éléments distincts.
 
 Concevoir d'abord une maquette à la taille d'affichage prévue, puis vérifier sur un écran plus étroit. Préférer une disposition réorganisée sur mobile plutôt qu'une interface simplement réduite.
+
+**Format de référence retenu pour itch.io : 960 × 540 px (16:9).** Composer et valider d'abord la valise, la boussole, les commandes et les textes FR/EN à cette taille réelle, puis vérifier les autres formats.
 
 ## 3. Palette chromatique indicative
 

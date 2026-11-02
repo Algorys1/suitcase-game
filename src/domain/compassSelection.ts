@@ -20,6 +20,13 @@ export function compassAngle(element: ElementId): number {
   return compassElements.indexOf(element) * COMPASS_STEP_DEGREES;
 }
 
+/** Clockwise degrees from north, snapped to the nearest catalogue symbol. */
+export function elementAtAngle(degrees: number): ElementId | null {
+  if (!Number.isFinite(degrees)) return null;
+  const normalized = ((degrees % 360) + 360) % 360;
+  return compassElements[Math.round(normalized / COMPASS_STEP_DEGREES) % compassElements.length] ?? null;
+}
+
 export function rotateSelection(slots: Slots, needle: SlotIndex, direction: -1 | 1): Slots {
   const current = slots[needle];
   const index = current === null ? -1 : compassElements.indexOf(current);

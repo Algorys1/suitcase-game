@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import texts from '../../data/fr.json';
+import { getTexts } from '../../services/i18n';
 import { isReady, selectElement } from '../../domain/preparation';
 import { compassElements, initialCompassSelection, rotateSelection } from '../../domain/compassSelection';
 import type { ElementId, SlotIndex, Slots } from '../../domain/preparation';
@@ -13,8 +13,6 @@ import type { SessionState } from '../../domain/session';
 import { BALANCE } from '../../domain/compass';
 import { progressStore } from '../../services/storage';
 
-const copy = texts.preparation;
-const compassCopy = texts.compass;
 type Control = { name: string; action: () => void };
 
 export class PreparationScene extends Phaser.Scene {
@@ -41,7 +39,7 @@ export class PreparationScene extends Phaser.Scene {
     this.focusName = null;
     this.cameras.main.resetFX();
     const canvas = this.game.canvas;
-    canvas.setAttribute('aria-label', copy.title);
+    canvas.setAttribute('aria-label', getTexts().preparation.title);
     canvas.tabIndex = 0;
     canvas.focus({ preventScroll: true });
     canvas.addEventListener('keydown', this.onKeyDown);
@@ -81,7 +79,7 @@ export class PreparationScene extends Phaser.Scene {
     if (next.lastTrip?.destinationId !== null && next.lastTrip?.destinationId !== undefined) {
       progressStore.discover(next.lastTrip.destinationId);
     }
-    this.message = texts.journey.departing;
+    this.message = getTexts().journey.departing;
     this.render();
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reducedMotion) this.cameras.main.fadeOut(350, 182, 154, 232);
@@ -138,6 +136,9 @@ export class PreparationScene extends Phaser.Scene {
   }
 
   private render(): void {
+    const texts = getTexts();
+    const copy = texts.preparation;
+    const compassCopy = texts.compass;
     this.children.removeAll(true);
     this.controls = [];
     const { width, height } = this.scale;

@@ -5,6 +5,13 @@
   "start": "Commencer un voyage",
   "journal": "Carnet de voyage",
   "settings": "Paramètres",
+  "translationUnavailable": "Texte indisponible",
+  "preferences": {
+    "description": "Choisissez la langue de l’interface.",
+    "french": "Français",
+    "english": "English",
+    "saved": "Choix enregistré dans ce navigateur."
+  },
   "back": "Retour à l’accueil",
   "prototype": "Prototype · Premiers voyages",
   "notebook": {

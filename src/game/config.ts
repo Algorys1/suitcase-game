@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { HomeScene } from './scenes/HomeScene';
-import { PlaceholderScene } from './scenes/PlaceholderScene';
+import { SettingsScene } from './scenes/SettingsScene';
 import { PreparationScene } from './scenes/PreparationScene';
 import { ResultScene } from './scenes/ResultScene';
 import { SummaryScene } from './scenes/SummaryScene';
@@ -17,5 +17,5 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     height: '100%',
   },
   audio: { noAudio: true },
-  scene: [HomeScene, PreparationScene, ResultScene, SummaryScene, JournalScene, JournalEntryScene, PlaceholderScene],
+  scene: [HomeScene, PreparationScene, ResultScene, SummaryScene, JournalScene, JournalEntryScene, SettingsScene],
 };

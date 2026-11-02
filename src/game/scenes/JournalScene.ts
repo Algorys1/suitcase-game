@@ -1,12 +1,11 @@
 import Phaser from 'phaser';
-import texts from '../../data/fr.json';
+import { getTexts, getDestinationTexts } from '../../services/i18n';
 import { destinations } from '../../domain/recipes';
 import { progressStore } from '../../services/storage';
 import { createButton } from '../ui/menu';
 import type { MenuButton } from '../ui/menu';
 import { drawPostcard } from '../ui/postcard';
 
-const content: Record<string, { title: string }> = texts.destinations;
 type Control = { name: string; action: () => void };
 
 export class JournalScene extends Phaser.Scene {
@@ -20,7 +19,7 @@ export class JournalScene extends Phaser.Scene {
     this.page = Number.isInteger(page) && page >= 0 ? page : 0;
     this.focusName = null;
     const canvas = this.game.canvas;
-    canvas.setAttribute('aria-label', texts.journal);
+    canvas.setAttribute('aria-label', getTexts().journal);
     canvas.tabIndex = 0;
     canvas.focus({ preventScroll: true });
     canvas.addEventListener('keydown', this.onKeyDown);
@@ -69,6 +68,7 @@ export class JournalScene extends Phaser.Scene {
   }
 
   private render(): void {
+    const texts = getTexts();
     this.children.removeAll(true);
     this.controls = [];
     const { width, height } = this.scale;
@@ -98,7 +98,7 @@ export class JournalScene extends Phaser.Scene {
       const y = gridTop + cardHeight / 2 + Math.floor(index / columns) * (cardHeight + gap);
       this.button(x, y, cardWidth, cardHeight, {
         name: unlocked ? `entry-${destination.id}` : `locked-${this.page * pageSize + index}`,
-        label: unlocked ? content[destination.id]?.title ?? texts.journey.unknown : '?\n' + texts.notebook.unknown,
+        label: unlocked ? getDestinationTexts(destination.id)?.title ?? texts.journey.unknown : '?\n' + texts.notebook.unknown,
         fontSize: cardWidth < 170 ? 13 : 17, labelOffsetY: unlocked ? cardHeight * 0.25 : 0,
         disabled: !unlocked,
         action: () => this.scene.start('journal-entry', { id: destination.id, page: this.page }),

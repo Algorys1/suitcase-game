@@ -1,16 +1,15 @@
 import Phaser from 'phaser';
-import texts from '../../data/fr.json';
+import { getTexts, getDestinationTexts } from '../../services/i18n';
 import { destinations } from '../../domain/recipes';
 import { progressStore } from '../../services/storage';
 import { createMenu } from '../ui/menu';
-
-const content: Record<string, { title: string; story: string }> = texts.destinations;
 
 export class JournalEntryScene extends Phaser.Scene {
   constructor() { super('journal-entry'); }
 
   create({ id, page = 0 }: { id?: string; page?: number } = {}): void {
-    const entry = id === undefined ? undefined : content[id];
+    const texts = getTexts();
+    const entry = id === undefined ? undefined : getDestinationTexts(id);
     if (id === undefined || !entry || !progressStore.read().discoveredDestinationIds.includes(id)) {
       this.scene.start('journal', { page });
       return;

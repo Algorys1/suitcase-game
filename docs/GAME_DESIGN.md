@@ -4,7 +4,7 @@
 > **Jam :** Indie Park Game Jam #6 — thème « Voyage ».  
 > **Portée :** jeu solo, jouable dans un navigateur, sessions courtes, progression de collection persistante.
 
-> **Avancement du prototype — étape 5 :** voyages, Néant, charges 10 / 1 / 2, bilan et carnet permanent sont jouables. Les découvertes sont sauvegardées dès le départ accepté ; les résultats distinguent nouvelle découverte et lieu déjà connu entre parties. Les lieux inconnus restent masqués dans le carnet. La session est perdue au rechargement, mais les découvertes restent enregistrées dans ce navigateur si le stockage est disponible. Illustrations, histoires et titres anglais restent provisoires ; le choix de langue dans l'interface et les autocollants restent à ajouter.
+> **Avancement du prototype — étape 6 :** voyages, Néant, charges 10 / 1 / 2, bilan et carnet permanent sont jouables. Les paramètres proposent FR/EN, avec application immédiate et sauvegarde du choix sans perte des découvertes. Tous les écrans et les éléments utilisent la langue choisie ; illustrations, histoires et titres anglais des destinations restent provisoires. La session est perdue au rechargement, mais le carnet et la langue restent enregistrés dans ce navigateur si le stockage est disponible. Les autocollants restent à ajouter.
 
 > **Complément :** [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md), proposition à prototyper, non encore validée en jeu. Il prime pour la méthode de sélection par deux aiguilles ; le présent document conserve la référence des recettes, de l'énergie, du carnet et de la fin de session. Les autocollants ajoutent une progression cosmétique, sans bonus de gameplay.
 

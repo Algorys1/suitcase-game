@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import texts from '../../data/fr.json';
+import { getTexts } from '../../services/i18n';
 import { drawPostcard } from './postcard';
 
 export type MenuButton = {
@@ -81,6 +81,7 @@ export function createButton(
 
 /** Reflow at native canvas size to keep text and touch targets readable. */
 export function createMenu(scene: Phaser.Scene, content: MenuContent): () => void {
+  const texts = getTexts();
   scene.game.canvas.setAttribute('aria-label', content.title);
   const canvas = scene.game.canvas;
   canvas.tabIndex = 0;

@@ -1,11 +1,9 @@
 import Phaser from 'phaser';
-import texts from '../../data/fr.json';
+import { getTexts, getDestinationTexts } from '../../services/i18n';
 import type { SessionState } from '../../domain/session';
 import { createMenu } from '../ui/menu';
 import { progressStore } from '../../services/storage';
 import { destinations } from '../../domain/recipes';
-
-const content: Record<string, { title: string }> = texts.destinations;
 
 export class SummaryScene extends Phaser.Scene {
   constructor() { super('summary'); }
@@ -17,10 +15,11 @@ export class SummaryScene extends Phaser.Scene {
     const pages = Math.max(1, Math.ceil(ids.length / 2));
     let dispose: (() => void) | undefined;
     const render = (): void => {
+      const texts = getTexts();
       dispose?.();
       const places = ids.slice(page * 2, page * 2 + 2).map(id => texts.journey.visits
         .replace('{name}', (session.newlyDiscoveredIds.includes(id) ? texts.notebook.newMarker + ' ' : '')
-          + (content[id]?.title ?? texts.journey.unknown))
+          + (getDestinationTexts(id)?.title ?? texts.journey.unknown))
         .replace('{count}', String(session.visitedDestinationIds.filter(visited => visited === id).length)));
       dispose = createMenu(this, {
         title: texts.journey.summaryTitle,

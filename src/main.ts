@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
 import { gameConfig } from './game/config';
 import './style.css';
+import { applyLanguageToDocument } from './services/i18n';
 
+applyLanguageToDocument();
 const game = new Phaser.Game(gameConfig);
 
 // Avoid keeping a second canvas or input listeners after a Vite hot update.

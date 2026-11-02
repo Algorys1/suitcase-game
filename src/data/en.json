@@ -5,6 +5,13 @@
   "start": "Start a journey",
   "journal": "Travel journal",
   "settings": "Settings",
+  "translationUnavailable": "Text unavailable",
+  "preferences": {
+    "description": "Choose the interface language.",
+    "french": "Français",
+    "english": "English",
+    "saved": "Choice saved in this browser."
+  },
   "back": "Back to home",
   "prototype": "Prototype · First journeys",
   "notebook": {
@@ -105,123 +112,123 @@
   },
   "destinations": {
     "archipel_azur": {
-      "title": "Destination 01 (title pending translation)",
+      "title": "Destination 01 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "cimes_eternelles": {
-      "title": "Destination 02 (title pending translation)",
+      "title": "Destination 02 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "mycelia": {
-      "title": "Destination 03 (title pending translation)",
+      "title": "Destination 03 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "ruines_englouties": {
-      "title": "Destination 04 (title pending translation)",
+      "title": "Destination 04 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "coeur_de_braise": {
-      "title": "Destination 05 (title pending translation)",
+      "title": "Destination 05 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "iles_suspendues": {
-      "title": "Destination 06 (title pending translation)",
+      "title": "Destination 06 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "marais_des_lucioles": {
-      "title": "Destination 07 (title pending translation)",
+      "title": "Destination 07 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "desert_de_cristal": {
-      "title": "Destination 08 (title pending translation)",
+      "title": "Destination 08 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "palais_de_givre": {
-      "title": "Destination 09 (title pending translation)",
+      "title": "Destination 09 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "temple_oublie": {
-      "title": "Destination 10 (title pending translation)",
+      "title": "Destination 10 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "ile_des_cendres": {
-      "title": "Destination 11 (title pending translation)",
+      "title": "Destination 11 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "grottes_sporiferes": {
-      "title": "Destination 12 (title pending translation)",
+      "title": "Destination 12 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "canopee_des_brumes": {
-      "title": "Destination 13 (title pending translation)",
+      "title": "Destination 13 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "recif_de_verre": {
-      "title": "Destination 14 (title pending translation)",
+      "title": "Destination 14 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "jardins_du_zenith": {
-      "title": "Destination 15 (title pending translation)",
+      "title": "Destination 15 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "cite_immobile": {
-      "title": "Destination 16 (title pending translation)",
+      "title": "Destination 16 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "sylve_prismatique": {
-      "title": "Destination 17 (title pending translation)",
+      "title": "Destination 17 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "necropole_ardente": {
-      "title": "Destination 18 (title pending translation)",
+      "title": "Destination 18 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "foret_du_silence": {
-      "title": "Destination 19 (title pending translation)",
+      "title": "Destination 19 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "sanctuaire_des_spores": {
-      "title": "Destination 20 (title pending translation)",
+      "title": "Destination 20 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "royaume_des_spores_celestes": {
-      "title": "Destination 21 (title pending translation)",
+      "title": "Destination 21 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "tempete_ecarlate": {
-      "title": "Destination 22 (title pending translation)",
+      "title": "Destination 22 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "atoll_boreal": {
-      "title": "Destination 23 (title pending translation)",
+      "title": "Destination 23 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "vestiges_celestes": {
-      "title": "Destination 24 (title pending translation)",
+      "title": "Destination 24 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "mer_figee": {
-      "title": "Destination 25 (title pending translation)",
+      "title": "Destination 25 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "jungle_incandescente": {
-      "title": "Destination 26 (title pending translation)",
+      "title": "Destination 26 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "jardins_de_gemmes": {
-      "title": "Destination 27 (title pending translation)",
+      "title": "Destination 27 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "empire_des_sables": {
-      "title": "Destination 28 (title pending translation)",
+      "title": "Destination 28 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "faille_des_contraires": {
-      "title": "Destination 29 (title pending translation)",
+      "title": "Destination 29 (title pending)",
       "story": "Story pending — placeholder text."
     },
     "observatoire_des_etoiles": {
-      "title": "Destination 30 (title pending translation)",
+      "title": "Destination 30 (title pending)",
       "story": "Story pending — placeholder text."
     }
   }

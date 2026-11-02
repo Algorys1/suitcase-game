@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import texts from '../../data/fr.json';
+import { getTexts, getDestinationTexts } from '../../services/i18n';
 import { BALANCE } from '../../domain/compass';
 import { continueSession } from '../../domain/session';
 import type { SessionState } from '../../domain/session';
@@ -7,15 +7,14 @@ import { createMenu } from '../ui/menu';
 import { destinations } from '../../domain/recipes';
 import { progressStore } from '../../services/storage';
 
-const content: Record<string, { title: string; story: string }> = texts.destinations;
-
 export class ResultScene extends Phaser.Scene {
   constructor() { super('result'); }
 
   create({ session }: { session?: SessionState } = {}): void {
+    const texts = getTexts();
     const trip = session?.lastTrip;
     if (!session || session.phase !== 'result' || !trip) { this.scene.start('home'); return; }
-    const destination = trip.destinationId === null ? null : content[trip.destinationId];
+    const destination = trip.destinationId === null ? null : getDestinationTexts(trip.destinationId);
     const cost = texts.journey.cost.replace('{cost}', String(trip.cost))
       .replace('{charges}', String(session.charges)).replace('{max}', String(BALANCE.initialCharges));
     const description = destination

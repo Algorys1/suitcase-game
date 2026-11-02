@@ -4,7 +4,7 @@
 > **Références :** `README.md`, `docs/GAME_DESIGN.md`, `docs/ART_DIRECTION.md`.  
 > **Cible :** jeu HTML5 autonome, exécutable directement dans le navigateur et publiable sur itch.io.
 
-> **Avancement — étape 5 :** la préparation, les recettes/Néant, les charges, le bilan et le carnet permanent paginé sont implémentés. Le départ accepté débite une fois et sauvegarde immédiatement toute découverte avant la transition. `services/storage.ts` valide le schéma v1, filtre les IDs inconnus, déduplique et récupère les données invalides ; les erreurs de stockage utilisent un carnet en mémoire avec une indication non bloquante. La langue sauvegardée est préservée, mais son sélecteur dans l'interface reste à implémenter. La session n'est pas sauvegardée.
+> **Avancement — étape 6 :** préparation, recettes/Néant, charges, bilan et carnet permanent paginé sont implémentés. Les paramètres FR/EN appliquent et sauvegardent le choix immédiatement. `services/i18n.ts` fournit les catalogues typés et la résolution des clés de contenu avec repli français. `services/storage.ts` conserve le schéma v1 et les découvertes lors d'un changement de langue ; les erreurs de stockage utilisent un état en mémoire avec une indication non bloquante. La session n'est pas sauvegardée. Histoires et titres anglais de destinations restent provisoires.
 
 > **Extension :** [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md) définit la sélection par aiguilles et les autocollants cosmétiques. La phase A est implémentée avec visuels temporaires, en attente de playtest ; les autocollants ne sont pas implémentés. Les modèles ci-dessous décrivent le socle et seront étendus au fil des phases validées.
 

@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
-import texts from '../../data/fr.json';
+import { getTexts } from '../../services/i18n';
 import { createMenu } from '../ui/menu';
-import type { PlaceholderPage } from './PlaceholderScene';
 import { createSession } from '../../domain/session';
 import { progressStore } from '../../services/storage';
 import { destinations } from '../../domain/recipes';
@@ -12,9 +11,7 @@ export class HomeScene extends Phaser.Scene {
   }
 
   create(): void {
-    const open = (page: PlaceholderPage): void => {
-      this.scene.start('placeholder', { page });
-    };
+    const texts = getTexts();
 
     createMenu(this, {
       title: texts.title,
@@ -23,9 +20,9 @@ export class HomeScene extends Phaser.Scene {
       footer: texts.notebook.progress.replace('{count}', String(progressStore.read().discoveredDestinationIds.length))
         .replace('{total}', String(destinations.length)),
       buttons: [
-        { label: texts.start, action: () => this.scene.start('preparation', { session: createSession() }), primary: true },
-        { label: texts.journal, action: () => this.scene.start('journal', { page: 0 }) },
-        { label: texts.settings, action: () => open('settings') },
+        { name: 'start', label: texts.start, action: () => this.scene.start('preparation', { session: createSession() }), primary: true },
+        { name: 'journal', label: texts.journal, action: () => this.scene.start('journal', { page: 0 }) },
+        { name: 'settings', label: texts.settings, action: () => this.scene.start('settings') },
       ],
     });
   }

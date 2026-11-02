@@ -46,7 +46,7 @@ describe('résolution des recettes', () => {
       expect(destination.storyKey).toBe(`destinations.${destination.id}.story`);
       expect(french[destination.id]?.title).toBeTruthy();
       expect(french[destination.id]?.story).toContain('provisoire');
-      expect(english[destination.id]?.title).toContain('pending translation');
+      expect(english[destination.id]?.title).toContain('title pending');
     }
     expect(french.archipel_azur?.title).toBe("L'Archipel d'Azur");
     expect(french.coeur_de_braise?.title).toBe('Le Cœur de braise');

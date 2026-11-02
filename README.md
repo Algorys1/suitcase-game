@@ -2,7 +2,7 @@
 
 Jeu expérimental de découverte fantastique, créé pour l'**Indie Park Game Jam #6** (thème : **Voyage**).
 
-> **Statut :** étape 5 — carnet permanent et sauvegarde locale. Les découvertes survivent aux nouvelles parties et au rechargement ; le carnet affiche les lieux connus et masque les autres. Voyages, charges et bilan de session restent jouables. Le choix de langue dans l'interface et les autocollants restent à implémenter.
+> **Statut :** étape 6 — paramètres et interface FR/EN. La langue se choisit dans les paramètres, s'applique immédiatement et reste enregistrée avec le carnet. Accueil, préparation, résultats, bilan, carnet et fiches utilisent le même choix. Histoires, illustrations et titres anglais des destinations restent provisoires ; les autocollants ne sont pas encore implémentés.
 
 > **Extension :** [boussole à aiguilles et autocollants](docs/COMPASS_AND_STICKERS.md). La phase A est implémentée avec des visuels temporaires et reste à valider en playtest. Les phases B/C ne sont pas commencées.
 
@@ -39,17 +39,19 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 8. Un nouveau voyage depuis l'accueil repart toujours à **10 charges**, avec une liste de visites de session vide ; le carnet permanent est conservé. Chaque première découverte est sauvegardée dès le départ accepté, avant sa révélation. Un rechargement perd la session en cours et revient à l'accueil, en conservant les découvertes sauvegardées.
 9. **Carnet de voyage** présente les 30 lieux sur plusieurs pages : les lieux inconnus restent masqués, sans nom ni recette. Cliquer/toucher un lieu connu ouvre sa fiche avec une vignette et une histoire provisoires ; le retour conserve la page consultée. L'accueil et le bilan affichent la progression sur 30 ; les nouveaux lieux de la session sont marqués **★ Nouveau**.
 10. Le carnet est enregistré **dans ce navigateur**. Effacer les données du site le supprime aussi. Si le stockage est indisponible, un message indique que le carnet reste uniquement en mémoire jusqu'au rechargement ; le jeu continue de fonctionner.
+11. Dans **Paramètres / Settings**, choisir **Français** ou **English**. Une coche et une bordure indiquent la langue active ; tout l'écran se traduit immédiatement. Le retour à l'accueil puis les voyages et le carnet conservent ce choix. La préférence est sauvegardée sans modifier les découvertes ; si le stockage est bloqué, elle reste valable en mémoire jusqu'au rechargement, avec un avertissement.
 
 ### Choix techniques actuels
 
-- Sept scènes : accueil, préparation, résultat, bilan, carnet, fiche de destination et paramètres provisoires. La transition de voyage reste dans la préparation. `JournalScene` gère la grille paginée et `JournalEntryScene` les fiches connues.
+- Sept scènes : accueil, préparation, résultat, bilan, carnet, fiche de destination et `SettingsScene`. La transition de voyage reste dans la préparation. `JournalScene` gère la grille paginée et `JournalEntryScene` les fiches connues ; la scène temporaire des paramètres a été remplacée.
 - La logique pure de préparation est dans `src/domain/preparation.ts` ; `src/domain/compassSelection.ts` ajoute le réglage initial et la rotation par crans, sans Phaser. Boussole et palette partagent les mêmes emplacements et la même validation du départ. Une sélection provisoire en doublon est visible mais ne permet pas de voyager.
 - `recipes.ts` charge et valide les 30 recettes, indexées par paire non ordonnée. `compass.ts` centralise les valeurs provisoires 10 / 1 / 2 ; `session.ts` gère les phases préparation → voyage → résultat → préparation ou fin. Le débit a lieu à l'acceptation du départ, jamais dans une animation ou un redimensionnement.
 - Affichage Phaser en mode `RESIZE` : panneau centré et largeur bornée sur desktop, texte redisposé et boutons conservant une taille tactile sur petit écran. Les décorations secondaires sont masquées sur les fenêtres peu hautes.
 - Formes et police système temporaires, sans téléchargement de police, image ou autre ressource distante. La valise est dessinée en perspective ; dix pictogrammes simples entourent le cadran. Les aiguilles se distinguent par leur forme (triangle / losange), leur couleur et leur numéro. Les noms des choix restent visibles dans les commandes et la valise.
-- Textes d'interface dans `src/data/fr.json` et `en.json`. L'affichage reste en français ; le sélecteur FR/EN viendra à l'étape suivante. Le format de sauvegarde valide et conserve déjà la préférence `language` (`fr` par défaut), sans l'écraser lors d'une découverte.
-- Les 30 noms français sont repris du tableau approuvé dans `GAME_DESIGN.md`, sans changer les catalogues. Les histoires sont explicitement des textes d'attente ; les titres anglais portent la mention « title pending translation ». Aucun récit ni traduction éditoriale définitive n'est inventé.
-- **38 tests** protègent les catalogues, les 45 combinaisons dans les deux ordres, le cycle de session et la progression permanente : revisites entre parties, sauvegardes absentes ou corrompues, filtrage des IDs inconnus, déduplication, langue, stockage bloqué et collection complète.
+- `services/i18n.ts` sélectionne `fr.json` ou `en.json` à partir de la préférence sauvegardée (`fr` par défaut). Les scènes lisent les textes à leur création ou au rendu, sans conserver un catalogue français figé. La page applique aussi la langue au titre de l'onglet et à l'attribut HTML `lang` dès le démarrage.
+- Les clés d'interface sont typées et vérifiées dans les deux catalogues, avec les mêmes paramètres `{…}`. Les clés dynamiques des destinations passent par un résolveur avec repli français, puis texte générique lisible si la clé est inconnue.
+- Les 30 noms français sont repris du tableau approuvé dans `GAME_DESIGN.md`, sans changer les catalogues. Les histoires sont explicitement des textes d'attente ; les titres anglais portent la mention courte « title pending », adaptée aux cartes du carnet. Aucun récit ni traduction éditoriale définitive n'est inventé.
+- **44 tests** protègent les catalogues, les 45 combinaisons dans les deux ordres, le cycle de session, la progression permanente et les langues : clés manquantes, paramètres, repli de traduction, sauvegarde du choix, stockage bloqué et préservation des découvertes.
 - `services/storage.ts` conserve uniquement `{ schemaVersion: 1, discoveredDestinationIds, language }` sous la clé `suitcase-game.progress.v1`. L'accès à `localStorage`, la lecture et l'écriture sont protégés ; une indisponibilité utilise la progression en mémoire. Aucune session ni charge n'est sauvegardée.
 - Le résultat distingue désormais **Nouvelle découverte ! / Déjà visité** selon le carnet global. `session.ts` conserve séparément les nouveaux IDs de la session pour le bilan. Le Néant ne débloque rien et les revisites coûtent toujours 1 charge.
 - La transition dure 350 ms ; la préférence système de réduction des animations supprime le fondu. La boussole affiche ses charges numériquement dans la préparation, y compris en mode palette.
@@ -86,7 +88,7 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 - Doubles clics, coûts 1 / 2, passage de 1 à 0 avant le Néant, nouvelle session à 10, préférence de réduction des animations, retour aux menus et rechargement vérifiés sans erreur JavaScript ni ressource HTTP manquante.
 - Les catalogues et dépendances sont inchangés. Firefox, appareil tactile réel et page itch.io publiée restent à vérifier avant publication.
 
-### Vérifications de l'étape 5
+### Vérifications de l'étape 5 (historique)
 
 - **38 tests Vitest** réussis ; TypeScript strict et build Vite réussis.
 - Chrome headless en 1280 × 720, 800 × 600, 320 × 568, 360 × 640 et 640 × 360 : trente fiches, pagination complète, titres longs, retour à la bonne page et clavier vérifiés. Les lieux inconnus restent masqués et inactifs.
@@ -94,6 +96,14 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 - Sauvegardes absentes, corrompues ou contenant des IDs inconnus/dupliqués, préférence de langue préservée, carnet complet toujours jouable et stockage entièrement bloqué testés. Le repli en mémoire conserve les découvertes pendant la navigation et affiche l'indisponibilité.
 - Les mêmes parcours passent sur le build sous `/jam/` en desktop, portrait et paysage, sans erreur JavaScript ni ressource HTTP manquante. Les captures ont été contrôlées visuellement ; les illustrations et histoires restent provisoires.
 - Catalogues et dépendances inchangés. Firefox, appareil tactile réel et publication itch.io restent à vérifier avant publication.
+
+### Vérifications de l'étape 6
+
+- **44 tests Vitest** réussis ; TypeScript strict et build Vite réussis. Les deux catalogues ont les mêmes clés non vides et les mêmes paramètres ; le repli français et la conservation des découvertes lors d'un changement de langue sont testés.
+- Chrome headless en FR puis EN : 1280 × 720, 800 × 600, 320 × 568 et 640 × 360. Paramètres, trente fiches du carnet, titres longs, préparation, résultats, Néant et bilan vérifiés à la souris et au toucher simulé, sans texte hors du cadre ni description superposée aux boutons.
+- La préférence survit au rechargement ; les changements répétés n'accumulent pas d'écouteurs d'événements. Le clavier, le titre de l'onglet, l'attribut HTML `lang`, les sauvegardes invalides et le repli en mémoire lorsque le stockage est bloqué sont vérifiés.
+- Les mêmes parcours passent sur le build sous `/jam/` en 1280 × 720, 320 × 568 et 640 × 360, sans erreur JavaScript ni ressource HTTP manquante. Les captures ont été contrôlées visuellement. Firefox et appareil tactile réel restent à vérifier avant publication.
+- Titres anglais de destinations raccourcis en « Destination 01 (title pending) » pour rester lisibles sur les cartes ; les histoires restent des textes d'attente dans les deux langues.
 
 ## Concept
 
@@ -178,7 +188,7 @@ Les versions exactes et leurs dépendances transitives sont verrouillées dans `
 
 ## Priorités de production
 
-La sélection par aiguilles, les voyages avec charges et le carnet permanent sont implémentés. Le choix de langue dans l'interface reste à ajouter. La progression permanente permet désormais de préparer les phases d'autocollants et de décoration, après validation des étapes correspondantes. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md). La rotation des aiguilles reste à repenser lors de l'habillage, conformément au premier retour de playtest.
+La sélection par aiguilles, les voyages, le carnet permanent et les paramètres FR/EN sont implémentés. Les phases d'autocollants et de décoration pourront suivre après validation des étapes correspondantes ; les textes éditoriaux et les assets définitifs restent à produire. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md). La rotation des aiguilles reste à repenser lors de l'habillage, conformément au premier retour de playtest.
 
 1. Prototype jouable avec graphismes temporaires : deux emplacements, choix des éléments, résolution d'une recette.
 2. Boucle complète : boussole, Néant, écran de résultat, fin de partie.

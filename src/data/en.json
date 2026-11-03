@@ -144,7 +144,7 @@
     "continue": "Continue",
     "finish": "View summary",
     "voidTitle": "The Void",
-    "voidStory": "No world answers this combination. The compass falters.",
+    "voidStory": "You travel into the Void. It is a destination, certainly, but not one where you would want to stay.",
     "cost": "−{cost} charge(s) · {charges} / {max} remaining",
     "firstVisit": "First visit this session",
     "revisit": "Already visited this session",

@@ -7,6 +7,7 @@ import type { Souvenir } from '../../domain/souvenirs';
 import { drawPreparationDesk } from './preparationArt';
 import { bookBusy, turnJournalPage } from './notebookMotion';
 import type { PageDirection } from './notebookMotion';
+import { drawVoid } from './void';
 
 export type MenuButton = {
   label: string;
@@ -35,6 +36,7 @@ type MenuContent = {
   home?: boolean;
   preferences?: { stamp: boolean };
   dark?: boolean;
+  void?: boolean;
   footer?: string;
   postcard?: number;
   souvenir?: Souvenir;
@@ -466,6 +468,31 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
     stopReveal?.();
     stopReveal = undefined;
     scene.children.getAll().forEach(child => child.destroy());
+    if (content.void) {
+      stopReveal = drawVoid(scene, !motion.matches);
+      const { width, height } = scene.scale;
+      const portrait = width < 600 && height > width;
+      const center = width * (portrait ? 0.5 : 0.77);
+      const textWidth = portrait ? width - 56 : width * 0.34;
+      const top = height * (portrait ? 0.52 : 0.16);
+      const small = height < 450 || width < 400;
+      const words = (y: number, text: string, size: number, name: string, color = '#fff4df') =>
+        scene.add.text(center, y, text, { fontFamily, fontSize: size, color, align: 'center',
+          wordWrap: { width: textWidth, useAdvancedWrap: true } }).setOrigin(0.5, 0).setPadding(2).setName(name);
+      const title = words(top, content.title, small ? 28 : 40, 'menu-title');
+      title.setFontFamily('Georgia, serif');
+      const story = words(title.y + title.height + (small ? 10 : 20), content.description,
+        small ? 15 : 19, 'menu-description');
+      const cost = words(story.y + story.height + (small ? 12 : 24), content.detail ?? '',
+        small ? 13 : 16, 'void-cost', '#bde8e8');
+      const button = content.buttons[0];
+      if (button) createButton(scene, center, Math.max(cost.y + cost.height + 32,
+        height * (portrait ? 0.89 : 0.76)), Math.min(textWidth, 300), 46,
+        { ...button, focused: focusIndex === 0, stationery: true, fontSize: small ? 16 : 18 });
+      if (content.footer) words(height - 26, content.footer, 11, 'void-footer');
+      firstRender = false;
+      return;
+    }
     if (content.home) {
       renderHomeMenu(scene, content, focusIndex);
       firstRender = false;
@@ -568,7 +595,7 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
   };
   canvas.addEventListener('keydown', onKeyDown);
   scene.scale.on(Phaser.Scale.Events.RESIZE, render);
-  const onMotionChange = (): void => { if (motion.matches) render(); };
+  const onMotionChange = (): void => { if (content.void || motion.matches) render(); };
   motion.addEventListener('change', onMotionChange);
   const dispose = (): void => {
     stopTurn?.();

@@ -22,14 +22,14 @@ export class ResultScene extends Phaser.Scene {
     const postcard = destinations.findIndex(entry => entry.id === trip.destinationId);
     const description = destination
       ? destination.story + (hasPostcard(this, postcard) ? '' : '\n\n' + texts.journey.artwork)
-      : [texts.journey.voidStory, cost].join('\n\n');
+      : texts.journey.voidStory;
     const isVoid = trip.destinationId === null;
     this.cameras.main.setBackgroundColor(isVoid ? '#24243e' : '#fff4df');
     createMenu(this, {
       title: isVoid ? texts.journey.voidTitle : destination?.title ?? texts.journey.unknown,
-      description, dark: isVoid,
+      description, dark: isVoid, void: isVoid,
       caption: isVoid ? undefined : (trip.isNewDiscovery ? texts.notebook.newDiscovery : texts.notebook.alreadyVisited),
-      detail: isVoid ? undefined : cost,
+      detail: cost,
       reveal: isVoid ? undefined : trip.isNewDiscovery ? 'new' : 'revisit',
       postcard: isVoid ? undefined : postcard,
       souvenir: souvenirForDestination(trip.destinationId, progressStore.read().discoveredDestinationIds),

@@ -7,12 +7,12 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     const home = key.startsWith('home-');
     const journal = key === 'journal-closed';
     const settings = key.startsWith('settings-');
-    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home && !journal && !settings) continue;
+    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home && !journal && !settings && key !== 'void-space') continue;
     const texture = scene.textures.get(key);
     const source = texture.getSourceImage();
     // A canvas source has already been prepared during an earlier visit to Home.
     if (!(source instanceof HTMLImageElement)) continue;
-    const backdrop = key === 'preparation-travel_desk';
+    const backdrop = key === 'preparation-travel_desk' || key === 'void-space';
     const vial = key.startsWith('preparation-vial_');
     const maxEdge = backdrop ? 2048 : vial || key.startsWith('preparation-element-') || key.startsWith('preparation-needle_') ? 512 : 1024;
     const ratio = Math.min(1, maxEdge / Math.max(source.naturalWidth, source.naturalHeight));

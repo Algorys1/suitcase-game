@@ -16,6 +16,9 @@ export class HomeScene extends Phaser.Scene {
   }
 
   preload(): void {
+    if (!this.textures.exists('void-space')) {
+      this.load.image('void-space', `${import.meta.env.BASE_URL}assets/void/space.webp`);
+    }
     if (!this.textures.exists('journal-closed')) {
       this.load.image('journal-closed', `${import.meta.env.BASE_URL}assets/journal/closed.webp`);
     }

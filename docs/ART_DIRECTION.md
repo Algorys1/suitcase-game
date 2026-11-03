@@ -156,6 +156,8 @@ Même au sein d'une famille, changer **le cadrage, la silhouette et le point foc
 
 ## 7. Le Néant
 
+**Habillage spatial intégré (à valider en jeu) :** illustration bleu nuit, brumes violettes et turquoise, valise ouverte sur un fragment de roche. Des voiles lumineux et des poussières dérivent en continu autour de la boussole, avec un reflet doux sur le laiton. À la demande du joueur, le boîtier ne tremble plus : son inclinaison reste fixe, seule une lévitation verticale lente de 3 px subsiste. Les deux aiguilles continuent de perdre le nord. Les anciens contours elliptiques sont supprimés. Aucun flash ni mouvement de caméra. Le message retenu avec le joueur est : « Vous voyagez dans le Néant. C’est une destination, certes, mais pas celle où l’on a envie de rester. » Traduction anglaise intégrée. Coût et charges restantes restent visibles ; Continuer est disponible immédiatement. Aucun souvenir ou déblocage. La réduction des animations fige les effets et sa désactivation les relance ; les écouteurs sont nettoyés avant chaque nouveau rendu et à la sortie. Source et prompt : `designs/void/` ; WebP distribué : `public/assets/void/space.webp`.
+
 Le Néant doit contraster avec les destinations colorées sans donner l'impression d'une erreur technique.
 
 - Fond bleu nuit / violet profond, une petite plateforme ou une silhouette flottante, quelques points lumineux éloignés.

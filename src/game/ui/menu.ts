@@ -33,6 +33,7 @@ type MenuContent = {
   detail?: string;
   reveal?: 'new' | 'revisit';
   home?: boolean;
+  preferences?: { stamp: boolean };
   dark?: boolean;
   footer?: string;
   postcard?: number;
@@ -43,6 +44,97 @@ type MenuContent = {
 
 const fontFamily = '"Trebuchet MS", Arial, sans-serif';
 const ink = 0x302a37;
+
+/** A travel form on the same desk, with language labels and a live ink stamp. */
+function renderPreferencesMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: number,
+  animate: boolean): (() => void) | undefined {
+  const { width, height } = scene.scale;
+  const portrait = width < 600;
+  const short = height < 450;
+  const ratio = portrait ? 3 / 4 : 4 / 3;
+  const sheetHeight = Math.min(height - 24, (width - 24) / ratio, 640);
+  const sheetWidth = sheetHeight * ratio;
+  const center = width / 2;
+  const top = (height - sheetHeight) / 2;
+  const textWidth = sheetWidth * 0.76;
+  const texts = getTexts();
+  drawPreparationDesk(scene, width, height);
+  const key = `settings-${portrait ? 'portrait' : 'landscape'}`;
+  if (scene.textures.exists(key)) {
+    const sheet = scene.add.image(center, height / 2, key).setName('settings-stationery');
+    sheet.setScale(Math.min(sheetWidth / sheet.width, sheetHeight / sheet.height)).setAngle(0.7);
+  } else {
+    const paper = scene.add.graphics().setPosition(center, height / 2).setAngle(1).setName('settings-paper-fallback');
+    paper.fillStyle(0x5e422b, 0.16).fillRoundedRect(-sheetWidth * 0.46, -sheetHeight * 0.45 + 5,
+      sheetWidth * 0.92, sheetHeight * 0.9, 5);
+    paper.fillStyle(0xfff4df).lineStyle(1, 0xb59a70, 0.5)
+      .fillRoundedRect(-sheetWidth * 0.46, -sheetHeight * 0.45, sheetWidth * 0.92, sheetHeight * 0.9, 5)
+      .strokeRoundedRect(-sheetWidth * 0.46, -sheetHeight * 0.45, sheetWidth * 0.92, sheetHeight * 0.9, 5);
+    paper.fillStyle(0xb58b4c).fillRoundedRect(-16, -sheetHeight * 0.47, 32, 22, 4);
+  }
+  const words = (y: number, value: string, size: number, name: string, color = '#65452e') =>
+    scene.add.text(center, y, value, { fontFamily, fontSize: size, color, align: 'center',
+      wordWrap: { width: textWidth, useAdvancedWrap: true } }).setOrigin(0.5, 0).setPadding(2).setName(name);
+  // A small compass sketch leaves the painted sheet free of language-specific art.
+  const compassY = top + sheetHeight * (portrait ? 0.14 : 0.15);
+  const compassX = center - sheetWidth * 0.30;
+  const doodle = scene.add.graphics().lineStyle(1, 0xa5814e, 0.8);
+  doodle.strokeCircle(compassX, compassY, 10).strokeCircle(compassX, compassY, 13);
+  doodle.fillStyle(0x79506b).fillTriangle(compassX, compassY - 8, compassX - 3, compassY + 3, compassX + 3, compassY + 3);
+  doodle.lineStyle(1, 0xa5814e).lineBetween(compassX, compassY + 3, compassX, compassY + 9);
+  const title = words(top + sheetHeight * (portrait ? 0.18 : 0.21), texts.preferences.title,
+    Math.min(short ? 26 : 36, textWidth / 10), 'menu-title', '#513322');
+  title.setFontFamily('Georgia, "Times New Roman", serif').setFontStyle('bold');
+  const description = words(Math.max(title.y + title.height + (short ? 5 : 10), top + sheetHeight * 0.34),
+    content.description, short || portrait ? 14 : 17, 'menu-description');
+
+  const gap = portrait ? 12 : 22;
+  const ticketWidth = Math.min(224, (textWidth - gap) / 2);
+  const ticketHeight = short ? 72 : portrait ? 82 : 92;
+  const ticketY = Math.max(top + sheetHeight * 0.54, description.y + description.height + 14 + ticketHeight / 2);
+  let animatedStamp: Phaser.GameObjects.Container | undefined;
+  content.buttons.slice(0, 2).forEach((button, index) => {
+    const x = center + (index === 0 ? -1 : 1) * (ticketWidth + gap) / 2;
+    const left = x - ticketWidth / 2;
+    const y = ticketY - ticketHeight / 2;
+    const tag = scene.add.graphics().setName(`${button.name}-ticket`);
+    tag.fillStyle(0x785339, 0.13).fillRoundedRect(left, y + 3, ticketWidth, ticketHeight, 3);
+    tag.fillStyle(button.selected ? 0xf2dfb8 : 0xfaf0dc).lineStyle(1, 0xa98a5f, 0.65)
+      .fillRoundedRect(left, y, ticketWidth, ticketHeight, 3).strokeRoundedRect(left, y, ticketWidth, ticketHeight, 3);
+    tag.lineStyle(1, 0xbea075, 0.45).lineBetween(left + 9, y + ticketHeight - 7, left + ticketWidth - 9, y + ticketHeight - 7);
+    // The punched corners and a faint ruled line evoke a luggage label.
+    for (const side of [-1, 1]) {
+      tag.fillStyle(0xd6bd91).fillCircle(x + side * (ticketWidth / 2 - 8), y + 8, 2);
+    }
+    createButton(scene, x, ticketY, ticketWidth, ticketHeight, { ...button, focused: index === focusIndex,
+      textOnly: true, labelOffsetY: -ticketHeight * 0.19, fontSize: portrait ? 16 : short ? 17 : 21 });
+    if (!button.selected) return;
+    const stampWidth = Math.min(ticketWidth - 16, 116);
+    const print = scene.add.graphics().lineStyle(2, 0x794663, 0.88);
+    print.strokeRoundedRect(-stampWidth / 2, -14, stampWidth, 28, 5);
+    print.lineStyle(0.7, 0x794663, 0.65).strokeRoundedRect(-stampWidth / 2 + 3, -11, stampWidth - 6, 22, 3);
+    print.lineStyle(2, 0x794663).beginPath().moveTo(-stampWidth / 2 + 10, 0)
+      .lineTo(-stampWidth / 2 + 14, 4).lineTo(-stampWidth / 2 + 21, -5).strokePath();
+    const label = scene.add.text(9, 0, texts.preferences.selected, {
+      fontFamily, fontSize: portrait ? 10 : 12, fontStyle: 'bold', color: '#794663',
+    }).setOrigin(0.5).setPadding(2);
+    const stamp = scene.add.container(x, ticketY + ticketHeight * 0.21, [print, label])
+      .setAngle(-7).setAlpha(0.92).setName('language-stamp');
+    if (animate) animatedStamp = stamp;
+  });
+  const footer = words(Math.max(top + sheetHeight * 0.70, ticketY + ticketHeight / 2 + 14),
+    content.footer ?? '', portrait || short ? 11 : 13, 'settings-saved');
+  const back = content.buttons[2];
+  if (back) createButton(scene, center, Math.max(top + sheetHeight * 0.84, footer.y + footer.height + 34),
+    Math.min(textWidth, 270), 44,
+    { ...back, focused: focusIndex === 2, stationery: true, fontSize: portrait || short ? 15 : 18 });
+  if (!animatedStamp) return undefined;
+  const stamp = animatedStamp;
+  const y = stamp.y;
+  stamp.setScale(1.35).setAlpha(0).setY(y - 7);
+  const tween = scene.tweens.add({ targets: stamp, scaleX: 1, scaleY: 1, alpha: 0.92, y, duration: 190, ease: 'Quad.Out' });
+  return () => { tween.stop(); stamp.setScale(1).setAlpha(0.92).setY(y); };
+}
 
 /** A departure table, with a separate portrait composition and localized live text. */
 function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: number): void {
@@ -260,12 +352,13 @@ export function createButton(
         return;
       } else if (hover && !button.disabled) {
         background.lineStyle(1, 0x533d2b, 0.8)
-          .lineBetween(x - label.width / 2, y + label.height / 2 + 2, x + label.width / 2, y + label.height / 2 + 2);
+          .lineBetween(x - label.width / 2, y + (button.labelOffsetY ?? 0) + label.height / 2 + 2,
+            x + label.width / 2, y + (button.labelOffsetY ?? 0) + label.height / 2 + 2);
       }
       if (button.focused) {
         background.lineStyle(2, button.textOnly ? 0x79543f : 0xf1d496).strokeRoundedRect(x - width / 2 - 2, y - height / 2, width + 4, height, 9);
       }
-      label.setY(y + (pressed ? 1 : 0));
+      label.setY(y + (button.labelOffsetY ?? 0) + (pressed ? 1 : 0));
       return;
     }
     if (button.stationery) {
@@ -375,6 +468,12 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
     scene.children.getAll().forEach(child => child.destroy());
     if (content.home) {
       renderHomeMenu(scene, content, focusIndex);
+      firstRender = false;
+      return;
+    }
+    if (content.preferences) {
+      stopReveal = renderPreferencesMenu(scene, content, focusIndex,
+        firstRender && content.preferences.stamp && !motion.matches);
       firstRender = false;
       return;
     }

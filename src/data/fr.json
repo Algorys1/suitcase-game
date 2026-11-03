@@ -8,7 +8,9 @@
   "settings": "Paramètres",
   "translationUnavailable": "Texte indisponible",
   "preferences": {
-    "description": "Choisissez la langue de l’interface.",
+    "title": "Préférences de voyage",
+    "description": "Choisissez la langue de votre voyage.",
+    "selected": "Choisi",
     "french": "Français",
     "english": "English",
     "saved": "Choix enregistré dans ce navigateur."

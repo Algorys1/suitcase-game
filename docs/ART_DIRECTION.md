@@ -10,6 +10,8 @@
 
 ## 1. Intention visuelle
 
+**Paramètres — habillage validé :** une fiche de préférences de voyage en papier crème, légèrement inclinée, avec pince en laiton, billet ancien et crayon, repose sur la table commune. Les deux étiquettes de langue sont côte à côte ; un tampon prune avec coche distingue le choix actif et apparaît en 190 ms au changement, immédiatement avec la réduction des animations. Sources peintes paysage et portrait et prompts de l'outil intégré `image_gen` dans [`designs/settings/stationery-v1/`](../designs/settings/stationery-v1/), exports WebP transparents dans `public/assets/settings/`. Les titres, étiquettes, tampon et mention de sauvegarde sont localisés par le jeu ; le retour utilise la languette de papier existante. Le style et la composition sont validés visuellement par le joueur.
+
 **Continuité du carnet :** les rebords du carnet ouvert reprennent le cuir rouge prune de la couverture, avec une ombre bordeaux et un fin reflet rosé. Les pages restent crème. Ce rendu commun s'applique au sommaire, aux fiches et aux résultats de voyage.
 
 **Accueil validé en jeu :** une table de départ commune à la préparation, avec une nature morte illustrée réunissant valise fermée, carnet prune et boussole. Une lueur discrète traverse la jointure de la valise. Titre en sérif brun, commande de départ sur papier déchiré, accès au carnet et progression plus discrets ; les textes FR/EN restent rendus par le jeu. La composition se réorganise en portrait. [Source](../designs/home/hero-v1/departure.png) et [prompt de l'outil intégré image_gen](../designs/home/hero-v1/prompt.json).

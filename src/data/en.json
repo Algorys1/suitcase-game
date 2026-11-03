@@ -8,7 +8,9 @@
   "settings": "Settings",
   "translationUnavailable": "Text unavailable",
   "preferences": {
-    "description": "Choose the interface language.",
+    "title": "Travel preferences",
+    "description": "Choose the language of your journey.",
+    "selected": "Selected",
     "french": "Français",
     "english": "English",
     "saved": "Choice saved in this browser."

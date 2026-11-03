@@ -66,6 +66,14 @@ La composition validée présente la valise fermée, le carnet prune et une bous
 
 Illustration produite avec l'outil intégré `image_gen` : [source PNG](designs/home/hero-v1/departure.png), [prompt et références](designs/home/hero-v1/prompt.json), [export WebP transparent](public/assets/home/departure.webp) (366 Kio). Le décor existant est réutilisé. Si l'illustration manque, la valise fermée sert de repli.
 
+### Préférences de voyage — nouvel habillage
+
+Les paramètres prennent la forme d'une fiche crème posée sur la table existante, avec pince en laiton, billet ancien et crayon. Deux étiquettes sélectionnent Français ou English ; un tampon prune avec coche marque le choix actif et apparaît brièvement lors d'un changement. La préférence de réduction des animations affiche le tampon immédiatement. Le retour conserve la languette de papier commune aux autres écrans.
+
+Deux compositions peintes, paysage et portrait, sont générées avec l'outil intégré `image_gen` : [sources PNG et prompts](designs/settings/stationery-v1/), exports WebP transparents dans `public/assets/settings/` (environ 281 Kio au total). La composition s'adapte à la fenêtre ; les textes FR/EN, les zones tactiles et le focus clavier restent rendus par le jeu. La langue et les découvertes conservent leur sauvegarde existante. Une fiche dessinée prend le relais si l'illustration est indisponible. Cette présentation est validée visuellement par le joueur.
+
+Vérifications exécutées : **51 tests Vitest**, TypeScript strict et build Vite réussis. Chrome headless, build sous `/jam/`, FR/EN en 960 × 540, 1280 × 720, 1920 × 1080, 800 × 600, 320 × 568, 360 × 640, 640 × 360 et 600 × 568 : choix et sauvegarde de langue, conservation des découvertes, tampon, retours et rechargement contrôlés à la souris ou au toucher simulé. Clavier, réduction des animations, redimensionnement pendant le tampon, absence de rejeu à la réouverture, texture absente et stockage bloqué vérifiés ; parcours courants sans erreur JavaScript/HTTP. Captures desktop, portrait et paysage contrôlées visuellement. Firefox, appareil tactile réel et iframe itch.io restent à vérifier avant publication.
+
 ### Ouverture et feuilletage du carnet — prototype à valider
 
 Le carnet se rapproche en 650 ms, puis sa couverture pivote en 430–520 ms. Les pages se tournent en 480 ms avec deux faces de papier autour de la reliure. Les interactions sont verrouillées pendant ces transitions ; redimensionnement et changement de préférence d'animation terminent proprement l'effet. `prefers-reduced-motion` donne un accès immédiat. Aucune charge ni donnée de sauvegarde ne change lors de la consultation.

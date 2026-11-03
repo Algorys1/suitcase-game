@@ -6,7 +6,8 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     const preparation = key.startsWith('preparation-');
     const home = key.startsWith('home-');
     const journal = key === 'journal-closed';
-    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home && !journal) continue;
+    const settings = key.startsWith('settings-');
+    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home && !journal && !settings) continue;
     const texture = scene.textures.get(key);
     const source = texture.getSourceImage();
     // A canvas source has already been prepared during an earlier visit to Home.

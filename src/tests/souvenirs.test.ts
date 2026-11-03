@@ -8,10 +8,11 @@ const assets = import.meta.glob('../../public/assets/stickers/*.webp', {
   eager: true, query: '?url', import: 'default',
 });
 
-describe('souvenirs des trois destinations pilotes', () => {
+describe('souvenirs des 30 destinations', () => {
   it('associe chaque souvenir à une destination unique, une image et des noms FR/EN', () => {
-    expect(souvenirs).toHaveLength(3);
-    expect(new Set(souvenirs.map(s => s.destinationId)).size).toBe(3);
+    expect(souvenirs).toHaveLength(30);
+    expect(new Set(souvenirs.map(s => s.destinationId)).size).toBe(30);
+    expect(souvenirs.map(s => s.destinationId).sort()).toEqual(destinations.map(d => d.id).sort());
     for (const souvenir of souvenirs) {
       expect(destinations.some(d => d.id === souvenir.destinationId)).toBe(true);
       expect(assets).toHaveProperty(`../../public/${souvenir.image}`);
@@ -25,12 +26,15 @@ describe('souvenirs des trois destinations pilotes', () => {
     expect(souvenirForDestination('archipel_azur', [])).toBeUndefined();
     expect(souvenirForDestination(null, ['archipel_azur'])).toBeUndefined();
     expect(souvenirForDestination('unknown', ['unknown'])).toBeUndefined();
-    expect(souvenirForDestination('cimes_eternelles', ['cimes_eternelles'])).toBeUndefined();
+    for (const destination of destinations) {
+      expect(souvenirForDestination(destination.id, [])).toBeUndefined();
+      expect(souvenirForDestination(destination.id, [destination.id])?.destinationId).toBe(destination.id);
+    }
   });
 
   it('récupère les souvenirs depuis une ancienne sauvegarde sans nouveau champ', () => {
     const progress = decodeProgress(JSON.stringify({ schemaVersion: 1, language: 'en',
-      discoveredDestinationIds: ['archipel_azur', 'mycelia', 'coeur_de_braise'] }));
+      discoveredDestinationIds: destinations.map(d => d.id) }));
     for (const souvenir of souvenirs) {
       expect(souvenirForDestination(souvenir.destinationId, progress.discoveredDestinationIds)).toEqual(souvenir);
     }

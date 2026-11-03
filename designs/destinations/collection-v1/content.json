@@ -1,0 +1,272 @@
+[
+  {
+    "id": "cimes_eternelles",
+    "en": "The Eternal Peaks",
+    "frStory": "Sur ces sommets, le vent ne cesse jamais de chanter. Une petite cloche recueille sa mélodie, pour la confier aux voyageurs quand tout devient silencieux.",
+    "enStory": "On these peaks, the wind never stops singing. A little bell gathers its melody and shares it with travellers when everything falls silent.",
+    "frSouvenir": "Clochette des sommets",
+    "enSouvenir": "Summit wind bell",
+    "scene": "three rounded snowy mountain peaks above lavender clouds, peach sunrise, little brass wind bell hanging from a stone arch in the foreground",
+    "object": "a small antique brass wind bell on a blue braided cord, tiny snowflake engraving"
+  },
+  {
+    "id": "ruines_englouties",
+    "en": "The Sunken Ruins",
+    "frStory": "La mer a gardé les portes ouvertes de cette ancienne cité. Entre les colonnes, une clé de nacre attend qu’un ancien habitant revienne ouvrir sa porte.",
+    "enStory": "The sea has kept the doors of this ancient city open. Between its columns, a mother-of-pearl key waits for a former resident to return and open their door.",
+    "frSouvenir": "Clé de nacre",
+    "enSouvenir": "Mother-of-pearl key",
+    "scene": "submerged ancient rounded stone arches and stairs beneath clear turquoise water, sunbeams, coral, a large mother-of-pearl key resting on a foreground pedestal",
+    "object": "a single ornate mother-of-pearl antique key, turquoise ribbon and tiny pink coral accent"
+  },
+  {
+    "id": "iles_suspendues",
+    "en": "The Hanging Isles",
+    "frStory": "Les îles dérivent sans jamais se perdre de vue. Leurs habitants attachent un galet léger à leurs lettres : il retrouve toujours le courant qui mène à un ami.",
+    "enStory": "The islands drift without ever losing sight of one another. Their inhabitants tie a weightless pebble to each letter: it always finds the breeze that leads to a friend.",
+    "frSouvenir": "Galet sans poids",
+    "enSouvenir": "Weightless pebble",
+    "scene": "three rounded floating stone islands with grassy tops above peach clouds, rope bridge, foreground smooth pebble hovering above a ribbon",
+    "object": "a smooth round lavender stone hovering inside a loose loop of golden ribbon, a few soft gold sparks"
+  },
+  {
+    "id": "marais_des_lucioles",
+    "en": "The Firefly Marsh",
+    "frStory": "À la nuit tombée, mille lumières dessinent un chemin sur l’eau. On emporte d’ici un petit fanal vide : les lucioles préfèrent rester libres.",
+    "enStory": "At nightfall, a thousand lights trace a path across the water. Travellers take home a little empty lantern: the fireflies prefer to stay free.",
+    "frSouvenir": "Fanal du marais",
+    "enSouvenir": "Marsh lantern",
+    "scene": "quiet teal marsh at twilight, rounded mushrooms on mossy banks, curved wooden boardwalk, golden fireflies, empty little hanging lantern in foreground",
+    "object": "a small empty open brass lantern with teal glass panes and curved handle, two golden fireflies flying outside"
+  },
+  {
+    "id": "desert_de_cristal",
+    "en": "The Crystal Desert",
+    "frStory": "Sous le soleil, les dunes tintent comme du verre. Un sablier y mesure autre chose que les heures : le temps qu’il faut pour retrouver son émerveillement.",
+    "enStory": "In the sunlight, the dunes chime like glass. Here, an hourglass measures something other than hours: the time it takes to find wonder again.",
+    "frSouvenir": "Sablier scintillant",
+    "enSouvenir": "Shimmering hourglass",
+    "scene": "sweeping peach sand dunes with large lavender and mint crystal clusters, warm sunset, one small brass hourglass on a foreground rock",
+    "object": "a small brass hourglass filled with sparkling lilac crystal sand, rounded glass bulbs"
+  },
+  {
+    "id": "palais_de_givre",
+    "en": "The Frost Palace",
+    "frStory": "Chaque hiver, le palais se construit une nouvelle salle. Une rose de givre attend sur le seuil ; dans la main d’un invité, elle ne fond jamais.",
+    "enStory": "Each winter, the palace builds itself another room. A frost rose waits on the doorstep; in a guest’s hand, it never melts.",
+    "frSouvenir": "Rose de givre",
+    "enSouvenir": "Frost rose",
+    "scene": "rounded ice palace with translucent blue towers and lavender crystal windows, snowy garden, large icy rose near entrance, soft pink dawn",
+    "object": "one translucent pale blue frost rose with silver stem and two crystalline leaves"
+  },
+  {
+    "id": "temple_oublie",
+    "en": "The Forgotten Temple",
+    "frStory": "Les racines ont remplacé les marches, mais le temple accueille ceux qui ont le pied léger. Une amulette de bois porte le souvenir de tous ceux qui s’y sont reposés.",
+    "enStory": "Roots have replaced the steps, but the temple welcomes those who tread lightly. A wooden amulet holds the memory of everyone who has rested here.",
+    "frSouvenir": "Amulette des racines",
+    "enSouvenir": "Rootwood amulet",
+    "scene": "ancient rounded sandstone temple embraced by enormous tree roots, mossy stairs, green canopy, sunbeam on a carved wooden amulet on the threshold",
+    "object": "a round carved wooden amulet with a simple spiral tree-root motif, moss-green cord"
+  },
+  {
+    "id": "ile_des_cendres",
+    "en": "The Ashen Island",
+    "frStory": "La cendre tombe ici aussi doucement que la neige. Au pied des palmiers noirs, une graine rouge attend la première pluie pour recommencer le monde.",
+    "enStory": "Ash falls here as softly as snow. Beneath the dark palms, a red seed waits for the first rain to begin the world anew.",
+    "frSouvenir": "Graine du renouveau",
+    "enSouvenir": "Seed of renewal",
+    "scene": "small tropical island with charcoal sand, curved dark palm trees with copper fronds, calm plum sea, bright red sprouting seed in foreground, drifting soft ash, hopeful dawn",
+    "object": "one large glowing red seed cradled in a dark split husk, tiny fresh green sprout"
+  },
+  {
+    "id": "grottes_sporiferes",
+    "en": "The Spore Caverns",
+    "frStory": "Sous la montagne, les spores dessinent un ciel à l’envers. Les voyageurs y ramassent une géode dont la lumière suffit à rassurer les nuits les plus longues.",
+    "enStory": "Beneath the mountain, spores draw an upside-down sky. Travellers gather a geode whose light can soften even the longest night.",
+    "frSouvenir": "Géode lumineuse",
+    "enSouvenir": "Glowing geode",
+    "scene": "rounded violet cavern with giant luminous blue mushrooms, golden spores on ceiling like constellations, open glowing geode in foreground, intimate cozy underground scene",
+    "object": "an open rounded purple stone geode with softly glowing mint and lilac interior crystals"
+  },
+  {
+    "id": "canopee_des_brumes",
+    "en": "The Mist Canopy",
+    "frStory": "Les branches retiennent les nuages pour leur laisser le temps de rêver. Dans une tasse de feuille, une goutte de brume garde la fraîcheur matinale suspendue.",
+    "enStory": "The branches hold the clouds long enough for them to dream. In a leaf cup, a drop of mist holds the morning freshness in suspension.",
+    "frSouvenir": "Tasse de brume",
+    "enSouvenir": "Mist cup",
+    "scene": "high rounded treetops emerging from lavender mist, rope walkway between branches, golden morning rays, leaf-shaped cup collecting mist on foreground branch",
+    "object": "a little folded green leaf teacup with twig handle, soft lavender mist curling above its rim"
+  },
+  {
+    "id": "recif_de_verre",
+    "en": "The Glass Reef",
+    "frStory": "Les coraux de verre changent de couleur avec la marée. Une perle en garde tous les reflets, même très loin de l’océan.",
+    "enStory": "The glass corals change colour with the tide. One pearl keeps all their reflections, even far from the ocean.",
+    "frSouvenir": "Perle des marées",
+    "enSouvenir": "Tidal pearl",
+    "scene": "clear shallow turquoise sea with rounded translucent pink and mint glass coral, sunlit ripples, large iridescent pearl in an open shell in foreground",
+    "object": "a single large iridescent pearl nestled in a small translucent mint glass coral cradle"
+  },
+  {
+    "id": "jardins_du_zenith",
+    "en": "The Zenith Gardens",
+    "frStory": "À midi, les jardins flottent dans une lumière dorée. Leurs jardiniers prêtent des arrosoirs aux nuages, qui n’oublient jamais de les rapporter pleins.",
+    "enStory": "At noon, the gardens float in golden light. Their gardeners lend watering cans to the clouds, who always remember to bring them back full.",
+    "frSouvenir": "Arrosoir des nuages",
+    "enSouvenir": "Cloud watering can",
+    "scene": "sunny hanging terraced garden above fluffy clouds, elegant curved palms and round flowerbeds, small gold watering can on foreground terrace, blue and peach sky",
+    "object": "a tiny golden watering can with a soft white cloud peeking out, rounded spout and mint handle"
+  },
+  {
+    "id": "cite_immobile",
+    "en": "The Still City",
+    "frStory": "La neige a arrêté les horloges, sans éteindre les fenêtres. Une montre sans aiguilles rappelle qu’ici, personne n’est jamais en retard.",
+    "enStory": "Snow has stopped the clocks without dimming the windows. A watch without hands is a reminder that here, nobody is ever late.",
+    "frSouvenir": "Montre sans heures",
+    "enSouvenir": "Timeless pocket watch",
+    "scene": "quiet ancient rounded city square buried in soft snow, clock tower without clock hands, warm golden windows, an antique pocket watch on a foreground ledge",
+    "object": "an antique brass pocket watch with a blank pearl clock face without hands or numbers, short chain, snow on top"
+  },
+  {
+    "id": "sylve_prismatique",
+    "en": "The Prismwood",
+    "frStory": "Dans cette forêt, chaque feuille choisit sa propre couleur. Un prisme accroché à une branche offre un petit arc-en-ciel à qui prend le temps de regarder.",
+    "enStory": "In this forest, every leaf chooses its own colour. A prism hanging from a branch offers a little rainbow to anyone who takes time to look.",
+    "frSouvenir": "Prisme des feuillages",
+    "enSouvenir": "Leaflight prism",
+    "scene": "enchanted woodland with rounded trees and translucent gemlike leaves, pastel rainbow light across mossy path, large hanging triangular prism in foreground",
+    "object": "a chunky translucent triangular crystal prism on a green cord, soft rainbow reflection, one small golden leaf charm"
+  },
+  {
+    "id": "necropole_ardente",
+    "en": "The Ember Necropolis",
+    "frStory": "Les flammes veillent sur les noms que le temps a effacés. Une ancienne lampe entretient cette chaleur tranquille, comme une pensée pour les absents.",
+    "enStory": "Flames watch over names that time has worn away. An ancient lamp keeps their quiet warmth alive, like a thought for those who are missed.",
+    "frSouvenir": "Lampe du souvenir",
+    "enSouvenir": "Remembrance lamp",
+    "scene": "peaceful ancient rounded stone memorials and arches at violet dusk, small warm flames in terracotta oil lamps, no readable inscriptions, gentle comforting mood, prominent oil lamp in foreground",
+    "object": "a small rounded terracotta oil lamp with a steady golden flame and simple carved petal pattern"
+  },
+  {
+    "id": "foret_du_silence",
+    "en": "The Silent Forest",
+    "frStory": "La neige enveloppe les arbres et les bruits du monde. Une plume blanche repose sur une souche, si légère qu’elle semble flotter dans le silence.",
+    "enStory": "Snow wraps the trees and muffles the sounds of the world. A white feather rests on a stump, so light it seems to float in the silence.",
+    "frSouvenir": "Plume de silence",
+    "enSouvenir": "Feather of silence",
+    "scene": "quiet snowy forest with rounded evergreen trees, lavender shadows, winding untouched snow path and single large white feather on foreground stump, soft dawn",
+    "object": "a single curved white feather with pale blue shading and a small silver ribbon tied to its quill"
+  },
+  {
+    "id": "sanctuaire_des_spores",
+    "en": "The Spore Sanctuary",
+    "frStory": "Dans les alcôves, des sphères recueillent les spores dorées des champignons. Un médaillon en garde quelques-unes, dont la douce lumière accompagne le voyageur.",
+    "enStory": "In the alcoves, spheres gather the mushrooms’ golden spores. A medallion holds a few of them, their gentle light accompanying the traveller.",
+    "frSouvenir": "Médaillon de spores",
+    "enSouvenir": "Spore medallion",
+    "scene": "moss-covered ancient circular sanctuary with mushroom clusters, stone alcoves holding glowing spore orbs, purple and gold light, round medallion on central low altar",
+    "object": "a round antique brass medallion with a clear amber center containing luminous golden spores, violet cord"
+  },
+  {
+    "id": "royaume_des_spores_celestes",
+    "en": "The Skyspore Kingdom",
+    "frStory": "Des champignons légers voyagent de nuage en nuage. Leurs petites ombrelles ne protègent pas de la pluie : elles apprennent aux rêves à voler.",
+    "enStory": "Weightless mushrooms travel from cloud to cloud. Their little parasols do not keep out the rain: they teach dreams to fly.",
+    "frSouvenir": "Ombrelle des rêves",
+    "enSouvenir": "Dream parasol",
+    "scene": "fantastical kingdom of giant pastel mushroom platforms floating among cream clouds, tiny mushroom-cap parasol drifting in foreground, lavender and peach sky",
+    "object": "one small lavender mushroom-cap parasol with cream spots and curved golden handle, soft cloud puff beneath"
+  },
+  {
+    "id": "tempete_ecarlate",
+    "en": "The Scarlet Storm",
+    "frStory": "Les nuages rouges se racontent leurs colères à coups d’éclairs. Quand ils se taisent, il reste parfois une étincelle, tiède et douce au creux d’un flacon.",
+    "enStory": "The red clouds tell each other their troubles in flashes of lightning. When they fall quiet, a spark sometimes remains, warm and gentle inside a tiny bottle.",
+    "frSouvenir": "Éclair en bouteille",
+    "enSouvenir": "Bottled lightning",
+    "scene": "rounded scarlet and coral storm clouds above a calm plum landscape, one gentle golden lightning arc, small corked bottle containing a lightning spark on foreground ridge, magical not threatening",
+    "object": "a round clear glass bottle with copper stopper containing one tiny golden lightning bolt, coral reflections"
+  },
+  {
+    "id": "atoll_boreal",
+    "en": "The Boreal Atoll",
+    "frStory": "Les palmiers portent des franges de neige sous les aurores. Un bracelet tressé de lumière garde au poignet les couleurs de cette nuit impossible.",
+    "enStory": "The palms wear fringes of snow beneath the aurora. A bracelet woven from light keeps the colours of this impossible night around your wrist.",
+    "frSouvenir": "Bracelet d’aurore",
+    "enSouvenir": "Aurora bracelet",
+    "scene": "snowy tropical ring island with frosted curved palm trees, turquoise lagoon edged with ice, green and violet aurora in night sky, luminous woven bracelet on foreground snow",
+    "object": "a circular braided bracelet of mint green violet and turquoise glowing strands, small silver snowflake charm"
+  },
+  {
+    "id": "vestiges_celestes",
+    "en": "The Celestial Remains",
+    "frStory": "Les escaliers montent encore, même là où les palais ont disparu. Un fragment de mosaïque montre une étoile : peut-être l’adresse de leurs anciens habitants.",
+    "enStory": "The stairways still climb, even where the palaces have vanished. A mosaic fragment shows a star: perhaps the address of those who once lived here.",
+    "frSouvenir": "Éclat de mosaïque",
+    "enSouvenir": "Star mosaic shard",
+    "scene": "ancient cream stone arches and broken stairs suspended above golden clouds, lavender sky, large blue and gold star mosaic fragment on foreground ledge",
+    "object": "a rounded broken blue ceramic mosaic fragment with one golden star inlaid at center, warm terracotta edges"
+  },
+  {
+    "id": "mer_figee",
+    "en": "The Frozen Sea",
+    "frStory": "Une vague s’est arrêtée juste avant de rejoindre le rivage. Dans une petite boule de verre, son écume continue pourtant de danser.",
+    "enStory": "A wave stopped just before reaching the shore. Inside a little glass globe, its sea foam still dances.",
+    "frSouvenir": "Vague sous verre",
+    "enSouvenir": "Wave in glass",
+    "scene": "a giant curling ocean wave frozen into translucent turquoise ice near snowy shore, peach horizon, small glass snowglobe containing a wave in foreground",
+    "object": "a small clear glass globe on a round carved blue wooden base containing one tiny turquoise curling wave and white foam"
+  },
+  {
+    "id": "jungle_incandescente",
+    "en": "The Glowing Jungle",
+    "frStory": "Les lianes brillent sans brûler et les fleurs s’ouvrent à la chaleur. Un fruit-lanterne accompagne les voyageurs jusqu’à la lisière, puis garde leur chemin en mémoire.",
+    "enStory": "The vines glow without burning and flowers open in the warmth. A lantern fruit guides travellers to the forest’s edge, then remembers their path.",
+    "frSouvenir": "Fruit-lanterne",
+    "enSouvenir": "Lantern fruit",
+    "scene": "lush rounded tropical forest with glowing coral vines and warm luminous orange fruits, emerald leaves, winding path, large lantern fruit in foreground, no destructive fire",
+    "object": "a glowing orange lantern-shaped fruit in a delicate green leaf husk, curved stem and two rounded leaves"
+  },
+  {
+    "id": "jardins_de_gemmes",
+    "en": "The Gem Gardens",
+    "frStory": "Les jardiniers arrosent les champignons avec des reflets de lune. Au matin, une fleur de gemme a poussé : elle ne demande ni eau ni vase, seulement un peu de lumière.",
+    "enStory": "The gardeners water their mushrooms with moonlight. By morning, a gem flower has grown: it needs neither water nor a vase, only a little light.",
+    "frSouvenir": "Fleur de gemme",
+    "enSouvenir": "Gem blossom",
+    "scene": "whimsical garden with rounded crystal mushrooms in pink and lavender, emerald moss beds, moonlit sky, one prominent gemstone flower in foreground",
+    "object": "one small gemstone flower with rounded translucent rose quartz petals, golden center and jade green crystal stem"
+  },
+  {
+    "id": "empire_des_sables",
+    "en": "The Sand Empire",
+    "frStory": "Les dunes déplacent les rues pendant que la cité dort. Une petite lampe indique toujours la direction de l’oasis, même quand toutes les routes ont changé.",
+    "enStory": "The dunes move the streets while the city sleeps. A little lamp always points towards the oasis, even when every road has changed.",
+    "frSouvenir": "Lampe de l’oasis",
+    "enSouvenir": "Oasis lamp",
+    "scene": "ancient rounded sandstone city half-buried in peach dunes, domes and arches, small palm oasis, golden sunrise, turquoise brass lamp on foreground step",
+    "object": "a little ornate brass travelling lamp with turquoise enamel, rounded belly and curved long spout, a soft mint wisp"
+  },
+  {
+    "id": "faille_des_contraires",
+    "en": "The Rift of Opposites",
+    "frStory": "D’un côté, la braise ; de l’autre, le givre. Au-dessus de la faille, deux rubans noués restent tièdes : les contraires savent parfois se tenir chaud.",
+    "enStory": "Embers on one side, frost on the other. Above the rift, two knotted ribbons stay warm: sometimes opposites know how to keep each other cosy.",
+    "frSouvenir": "Nœud des contraires",
+    "enSouvenir": "Knot of opposites",
+    "scene": "rounded canyon split between glowing coral volcanic rock and pale blue icy rock, narrow natural stone bridge, two knotted ribbons tied on bridge post, soft violet sky",
+    "object": "two broad ribbons tied together into one graceful knot, one ember orange with gold flecks, one icy blue with white snowflake motifs"
+  },
+  {
+    "id": "observatoire_des_etoiles",
+    "en": "The Star Observatory",
+    "frStory": "Ici, les étoiles descendent assez bas pour regarder dans les télescopes. Une lentille de poche garde un coin de ciel, pour les soirs où les nuages cachent tout.",
+    "enStory": "Here, the stars come down low enough to look through the telescopes. A pocket lens keeps a patch of sky for evenings when clouds hide everything.",
+    "frSouvenir": "Lentille d’étoiles",
+    "enSouvenir": "Starlight lens",
+    "scene": "rounded brass and crystal observatory dome on a cloud terrace, large telescope pointed toward low golden stars, deep lavender night, small starry pocket lens on foreground parapet",
+    "object": "a round brass pocket magnifying lens with a short carved handle, midnight blue glass containing a few tiny golden stars"
+  }
+]

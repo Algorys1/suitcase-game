@@ -1,13 +1,12 @@
 import Phaser from 'phaser';
 import { destinations } from '../../domain/recipes';
-import pilotIds from '../../data/pilotDestinations.json';
 
 const textureKey = (id: string): string => `destination-${id}`;
 
-/** Only queue supplied artwork; the catalogue remains the source of asset paths. */
+/** Load the complete collection from the catalogue's asset paths. */
 export function preloadPostcards(scene: Phaser.Scene): void {
   for (const destination of destinations) {
-    if (pilotIds.includes(destination.id) && !scene.textures.exists(textureKey(destination.id))) {
+    if (!scene.textures.exists(textureKey(destination.id))) {
       scene.load.image(textureKey(destination.id), import.meta.env.BASE_URL + destination.image);
     }
   }

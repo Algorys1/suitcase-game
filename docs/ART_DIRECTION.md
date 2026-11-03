@@ -1,5 +1,7 @@
 # Direction artistique — Le monde tient dans une valise
 
+> **Collection complète intégrée :** les 30 destinations disposent de leur illustration, de leur histoire FR/EN et de leur autocollant souvenir. Les trois pilotes validés sont conservés ; les 27 ajouts sont des propositions à relire en jeu. Voir [le catalogue illustré et les sources](DESTINATION_COLLECTION.md). La décoration de la valise (phase C) et les Escales enchantées restent à développer. Les mentions de trois pilotes ou de placeholders ci-dessous décrivent les étapes antérieures.
+
 > **Statut :** guide de production visuelle pour Codex et la création d'assets.  
 > **Références fonctionnelles :** [`GAME_DESIGN.md`](GAME_DESIGN.md), [`../README.md`](../README.md).  
 > **Décision validée :** 2D en perspective isométrique, cartoon simple, coloré, légèrement magique.

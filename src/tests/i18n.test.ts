@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import fr from '../data/fr.json';
 import en from '../data/en.json';
 import catalogue from '../data/destinations.json';
-import pilotIds from '../data/pilotDestinations.json';
 import { getTexts, resolveTranslation, translate } from '../services/i18n';
 import { ProgressStore } from '../services/storage';
 
@@ -33,14 +32,9 @@ describe('internationalisation FR / EN', () => {
     expect(translate('settings', 'en')).toBe('Settings');
     for (const destination of catalogue) {
       expect(translate(destination.titleKey, 'fr')).toBeTruthy();
-      if (pilotIds.includes(destination.id)) {
-        expect(translate(destination.titleKey, 'en')).not.toContain('title pending');
-        expect(translate(destination.storyKey, 'en')).not.toContain('placeholder');
-        expect(translate(destination.storyKey, 'fr')).not.toContain('provisoire');
-      } else {
-        expect(translate(destination.titleKey, 'en')).toContain('title pending');
-        expect(translate(destination.storyKey, 'en')).toContain('placeholder');
-      }
+      expect(translate(destination.titleKey, 'en')).not.toContain('title pending');
+      expect(translate(destination.storyKey, 'en')).not.toContain('placeholder');
+      expect(translate(destination.storyKey, 'fr')).not.toContain('provisoire');
     }
   });
 

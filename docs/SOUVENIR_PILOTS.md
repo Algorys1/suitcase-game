@@ -1,5 +1,7 @@
 # Autocollants souvenirs — pilote de phase B
 
+> **Collection complète intégrée :** les 30 destinations disposent de leur illustration, de leur histoire FR/EN et de leur autocollant souvenir. Les trois pilotes validés sont conservés ; les 27 ajouts sont des propositions à relire en jeu. Voir [le catalogue illustré et les sources](DESTINATION_COLLECTION.md). La décoration de la valise (phase C) et les Escales enchantées restent à développer. Les mentions de trois pilotes ou de placeholders ci-dessous décrivent les étapes antérieures.
+
 **Direction choisie avec le joueur : un objet rapporté du voyage, plutôt qu'un rappel des ingrédients.** Les trois autocollants et leur présentation sous les histoires sont retenus après essai du joueur. La phase B reste limitée à ces trois destinations ; les 27 autres souvenirs sont à concevoir. La décoration de la valise (phase C) n'est pas commencée.
 
 | Destination | Souvenir FR / EN | Idée | Recette de test |
@@ -37,7 +39,7 @@ Exports utilisés par le jeu :
 
 Sources et exports : **1254 × 1254 px**, composition et transparence conservées. Conversion WebP par canvas, sans recadrage ni retouche ; environ **495 Ko** pour les trois exports. Le build inclut uniquement les WebP, sans téléchargement depuis un service distant pendant une partie.
 
-Le joueur a retenu les trois dessins et leur présentation sur une étiquette kraft ; les 27 autres souvenirs restent à concevoir avant d'étendre la collection.
+Le joueur a retenu les trois dessins et leur présentation sur une étiquette kraft. Les 27 autres souvenirs sont désormais intégrés dans la [collection complète](DESTINATION_COLLECTION.md), pour relecture en jeu.
 
 ## Vérifications exécutées
 

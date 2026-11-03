@@ -1,5 +1,152 @@
 [
-  { "destinationId": "archipel_azur", "image": "assets/stickers/archipel_azur.webp", "nameKey": "stickers.names.seashell" },
-  { "destinationId": "mycelia", "image": "assets/stickers/mycelia.webp", "nameKey": "stickers.names.sporeLantern" },
-  { "destinationId": "coeur_de_braise", "image": "assets/stickers/coeur_de_braise.webp", "nameKey": "stickers.names.emberVial" }
+  {
+    "destinationId": "archipel_azur",
+    "image": "assets/stickers/archipel_azur.webp",
+    "nameKey": "stickers.names.seashell"
+  },
+  {
+    "destinationId": "cimes_eternelles",
+    "image": "assets/stickers/cimes_eternelles.webp",
+    "nameKey": "stickers.names.cimes_eternelles"
+  },
+  {
+    "destinationId": "mycelia",
+    "image": "assets/stickers/mycelia.webp",
+    "nameKey": "stickers.names.sporeLantern"
+  },
+  {
+    "destinationId": "ruines_englouties",
+    "image": "assets/stickers/ruines_englouties.webp",
+    "nameKey": "stickers.names.ruines_englouties"
+  },
+  {
+    "destinationId": "coeur_de_braise",
+    "image": "assets/stickers/coeur_de_braise.webp",
+    "nameKey": "stickers.names.emberVial"
+  },
+  {
+    "destinationId": "iles_suspendues",
+    "image": "assets/stickers/iles_suspendues.webp",
+    "nameKey": "stickers.names.iles_suspendues"
+  },
+  {
+    "destinationId": "marais_des_lucioles",
+    "image": "assets/stickers/marais_des_lucioles.webp",
+    "nameKey": "stickers.names.marais_des_lucioles"
+  },
+  {
+    "destinationId": "desert_de_cristal",
+    "image": "assets/stickers/desert_de_cristal.webp",
+    "nameKey": "stickers.names.desert_de_cristal"
+  },
+  {
+    "destinationId": "palais_de_givre",
+    "image": "assets/stickers/palais_de_givre.webp",
+    "nameKey": "stickers.names.palais_de_givre"
+  },
+  {
+    "destinationId": "temple_oublie",
+    "image": "assets/stickers/temple_oublie.webp",
+    "nameKey": "stickers.names.temple_oublie"
+  },
+  {
+    "destinationId": "ile_des_cendres",
+    "image": "assets/stickers/ile_des_cendres.webp",
+    "nameKey": "stickers.names.ile_des_cendres"
+  },
+  {
+    "destinationId": "grottes_sporiferes",
+    "image": "assets/stickers/grottes_sporiferes.webp",
+    "nameKey": "stickers.names.grottes_sporiferes"
+  },
+  {
+    "destinationId": "canopee_des_brumes",
+    "image": "assets/stickers/canopee_des_brumes.webp",
+    "nameKey": "stickers.names.canopee_des_brumes"
+  },
+  {
+    "destinationId": "recif_de_verre",
+    "image": "assets/stickers/recif_de_verre.webp",
+    "nameKey": "stickers.names.recif_de_verre"
+  },
+  {
+    "destinationId": "jardins_du_zenith",
+    "image": "assets/stickers/jardins_du_zenith.webp",
+    "nameKey": "stickers.names.jardins_du_zenith"
+  },
+  {
+    "destinationId": "cite_immobile",
+    "image": "assets/stickers/cite_immobile.webp",
+    "nameKey": "stickers.names.cite_immobile"
+  },
+  {
+    "destinationId": "sylve_prismatique",
+    "image": "assets/stickers/sylve_prismatique.webp",
+    "nameKey": "stickers.names.sylve_prismatique"
+  },
+  {
+    "destinationId": "necropole_ardente",
+    "image": "assets/stickers/necropole_ardente.webp",
+    "nameKey": "stickers.names.necropole_ardente"
+  },
+  {
+    "destinationId": "foret_du_silence",
+    "image": "assets/stickers/foret_du_silence.webp",
+    "nameKey": "stickers.names.foret_du_silence"
+  },
+  {
+    "destinationId": "sanctuaire_des_spores",
+    "image": "assets/stickers/sanctuaire_des_spores.webp",
+    "nameKey": "stickers.names.sanctuaire_des_spores"
+  },
+  {
+    "destinationId": "royaume_des_spores_celestes",
+    "image": "assets/stickers/royaume_des_spores_celestes.webp",
+    "nameKey": "stickers.names.royaume_des_spores_celestes"
+  },
+  {
+    "destinationId": "tempete_ecarlate",
+    "image": "assets/stickers/tempete_ecarlate.webp",
+    "nameKey": "stickers.names.tempete_ecarlate"
+  },
+  {
+    "destinationId": "atoll_boreal",
+    "image": "assets/stickers/atoll_boreal.webp",
+    "nameKey": "stickers.names.atoll_boreal"
+  },
+  {
+    "destinationId": "vestiges_celestes",
+    "image": "assets/stickers/vestiges_celestes.webp",
+    "nameKey": "stickers.names.vestiges_celestes"
+  },
+  {
+    "destinationId": "mer_figee",
+    "image": "assets/stickers/mer_figee.webp",
+    "nameKey": "stickers.names.mer_figee"
+  },
+  {
+    "destinationId": "jungle_incandescente",
+    "image": "assets/stickers/jungle_incandescente.webp",
+    "nameKey": "stickers.names.jungle_incandescente"
+  },
+  {
+    "destinationId": "jardins_de_gemmes",
+    "image": "assets/stickers/jardins_de_gemmes.webp",
+    "nameKey": "stickers.names.jardins_de_gemmes"
+  },
+  {
+    "destinationId": "empire_des_sables",
+    "image": "assets/stickers/empire_des_sables.webp",
+    "nameKey": "stickers.names.empire_des_sables"
+  },
+  {
+    "destinationId": "faille_des_contraires",
+    "image": "assets/stickers/faille_des_contraires.webp",
+    "nameKey": "stickers.names.faille_des_contraires"
+  },
+  {
+    "destinationId": "observatoire_des_etoiles",
+    "image": "assets/stickers/observatoire_des_etoiles.webp",
+    "nameKey": "stickers.names.observatoire_des_etoiles"
+  }
 ]

@@ -1,5 +1,7 @@
 # Extension de gameplay — Boussole à aiguilles et autocollants
 
+> **Collection complète intégrée :** les 30 destinations disposent de leur illustration, de leur histoire FR/EN et de leur autocollant souvenir. Les trois pilotes validés sont conservés ; les 27 ajouts sont des propositions à relire en jeu. Voir [le catalogue illustré et les sources](DESTINATION_COLLECTION.md). La décoration de la valise (phase C) et les Escales enchantées restent à développer. Les mentions de trois pilotes ou de placeholders ci-dessous décrivent les étapes antérieures.
+
 > **Projet :** Le monde tient dans une valise  
 > **Statut :** proposition à prototyper, **non encore validée en jeu**  
 > **Références :** `docs/GAME_DESIGN.md`, `docs/ART_DIRECTION.md`, `docs/TECHNICAL.md`, `src/data/elements.json`, `src/data/destinations.json`.

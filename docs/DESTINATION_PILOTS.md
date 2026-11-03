@@ -1,5 +1,7 @@
 # Trois destinations pilotes — proposition v1
 
+> **Collection complète intégrée :** les 30 destinations disposent de leur illustration, de leur histoire FR/EN et de leur autocollant souvenir. Les trois pilotes validés sont conservés ; les 27 ajouts sont des propositions à relire en jeu. Voir [le catalogue illustré et les sources](DESTINATION_COLLECTION.md). La décoration de la valise (phase C) et les Escales enchantées restent à développer. Les mentions de trois pilotes ou de placeholders ci-dessous décrivent les étapes antérieures.
+
 **Statut : style des trois illustrations validé par le joueur après essai.** Les histoires FR/EN restent des propositions éditoriales. Cette première série sert désormais de référence visuelle pour les 27 autres destinations. Les recettes et règles du catalogue restent inchangées.
 
 ## Direction visuelle
@@ -47,6 +49,6 @@ Les textes exécutés par le jeu restent externalisés dans [`fr.json`](../src/d
 - Génération par l'outil intégré **image_gen**, à partir d'une direction commune. [Prompts complets et statut](../designs/destinations/pilot-v1/prompts.json).
 - [Sources PNG conservées](../designs/destinations/pilot-v1/) : 1448 × 1086 px, ratio 4:3. La génération a fourni cette résolution ; les prompts visaient 1024 × 768.
 - [Assets WebP du jeu](../public/assets/destinations/) : mêmes dimensions et composition, environ 535 Ko pour les trois fichiers. Conversion par canvas sans retouche ni recadrage.
-- Les chemins proviennent de `destinations.json` ; `pilotDestinations.json` énumère seulement les trois IDs dont les images sont disponibles. Les autres lieux gardent leurs placeholders, sans requêtes vers des fichiers absents. Une texture indisponible utilise le dessin temporaire.
+- Les chemins proviennent de `destinations.json`. La limitation historique aux trois pilotes a été supprimée : les 30 images sont maintenant chargées depuis ce catalogue. Une texture indisponible utilise toujours le dessin temporaire.
 
-Le joueur a retenu le carnet et sa présentation. Le ton des petites histoires reste une proposition éditoriale. Le style des trois illustrations est retenu ; les 27 autres illustrations restent à produire.
+Le joueur a retenu le carnet et sa présentation. Le ton des petites histoires reste une proposition éditoriale. Le style des trois illustrations est retenu ; les 27 autres illustrations sont désormais intégrées dans la [collection complète](DESTINATION_COLLECTION.md), pour relecture en jeu.

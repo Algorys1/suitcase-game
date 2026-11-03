@@ -4,9 +4,9 @@ Jeu expérimental de découverte fantastique, créé pour l'**Indie Park Game Ja
 
 **Projet itch.io :** [The world in a suitcase](https://algorys1.itch.io/the-world-in-a-suitcase). **Format d'intégration prévu : 960 × 540 px (16:9)**, référence principale pour la composition et la lisibilité de l'interface. Le jeu conserve son adaptation aux autres tailles de fenêtre.
 
-> **Statut :** boucle jouable et interface FR/EN, avec trois destinations pilotes illustrées : l'Archipel d'Azur, Mycélia et le Cœur de braise. **Le style des illustrations et le carnet sont retenus après essai du joueur.** Résultats et fiches présentent les cartes dans un carnet crème et laiton, avec une courte révélation à l'arrivée. Les histoires FR/EN restent des propositions ; les 27 autres destinations conservent leurs placeholders. Trois [autocollants souvenirs pilotes](docs/SOUVENIR_PILOTS.md) apparaissent désormais sous les histoires des destinations découvertes.
+> **Statut :** boucle jouable, interface FR/EN et collection complète intégrée : **30 destinations illustrées, 30 histoires FR/EN et 30 autocollants souvenirs**. Les trois pilotes validés sont conservés ; les 27 nouvelles propositions attendent la relecture du joueur en jeu. Le [catalogue illustré](docs/DESTINATION_COLLECTION.md) réunit les cartes, récits et souvenirs.
 
-> **Extension :** [boussole à aiguilles et autocollants](docs/COMPASS_AND_STICKERS.md). La manipulation directe des aiguilles est retenue. Le pilote de phase B sur trois souvenirs est retenu après essai du joueur ; la phase C (décoration de la valise) n'est pas commencée.
+> **Extension :** la manipulation directe des aiguilles et la présentation des souvenirs sur étiquette kraft sont retenues. La phase B couvre désormais les 30 destinations ; le déblocage est déduit du carnet, compatible avec les anciennes sauvegardes. La phase C (décoration de la valise) n’est pas commencée. Les [Escales enchantées](docs/ESCALES_ENCHANTEES.md) sont une étape ultérieure.
 
 ## Lancer le prototype
 
@@ -52,9 +52,9 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 - Préparation illustrée à partir de la maquette retenue : valise en cuir caramel, cadran crème et laiton, aiguilles peintes indépendantes et dix figurines communes au cadran et aux compartiments. Les prises de 44 × 44 px sur les pointes et contrepoids, les noms FR/EN sous la boussole, le clavier et la palette de repli restent disponibles. En portrait, la valise passe sous le cadran. Images locales WebP et police système, sans service distant ; les formes simples restent un repli en cas de texture absente.
 - `services/i18n.ts` sélectionne `fr.json` ou `en.json` à partir de la préférence sauvegardée (`fr` par défaut). Les scènes lisent les textes à leur création ou au rendu, sans conserver un catalogue français figé. La page applique aussi la langue au titre de l'onglet et à l'attribut HTML `lang` dès le démarrage.
 - Les clés d'interface sont typées et vérifiées dans les deux catalogues, avec les mêmes paramètres `{…}`. Les clés dynamiques des destinations passent par un résolveur avec repli français, puis texte générique lisible si la clé est inconnue.
-- Les 30 noms français sont repris du tableau approuvé dans `GAME_DESIGN.md`. Trois destinations pilotes proposent des histoires FR/EN et des titres anglais à valider ; les 27 autres conservent leurs textes d'attente et titres « title pending ». Les textes affichés restent dans `fr.json` et `en.json`.
-- Les trois illustrations locales WebP pèsent environ **535 Ko au total**. `pilotDestinations.json` sélectionne les assets disponibles ; leurs chemins restent définis dans `destinations.json`. Résultats, vignettes et fiches du carnet partagent le même rendu sans déformation. Les autres destinations utilisent le dessin temporaire, sans demander de fichiers absents.
-- **51 tests** protègent les catalogues, les assets pilotes, les souvenirs, les 45 combinaisons dans les deux ordres, la sélection (dont l'aimantation et le passage par le nord), le cycle de session, la progression permanente et les langues : clés manquantes, paramètres, repli de traduction, sauvegarde du choix, stockage bloqué et préservation des découvertes.
+- Les 30 noms français sont repris du tableau approuvé dans `GAME_DESIGN.md`. Les 30 destinations ont une histoire FR/EN et un titre anglais, proposés à la relecture du joueur. Les textes affichés restent dans `fr.json` et `en.json`.
+- Les 30 illustrations locales WebP sont chargées depuis les chemins de `destinations.json`, sans liste de pilotes séparée. Résultats, vignettes et fiches du carnet partagent le même rendu sans déformation. Le dessin temporaire reste disponible si une texture manque.
+- **51 tests** protègent les catalogues, les 30 illustrations et souvenirs, les 45 combinaisons dans les deux ordres, la sélection (dont l'aimantation et le passage par le nord), le cycle de session, la progression permanente et les langues : clés manquantes, paramètres, repli de traduction, sauvegarde du choix, stockage bloqué et préservation des découvertes.
 - `services/storage.ts` conserve uniquement `{ schemaVersion: 1, discoveredDestinationIds, language }` sous la clé `suitcase-game.progress.v1`. L'accès à `localStorage`, la lecture et l'écriture sont protégés ; une indisponibilité utilise la progression en mémoire. Aucune session ni charge n'est sauvegardée.
 - Le résultat distingue désormais **Nouvelle découverte ! / Déjà visité** selon le carnet global. `session.ts` conserve séparément les nouveaux IDs de la session pour le bilan. Le Néant ne débloque rien et les revisites coûtent toujours 1 charge.
 - La transition dure 350 ms ; la préférence système de réduction des animations supprime le fondu. La boussole affiche ses charges numériquement dans la préparation, y compris en mode palette.
@@ -100,10 +100,10 @@ Les effets sont dans `src/game/ui/notebookMotion.ts`. Les deux textures temporai
 - **46 tests Vitest**, TypeScript strict et build Vite réussis. Chrome headless, build sous `/jam/`, FR/EN : illustrations et textes à 960 × 540, 1280 × 720, 800 × 600, 320 × 568, 360 × 640 et 640 × 360, à la souris et au toucher simulé. Les 30 fiches passent à 960 × 540, 320 × 568 et 640 × 360 ; captures contrôlées visuellement.
 - Nouvelle découverte, revisite, sortie pendant le fondu, nettoyage des effets, clavier, redimensionnement, Néant, persistance et préférence de réduction des animations (y compris activée en cours de révélation) vérifiés sans erreur JavaScript/HTTP. La publication itch.io, Firefox et un appareil tactile réel restent à vérifier.
 
-### Autocollants souvenirs — pilote de phase B
+### Autocollants souvenirs — historique du pilote de phase B
 
 - **Coquillage des horizons**, **Lanterne à spores** et **Braise éternelle** : trois objets rapportés des voyages, sous les histoires des résultats et fiches du carnet. Première découverte annoncée en FR/EN, apparition après le texte, vue compacte sur petit écran. Les recettes pour les essayer figurent dans [la présentation des pilotes](docs/SOUVENIR_PILOTS.md).
-- Déblocage déduit du carnet existant : les anciennes découvertes donnent leur souvenir immédiatement, sans migration ni nouveau champ sauvegardé. Revisites sans doublon ; aucun souvenir pour le Néant. Les 27 autres souvenirs et la décoration de la valise restent à faire après validation.
+- Déblocage déduit du carnet existant : les anciennes découvertes donnent leur souvenir immédiatement, sans migration ni nouveau champ sauvegardé. Revisites sans doublon ; aucun souvenir pour le Néant. Les 27 autres souvenirs ont depuis été ajoutés dans la [collection complète](docs/DESTINATION_COLLECTION.md) ; la décoration de la valise reste à développer.
 - `data/souvenirs.json`, `domain/souvenirs.ts` et `game/ui/souvenir.ts` portent les données, la disponibilité et le rendu. Noms FR/EN externalisés. Trois WebP locaux transparents, environ 495 Ko ; sources PNG et prompts conservés dans `designs/stickers/pilot-v1/`.
 - Après retour du joueur : illustrations et autocollants utilisent un cache avec mipmaps et filtrage trilinéaire pour les petites tailles. Un liseré blanc et une ombre légère distinguent les autocollants du papier crème. Les fichiers d'images restent inchangés. Cache et effets WebGL contrôlés dans Chrome en 960 × 540, 320 × 568 et 640 × 360, y compris retours répétés au carnet sans accumulation de textures.
 - Support actuellement à l'essai : étiquette de bagage en kraft brun avec œillet et scotch, nom écrit sur le papier et autocollant incliné entièrement contenu dans le kraft. Le support est dessiné dans `game/ui/souvenir.ts` et accompagne le fondu existant ; aucune ressource supplémentaire n'est chargée.
@@ -190,7 +190,7 @@ Le but est de découvrir le plus de lieux possible au fil des parties et de remp
 
 ## Boucle de jeu prévue
 
-Les [deux aiguilles de la boussole](docs/COMPASS_AND_STICKERS.md) sélectionnent les éléments et remplissent automatiquement la valise ; la palette reste un repli provisoire. La boucle ci-dessous et le carnet permanent sont jouables, avec des visuels et histoires temporaires.
+Les [deux aiguilles de la boussole](docs/COMPASS_AND_STICKERS.md) sélectionnent les éléments et remplissent automatiquement la valise ; la palette reste un repli provisoire. La boucle ci-dessous et le carnet permanent sont jouables, avec les 30 destinations illustrées et leurs histoires FR/EN.
 
 1. Depuis l'accueil, choisir **Commencer un voyage**.
 2. Découvrir la valise et les dix symboles du cadran.
@@ -214,10 +214,10 @@ Ces valeurs sont des hypothèses de prototype, **pas un équilibrage définitif*
 ### Extension : aiguilles et autocollants
 
 - **Phase A — implémentée, à valider en playtest :** orienter directement les aiguilles par glisser ou choisir un symbole pour l'aiguille active. La sélection s'aimante aux dix crans de 36° ; les deux emplacements reflètent les choix. Tourner ne déclenche aucune dépense ; Voyager reste désactivé pendant le geste ou si les choix sont identiques. Le clavier et la palette avec commandes par crans servent de repli.
-- **Phase B — trois souvenirs pilotes implémentés :** chaque première découverte permanente donne son autocollant cosmétique. Le prototype couvre l'Archipel d'Azur, Mycélia et le Cœur de braise ; les 27 autres suivront après validation. Les déblocages se déduisent du carnet, sans doublon lors des revisites ni récompense pour le Néant.
+- **Phase B — 30 souvenirs intégrés :** chaque première découverte permanente donne son autocollant cosmétique. La collection couvre les 30 destinations. Les déblocages se déduisent du carnet, sans doublon lors des revisites ni récompense pour le Néant.
 - **Phase C — après la boucle jouable :** décorer le couvercle fermé, avec **6 positions fixes proposées**. Placement, remplacement et retrait sans perte de l'autocollant ; disposition persistante et anciennes sauvegardes compatibles.
 
-Les recettes, les coûts prévus et la fin de session restent inchangés. Le réglage initial provisoire est Arbre / Arbre, aiguille 1 active ; le bouton de décoration et le nombre final de positions décoratives restent à déterminer. Les trois autocollants sont consultables dans les fiches du carnet ; leur présentation est validée ; le placement sur la valise reste la prochaine phase à entreprendre.
+Les recettes, les coûts prévus et la fin de session restent inchangés. Le réglage initial provisoire est Arbre / Arbre, aiguille 1 active ; le bouton de décoration et le nombre final de positions décoratives restent à déterminer. Les 30 autocollants sont consultables dans les fiches du carnet ; la présentation des trois pilotes est validée. La collection complète attend maintenant la relecture du joueur.
 
 ## Contenu prévu
 
@@ -227,7 +227,7 @@ Les recettes, les coûts prévus et la fin de session restent inchangés. Le ré
 - **2 emplacements seulement** ; pas de recettes à trois éléments dans le périmètre retenu.
 - **FR et EN** dès la première version.
 
-Les identifiants, recettes et références d'assets et de traductions sont déjà présents dans `src/data/destinations.json` et `src/data/elements.json`. Ces catalogues sont conservés tels quels. Les illustrations et textes de destinations restent à produire et à valider.
+Les identifiants, recettes et références d'assets et de traductions sont déjà présents dans `src/data/destinations.json` et `src/data/elements.json`. Ces catalogues sont conservés tels quels. Les illustrations, histoires et souvenirs sont intégrés ; les nouveaux contenus restent à relire en jeu.
 
 ## Direction artistique
 
@@ -260,12 +260,13 @@ Les versions exactes et leurs dépendances transitives sont verrouillées dans `
 | [`docs/COMPASS_AND_STICKERS.md`](docs/COMPASS_AND_STICKERS.md) | Extension à prototyper : sélection par aiguilles, autocollants et décoration persistante |
 | `docs/ART_DIRECTION.md` | Style, interface, animations et ressources visuelles |
 | `docs/TECHNICAL.md` | Architecture, sauvegarde, tests et export itch.io |
+| [`docs/DESTINATION_COLLECTION.md`](docs/DESTINATION_COLLECTION.md) | Collection illustrée des 30 destinations, récits FR/EN, souvenirs, sources et vérifications |
 | `src/data/destinations.json` | Catalogue des 30 destinations et recettes |
 | `src/data/elements.json` | Palette des 10 éléments |
 
 ## Priorités de production
 
-La sélection par aiguilles, les voyages, le carnet permanent et les paramètres FR/EN sont implémentés. Les phases d'autocollants et de décoration pourront suivre après validation des étapes correspondantes ; les textes éditoriaux et les assets définitifs restent à produire. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md). Après essai, le joueur juge la manipulation directe des aiguilles beaucoup mieux et plus intuitive que les molettes. Cette direction est retenue ; les détails visuels, les animations et les essais sur appareil tactile réel restent à travailler.
+La sélection par aiguilles, les voyages, le carnet permanent et les paramètres FR/EN sont implémentés. Les 30 autocollants sont intégrés. La collection complète attend la relecture du joueur avant la décoration et les étapes suivantes. Voir les [phases et critères d'acceptation](docs/COMPASS_AND_STICKERS.md). Après essai, le joueur juge la manipulation directe des aiguilles beaucoup mieux et plus intuitive que les molettes. Cette direction est retenue ; les détails visuels, les animations et les essais sur appareil tactile réel restent à travailler.
 
 1. Prototype jouable avec graphismes temporaires : deux emplacements, choix des éléments, résolution d'une recette.
 2. Boucle complète : boussole, Néant, écran de résultat, fin de partie.

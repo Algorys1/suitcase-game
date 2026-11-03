@@ -39,7 +39,34 @@
     "names": {
       "seashell": "Seashell of horizons",
       "sporeLantern": "Spore lantern",
-      "emberVial": "Eternal ember"
+      "emberVial": "Eternal ember",
+      "cimes_eternelles": "Summit wind bell",
+      "ruines_englouties": "Mother-of-pearl key",
+      "iles_suspendues": "Weightless pebble",
+      "marais_des_lucioles": "Marsh lantern",
+      "desert_de_cristal": "Shimmering hourglass",
+      "palais_de_givre": "Frost rose",
+      "temple_oublie": "Rootwood amulet",
+      "ile_des_cendres": "Seed of renewal",
+      "grottes_sporiferes": "Glowing geode",
+      "canopee_des_brumes": "Mist cup",
+      "recif_de_verre": "Tidal pearl",
+      "jardins_du_zenith": "Cloud watering can",
+      "cite_immobile": "Timeless pocket watch",
+      "sylve_prismatique": "Leaflight prism",
+      "necropole_ardente": "Remembrance lamp",
+      "foret_du_silence": "Feather of silence",
+      "sanctuaire_des_spores": "Spore medallion",
+      "royaume_des_spores_celestes": "Dream parasol",
+      "tempete_ecarlate": "Bottled lightning",
+      "atoll_boreal": "Aurora bracelet",
+      "vestiges_celestes": "Star mosaic shard",
+      "mer_figee": "Wave in glass",
+      "jungle_incandescente": "Lantern fruit",
+      "jardins_de_gemmes": "Gem blossom",
+      "empire_des_sables": "Oasis lamp",
+      "faille_des_contraires": "Knot of opposites",
+      "observatoire_des_etoiles": "Starlight lens"
     }
   },
   "compass": {
@@ -134,120 +161,120 @@
       "story": "Here, the waves bring back fragments of sky. Beneath the palms, they say a seashell lets you hear the sea of your next journey."
     },
     "cimes_eternelles": {
-      "title": "Destination 02 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Eternal Peaks",
+      "story": "On these peaks, the wind never stops singing. A little bell gathers its melody and shares it with travellers when everything falls silent."
     },
     "mycelia": {
       "title": "Mycelia",
       "story": "At dusk, the mushrooms light their windows. Their spores illuminate the paths, so even lost travellers can find a welcoming door."
     },
     "ruines_englouties": {
-      "title": "Destination 04 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Sunken Ruins",
+      "story": "The sea has kept the doors of this ancient city open. Between its columns, a mother-of-pearl key waits for a former resident to return and open their door."
     },
     "coeur_de_braise": {
       "title": "The Ember Heart",
       "story": "Beneath the dark stone, the world keeps a glowing heart. Each drifting ember carries a little of its warmth to lands where winter lingers."
     },
     "iles_suspendues": {
-      "title": "Destination 06 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Hanging Isles",
+      "story": "The islands drift without ever losing sight of one another. Their inhabitants tie a weightless pebble to each letter: it always finds the breeze that leads to a friend."
     },
     "marais_des_lucioles": {
-      "title": "Destination 07 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Firefly Marsh",
+      "story": "At nightfall, a thousand lights trace a path across the water. Travellers take home a little empty lantern: the fireflies prefer to stay free."
     },
     "desert_de_cristal": {
-      "title": "Destination 08 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Crystal Desert",
+      "story": "In the sunlight, the dunes chime like glass. Here, an hourglass measures something other than hours: the time it takes to find wonder again."
     },
     "palais_de_givre": {
-      "title": "Destination 09 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Frost Palace",
+      "story": "Each winter, the palace builds itself another room. A frost rose waits on the doorstep; in a guest’s hand, it never melts."
     },
     "temple_oublie": {
-      "title": "Destination 10 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Forgotten Temple",
+      "story": "Roots have replaced the steps, but the temple welcomes those who tread lightly. A wooden amulet holds the memory of everyone who has rested here."
     },
     "ile_des_cendres": {
-      "title": "Destination 11 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Ashen Island",
+      "story": "Ash falls here as softly as snow. Beneath the dark palms, a red seed waits for the first rain to begin the world anew."
     },
     "grottes_sporiferes": {
-      "title": "Destination 12 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Spore Caverns",
+      "story": "Beneath the mountain, spores draw an upside-down sky. Travellers gather a geode whose light can soften even the longest night."
     },
     "canopee_des_brumes": {
-      "title": "Destination 13 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Mist Canopy",
+      "story": "The branches hold the clouds long enough for them to dream. In a leaf cup, a drop of mist holds the morning freshness in suspension."
     },
     "recif_de_verre": {
-      "title": "Destination 14 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Glass Reef",
+      "story": "The glass corals change colour with the tide. One pearl keeps all their reflections, even far from the ocean."
     },
     "jardins_du_zenith": {
-      "title": "Destination 15 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Zenith Gardens",
+      "story": "At noon, the gardens float in golden light. Their gardeners lend watering cans to the clouds, who always remember to bring them back full."
     },
     "cite_immobile": {
-      "title": "Destination 16 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Still City",
+      "story": "Snow has stopped the clocks without dimming the windows. A watch without hands is a reminder that here, nobody is ever late."
     },
     "sylve_prismatique": {
-      "title": "Destination 17 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Prismwood",
+      "story": "In this forest, every leaf chooses its own colour. A prism hanging from a branch offers a little rainbow to anyone who takes time to look."
     },
     "necropole_ardente": {
-      "title": "Destination 18 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Ember Necropolis",
+      "story": "Flames watch over names that time has worn away. An ancient lamp keeps their quiet warmth alive, like a thought for those who are missed."
     },
     "foret_du_silence": {
-      "title": "Destination 19 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Silent Forest",
+      "story": "Snow wraps the trees and muffles the sounds of the world. A white feather rests on a stump, so light it seems to float in the silence."
     },
     "sanctuaire_des_spores": {
-      "title": "Destination 20 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Spore Sanctuary",
+      "story": "In the alcoves, spheres gather the mushrooms’ golden spores. A medallion holds a few of them, their gentle light accompanying the traveller."
     },
     "royaume_des_spores_celestes": {
-      "title": "Destination 21 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Skyspore Kingdom",
+      "story": "Weightless mushrooms travel from cloud to cloud. Their little parasols do not keep out the rain: they teach dreams to fly."
     },
     "tempete_ecarlate": {
-      "title": "Destination 22 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Scarlet Storm",
+      "story": "The red clouds tell each other their troubles in flashes of lightning. When they fall quiet, a spark sometimes remains, warm and gentle inside a tiny bottle."
     },
     "atoll_boreal": {
-      "title": "Destination 23 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Boreal Atoll",
+      "story": "The palms wear fringes of snow beneath the aurora. A bracelet woven from light keeps the colours of this impossible night around your wrist."
     },
     "vestiges_celestes": {
-      "title": "Destination 24 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Celestial Remains",
+      "story": "The stairways still climb, even where the palaces have vanished. A mosaic fragment shows a star: perhaps the address of those who once lived here."
     },
     "mer_figee": {
-      "title": "Destination 25 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Frozen Sea",
+      "story": "A wave stopped just before reaching the shore. Inside a little glass globe, its sea foam still dances."
     },
     "jungle_incandescente": {
-      "title": "Destination 26 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Glowing Jungle",
+      "story": "The vines glow without burning and flowers open in the warmth. A lantern fruit guides travellers to the forest’s edge, then remembers their path."
     },
     "jardins_de_gemmes": {
-      "title": "Destination 27 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Gem Gardens",
+      "story": "The gardeners water their mushrooms with moonlight. By morning, a gem flower has grown: it needs neither water nor a vase, only a little light."
     },
     "empire_des_sables": {
-      "title": "Destination 28 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Sand Empire",
+      "story": "The dunes move the streets while the city sleeps. A little lamp always points towards the oasis, even when every road has changed."
     },
     "faille_des_contraires": {
-      "title": "Destination 29 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Rift of Opposites",
+      "story": "Embers on one side, frost on the other. Above the rift, two knotted ribbons stay warm: sometimes opposites know how to keep each other cosy."
     },
     "observatoire_des_etoiles": {
-      "title": "Destination 30 (title pending)",
-      "story": "Story pending — placeholder text."
+      "title": "The Star Observatory",
+      "story": "Here, the stars come down low enough to look through the telescopes. A pocket lens keeps a patch of sky for evenings when clouds hide everything."
     }
   }
 }

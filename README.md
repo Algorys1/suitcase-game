@@ -39,13 +39,13 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 6. Au clavier : **1 / 2** choisit l'aiguille, **← / →** la déplace, **Tab / Maj+Tab** déplace le focus et **Entrée / Espace** active le bouton. Un contour marque le focus ; Tab peut quitter le jeu aux extrémités du parcours.
 7. Le résultat affiche le nom, le coût et les charges restantes. **Continuer** ouvre une préparation Arbre / Arbre avec les charges restantes ; à zéro, **Voir le bilan** présente les lieux de la session, le nombre de visites et les passages au Néant. Les listes longues se parcourent avec **Autres lieux**.
 8. Un nouveau voyage depuis l'accueil repart toujours à **10 charges**, avec une liste de visites de session vide ; le carnet permanent est conservé. Chaque première découverte est sauvegardée dès le départ accepté, avant sa révélation. Un rechargement perd la session en cours et revient à l'accueil, en conservant les découvertes sauvegardées.
-9. **Carnet de voyage** présente les 30 lieux sur plusieurs pages : les lieux inconnus restent masqués, sans nom ni recette. Cliquer/toucher un lieu connu ouvre sa fiche avec une vignette et une histoire provisoires ; le retour conserve la page consultée. L'accueil et le bilan affichent la progression sur 30 ; les nouveaux lieux de la session sont marqués **★ Nouveau**.
+9. **Carnet de voyage** rapproche le carnet de l'accueil puis ouvre son sommaire. Les 30 lieux sont répartis sur plusieurs pages : noms cliquables pour les découvertes, « ? » inactifs pour les inconnus, sans dévoiler les recettes. Les coins supérieurs et les flèches du clavier feuillettent le sommaire. Une destination s'ouvre avec un effet de page tournée ; ses coins parcourent les destinations déjà découvertes dans l'ordre du catalogue. **Retour au sommaire** conserve la page d'origine. L'accueil et le bilan affichent la progression sur 30 ; les nouveaux lieux de la session sont marqués **★ Nouveau**.
 10. Le carnet est enregistré **dans ce navigateur**. Effacer les données du site le supprime aussi. Si le stockage est indisponible, un message indique que le carnet reste uniquement en mémoire jusqu'au rechargement ; le jeu continue de fonctionner.
 11. Dans **Paramètres / Settings**, choisir **Français** ou **English**. Une coche et une bordure indiquent la langue active ; tout l'écran se traduit immédiatement. Le retour à l'accueil puis les voyages et le carnet conservent ce choix. La préférence est sauvegardée sans modifier les découvertes ; si le stockage est bloqué, elle reste valable en mémoire jusqu'au rechargement, avec un avertissement.
 
 ### Choix techniques actuels
 
-- Sept scènes : accueil, préparation, résultat, bilan, carnet, fiche de destination et `SettingsScene`. La transition de voyage reste dans la préparation. `JournalScene` gère la grille paginée et `JournalEntryScene` les fiches connues ; la scène temporaire des paramètres a été remplacée.
+- Sept scènes : accueil, préparation, résultat, bilan, carnet, fiche de destination et `SettingsScene`. La transition de voyage reste dans la préparation. `JournalScene` gère le sommaire paginé et `JournalEntryScene` les fiches connues ; la scène temporaire des paramètres a été remplacée.
 - La logique pure de préparation est dans `src/domain/preparation.ts` ; `src/domain/compassSelection.ts` ajoute le réglage initial, la rotation par crans et l'aimantation d'un angle vers un élément, sans Phaser. Boussole et palette partagent les mêmes emplacements et la même validation du départ. Une sélection provisoire en doublon est visible mais ne permet pas de voyager.
 - `recipes.ts` charge et valide les 30 recettes, indexées par paire non ordonnée. `compass.ts` centralise les valeurs provisoires 10 / 1 / 2 ; `session.ts` gère les phases préparation → voyage → résultat → préparation ou fin. Le débit a lieu à l'acceptation du départ, jamais dans une animation ou un redimensionnement.
 - Affichage Phaser en mode `RESIZE` : panneau centré et largeur bornée sur desktop, texte redisposé et boutons conservant une taille tactile sur petit écran. Les décorations secondaires sont masquées sur les fenêtres peu hautes.
@@ -62,9 +62,17 @@ Le build utilise des chemins relatifs (`base: './'`). Pour une future publicatio
 
 ### Accueil illustré
 
-Une première composition à valider présente la valise fermée, le carnet prune et une boussole sur la table de préparation. Le titre FR/EN reste du texte net ; l'illustration passe sous le titre en portrait. Le départ utilise la languette de papier existante, le carnet affiche la progression permanente et les paramètres restent accessibles. Souris, toucher et clavier conservent les trois actions du menu.
+La composition validée présente la valise fermée, le carnet prune et une boussole sur la table de préparation. Le titre FR/EN reste du texte net ; l'illustration passe sous le titre en portrait. Le départ utilise la languette de papier existante, le carnet affiche la progression permanente et les paramètres restent accessibles. Souris, toucher et clavier conservent les trois actions du menu.
 
 Illustration produite avec l'outil intégré `image_gen` : [source PNG](designs/home/hero-v1/departure.png), [prompt et références](designs/home/hero-v1/prompt.json), [export WebP transparent](public/assets/home/departure.webp) (366 Kio). Le décor existant est réutilisé. Si l'illustration manque, la valise fermée sert de repli.
+
+### Ouverture et feuilletage du carnet — prototype à valider
+
+Le carnet se rapproche en 650 ms, puis sa couverture pivote en 430–520 ms. Les pages se tournent en 480 ms avec deux faces de papier autour de la reliure. Les interactions sont verrouillées pendant ces transitions ; redimensionnement et changement de préférence d'animation terminent proprement l'effet. `prefers-reduced-motion` donne un accès immédiat. Aucune charge ni donnée de sauvegarde ne change lors de la consultation.
+
+La couverture séparée a été dérivée de l'accueil avec l'outil intégré `image_gen` : [source PNG](designs/journal/cover-v2/closed.png), [prompt](designs/journal/cover-v2/prompt.json), [WebP transparent](public/assets/journal/closed.webp) (282 Kio). Le rapprochement utilise un fondu entre le carnet peint dans l'accueil et cette couverture ; l'illustration d'accueil validée reste intacte. Sans la couverture, le sommaire s'ouvre directement.
+
+Les effets sont dans `src/game/ui/notebookMotion.ts`. Les deux textures temporaires de feuilletage sont libérées à la fin, au redimensionnement ou à la sortie. Avec Phaser 4, `DynamicTexture.draw()` met les dessins en attente : `render()` est appelé avant de détruire les objets de la page précédente.
 
 ### Habillage de l'écran de préparation
 

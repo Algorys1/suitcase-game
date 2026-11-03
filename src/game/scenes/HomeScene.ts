@@ -8,6 +8,7 @@ import { preloadPostcards } from '../ui/postcard';
 import { preloadSouvenirs } from '../ui/souvenir';
 import { prepareIllustrationTextures } from '../ui/illustrationTextures';
 import { preloadPreparationArt } from '../ui/preparationArt';
+import { approachJournal } from '../ui/notebookMotion';
 
 export class HomeScene extends Phaser.Scene {
   constructor() {
@@ -15,6 +16,9 @@ export class HomeScene extends Phaser.Scene {
   }
 
   preload(): void {
+    if (!this.textures.exists('journal-closed')) {
+      this.load.image('journal-closed', `${import.meta.env.BASE_URL}assets/journal/closed.webp`);
+    }
     if (!this.textures.exists('home-departure')) {
       this.load.image('home-departure', `${import.meta.env.BASE_URL}assets/home/departure.webp`);
     }
@@ -35,7 +39,8 @@ export class HomeScene extends Phaser.Scene {
         .replace('{total}', String(destinations.length)),
       buttons: [
         { name: 'start', label: texts.start, action: () => this.scene.start('preparation', { session: createSession() }), primary: true },
-        { name: 'journal', label: texts.journal, action: () => this.scene.start('journal', { page: 0 }) },
+        { name: 'journal', label: texts.journal,
+          action: () => approachJournal(this, opening => this.scene.start('journal', { page: 0, opening })) },
         { name: 'settings', label: texts.settings, action: () => this.scene.start('settings') },
       ],
     });

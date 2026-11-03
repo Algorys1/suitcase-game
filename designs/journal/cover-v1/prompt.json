@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen (built-in)",
+  "intent": "edit",
+  "reference": "../../home/hero-v1/departure.png",
+  "prompt": "Use case: precise-object-edit. Asset: separate animated closed journal sprite for a fantasy game.\nInput image is an edit target: extract ONLY the small plum leather journal at the lower left of the supplied illustration. Remove the suitcase, compass and every other object. Repaint the journal alone as the same recognizable object: plum leather, gold compass rose embossed in the center, brass protective corners, cream page edges, small clasp strap. Show it upright, front-facing, with only a little thickness visible on the right and bottom. Its long edges must be vertical and cover nearly rectangular, for an animation opening at the left spine. Keep the warm hand-painted cartoon materials of the source. Entire book visible, centered, close framing, portrait aspect ratio, genuine transparent alpha background. No ground, no text, no letters, no new ornaments, no extra objects, no white halo.",
+  "transparent_background": true
+}

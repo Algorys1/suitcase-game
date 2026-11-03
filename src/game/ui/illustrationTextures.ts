@@ -5,7 +5,8 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
   for (const key of scene.textures.getTextureKeys()) {
     const preparation = key.startsWith('preparation-');
     const home = key.startsWith('home-');
-    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home) continue;
+    const journal = key === 'journal-closed';
+    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home && !journal) continue;
     const texture = scene.textures.get(key);
     const source = texture.getSourceImage();
     // A canvas source has already been prepared during an earlier visit to Home.
@@ -31,7 +32,7 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     const prepared = scene.textures.addCanvas(key, canvas);
     // Exclude unused padding from the frame; keep the original artwork ratio.
     // The two vial states must retain a shared frame to composite the dust without shifts.
-    if ((preparation || home) && !backdrop && !vial) {
+    if ((preparation || home || journal) && !backdrop && !vial) {
       // Generated sprites have different transparent margins. Frame their visible
       // silhouette once so every icon has a consistent size, keeping source files intact.
       const pixels = context.getImageData(0, 0, width, height).data;

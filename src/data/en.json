@@ -16,6 +16,10 @@
   "back": "Back to home",
   "prototype": "Prototype · First journeys",
   "notebook": {
+    "contents": "Contents",
+    "backToContents": "Back to contents",
+    "previousEntry": "Previous destination",
+    "nextEntry": "Next destination",
     "progress": "{count} / {total} destinations discovered",
     "newDiscovery": "New discovery!",
     "alreadyVisited": "Already visited",

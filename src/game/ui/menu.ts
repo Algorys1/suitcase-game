@@ -5,6 +5,8 @@ import { drawNotebook, drawDiamond, revealPostcard } from './notebook';
 import { drawSouvenir } from './souvenir';
 import type { Souvenir } from '../../domain/souvenirs';
 import { drawPreparationDesk } from './preparationArt';
+import { bookBusy, turnJournalPage } from './notebookMotion';
+import type { PageDirection } from './notebookMotion';
 
 export type MenuButton = {
   label: string;
@@ -21,6 +23,7 @@ export type MenuButton = {
   plateAngle?: number;
   plateHeight?: number;
   textOnly?: boolean;
+  pageCorner?: 'previous' | 'next';
 };
 
 type MenuContent = {
@@ -35,6 +38,7 @@ type MenuContent = {
   postcard?: number;
   souvenir?: Souvenir;
   buttons: MenuButton[];
+  bookNavigation?: { previous: MenuButton; next: MenuButton; turn?: PageDirection };
 };
 
 const fontFamily = '"Trebuchet MS", Arial, sans-serif';
@@ -129,7 +133,7 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   if (spacious) {
     text(top + padding + 6, getTexts().journal, 12).setColor('#806748').setName('postcard-eyebrow');
   }
-  const title = text(top + padding + (spacious ? 52 : 0), content.title,
+  const title = text(top + padding + (spacious ? 52 : content.bookNavigation ? 32 : 0), content.title,
     short ? 22 : landscape ? 30 : 24, true).setName('menu-title');
   words.push(title);
   let contentTop = title.y + title.height + gap;
@@ -194,6 +198,11 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   if (content.footer) {
     text(top + panelHeight - padding - 18, content.footer, 11).setName('postcard-footer');
   }
+  if (content.bookNavigation) {
+    [content.bookNavigation.previous, content.bookNavigation.next].forEach((button, index) =>
+      createButton(scene, index ? left + panelWidth - 24 : left + 24, top + 24, 44, 44,
+        { ...button, pageCorner: index ? 'next' : 'previous', focused: focusIndex === content.buttons.length + index }));
+  }
   if (animate) return revealPostcard(scene, art, words,
     { x: artX, y: artY, width: fittedWidth, height: artHeight }, content.reveal === 'new', souvenir);
   return undefined;
@@ -221,6 +230,16 @@ export function createButton(
   let pressed = false;
 
   const draw = (hover = false): void => {
+    if (button.pageCorner) {
+      const side = button.pageCorner === 'next' ? 1 : -1;
+      label.setText(side === 1 ? '›' : '‹').setFontSize(27).setColor(button.disabled ? '#b9a88b' : '#79543f');
+      background.clear().fillStyle(0x785339, 0.10)
+        .fillTriangle(x + side * 20, y - 20, x + side * 20, y + 10, x - side * 10, y - 20);
+      background.fillStyle(hover && !button.disabled ? 0xe2c18b : 0xeddbb8, button.disabled ? 0.4 : 1)
+        .fillTriangle(x + side * 18, y - 19, x + side * 18, y + 8, x - side * 9, y - 19);
+      if (button.focused) background.lineStyle(2, 0x79543f).strokeRoundedRect(x - 21, y - 21, 42, 42, 5);
+      return;
+    }
     if (button.plateColor !== undefined || button.textOnly) {
       background.clear();
       const plateHeight = button.plateHeight ?? 22;
@@ -334,6 +353,7 @@ export function createButton(
 
 /** Reflow at native canvas size to keep text and touch targets readable. */
 export function createMenu(scene: Phaser.Scene, content: MenuContent): () => void {
+  scene.data.set('book-busy', false);
   const texts = getTexts();
   scene.game.canvas.setAttribute('aria-label', content.title);
   const canvas = scene.game.canvas;
@@ -343,8 +363,13 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
   let firstRender = true;
   let stopReveal: (() => void) | undefined;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const controls = content.bookNavigation
+    ? [...content.buttons, content.bookNavigation.previous, content.bookNavigation.next] : content.buttons;
+  let stopTurn: (() => void) | undefined;
 
   const render = (): void => {
+    stopTurn?.();
+    stopTurn = undefined;
     stopReveal?.();
     stopReveal = undefined;
     scene.children.getAll().forEach(child => child.destroy());
@@ -356,6 +381,7 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
     if (content.postcard !== undefined) {
       stopReveal = renderPostcardMenu(scene, content, content.postcard, focusIndex,
         firstRender && content.reveal !== undefined && !motion.matches);
+      if (firstRender && content.bookNavigation?.turn) stopTurn = turnJournalPage(scene, content.bookNavigation.turn);
       firstRender = false;
       return;
     }
@@ -424,17 +450,21 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
 
   render();
   const onKeyDown = (event: KeyboardEvent): void => {
+    if (bookBusy(scene)) return;
     if (event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.key === 'Tab') {
-      let next = focusIndex < 0 ? (event.shiftKey ? content.buttons.length - 1 : 0)
+      let next = focusIndex < 0 ? (event.shiftKey ? controls.length - 1 : 0)
         : focusIndex + (event.shiftKey ? -1 : 1);
-      while (content.buttons[next]?.disabled) next += event.shiftKey ? -1 : 1;
-      focusIndex = content.buttons[next] ? next : -1;
+      while (controls[next]?.disabled) next += event.shiftKey ? -1 : 1;
+      focusIndex = controls[next] ? next : -1;
       if (focusIndex >= 0) event.preventDefault();
       render();
     } else if (event.key === 'Enter' || event.key === ' ') {
-      const button = content.buttons[focusIndex];
+      const button = controls[focusIndex];
       if (button && !button.disabled) { event.preventDefault(); button.action(); }
+    } else if (content.bookNavigation && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+      const button = event.key === 'ArrowLeft' ? content.bookNavigation.previous : content.bookNavigation.next;
+      if (!button.disabled) { event.preventDefault(); button.action(); }
     }
   };
   canvas.addEventListener('keydown', onKeyDown);
@@ -442,6 +472,7 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
   const onMotionChange = (): void => { if (motion.matches) render(); };
   motion.addEventListener('change', onMotionChange);
   const dispose = (): void => {
+    stopTurn?.();
     stopReveal?.();
     motion.removeEventListener('change', onMotionChange);
     scene.scale.off(Phaser.Scale.Events.RESIZE, render);

@@ -1,16 +1,25 @@
 import Phaser from 'phaser';
+import { drawPreparationDesk } from './preparationArt';
+
+export function notebookLayout(scene: Phaser.Scene) {
+  const { width, height } = scene.scale;
+  const landscape = width >= 700 || (width >= 580 && height < 450);
+  const bookWidth = Math.min(width - 32, 1040);
+  const bookHeight = Math.min(height - 32, 720);
+  return { left: (width - bookWidth) / 2, top: (height - bookHeight) / 2,
+    width: bookWidth, height: bookHeight, landscape };
+}
 
 /** Lightweight paper and binding, drawn locally at the current canvas size. */
 export function drawNotebook(scene: Phaser.Scene, left: number, top: number, width: number, height: number,
   foldX?: number): void {
+  drawPreparationDesk(scene, scene.scale.width, scene.scale.height);
   const g = scene.add.graphics().setName('notebook-paper');
-  g.fillStyle(0x293f43).fillRect(0, 0, scene.scale.width, scene.scale.height);
-  // A quiet compass motif on the travel desk, mostly concealed by the book.
-  g.lineStyle(1, 0xe4bf79, 0.12);
-  g.strokeCircle(scene.scale.width / 2, scene.scale.height / 2, Math.min(scene.scale.width, scene.scale.height) * 0.65);
   g.fillStyle(0x13282e, 0.35).fillRoundedRect(left - 6, top + 3, width + 12, height + 8, 16);
-  g.fillStyle(0x875e42).fillRoundedRect(left - 6, top - 5, width + 12, height + 12, 14);
-  g.lineStyle(1, 0xd9b77b).strokeRoundedRect(left - 3, top - 2, width + 6, height + 6, 12);
+  // The open binding uses the same plum-red leather as the closed journal.
+  g.fillStyle(0x74374b).fillRoundedRect(left - 6, top - 5, width + 12, height + 12, 14);
+  g.lineStyle(1, 0x452331, 0.85).strokeRoundedRect(left - 6, top - 5, width + 12, height + 12, 14);
+  g.lineStyle(2, 0xba7785, 0.8).strokeRoundedRect(left - 3, top - 2, width + 6, height + 6, 12);
   g.fillStyle(0xd4bf99).fillRoundedRect(left + 1, top + 5, width - 2, height, 10);
   g.fillStyle(0xfff5df).fillRoundedRect(left, top, width, height, 10);
   g.lineStyle(1, 0xc5a478, 0.55).lineBetween(left + 12, top + height + 2, left + width - 12, top + height + 2);
@@ -21,7 +30,7 @@ export function drawNotebook(scene: Phaser.Scene, left: number, top: number, wid
   for (let i = 0; i < Math.min(1800, width * height / 240); i++) {
     g.fillRect(left + 10 + random() * (width - 20), top + 10 + random() * (height - 20), 1 + random() * 2, 1);
   }
-  g.lineStyle(1, 0xb99257, 0.28).strokeRoundedRect(left + 9, top + 9, width - 18, height - 18, 5);
+  g.lineStyle(1, 0x956776, 0.22).strokeRoundedRect(left + 9, top + 9, width - 18, height - 18, 5);
   if (foldX !== undefined) {
     g.fillStyle(0x8a603c, 0.05).fillRect(foldX - 7, top + 2, 14, height - 4);
     g.lineStyle(1, 0x9c774f, 0.24).lineBetween(foldX, top + 10, foldX, top + height - 10);

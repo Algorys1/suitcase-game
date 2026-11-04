@@ -1,5 +1,15 @@
 # Prototype — La carte d’aventure
 
+> **Dernière étape intégrée :** carnet accessible depuis la carte et trois conseils contextuels FR/EN, passables et consultables à nouveau depuis le carnet. La collection, l’expédition et les charges sont conservées lors des consultations. Les activités des 28 autres mondes restent des propositions dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md).
+
+### Vérifications du carnet et du tutoriel — 5 novembre 2026
+
+- Build TypeScript strict/Vite et 78 tests Vitest réussis, dont trois nouveaux tests sur la validation et la persistance des conseils, le passage de l’aide et le stockage bloqué. Aucun asset ni dépendance ajouté.
+- Build sous `/jam/` dans Chrome : départ, exploration, souvenir, conseils passables et relisibles, carnet depuis la carte et reprise après rechargement, en FR à 960 × 540 et 320 × 568, en EN à 640 × 360 et 360 × 640. Toucher simulé sur les portraits. Les souvenirs restent anonymes dans les fiches avant collecte.
+- Les 30 fiches et le sommaire aux titres longs passent les contrôles de cadre et de séparation histoire/souvenir en FR/EN à 320 × 568 et 640 × 360. Les états de collection et la piste de la clochette sont vérifiés.
+- Carte remplie de dix escales sur les quatre formats : dix noms visibles, aucune zone de visite recouverte par celle du carnet, pagination du carnet conservée après exploration, retour à zéro charge puis bilan. Captures desktop/portrait/paysage contrôlées. La taille des légendes s’adapte sur les portraits remplis.
+- Conseils au clavier, relecture sans réouverture involontaire par la même touche Entrée, réduction des animations et stockage bloqué vérifiés. Aucune erreur JavaScript/HTTP sur les parcours réussis. Firefox, tactile physique et publication itch.io restent à vérifier.
+
 ## Direction retenue le 4 novembre 2026
 
 Après essai, le joueur souhaite rompre la répétition préparation → révélation → préparation. Le critère de plaisir est : « Tiens, j’ai envie de visiter un monde où il y a ça ! » Les découvertes doivent donner une intention au départ suivant. Cette direction est autorisée pour un prototype ; son plaisir reste à valider en jeu.

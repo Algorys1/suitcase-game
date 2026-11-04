@@ -38,7 +38,8 @@ function animation(scene: Phaser.Scene, build: (finish: () => void) => () => voi
 /** Lift the journal from its position in the home illustration toward the reader. */
 export function approachJournal(scene: Phaser.Scene, complete: (opening: boolean) => void): void {
   if (bookBusy(scene)) return;
-  const hero = scene.children.getByName('home-departure');
+  const mapBook = scene.children.getByName('map-journal-art');
+  const hero = mapBook ?? scene.children.getByName('home-departure');
   if (reducedMotion() || !scene.textures.exists('journal-closed') || !(hero instanceof Phaser.GameObjects.Image)) {
     complete(false); return;
   }
@@ -48,8 +49,10 @@ export function approachJournal(scene: Phaser.Scene, complete: (opening: boolean
     drawPreparationDesk(scene, scene.scale.width, scene.scale.height);
     const desk = scene.children.list.at(-1) as Phaser.GameObjects.Image | Phaser.GameObjects.Graphics;
     desk.setAlpha(0).setDepth(1000);
-    const cover = scene.add.image(bounds.x + bounds.width * 0.13, bounds.y + bounds.height * 0.73, 'journal-closed')
-      .setDisplaySize(bounds.width * 0.24, bounds.height * 0.52).setAngle(13).setAlpha(0)
+    const cover = scene.add.image(mapBook ? hero.x : bounds.x + bounds.width * 0.13,
+      mapBook ? hero.y : bounds.y + bounds.height * 0.73, 'journal-closed')
+      .setDisplaySize(mapBook ? hero.displayWidth : bounds.width * 0.24,
+        mapBook ? hero.displayHeight : bounds.height * 0.52).setAngle(mapBook ? -7 : 13).setAlpha(0)
       .setDepth(1001).setName('journal-approach');
     const tweens = [
       scene.tweens.add({ targets: desk, alpha: 1, duration: 420 }),

@@ -74,17 +74,21 @@ Exemples de réactions locales, sans compteur, ressource ou sauvegarde propre :
 
 Ces réactions sont discrètes et brèves, sans scintillement de guidage ni fausse animation de récompense. D’abord réussir l’activité principale et la lisibilité du lieu ; ajouter ensuite une ou deux touches si le budget le permet. Elles respectent la réduction des animations.
 
-## Tutoriel à préparer
+## Tutoriel — première intégration
 
-Direction discutée, **pas encore implémentée** : trois messages contextuels courts au fil de la première aventure. Ils expliquent la possibilité d’explorer et de gagner un souvenir sans donner la solution du lieu.
+**Mise à jour — première intégration réalisée :** les trois conseils contextuels ci-dessous sont maintenant présents en FR/EN, peuvent être passés et relus depuis le sommaire du carnet. Leur acquittement est conservé. Les textes, le rythme et leur compréhension restent à valider par le joueur. Le descriptif de proposition ci-dessous conserve les intentions initiales.
+
+Direction retenue : trois messages contextuels courts au fil de la première aventure. Ils expliquent la possibilité d’explorer et de gagner un souvenir sans donner la solution du lieu.
 
 1. Premier départ : « Choisissez deux éléments pour guider la boussole. »
 2. Première exploration : « Certains mondes cachent un souvenir. Observez, touchez… le paysage peut vous répondre. »
 3. Premier souvenir : « Un souvenir rejoint votre carnet. Certains vous donneront une raison de repartir… »
 
-Copies FR de travail, à externaliser et traduire en EN au moment de l’intégration. Prévoir de passer l’aide et de la relire ; ne pas la rejouer à chaque aventure. Le troisième message n’apparaît qu’une fois le souvenir effectivement acquis. Le tutoriel doit aussi fonctionner si le joueur ignore sa première exploration ou rencontre d’abord le Néant.
+Copies FR de conception ci-dessus ; les variantes intégrées et leur traduction EN sont externalisées dans les catalogues. L’aide peut être passée et relue ; elle ne se rejoue pas à chaque aventure. Le troisième message n’apparaît qu’une fois un souvenir effectivement acquis. Le tutoriel fonctionne aussi si le joueur ignore sa première exploration ou rencontre d’abord le Néant.
 
-## Carnet sur la carte à préparer
+## Carnet sur la carte — première intégration
+
+**Mise à jour — première intégration réalisée :** couverture existante en bas à gauche, animation d’approche et d’ouverture, retour à l’aventure, contexte de pagination conservé pendant une exploration depuis une fiche. Le sommaire distingue souvenir inconnu, souvenir acquis et piste ouverte ; les fiches gardent le souvenir masqué avant collecte. La composition et la compréhension restent à essayer en jeu.
 
 Le carnet permanent existe déjà ; il faut rétablir son accès dans le nouveau parcours, pas recréer sa collection.
 
@@ -94,7 +98,7 @@ Trois informations distinctes, présentées sans surcharger les pages : monde d�
 
 Le carnet peut montrer le monde et son histoire avant résolution de son activité, mais doit y respecter l’enveloppe et le nom inconnus du souvenir. Ne pas dévoiler l’autocollant dans une autre vue avant sa collecte. Conserver les souvenirs déjà acquis des anciennes sauvegardes. En petit portrait et paysage, vérifier que le carnet ne recouvre ni les lieux ni la commande de départ.
 
-Ces éléments sont à prototyper ; la position exacte, les messages et les états visuels restent à essayer.
+Cette première intégration reste à essayer : position exacte, messages et états visuels attendent le retour du joueur.
 
 ## Donner envie du voyage suivant
 
@@ -109,7 +113,7 @@ Les trois nouvelles correspondances sont des idées à discuter, sans nouvelle r
 
 ## Ordre de prototypage recommandé
 
-1. Rétablir le carnet depuis la carte et installer le tutoriel court : rendre la nouvelle boucle compréhensible avant d’étendre le contenu.
+1. **Intégré, à essayer :** carnet depuis la carte et tutoriel court, pour rendre la nouvelle boucle compréhensible avant d’étendre le contenu.
 2. Essayer trois gestes différents avec **Archipel d’Azur** (dégager et faire circuler), **Sylve prismatique** (orienter un rayon) et **Faille des contraires** (rapprocher). Vérifier la découverte sans guidage sur souris et toucher.
 3. Ajuster les familles à partir de ces essais, puis étendre par petits groupes. Éviter de produire les 28 jeux avant de savoir si ces gestes sont agréables.
 4. Ajouter les correspondances retenues et quelques animations gratuites après stabilisation des activités locales.

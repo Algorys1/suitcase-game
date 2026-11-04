@@ -323,5 +323,20 @@
     "windowsMood": "The village seems asleep. The landscape awaits your touch.",
     "sunrise": "The sun has crossed the peaks. A souvenir of this dawn travels with you.",
     "travellingSouvenir": "TRAVELLING SOUVENIR"
+  },
+  "tutorial": {
+    "title": "A few words before you travel",
+    "departure": "Choose two elements to guide the compass. Each pairing leads to a world… or the Void.",
+    "exploration": "Some worlds hide a souvenir. Look closely, touch… the landscape may respond. You can leave and come back later.",
+    "souvenir": "A souvenir joins your journal. Some will give you a reason to travel again… Find the journal at the bottom left of the map.",
+    "continue": "Continue",
+    "skip": "Skip the tips",
+    "close": "Close the tips",
+    "help": "Travel tips",
+    "mapBook": "Journal",
+    "discovered": "World discovered",
+    "pending": "Souvenir to discover",
+    "collected": "Souvenir found",
+    "wish": "A wish to travel"
   }
 }

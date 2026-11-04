@@ -269,6 +269,8 @@ Les versions exactes et leurs dépendances transitives sont verrouillées dans `
 
 ## Documentation et catalogues
 
+Le carnet s’ouvre maintenant depuis le bas gauche de la carte et revient à l’aventure en conservant son trajet. Trois conseils FR/EN introduisent le départ, l’exploration et les souvenirs ; ils peuvent être passés, restent acquittés après rechargement et se relisent depuis le sommaire. Le carnet distingue les souvenirs cachés, acquis et la piste Cimes → Mycélia.
+
 La prochaine étape de conception est consignée dans [les petits jeux des 30 destinations](docs/DESTINATION_ACTIVITIES.md) : une proposition par illustration, le tutoriel, l’accès au carnet depuis la carte et des animations sans récompense à envisager plus tard. Seules les activités des Cimes et de Mycélia sont actuellement implémentées.
 
 | Fichier | Rôle |

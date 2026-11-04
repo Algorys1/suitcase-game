@@ -6,6 +6,8 @@ import type { PilotId, PilotSteps } from '../domain/pilotExploration';
 
 export const PROGRESS_KEY = 'suitcase-game.progress.v1';
 export type Language = 'fr' | 'en';
+export const tutorialSteps = ['departure', 'exploration', 'souvenir'] as const;
+export type TutorialStep = typeof tutorialSteps[number];
 export type Progress = {
   schemaVersion: 1;
   discoveredDestinationIds: string[];
@@ -14,6 +16,7 @@ export type Progress = {
   pendingSouvenirIds?: string[];
   awakenedMycelia?: boolean;
   pilotSteps?: PilotSteps;
+  tutorialSeen?: TutorialStep[];
 };
 type StorageAccess = () => Pick<Storage, 'getItem' | 'setItem'>;
 const knownIds = new Set(destinations.map(({ id }) => id));
@@ -48,7 +51,10 @@ export function decodeProgress(serialized: string | null): Progress {
         }
       }
     }
+    const tutorialSeen = 'tutorialSeen' in value && Array.isArray(value.tutorialSeen)
+      ? tutorialSteps.filter(step => value.tutorialSeen instanceof Array && value.tutorialSeen.includes(step)) : [];
     return { schemaVersion: 1, language,
+      ...(tutorialSeen.length ? { tutorialSeen } : {}),
       ...(Object.keys(pilotSteps).length ? { pilotSteps } : {}),
       ...(pending.length ? { pendingSouvenirIds: pending } : {}),
       ...('awakenedMycelia' in value && value.awakenedMycelia === true
@@ -74,6 +80,7 @@ export class ProgressStore {
       catch { this.progress = emptyProgress(); this.canPersist = false; }
     }
     return { ...this.progress, discoveredDestinationIds: [...this.progress.discoveredDestinationIds],
+      ...(this.progress.tutorialSeen ? { tutorialSeen: [...this.progress.tutorialSeen] } : {}),
       ...(this.progress.pilotSteps ? { pilotSteps: Object.fromEntries(Object.entries(this.progress.pilotSteps)
         .map(([id, steps]) => [id, [...steps]])) } : {}),
       ...(this.progress.pendingSouvenirIds ? { pendingSouvenirIds: [...this.progress.pendingSouvenirIds] } : {}),
@@ -94,6 +101,12 @@ export class ProgressStore {
 
   setLanguage(language: Language): void {
     this.save({ ...this.read(), language });
+  }
+
+  acknowledgeTutorial(step?: TutorialStep): void {
+    const progress = this.read();
+    this.save({ ...progress, tutorialSeen: step
+      ? [...new Set([...(progress.tutorialSeen ?? []), step])] : [...tutorialSteps] });
   }
 
   /** Session and discoveries share one write, before the departure animation. */

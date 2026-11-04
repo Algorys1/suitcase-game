@@ -1,5 +1,7 @@
 # Direction artistique — Le monde tient dans une valise
 
+> **Carnet sur la carte et découverte guidée :** la couverture prune existante repose en bas à gauche ; son approche et son ouverture réutilisent les animations du carnet, sans nouvel asset. Les conseils sont de courts billets crème à languette de papier déchiré, sans flèches ni repères sur les cibles. L’enveloppe anonyme reste commune au carnet et aux explorations avant collecte. Les réactions décoratives sans récompense sont notées pour plus tard dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md).
+
 > **Chapitre Cimes → Mycélia :** [nouveaux calques et assets](ADVENTURE_ASSETS.md). Le papier illustré, les badges SVG, Alegreya locale, les étiquettes kraft et les deux aiguilles existantes composent le nouvel habillage. Les légendes restent hors des paysages. Les réactions animées sont limitées aux lieux pilotes et attendent la validation artistique du joueur.
 
 > **Prototype carte d’aventure :** [composition autorisée et éléments provisoires](ADVENTURE_MAP.md). Carte sur papier, boussole en haut à gauche, dix badges ronds en haut à droite, valise fermée en bas à droite ; itinéraire pointillé et miniatures autour des escales. Les illustrations existantes sont réutilisées, avec des réactions locales pilotes.

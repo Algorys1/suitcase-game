@@ -323,5 +323,20 @@
     "windowsMood": "Le village semble endormi. Le paysage attend votre passage.",
     "sunrise": "Le soleil a franchi les sommets. Un souvenir de cette aube vous accompagne.",
     "travellingSouvenir": "SOUVENIR VOYAGEUR"
+  },
+  "tutorial": {
+    "title": "Quelques mots avant le voyage",
+    "departure": "Choisissez deux éléments pour guider la boussole. Chaque association vous mène vers un monde… ou le Néant.",
+    "exploration": "Certains mondes cachent un souvenir. Observez, touchez… le paysage peut vous répondre. Vous pouvez repartir et revenir plus tard.",
+    "souvenir": "Un souvenir rejoint votre carnet. Certains vous donneront une raison de repartir… Retrouvez le carnet en bas à gauche de la carte.",
+    "continue": "Continuer",
+    "skip": "Passer les conseils",
+    "close": "Refermer les conseils",
+    "help": "Conseils de voyage",
+    "mapBook": "Carnet",
+    "discovered": "Monde découvert",
+    "pending": "Souvenir à découvrir",
+    "collected": "Souvenir trouvé",
+    "wish": "Une envie d’ailleurs"
   }
 }

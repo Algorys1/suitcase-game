@@ -1,5 +1,7 @@
 # Spécification technique — Le monde tient dans une valise
 
+> **Carnet et conseils depuis la carte :** `travelTutorial.ts` affiche une note papier modale en réutilisant les contrôles accessibles. `tutorialSeen` est un champ optionnel validé du schéma v1 ; il conserve les conseils acquittés ou passés, sans inférer leur état des anciennes collections. Le mode de relecture ne modifie pas ce champ. Les arguments de navigation `returnTo` et `journalPage` gardent le chemin carte → carnet → fiche → exploration → fiche → carnet → carte, sans démarrer ni débiter un voyage. Une actualisation reprend toujours l’expédition sauvegardée depuis l’accueil.
+
 > **Chapitre vivant et assets :** [sources](ADVENTURE_ASSETS.md), calques isolés dans `pilotWorlds.ts`, chargement dans `adventureAssets.ts`, placement pur des légendes dans `mapLabels.ts`. Le papier utilise l’API NineSlice de Phaser 4.2.1 installée. La police locale est chargée avant de mesurer les textes ; tous les chemins restent relatifs au build. Les animations ne décident ni des débits ni de la sauvegarde de l’offrande.
 
 > **Prototype carte d’aventure :** [règles et compatibilité](ADVENTURE_MAP.md). Les scènes carte/exploration utilisent les champs optionnels `route`, `pendingSouvenirIds` et `awakenedMycelia`. Le carnet et la langue des anciennes sauvegardes sont conservés.

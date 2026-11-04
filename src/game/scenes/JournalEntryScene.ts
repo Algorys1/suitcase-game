@@ -11,11 +11,13 @@ import type { PageDirection } from '../ui/notebookMotion';
 export class JournalEntryScene extends Phaser.Scene {
   constructor() { super('journal-entry'); }
 
-  create({ id, page = 0, turn }: { id?: string; page?: number; turn?: PageDirection } = {}): void {
+  create({ id, page = 0, turn, returnTo }: {
+    id?: string; page?: number; turn?: PageDirection; returnTo?: 'adventure';
+  } = {}): void {
     const texts = getTexts();
     const entry = id === undefined ? undefined : getDestinationTexts(id);
     if (id === undefined || !entry || !progressStore.read().discoveredDestinationIds.includes(id)) {
-      this.scene.start('journal', { page });
+      this.scene.start('journal', { page, returnTo });
       return;
     }
     const postcard = destinations.findIndex(destination => destination.id === id);
@@ -27,16 +29,17 @@ export class JournalEntryScene extends Phaser.Scene {
       if (bookBusy(this)) return;
       const animate = captureJournal(this);
       this.data.set('book-busy', true);
-      this.scene.start(target ? 'journal-entry' : 'journal', { id: target, page, turn: animate ? direction : undefined });
+      this.scene.start(target ? 'journal-entry' : 'journal', { id: target, page, returnTo, turn: animate ? direction : undefined });
     };
     createMenu(this, {
       title: entry.title,
+      caption: texts.tutorial.discovered,
       description: entry.story + invitation + (hasPostcard(this, postcard) ? '' : '\n\n' + texts.notebook.placeholder),
       postcard,
       souvenir: souvenirForDestination(id, progressStore.read().discoveredDestinationIds),
       souvenirLocked: !progressStore.unlockedSouvenirIds().includes(id),
       buttons: [{ name: 'explore', label: texts.adventure.explore,
-        action: () => this.scene.start('exploration', { id }) },
+        action: () => this.scene.start('exploration', { id, journalPage: page, returnTo }) },
       { name: 'back-to-journal', label: texts.notebook.backToContents, primary: true,
         action: () => navigate(undefined, 'previous') }],
       bookNavigation: {

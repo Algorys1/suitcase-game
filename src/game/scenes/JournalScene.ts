@@ -7,6 +7,8 @@ import type { MenuButton } from '../ui/menu';
 import { drawNotebook, notebookLayout } from '../ui/notebook';
 import { bookBusy, captureJournal, openJournalCover, turnJournalPage } from '../ui/notebookMotion';
 import type { PageDirection } from '../ui/notebookMotion';
+import { AdventureControls } from '../ui/adventureMap';
+import { travelTutorial } from '../ui/travelTutorial';
 
 type Control = { name: string; action: () => void };
 
@@ -16,10 +18,18 @@ export class JournalScene extends Phaser.Scene {
   private focusName: string | null = null;
   private controls: Control[] = [];
   private stopMotion: (() => void) | undefined;
+  private returnTo: 'adventure' | undefined;
+  private helpOpen = false;
+  private helpControls!: AdventureControls;
 
   constructor() { super('journal'); }
 
-  create({ page = 0, opening = false, turn }: { page?: number; opening?: boolean; turn?: PageDirection } = {}): void {
+  create({ page = 0, opening = false, turn, returnTo }: {
+    page?: number; opening?: boolean; turn?: PageDirection; returnTo?: 'adventure';
+  } = {}): void {
+    this.returnTo = returnTo;
+    this.helpOpen = false;
+    this.helpControls = new AdventureControls(this);
     this.page = Number.isInteger(page) && page >= 0 ? Math.min(page, destinations.length - 1) : 0;
     this.focusName = null;
     this.stopMotion = undefined;
@@ -44,7 +54,7 @@ export class JournalScene extends Phaser.Scene {
   }
 
   private onKeyDown = (event: KeyboardEvent): void => {
-    if (bookBusy(this) || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.defaultPrevented || this.helpOpen || bookBusy(this) || event.altKey || event.ctrlKey || event.metaKey) return;
     const index = this.controls.findIndex(control => control.name === this.focusName);
     if (event.key === 'Tab') {
       const next = index < 0 ? (event.shiftKey ? this.controls.length - 1 : 0) : index + (event.shiftKey ? -1 : 1);
@@ -77,6 +87,7 @@ export class JournalScene extends Phaser.Scene {
     this.stopMotion = undefined;
     this.children.getAll().forEach(child => child.destroy());
     this.controls = [];
+    this.helpControls.clear();
     const texts = getTexts();
     const b = notebookLayout(this);
     const short = this.scale.height < 450;
@@ -110,16 +121,25 @@ export class JournalScene extends Phaser.Scene {
       const y = rowsTop + (index % rows) * 44 + 22;
       const line = this.add.graphics();
       line.lineStyle(1, 0xb49260, 0.22).lineBetween(x - columnWidth / 2 + 26, y + 21, x + columnWidth / 2 - 26, y + 21);
+      const title = unlocked ? getDestinationTexts(destination.id)?.title ?? texts.journey.unknown : '?';
       this.button(x, y, columnWidth - 48, 44, {
         name: unlocked ? `entry-${destination.id}` : `locked-${start + index}`,
-        label: unlocked ? getDestinationTexts(destination.id)?.title ?? texts.journey.unknown : '?',
-        fontSize: b.landscape ? 17 : 15, textOnly: true, disabled: !unlocked,
+        label: title,
+        fontSize: title.length > 29 ? 13 : b.landscape ? 17 : 15,
+        labelOffsetY: unlocked ? -10 : 0, textOnly: true, disabled: !unlocked,
         action: () => {
           const animate = captureJournal(this);
           this.data.set('book-busy', true);
-          this.scene.start('journal-entry', { id: destination.id, page: start, turn: animate ? 'next' : undefined });
+          this.scene.start('journal-entry', { id: destination.id, page: start, returnTo: this.returnTo,
+            turn: animate ? 'next' : undefined });
         },
       });
+      if (unlocked) {
+        const collected = progressStore.unlockedSouvenirIds().includes(destination.id);
+        const wish = destination.id === 'cimes_eternelles' && collected && !progress.awakenedMycelia;
+        text(x, y + 8, wish ? texts.tutorial.wish : collected ? texts.tutorial.collected : texts.tutorial.pending,
+          10, columnWidth - 50).setPadding(0).setName(`entry-status-${destination.id}`);
+      }
     });
     const turnPage = (offset: number, direction: PageDirection) => {
       const animate = captureJournal(this);
@@ -135,13 +155,19 @@ export class JournalScene extends Phaser.Scene {
       name: 'next-page', label: texts.notebook.next, pageCorner: 'next', disabled: pageNumber === pages - 1,
       action: () => turnPage(start + pageSize, 'next'),
     });
-    text(center, b.top + b.height - 116, progressText, 12, b.width - 32).setName('journal-progress');
-    if (!progressStore.persistent) text(center, b.top + b.height - 96, notice, 10, b.width - 32);
-    this.button(center, b.top + b.height - 61, Math.min(260, b.width - 44), 44, {
-      name: 'home', label: texts.back, stationery: true, fontSize: 16, action: () => this.scene.start('home'),
+    text(center, b.top + b.height - 125, progressText, 12, b.width - 32).setName('journal-progress');
+    this.button(center, b.top + b.height - 99, Math.min(240, b.width - 44), 30, {
+      name: 'travel-help', label: texts.tutorial.help, textOnly: true, fontSize: 12,
+      action: () => { this.helpOpen = true; this.render(); },
     });
-    text(center, b.top + b.height - 25, texts.notebook.page.replace('{page}', String(pageNumber + 1))
-      .replace('{pages}', String(pages)), 11, b.width - 40).setName('journal-page-number');
+    this.button(center, b.top + b.height - 61, Math.min(260, b.width - 44), 44, {
+      name: 'home', label: this.returnTo ? texts.adventure.backToMap : texts.back, stationery: true, fontSize: 16,
+      action: () => this.scene.start(this.returnTo ?? 'home'),
+    });
+    text(center, b.top + b.height - 25, progressStore.persistent
+      ? texts.notebook.page.replace('{page}', String(pageNumber + 1)).replace('{pages}', String(pages))
+      : notice, progressStore.persistent ? 11 : 10, b.width - 40).setName('journal-page-number');
     this.game.canvas.setAttribute('aria-description', progressText + '. ' + notice);
+    if (this.helpOpen) travelTutorial(this, this.helpControls, 'review', () => { this.helpOpen = false; this.render(); });
   }
 }

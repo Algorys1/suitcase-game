@@ -54,7 +54,8 @@ export class AdventureControls {
         .strokeRoundedRect(item.x - item.w / 2 - 3, item.y - item.h / 2 - 3, item.w + 6, item.h + 6, 8);
       this.scene.game.canvas.setAttribute('aria-description', item.name);
     } else if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault(); this.items[this.index]?.action();
+      const item = this.items[this.index];
+      if (item) { event.preventDefault(); item.action(); }
     }
   };
 }
@@ -70,6 +71,8 @@ export function mapText(scene: Phaser.Scene, x: number, y: number, value: string
 export function mapInstruments(w: number, h: number) {
   const portrait = w < 600;
   return {
+    journal: { x: w < 600 ? 46 : h < 450 ? 45 : 100, y: h - 122,
+      width: w < 600 || h < 450 ? 52 : 72, height: w < 600 || h < 450 ? 70 : 88 },
     compass: { x: portrait ? 60 : 87, y: portrait ? 101 : 84, radius: portrait ? 32 : 45 },
     suitcase: { x: w - (portrait ? 64 : 113), top: h - (portrait ? 101 : 145),
       width: portrait ? 106 : 185, height: portrait ? 72 : 115 },
@@ -168,7 +171,7 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
   mapText(scene, w / 2, portrait ? 31 : short ? 32 : 48, copy.eyebrow, 9, w - 70, '#a08052').setLetterSpacing(2);
   mapText(scene, w / 2, portrait ? 53 : short ? 59 : 74, copy.title, portrait ? 19 : short ? 21 : 27, portrait ? w - 35 : w - 350)
     .setFontFamily('"Travel Serif", Georgia, serif').setName('adventure-title');
-  const { compass, suitcase } = mapInstruments(w, h);
+  const { compass, suitcase, journal } = mapInstruments(w, h);
   if (scene.textures.exists('preparation-compass_dial')) scene.add.image(compass.x, compass.y, 'preparation-compass_dial')
     .setDisplaySize(compass.radius * 2, compass.radius * 2).setAngle(-11).setName('map-compass-art');
   for (const index of [0, 1] as const) {
@@ -209,6 +212,8 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
     ? { x: point.x - (portrait ? 52 : 77), y: point.y - 32, width: portrait ? 104 : 154, height: 90 }
     : { x: point.x - size / 2, y: point.y - size / 2, width: size, height: size });
   reserved.push({ x: suitcase.x - suitcase.width / 2, y: suitcase.top, width: suitcase.width, height: suitcase.height });
+  reserved.push({ x: journal.x - journal.width / 2 - 5, y: journal.y - journal.height / 2 - 5,
+    width: journal.width + 10, height: journal.height + 30 });
   points.forEach((point, index) => {
     const from = points[index - 1];
     if (!from) return;
@@ -274,7 +279,7 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
   });
   // Captions occupy reserved paper, never a landscape, even in a ten-stop itinerary.
   for (const caption of captions) {
-    const label = mapText(scene, 0, 0, caption.text, short ? 10 : portrait ? 11 : 12,
+    const label = mapText(scene, 0, 0, caption.text, short || (portrait && count >= 8) ? 10 : portrait ? 11 : 12,
       portrait ? 92 : short ? 82 : 135, '#4e3825').setFontStyle('600').setOrigin(0, 0)
       .setName(`map-label-${caption.index}`);
     const preferred = { x: caption.x - label.width / 2 - 4, y: caption.y + size / 2 + 2,
@@ -297,4 +302,8 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
   }
   drawClosedSuitcase(scene, suitcase.x, suitcase.top, suitcase.width, suitcase.height);
   scene.children.getByName('suitcase-closed-art')?.setName('map-suitcase-art');
+  if (scene.textures.exists('journal-closed')) scene.add.image(journal.x, journal.y, 'journal-closed')
+    .setDisplaySize(journal.width, journal.height).setAngle(-7).setName('map-journal-art');
+  mapText(scene, journal.x, journal.y + journal.height / 2 + 11,
+    getTexts().tutorial.mapBook, portrait || short ? 10 : 12, 90).setName('map-journal-label');
 }

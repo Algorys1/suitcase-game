@@ -10,11 +10,14 @@ import { AdventureControls, mapText, reducedMotion } from '../ui/adventureMap';
 import { drawDestinationStage } from '../ui/destinationStage';
 import { drawSouvenir } from '../ui/souvenir';
 import { drawCimesSunrise, drawMyceliaLife } from '../ui/pilotWorlds';
+import { travelTutorial } from '../ui/travelTutorial';
 
 export class ExplorationScene extends Phaser.Scene {
   private id = '';
   private session: SessionState | undefined;
   private fromJournal = false;
+  private journalPage = 0;
+  private returnTo: 'adventure' | undefined;
   private controls!: AdventureControls;
   private offering = false;
   private justFound = false;
@@ -26,13 +29,17 @@ export class ExplorationScene extends Phaser.Scene {
   private greet = () => {};
   constructor() { super('exploration'); }
 
-  create({ id, session, fromResult = false }: { id?: string; session?: SessionState; fromResult?: boolean } = {}): void {
+  create({ id, session, fromResult = false, journalPage = 0, returnTo }: {
+    id?: string; session?: SessionState; fromResult?: boolean; journalPage?: number; returnTo?: 'adventure';
+  } = {}): void {
     if (!id || !destinationById(id) || !progressStore.read().discoveredDestinationIds.includes(id)) {
       this.scene.start('home'); return;
     }
     this.id = id;
     this.session = session ?? progressStore.read().expedition;
     this.fromJournal = session === undefined;
+    this.journalPage = journalPage;
+    this.returnTo = returnTo;
     this.offering = false;
     this.justFound = false;
     this.enter = !fromResult;
@@ -48,7 +55,8 @@ export class ExplorationScene extends Phaser.Scene {
 
   private back(): void {
     this.scene.start(!this.fromJournal && this.session ? 'adventure' : 'journal-entry',
-      !this.fromJournal && this.session ? { session: this.session } : { id: this.id });
+      !this.fromJournal && this.session ? { session: this.session }
+        : { id: this.id, page: this.journalPage, returnTo: this.returnTo });
   }
 
   private touch(id: PilotId, index: number, x: number, y: number): void {
@@ -156,10 +164,12 @@ export class ExplorationScene extends Phaser.Scene {
     }
     this.controls.button('back-to-map', !this.fromJournal ? (short ? copy.mapShort : copy.backToMap) : getTexts().notebook.back,
       sideX, stage.secondaryY, Math.min(220, sideW - 15), () => this.back());
+    if (!found) travelTutorial(this, this.controls, 'exploration', () => this.render());
+    else if (this.justFound) travelTutorial(this, this.controls, 'souvenir', () => this.render());
   }
 
   private collectSouvenir(x: number, y: number): void {
-    if (reducedMotion()) return;
+    if (reducedMotion() || this.children.getByName('tutorial-paper')) return;
     const target = this.children.getByName('exploration-sticker') as Phaser.GameObjects.Image | null;
     if (!target) return;
     const flying = this.add.image(x, y, `souvenir-${this.id}`).setName('souvenir-flying');

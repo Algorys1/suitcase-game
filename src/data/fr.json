@@ -154,11 +154,16 @@
     "artwork": "Illustration provisoire · histoire à venir",
     "unknown": "Destination inconnue",
     "story": "Histoire à écrire — texte provisoire.",
-    "summaryTitle": "Fin du voyage",
+    "summaryTitle": "Le voyage s’achève",
     "summaryStats": "{count} lieux uniques · {void} passage(s) au Néant",
     "noVisits": "Aucune destination visitée cette fois-ci. Une nouvelle valise vous attend !",
     "nextPlaces": "Autres lieux · {page} / {pages}",
-    "visits": "{name} ({count} visite(s))"
+    "visits": "{name} ({count} visite(s))",
+    "summaryRest": "La boussole se repose.\nLes souvenirs restent.",
+    "summaryMemories": "Souvenirs de voyage",
+    "summaryPlaces": "{count} lieux uniques visités",
+    "summaryDiscoveries": "{count} nouvelles découvertes",
+    "summaryVoid": "{count} passage(s) dans le Néant"
   },
   "destinations": {
     "archipel_azur": {

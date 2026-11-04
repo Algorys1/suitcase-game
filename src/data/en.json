@@ -154,11 +154,16 @@
     "artwork": "Temporary artwork · English title and story pending",
     "unknown": "Unknown destination",
     "story": "Story pending — placeholder text.",
-    "summaryTitle": "Journey complete",
+    "summaryTitle": "Journey’s end",
     "summaryStats": "{count} unique places · {void} visit(s) to the Void",
     "noVisits": "No destinations visited this time. A fresh suitcase awaits!",
     "nextPlaces": "More places · {page} / {pages}",
-    "visits": "{name} ({count} visit(s))"
+    "visits": "{name} ({count} visit(s))",
+    "summaryRest": "The compass rests.\nThe memories remain.",
+    "summaryMemories": "Journey memories",
+    "summaryPlaces": "{count} unique places visited",
+    "summaryDiscoveries": "{count} new discoveries",
+    "summaryVoid": "{count} visit(s) to the Void"
   },
   "destinations": {
     "archipel_azur": {

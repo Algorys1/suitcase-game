@@ -6,6 +6,8 @@ import { ResultScene } from './scenes/ResultScene';
 import { SummaryScene } from './scenes/SummaryScene';
 import { JournalScene } from './scenes/JournalScene';
 import { JournalEntryScene } from './scenes/JournalEntryScene';
+import { AdventureScene } from './scenes/AdventureScene';
+import { ExplorationScene } from './scenes/ExplorationScene';
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -18,5 +20,5 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     height: '100%',
   },
   audio: { noAudio: true },
-  scene: [HomeScene, PreparationScene, ResultScene, SummaryScene, JournalScene, JournalEntryScene, SettingsScene],
+  scene: [HomeScene, AdventureScene, ExplorationScene, PreparationScene, ResultScene, SummaryScene, JournalScene, JournalEntryScene, SettingsScene],
 };

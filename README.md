@@ -1,5 +1,11 @@
 # Le monde tient dans une valise
 
+> **Prototype carte d’aventure — 4 novembre 2026 :** carte d’itinéraire, dix badges de charge, escales accessibles et exploration pour trouver les nouveaux souvenirs. Premier lien interactif : clochette des Cimes → Mycélia. Cette évolution est à valider en jeu et prime sur les descriptions historiques ci-dessous. [Règles du prototype](docs/ADVENTURE_MAP.md).
+
+> **Première passe visuelle :** carte sur papier et vignettes illustrées, mouvements des instruments, arrivée en carte postale et découverte de la clochette des Cimes avec envol de son autocollant. Les cadrages d’arrivée et d’exploration sont communs ; les commandes et petits formats ont été retravaillés. La boucle attend un nouvel essai du joueur.
+
+> **Chapitre vivant :** la clochette des Cimes répond au toucher ; son invitation conduit à une Mycélia endormie que l’offrande réveille, avec un petit habitant à saluer. Accueil et autocollants retrouvent leurs étiquettes ; la carte, les charges et les légendes ont leur nouvel habillage. [Assets et sources](docs/ADVENTURE_ASSETS.md).
+
 Jeu expérimental de découverte fantastique, créé pour l'**Indie Park Game Jam #6** (thème : **Voyage**).
 
 **Projet itch.io :** [The world in a suitcase](https://algorys1.itch.io/the-world-in-a-suitcase). **Format d'intégration prévu : 960 × 540 px (16:9)**, référence principale pour la composition et la lisibilité de l'interface. Le jeu conserve son adaptation aux autres tailles de fenêtre.
@@ -263,6 +269,8 @@ Les versions exactes et leurs dépendances transitives sont verrouillées dans `
 
 ## Documentation et catalogues
 
+La prochaine étape de conception est consignée dans [les petits jeux des 30 destinations](docs/DESTINATION_ACTIVITIES.md) : une proposition par illustration, le tutoriel, l’accès au carnet depuis la carte et des animations sans récompense à envisager plus tard. Seules les activités des Cimes et de Mycélia sont actuellement implémentées.
+
 | Fichier | Rôle |
 | --- | --- |
 | `AGENTS.md` | Consignes de travail pour Codex |
@@ -285,3 +293,6 @@ La sélection par aiguilles, les voyages, le carnet permanent et les paramètres
 5. Tests d'équilibrage, compatibilité navigateur et mise en ligne sur itch.io.
 
 **Principe directeur :** garder une mécanique simple et une découverte satisfaisante ; éviter la simulation d'écosystème, les interactions en chaîne et toute complexité non nécessaire à la Game Jam.
+
+
+Dernière passe du prototype : les trois sommets des Cimes déclenchent un lever de soleil ; les cinq fenêtres de Mycélia allument le village. Les gestes partiels persistent, le souvenir inconnu est une enveloppe anonyme et l’offrande garde une commande séparée. Voir [la proposition et ses vérifications](docs/ADVENTURE_MAP.md) et [les assets et prompts](docs/ADVENTURE_ASSETS.md). Les autres escales restent à approfondir après validation de ces deux essais.

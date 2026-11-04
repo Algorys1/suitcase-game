@@ -9,6 +9,7 @@ import { preloadSouvenirs } from '../ui/souvenir';
 import { prepareIllustrationTextures } from '../ui/illustrationTextures';
 import { preloadPreparationArt } from '../ui/preparationArt';
 import { approachJournal } from '../ui/notebookMotion';
+import { preloadAdventureArt } from '../ui/adventureAssets';
 
 export class HomeScene extends Phaser.Scene {
   constructor() {
@@ -28,6 +29,7 @@ export class HomeScene extends Phaser.Scene {
     preloadPostcards(this);
     preloadSouvenirs(this);
     preloadPreparationArt(this);
+    preloadAdventureArt(this);
   }
 
   create(): void {
@@ -42,10 +44,10 @@ export class HomeScene extends Phaser.Scene {
       footer: texts.notebook.progress.replace('{count}', String(progressStore.read().discoveredDestinationIds.length))
         .replace('{total}', String(destinations.length)),
       buttons: [
-        { name: 'start', label: expedition ? (expedition.phase === 'ended' ? texts.resumeSummary : texts.resume) : texts.start,
+        { name: 'start', label: expedition ? texts.resume : texts.start,
           action: () => {
             const session = progressStore.read().expedition ?? createSession();
-            this.scene.start(session.phase === 'ended' ? 'summary' : session.phase === 'result' ? 'result' : 'preparation', { session });
+            this.scene.start(session.phase === 'result' ? 'result' : 'adventure', { session });
           }, primary: true },
         { name: 'journal', label: texts.journal,
           action: () => approachJournal(this, opening => this.scene.start('journal', { page: 0, opening })) },

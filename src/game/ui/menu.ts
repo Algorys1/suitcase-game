@@ -40,6 +40,7 @@ type MenuContent = {
   footer?: string;
   postcard?: number;
   souvenir?: Souvenir;
+  souvenirLocked?: boolean;
   buttons: MenuButton[];
   bookNavigation?: { previous: MenuButton; next: MenuButton; turn?: PageDirection };
 };
@@ -247,9 +248,11 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   }
   const buttonHeight = 44;
   const buttonGap = 10;
+  const pairedButtons = !landscape && content.buttons.length === 2;
+  const buttonRows = pairedButtons ? 1 : content.buttons.length;
   const footerSpace = content.footer ? 28 : 0;
   const buttonsTop = top + panelHeight - padding - footerSpace
-    - content.buttons.length * (buttonHeight + buttonGap) + buttonGap;
+    - buttonRows * (buttonHeight + buttonGap) + buttonGap;
   const description = text(0, content.description, short ? 14 : 16).setName('menu-description');
   words.push(description);
   const souvenirHeight = content.souvenir
@@ -285,10 +288,13 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   }
   const art = drawPostcard(scene, artX, artY, fittedWidth, artHeight, postcard, true);
   const souvenir = content.souvenir ? drawSouvenir(scene, content.souvenir, textX,
-    description.y + description.height + gap, textWidth, souvenirHeight, content.reveal === 'new') : [];
-  content.buttons.forEach((button, index) => createButton(scene, textX,
-    buttonsTop + buttonHeight / 2 + index * (buttonHeight + buttonGap), Math.min(textWidth, 240), buttonHeight,
-    { ...button, focused: index === focusIndex, fontSize: short ? 16 : 18, stationery: true }));
+    description.y + description.height + gap, textWidth, souvenirHeight, content.reveal === 'new', content.souvenirLocked) : [];
+  content.buttons.forEach((button, index) => {
+    const buttonWidth = pairedButtons ? (textWidth - buttonGap) / 2 : Math.min(textWidth, 240);
+    createButton(scene, pairedButtons ? textX + (index === 0 ? -1 : 1) * (buttonWidth + buttonGap) / 2 : textX,
+      buttonsTop + buttonHeight / 2 + (pairedButtons ? 0 : index * (buttonHeight + buttonGap)), buttonWidth, buttonHeight,
+      { ...button, focused: index === focusIndex, fontSize: pairedButtons ? 12 : short ? 16 : 18, stationery: true });
+  });
   if (content.footer) {
     text(top + panelHeight - padding - 18, content.footer, 11).setName('postcard-footer');
   }

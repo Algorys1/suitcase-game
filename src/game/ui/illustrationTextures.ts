@@ -7,12 +7,13 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     const home = key.startsWith('home-');
     const journal = key === 'journal-closed';
     const settings = key.startsWith('settings-');
-    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home && !journal && !settings && key !== 'void-space') continue;
+    const adventure = key.startsWith('adventure-') && !key.startsWith('adventure-charge-');
+    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home && !journal && !settings && !adventure && key !== 'void-space') continue;
     const texture = scene.textures.get(key);
     const source = texture.getSourceImage();
     // A canvas source has already been prepared during an earlier visit to Home.
     if (!(source instanceof HTMLImageElement)) continue;
-    const backdrop = key === 'preparation-travel_desk' || key === 'void-space';
+    const backdrop = key === 'preparation-travel_desk' || key === 'void-space' || key === 'adventure-map-paper';
     const vial = key.startsWith('preparation-vial_');
     const maxEdge = backdrop ? 2048 : vial || key.startsWith('preparation-element-') || key.startsWith('preparation-needle_') ? 512 : 1024;
     const ratio = Math.min(1, maxEdge / Math.max(source.naturalWidth, source.naturalHeight));
@@ -33,7 +34,7 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     const prepared = scene.textures.addCanvas(key, canvas);
     // Exclude unused padding from the frame; keep the original artwork ratio.
     // The two vial states must retain a shared frame to composite the dust without shifts.
-    if ((preparation || home || journal) && !backdrop && !vial) {
+    if ((preparation || home || journal || key === 'adventure-mycelia-resident' || key === 'adventure-cimes-bell') && !backdrop && !vial) {
       // Generated sprites have different transparent margins. Frame their visible
       // silhouette once so every icon has a consistent size, keeping source files intact.
       const pixels = context.getImageData(0, 0, width, height).data;

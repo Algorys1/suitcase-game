@@ -1,5 +1,9 @@
 # Direction artistique — Le monde tient dans une valise
 
+> **Chapitre Cimes → Mycélia :** [nouveaux calques et assets](ADVENTURE_ASSETS.md). Le papier illustré, les badges SVG, Alegreya locale, les étiquettes kraft et les deux aiguilles existantes composent le nouvel habillage. Les légendes restent hors des paysages. Les réactions animées sont limitées aux lieux pilotes et attendent la validation artistique du joueur.
+
+> **Prototype carte d’aventure :** [composition autorisée et éléments provisoires](ADVENTURE_MAP.md). Carte sur papier, boussole en haut à gauche, dix badges ronds en haut à droite, valise fermée en bas à droite ; itinéraire pointillé et miniatures autour des escales. Les illustrations existantes sont réutilisées, avec des réactions locales pilotes.
+
 > **Collection complète intégrée :** les 30 destinations disposent de leur illustration, de leur histoire FR/EN et de leur autocollant souvenir. Les trois pilotes validés sont conservés ; les 27 ajouts sont des propositions à relire en jeu. Voir [le catalogue illustré et les sources](DESTINATION_COLLECTION.md). La décoration de la valise (phase C) et les Escales enchantées restent à développer. Les mentions de trois pilotes ou de placeholders ci-dessous décrivent les étapes antérieures.
 
 > **Statut :** guide de production visuelle pour Codex et la création d'assets.  

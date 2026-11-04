@@ -1,5 +1,7 @@
 # Extension de gameplay — Boussole à aiguilles et autocollants
 
+> **Prototype autorisé le 4 novembre 2026 :** [carte d’aventure](ADVENTURE_MAP.md). Les aiguilles sont conservées ; les charges deviennent dix badges ronds. Les nouveaux souvenirs demandent une exploration. Un premier usage narratif de la clochette est proposé à Mycélia sans consommation de l’autocollant. Ces évolutions priment pour ce prototype sur le déblocage automatique et le rôle uniquement cosmétique ci-dessous. La décoration du couvercle reste distincte.
+
 > **Collection complète intégrée :** les 30 destinations disposent de leur illustration, de leur histoire FR/EN et de leur autocollant souvenir. Les trois pilotes validés sont conservés ; les 27 ajouts sont des propositions à relire en jeu. Voir [le catalogue illustré et les sources](DESTINATION_COLLECTION.md). La décoration de la valise (phase C) et les Escales enchantées restent à développer. Les mentions de trois pilotes ou de placeholders ci-dessous décrivent les étapes antérieures.
 
 > **Projet :** Le monde tient dans une valise  

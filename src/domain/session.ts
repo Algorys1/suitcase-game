@@ -17,6 +17,8 @@ export type SessionState = {
   newlyDiscoveredIds: readonly string[];
   voidTrips: number;
   lastTrip: TripResult | null;
+  /** Ordered steps, including the void. Absent in older saves. */
+  route?: readonly (string | null)[];
 };
 
 export function createSession(): SessionState {
@@ -35,6 +37,7 @@ export function beginTravel(session: SessionState, slots: Slots, knownDestinatio
   return {
     charges: spendCharges(session.charges, cost),
     phase: 'travelling',
+    route: [...sessionRoute(session), destination?.id ?? null],
     visitedDestinationIds: destination ? [...session.visitedDestinationIds, destination.id] : session.visitedDestinationIds,
     newlyDiscoveredIds: isNewDiscovery ? [...session.newlyDiscoveredIds, destination.id] : session.newlyDiscoveredIds,
     voidTrips: session.voidTrips + (destination ? 0 : 1),
@@ -95,6 +98,17 @@ export function decodeSession(value: unknown): SessionState | null {
       isNewDiscovery: trip.isNewDiscovery };
     phase = 'result';
   } else return null;
+  const route = v.route;
+  const validRoute = Array.isArray(route) && route.length === visited.length + v.voidTrips
+    && route.filter(id => id === null).length === v.voidTrips
+    && JSON.stringify(route.filter(id => id !== null)) === JSON.stringify(visited)
+    && (!lastTrip || route.at(-1) === lastTrip.destinationId);
   return { charges: v.charges, phase, visitedDestinationIds: [...v.visitedDestinationIds],
-    newlyDiscoveredIds: [...v.newlyDiscoveredIds], voidTrips: v.voidTrips, lastTrip };
+    newlyDiscoveredIds: [...v.newlyDiscoveredIds], voidTrips: v.voidTrips, lastTrip,
+    ...(validRoute ? { route: [...route] as (string | null)[] } : {}) };
+}
+
+/** Old saves did not retain the position of void trips. */
+export function sessionRoute(session: SessionState): readonly (string | null)[] {
+  return session.route ?? [...session.visitedDestinationIds, ...Array<null>(session.voidTrips).fill(null)];
 }

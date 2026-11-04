@@ -91,7 +91,8 @@ describe('expédition en pause', () => {
     while (session.charges > 0) session = continueSession(revealResult(beginTravel(session, ['tree', 'water'])));
     store.saveSession(session);
     store.finishSession();
-    expect(store.read()).toEqual({ schemaVersion: 1, language: 'en', discoveredDestinationIds: ['archipel_azur'] });
+    expect(store.read()).toEqual({ schemaVersion: 1, language: 'en', discoveredDestinationIds: ['archipel_azur'],
+      pendingSouvenirIds: ['archipel_azur'] });
   });
 
   it('ignore seulement une expédition invalide, sans perdre la langue ni les découvertes', () => {

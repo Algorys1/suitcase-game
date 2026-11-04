@@ -12,8 +12,10 @@ import { beginTravel, createSession, revealResult } from '../../domain/session';
 import type { SessionState } from '../../domain/session';
 import { BALANCE } from '../../domain/compass';
 import { progressStore } from '../../services/storage';
-import { drawElement, drawPreparationDesk } from '../ui/preparationArt';
-import { drawChargeVial } from '../ui/chargeVial';
+import { drawElement } from '../ui/preparationArt';
+import { drawAdventureMap, mapInstruments, reducedMotion } from '../ui/adventureMap';
+import { arriveObjects } from '../ui/travelMotion';
+import { drawChargeBadge } from '../ui/adventureAssets';
 
 type Control = { name: string; action: () => void };
 
@@ -27,6 +29,12 @@ export class PreparationScene extends Phaser.Scene {
   private session: SessionState = createSession();
   private dial = { x: 0, y: 0, radius: 1 };
   private drag: { pointerId: number; needle: SlotIndex; offset: number; angle: number } | null = null;
+  private entering = false;
+  private returning = false;
+  private finishEntrance: (() => void) | null = null;
+  private compassParts: Phaser.GameObjects.GameObject[] = [];
+  private caseParts: Phaser.GameObjects.GameObject[] = [];
+  private casePivot = { x: 0, y: 0, width: 1 };
 
   constructor() { super('preparation'); }
 
@@ -43,6 +51,9 @@ export class PreparationScene extends Phaser.Scene {
     this.message = '';
     this.focusName = null;
     this.drag = null;
+    this.entering = false;
+    this.returning = false;
+    this.input.enabled = true;
     this.cameras.main.resetFX();
     const canvas = this.game.canvas;
     canvas.setAttribute('aria-label', getTexts().preparation.title);
@@ -56,6 +67,7 @@ export class PreparationScene extends Phaser.Scene {
     this.input.on('pointerupoutside', this.releaseNeedle, this);
     this.input.on('gameout', this.finishDrag);
     this.render();
+    this.animateInstruments(false);
     this.scale.on(Phaser.Scale.Events.RESIZE, this.onResize, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.scale.off(Phaser.Scale.Events.RESIZE, this.onResize, this);
@@ -71,10 +83,14 @@ export class PreparationScene extends Phaser.Scene {
       canvas.removeAttribute('tabindex');
       canvas.removeAttribute('aria-description');
       this.controls = [];
+      this.finishEntrance?.();
+      this.finishEntrance = null;
+      this.input.enabled = true;
     });
   }
 
   private onResize(): void {
+    if (this.returning) { this.scene.start('adventure', { session: this.session }); return; }
     this.drag = null;
     this.game.canvas.style.cursor = '';
     this.render();
@@ -143,21 +159,38 @@ export class PreparationScene extends Phaser.Scene {
   }
 
   private depart(): void {
-    if (this.drag) return;
+    if (this.drag || this.entering) return;
     const next = beginTravel(this.session, this.slots, progressStore.read().discoveredDestinationIds);
     if (next === this.session) return;
     this.session = next;
     progressStore.saveSession(next);
     this.message = getTexts().journey.departing;
     this.render();
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reducedMotion) this.cameras.main.fadeOut(350, 182, 154, 232);
-    this.time.delayedCall(reducedMotion ? 0 : 350, () => {
+    const reduced = reducedMotion();
+    if (!reduced) {
+      const closed = this.children.getByName('suitcase-closed-art') as Phaser.GameObjects.Image | null;
+      if (closed) {
+        const scale = closed.scaleX;
+        this.tweens.add({ targets: closed, scaleX: scale * 1.025, scaleY: scale * 0.975,
+          duration: 140, yoyo: true, ease: 'Sine.InOut' });
+      }
+      for (let i = 0; i < 12; i++) {
+        const spark = this.add.circle(this.casePivot.x + Math.sin(i * 2.4) * 80,
+          this.casePivot.y - 50, 1 + i % 3, 0xffdf99, 0.6);
+        this.tweens.add({ targets: spark, y: spark.y - 25 - i * 4, alpha: 0, duration: 350 + i * 12 });
+      }
+      this.time.delayedCall(200, () => this.cameras.main.fadeOut(250, 249, 237, 213));
+    }
+    this.time.delayedCall(reduced ? 0 : 450, () => {
       this.scene.start('result', { session: revealResult(this.session) });
     });
   }
 
   private onKeyDown = (event: KeyboardEvent): void => {
+    if (this.entering) {
+      if (event.key === 'Escape' && !this.returning) { this.finishEntrance?.(); this.finishEntrance = null; }
+      event.preventDefault(); return;
+    }
     if (this.session.phase !== 'preparation') { event.preventDefault(); return; }
     if (this.drag) {
       if (event.key === 'Escape') this.finishDrag();
@@ -210,6 +243,8 @@ export class PreparationScene extends Phaser.Scene {
   }
 
   private render(): void {
+    this.finishEntrance?.();
+    this.finishEntrance = null;
     const texts = getTexts();
     const copy = texts.preparation;
     const compassCopy = texts.compass;
@@ -242,12 +277,25 @@ export class PreparationScene extends Phaser.Scene {
     const ready = isReady(this.slots);
     const status = this.message || (ready ? copy.ready : compassCopy.duplicate);
 
-    drawPreparationDesk(this, width, height);
-    this.text(width / 2, 8, copy.title, short || !split ? 23 : 30, contentWidth, true);
+    drawAdventureMap(this, this.session);
+    this.children.getAll().filter(child => child.type === 'Text').forEach(child => child.destroy());
+    for (const name of ['map-compass-art', 'map-compass-hands', 'map-needle-0', 'map-needle-1', 'map-suitcase-art', 'energy-ticket']) {
+      const object = this.children.getByName(name) as Phaser.GameObjects.Image | Phaser.GameObjects.Graphics | null;
+      object?.setVisible(false);
+    }
+    for (let i = 0; i < BALANCE.initialCharges; i++) {
+      (this.children.getByName(`charge-badge-${i}`) as Phaser.GameObjects.Graphics | null)?.setVisible(false);
+    }
+    this.add.rectangle(width / 2, height / 2, width, height, 0x382e28, 0.3);
+    this.add.graphics().fillStyle(0xfff4df, 0.93).lineStyle(1, 0xbb9a6d, 0.4)
+      .fillRoundedRect(12, 5, width - 24, height - 10, 8)
+      .strokeRoundedRect(12, 5, width - 24, height - 10, 8);
+    this.text(width / 2, 8, copy.title, short || !split ? 23 : 30, contentWidth, true).setFontFamily('Georgia, serif');
     this.text(width / 2, short || !split ? 39 : 46,
       this.paletteVisible ? compassCopy.paletteInstructions : compassCopy.instructions,
       short || !split ? 13 : 15, contentWidth).setColor('#68523e');
 
+    const compassStart = this.children.length;
     if (this.paletteVisible) {
       const columns = paletteColumns;
       const rows = Math.ceil(compassElements.length / columns);
@@ -278,7 +326,10 @@ export class PreparationScene extends Phaser.Scene {
       });
     }
 
+    this.compassParts = this.children.getAll().slice(compassStart);
+    const suitcaseStart = this.children.length;
     const suitcaseWidth = Math.min(controlsWidth, 580);
+    this.casePivot = { x: controlsX, y: caseTop + caseHeight, width: suitcaseWidth };
     let positions: ReturnType<typeof drawSuitcase> | null = null;
     if (this.session.phase === 'travelling') {
       drawClosedSuitcase(this, controlsX, caseTop, suitcaseWidth, caseHeight);
@@ -301,15 +352,18 @@ export class PreparationScene extends Phaser.Scene {
         selected: this.activeNeedle === index, action: () => this.chooseNeedle(index),
       });
     }
+    this.caseParts = this.children.getAll().slice(suitcaseStart);
     const charges = texts.journey.charges.replace('{charges}', String(this.session.charges))
       .replace('{max}', String(BALANCE.initialCharges));
     const paletteBottom = dialY + (Math.ceil(12 / paletteColumns) * 50 - 6) / 2;
     const vialTop = this.paletteVisible ? Math.max(dialY + radius - 8, paletteBottom + 4) : dialY + radius - 8;
-    drawChargeVial(this, dialX, vialTop, vialHeight, this.session.charges, BALANCE.initialCharges,
-      !this.paletteVisible);
+    for (let i = 0; i < BALANCE.initialCharges; i++) {
+      const x = dialX + (i - 4.5) * (split ? 19 : 17), y = vialTop + (split ? 18 : 12);
+      drawChargeBadge(this, x, y, 6, i < this.session.charges, `preparation-charge-${i}`);
+    }
     const count = compassCopy.chargeCount.replace('{charges}', String(this.session.charges))
       .replace('{max}', String(BALANCE.initialCharges));
-    this.text(split ? dialX : dialX + 48, split ? vialTop + vialHeight - 1 : vialTop + 26,
+    this.text(dialX, vialTop + (split ? 30 : 23),
       count, split ? 15 : 13, 72, true)
       .setName('preparation-charges');
     if (split) {
@@ -319,7 +373,8 @@ export class PreparationScene extends Phaser.Scene {
     const footerWidth = Math.min(contentWidth, 650);
     const footerButtonWidth = (footerWidth - 16) / 3;
     this.button(width / 2 - footerButtonWidth - 8, footerY, footerButtonWidth, {
-      name: 'home', label: texts.pause, fontSize: split ? 16 : 13, action: () => this.scene.start('home'),
+      name: 'home', label: texts.adventure.backToMap, textOnly: true, stationery: false,
+      fontSize: split ? 15 : 12, action: () => this.animateInstruments(true),
     });
     this.button(width / 2, footerY, footerButtonWidth, {
       name: 'toggle-palette', label: this.paletteVisible ? compassCopy.compass : compassCopy.palette,
@@ -334,5 +389,26 @@ export class PreparationScene extends Phaser.Scene {
       charges, ...this.slots.map((id, index) => compassCopy.needle.replace('{number}', String(index + 1))
         + ': ' + (id === null ? copy.empty : texts.elements[id].name)), status, compassCopy.keyboard,
     ].join('. '));
+  }
+
+  private animateInstruments(reverse: boolean): void {
+    if (this.entering) return;
+    if (reducedMotion()) { if (reverse) this.scene.start('adventure', { session: this.session }); return; }
+    const { compass, suitcase } = mapInstruments(this.scale.width, this.scale.height);
+    this.entering = true;
+    this.returning = reverse;
+    this.input.enabled = false;
+    const duration = reverse ? 300 : this.session.visitedDestinationIds.length ? 360 : 480;
+    const done = () => {
+      this.entering = false;
+      this.input.enabled = true;
+      if (reverse) this.scene.start('adventure', { session: this.session });
+    };
+    const finishCompass = arriveObjects(this, this.compassParts, this.dial,
+      { x: compass.x, y: compass.y, scale: compass.radius / this.dial.radius, alpha: 0.25, angle: -11 }, duration, undefined, reverse);
+    const finishCase = arriveObjects(this, this.caseParts, this.casePivot,
+      { x: suitcase.x, y: suitcase.top + suitcase.height, scale: suitcase.width / this.casePivot.width, alpha: 0 },
+      duration, done, reverse);
+    this.finishEntrance = () => { finishCompass(); finishCase(); this.entering = false; this.input.enabled = true; };
   }
 }

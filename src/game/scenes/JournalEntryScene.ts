@@ -19,6 +19,8 @@ export class JournalEntryScene extends Phaser.Scene {
       return;
     }
     const postcard = destinations.findIndex(destination => destination.id === id);
+    const invitation = id === 'cimes_eternelles' && progressStore.unlockedSouvenirIds().includes(id)
+      && !progressStore.read().awakenedMycelia ? '\n\n' + texts.adventure.bellWish : '';
     const known = destinations.filter(destination => progressStore.read().discoveredDestinationIds.includes(destination.id));
     const position = known.findIndex(destination => destination.id === id);
     const navigate = (target: string | undefined, direction: PageDirection) => {
@@ -29,10 +31,13 @@ export class JournalEntryScene extends Phaser.Scene {
     };
     createMenu(this, {
       title: entry.title,
-      description: entry.story + (hasPostcard(this, postcard) ? '' : '\n\n' + texts.notebook.placeholder),
+      description: entry.story + invitation + (hasPostcard(this, postcard) ? '' : '\n\n' + texts.notebook.placeholder),
       postcard,
       souvenir: souvenirForDestination(id, progressStore.read().discoveredDestinationIds),
-      buttons: [{ name: 'back-to-journal', label: texts.notebook.backToContents, primary: true,
+      souvenirLocked: !progressStore.unlockedSouvenirIds().includes(id),
+      buttons: [{ name: 'explore', label: texts.adventure.explore,
+        action: () => this.scene.start('exploration', { id }) },
+      { name: 'back-to-journal', label: texts.notebook.backToContents, primary: true,
         action: () => navigate(undefined, 'previous') }],
       bookNavigation: {
         turn,

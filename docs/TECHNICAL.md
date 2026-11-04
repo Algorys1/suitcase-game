@@ -1,5 +1,9 @@
 # Spécification technique — Le monde tient dans une valise
 
+> **Chapitre vivant et assets :** [sources](ADVENTURE_ASSETS.md), calques isolés dans `pilotWorlds.ts`, chargement dans `adventureAssets.ts`, placement pur des légendes dans `mapLabels.ts`. Le papier utilise l’API NineSlice de Phaser 4.2.1 installée. La police locale est chargée avant de mesurer les textes ; tous les chemins restent relatifs au build. Les animations ne décident ni des débits ni de la sauvegarde de l’offrande.
+
+> **Prototype carte d’aventure :** [règles et compatibilité](ADVENTURE_MAP.md). Les scènes carte/exploration utilisent les champs optionnels `route`, `pendingSouvenirIds` et `awakenedMycelia`. Le carnet et la langue des anciennes sauvegardes sont conservés.
+
 > **Collection complète intégrée :** les 30 destinations disposent de leur illustration, de leur histoire FR/EN et de leur autocollant souvenir. Les trois pilotes validés sont conservés ; les 27 ajouts sont des propositions à relire en jeu. Voir [le catalogue illustré et les sources](DESTINATION_COLLECTION.md). La décoration de la valise (phase C) et les Escales enchantées restent à développer. Les mentions de trois pilotes ou de placeholders ci-dessous décrivent les étapes antérieures.
 
 > **Statut :** document de préproduction destiné à Codex.  

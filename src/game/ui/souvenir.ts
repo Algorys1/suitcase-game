@@ -15,7 +15,7 @@ export function preloadSouvenirs(scene: Phaser.Scene): void {
 
 /** The name remains readable even if its optional artwork cannot be loaded. */
 export function drawSouvenir(scene: Phaser.Scene, souvenir: Souvenir, x: number, y: number,
-  width: number, height: number, fresh: boolean): Array<Phaser.GameObjects.Graphics | Phaser.GameObjects.Image | Phaser.GameObjects.Text> {
+  width: number, height: number, fresh: boolean, locked = false): Array<Phaser.GameObjects.Graphics | Phaser.GameObjects.Image | Phaser.GameObjects.Text> {
   const objects: Array<Phaser.GameObjects.Graphics | Phaser.GameObjects.Image | Phaser.GameObjects.Text> = [];
   const compact = height < 112;
   const tagWidth = Math.min(width - 18, 290);
@@ -65,7 +65,18 @@ export function drawSouvenir(scene: Phaser.Scene, souvenir: Souvenir, x: number,
   g.closePath().fillPath().strokePath();
   objects.push(g);
   const key = textureKey(souvenir.destinationId);
-  if (scene.textures.exists(key)) {
+  if (locked) {
+    const cy = y + height / 2;
+    const cover = scene.add.graphics().setName('souvenir-unknown');
+    cover.fillStyle(0x84623f, 0.15).fillRoundedRect(imageX - size * 0.36 + 1, cy - size * 0.38 + 2, size * 0.72, size * 0.76, 3);
+    cover.fillStyle(0xe5cda2).lineStyle(1, 0xa3855c).fillRoundedRect(imageX - size * 0.36, cy - size * 0.38, size * 0.72, size * 0.76, 3)
+      .strokeRoundedRect(imageX - size * 0.36, cy - size * 0.38, size * 0.72, size * 0.76, 3);
+    cover.lineStyle(1, 0xb69769).lineBetween(imageX - size * 0.34, cy - size * 0.34, imageX, cy - size * 0.03)
+      .lineBetween(imageX, cy - size * 0.03, imageX + size * 0.34, cy - size * 0.34);
+    const seal = scene.add.text(imageX, cy + size * 0.12, '?', { fontFamily: 'Georgia, serif', fontSize: Math.max(13, size * 0.43), color: '#866642' })
+      .setOrigin(0.5).setName('souvenir-unknown-seal');
+    objects.push(cover, seal);
+  } else if (scene.textures.exists(key)) {
     const image = scene.add.image(imageX, y + height / 2, key).setName(`souvenir-${souvenir.destinationId}`);
     image.setScale(Math.min(size / image.width, size / image.height)).setAngle(angle);
     image.enableFilters();
@@ -81,8 +92,8 @@ export function drawSouvenir(scene: Phaser.Scene, souvenir: Souvenir, x: number,
     fontFamily: '"Trebuchet MS", Arial, sans-serif', fontSize, color, align: 'center',
     wordWrap: { width: textWidth - 4, useAdvancedWrap: true },
   }).setOrigin(0.5, 0).setPadding(2);
-  const status = text(fresh ? getTexts().stickers.new : getTexts().stickers.kept, 11, '#60452d').setName('souvenir-status');
-  const name = text(translate(souvenir.nameKey), compact ? 13 : 14, '#3e2d21').setName('souvenir-name');
+  const status = text(locked ? getTexts().adventure.hidden : fresh ? getTexts().stickers.new : getTexts().stickers.kept, compact ? 9 : 11, '#60452d').setName('souvenir-status');
+  const name = text(locked ? '???' : translate(souvenir.nameKey), compact ? 11 : 14, '#3e2d21').setName('souvenir-name');
   const textTop = y + (height - status.height - name.height - 2) / 2;
   status.setY(textTop);
   name.setY(textTop + status.height + 2);

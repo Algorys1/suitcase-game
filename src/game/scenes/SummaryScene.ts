@@ -10,6 +10,7 @@ export class SummaryScene extends Phaser.Scene {
 
   create({ session }: { session?: SessionState } = {}): void {
     if (!session || session.phase !== 'ended') { this.scene.start('home'); return; }
+    progressStore.saveSession(session);
     const ids = [...new Set(session.visitedDestinationIds)];
     let page = 0;
     const pages = Math.max(1, Math.ceil(ids.length / 2));
@@ -33,7 +34,10 @@ export class SummaryScene extends Phaser.Scene {
             label: texts.journey.nextPlaces.replace('{page}', String(page + 1)).replace('{pages}', String(pages)),
             action: () => { page = (page + 1) % pages; render(); },
           }] : []),
-          { name: 'home', label: texts.back, primary: true, action: () => this.scene.start('home') },
+          { name: 'home', label: texts.back, primary: true, action: () => {
+            progressStore.finishSession();
+            this.scene.start('home');
+          } },
         ],
       });
     };

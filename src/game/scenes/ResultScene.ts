@@ -16,6 +16,7 @@ export class ResultScene extends Phaser.Scene {
     const texts = getTexts();
     const trip = session?.lastTrip;
     if (!session || session.phase !== 'result' || !trip) { this.scene.start('home'); return; }
+    progressStore.saveSession(session);
     const destination = trip.destinationId === null ? null : getDestinationTexts(trip.destinationId);
     const cost = texts.journey.cost.replace('{cost}', String(trip.cost))
       .replace('{charges}', String(session.charges)).replace('{max}', String(BALANCE.initialCharges));
@@ -39,6 +40,7 @@ export class ResultScene extends Phaser.Scene {
         name: 'continue', primary: true,
         action: () => {
           const next = continueSession(session);
+          progressStore.saveSession(next);
           this.scene.start(next.phase === 'ended' ? 'summary' : 'preparation', { session: next });
         },
       }],

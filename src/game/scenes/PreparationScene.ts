@@ -31,11 +31,12 @@ export class PreparationScene extends Phaser.Scene {
   constructor() { super('preparation'); }
 
   create({ session }: { session?: SessionState } = {}): void {
-    this.session = session ?? createSession();
+    this.session = session ?? progressStore.read().expedition ?? createSession();
     if (this.session.phase !== 'preparation' || this.session.charges <= 0) {
       this.scene.start('home');
       return;
     }
+    progressStore.saveSession(this.session);
     this.slots = initialCompassSelection();
     this.activeNeedle = 0;
     this.paletteVisible = false;
@@ -146,9 +147,7 @@ export class PreparationScene extends Phaser.Scene {
     const next = beginTravel(this.session, this.slots, progressStore.read().discoveredDestinationIds);
     if (next === this.session) return;
     this.session = next;
-    if (next.lastTrip?.destinationId !== null && next.lastTrip?.destinationId !== undefined) {
-      progressStore.discover(next.lastTrip.destinationId);
-    }
+    progressStore.saveSession(next);
     this.message = getTexts().journey.departing;
     this.render();
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -320,7 +319,7 @@ export class PreparationScene extends Phaser.Scene {
     const footerWidth = Math.min(contentWidth, 650);
     const footerButtonWidth = (footerWidth - 16) / 3;
     this.button(width / 2 - footerButtonWidth - 8, footerY, footerButtonWidth, {
-      name: 'home', label: copy.home, fontSize: split ? 16 : 13, action: () => this.scene.start('home'),
+      name: 'home', label: texts.pause, fontSize: split ? 16 : 13, action: () => this.scene.start('home'),
     });
     this.button(width / 2, footerY, footerButtonWidth, {
       name: 'toggle-palette', label: this.paletteVisible ? compassCopy.compass : compassCopy.palette,

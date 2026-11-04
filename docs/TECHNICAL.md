@@ -6,7 +6,7 @@
 > **Références :** `README.md`, `docs/GAME_DESIGN.md`, `docs/ART_DIRECTION.md`.  
 > **Cible :** jeu HTML5 autonome, exécutable directement dans le navigateur et publiable sur itch.io.
 
-> **Avancement — étape 6 :** préparation, recettes/Néant, charges, bilan et carnet permanent paginé sont implémentés. Les paramètres FR/EN appliquent et sauvegardent le choix immédiatement. `services/i18n.ts` fournit les catalogues typés et la résolution des clés de contenu avec repli français. `services/storage.ts` conserve le schéma v1 et les découvertes lors d'un changement de langue ; les erreurs de stockage utilisent un état en mémoire avec une indication non bloquante. La session n'est pas sauvegardée. Histoires et titres anglais de destinations restent provisoires.
+> **Avancement — étape 6 :** préparation, recettes/Néant, charges, bilan et carnet permanent paginé sont implémentés. Les paramètres FR/EN appliquent et sauvegardent le choix immédiatement. `services/i18n.ts` fournit les catalogues typés et la résolution des clés de contenu avec repli français. `services/storage.ts` conserve le schéma v1, enrichi d’un champ optionnel `expedition` validé : quitter ou recharger met la session en pause. Les erreurs de stockage utilisent un état en mémoire avec une indication non bloquante.
 
 > **Extension :** [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md) définit la sélection par aiguilles et les autocollants cosmétiques. La phase A est implémentée ; la manipulation directe est retenue. Trois autocollants souvenirs prototypent la phase B dans les résultats et fiches du carnet, sans modifier la sauvegarde. La phase C reste à valider avant implémentation.
 
@@ -144,29 +144,31 @@ Séparer **état de session** et **progression permanente**.
 ```ts
 type SessionState = {
   charges: number;
-  slots: [ElementId | null, ElementId | null];
-  visitedDestinationIds: string[];  // Visites de cette session, doublons possibles
-  newlyDiscoveredIds: string[];     // Uniques pendant cette session
+  phase: 'preparation' | 'travelling' | 'result' | 'ended';
+  visitedDestinationIds: readonly string[];  // Visites de cette session, doublons possibles
+  newlyDiscoveredIds: readonly string[];     // Uniques pendant cette session
   voidTrips: number;
+  lastTrip: TripResult | null;
 };
 
 type PersistentProgress = {
   schemaVersion: 1;
   discoveredDestinationIds: string[];
   language: 'fr' | 'en';
+  expedition?: SessionState;
 };
 ```
 
 Transitions :
 
-1. **Accueil → Préparation** : nouvelle session, valise vide, charges initiales.
+1. **Accueil → Préparation / Résultat / Récapitulatif** : reprendre l’expédition existante à sa phase sauvegardée ; sans expédition, créer une session avec les charges initiales.
 2. **Préparation → Voyage** : autoriser seulement deux éléments différents et `charges > 0` ; figer la paire et bloquer les clics répétés.
 3. **Voyage → Résultat** : résoudre la recette une seule fois, débiter la boussole une seule fois, sauvegarder immédiatement toute nouvelle découverte, puis jouer la révélation.
-4. **Résultat → Préparation** si `charges > 0` : vider les emplacements par défaut.
+4. **Résultat → Préparation** si `charges > 0` : conserver les charges et réinitialiser la sélection à Arbre / Arbre.
 5. **Résultat → Récapitulatif** si `charges === 0`.
-6. **Récapitulatif → Accueil** : ne pas effacer le carnet permanent.
+6. **Récapitulatif → Accueil** : effacer seulement l’expédition terminée, conserver le carnet et la langue.
 
-La présentation animée ne doit jamais déclencher plusieurs fois une résolution ou un débit. Si le joueur recharge la page pendant une session, il est acceptable pour le MVP de revenir à l'accueil et de perdre la session courante ; **les découvertes déjà sauvegardées doivent rester**.
+La présentation animée ne déclenche jamais une résolution ou un débit. Une écriture unique sauvegarde l’expédition et ses découvertes dès l’acceptation du départ. La phase `travelling` est normalisée en `result` dans la sauvegarde : recharger pendant l’animation revient à l’accueil, puis Reprendre affiche ce résultat déjà débité. Les transitions vers la préparation et le bilan sont sauvegardées. Le bilan reste récupérable tant que son retour à l’accueil n’a pas été activé ; seule cette action efface l’expédition terminée. L’accueil ne propose pas de nouvelle expédition pendant une session en cours. Les choix d’aiguilles restent transitoires et se réinitialisent à Arbre / Arbre.
 
 ## 6. Boussole : règles configurables
 
@@ -191,7 +193,8 @@ export const BALANCE = {
 ### Sauvegarde
 
 - Clé proposée : `suitcase-game.progress.v1`.
-- Écrire uniquement les données permanentes utiles : identifiants de destinations découvertes et langue choisie.
+- Écrire les identifiants de destinations découvertes, la langue et, si une expédition existe, son état sous le champ optionnel `expedition`. Le schéma v1 et les anciennes sauvegardes restent compatibles.
+- `decodeSession` valide phases, IDs, historique, découvertes de session, coût du dernier voyage et cohérence des charges avec les voyages effectués. Une expédition invalide est écartée sans effacer le carnet ni la langue. Les copies lues et écrites ne partagent pas leurs tableaux ou leur dernier résultat avec l’état interne du stockage.
 - Charger avec `try/catch`, valider la structure et ignorer les identifiants inconnus.
 - Si `localStorage` est inaccessible (navigation privée ou restrictions), laisser le jeu fonctionner avec une progression en mémoire et afficher au besoin un avertissement non bloquant.
 - Éviter toute sauvegarde de données personnelles.

@@ -33,6 +33,7 @@ export class HomeScene extends Phaser.Scene {
   create(): void {
     prepareIllustrationTextures(this);
     const texts = getTexts();
+    const expedition = progressStore.read().expedition;
 
     createMenu(this, {
       title: texts.title,
@@ -41,7 +42,11 @@ export class HomeScene extends Phaser.Scene {
       footer: texts.notebook.progress.replace('{count}', String(progressStore.read().discoveredDestinationIds.length))
         .replace('{total}', String(destinations.length)),
       buttons: [
-        { name: 'start', label: texts.start, action: () => this.scene.start('preparation', { session: createSession() }), primary: true },
+        { name: 'start', label: expedition ? (expedition.phase === 'ended' ? texts.resumeSummary : texts.resume) : texts.start,
+          action: () => {
+            const session = progressStore.read().expedition ?? createSession();
+            this.scene.start(session.phase === 'ended' ? 'summary' : session.phase === 'result' ? 'result' : 'preparation', { session });
+          }, primary: true },
         { name: 'journal', label: texts.journal,
           action: () => approachJournal(this, opening => this.scene.start('journal', { page: 0, opening })) },
         { name: 'settings', label: texts.settings, action: () => this.scene.start('settings') },

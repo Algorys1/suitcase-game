@@ -73,7 +73,7 @@ describe('carnet permanent', () => {
     expect(revisit.charges).toBe(9);
   });
 
-  it('ne stocke que les données permanentes et garde la session indépendante', () => {
+  it('n’invente pas d’expédition lors d’une découverte isolée', () => {
     const storage = memoryStorage();
     const store = new ProgressStore(() => storage);
     store.discover('mycelia');

@@ -6,7 +6,7 @@
 > **Jam :** Indie Park Game Jam #6 — thème « Voyage ».  
 > **Portée :** jeu solo, jouable dans un navigateur, sessions courtes, progression de collection persistante.
 
-> **Avancement du prototype — étape 6 :** voyages, Néant, charges 10 / 1 / 2, bilan et carnet permanent sont jouables. Les paramètres proposent FR/EN, avec application immédiate et sauvegarde du choix sans perte des découvertes. Tous les écrans et les éléments utilisent la langue choisie ; illustrations, histoires et titres anglais des destinations restent provisoires. La session est perdue au rechargement, mais le carnet et la langue restent enregistrés dans ce navigateur si le stockage est disponible. Trois autocollants souvenirs prototypent la phase B sous les histoires ; la décoration de la valise reste à ajouter après validation.
+> **Avancement du prototype — étape 6 :** voyages, Néant, charges 10 / 1 / 2, bilan et carnet permanent sont jouables. Les paramètres proposent FR/EN, avec application immédiate et sauvegarde du choix sans perte des découvertes. Quitter met désormais l’expédition en pause : son état, ses charges et son bilan survivent au retour à l’accueil et au rechargement si le stockage est disponible. Les choix d’éléments reviennent à Arbre / Arbre en reprenant la préparation. La décoration de la valise reste à ajouter après validation.
 
 > **Complément :** [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md), proposition à prototyper, non encore validée en jeu. Il prime pour la méthode de sélection par deux aiguilles ; le présent document conserve la référence des recettes, de l'énergie, du carnet et de la fin de session. Les autocollants ajoutent une progression cosmétique, sans bonus de gameplay.
 
@@ -50,7 +50,8 @@ La boussole constitue **la seule ressource de session**. Aucun compteur de voyag
 ### 3.1 Accueil
 
 Actions :
-- **Commencer un voyage** : démarre une nouvelle session avec la boussole pleine et la valise vide.
+- **Commencer un voyage** : disponible seulement sans expédition en cours ; démarre une session avec la boussole pleine.
+- **Reprendre le voyage** remplace cette action pendant une expédition en pause, sans recharge. Après un départ interrompu ou un résultat non acquitté, reprend au résultat sans nouveau débit. À zéro, le dernier résultat mène au bilan ; un bilan en attente se reprend par **Voir le bilan**. Le retour à l’accueil depuis ce bilan clôt l’expédition et permet un nouveau départ.
 - **Carnet de voyage** : ouvre les destinations découvertes lors de toutes les sessions précédentes, y compris la session la plus récente.
 - **Paramètres** : au minimum choix de langue FR/EN.
 
@@ -207,7 +208,7 @@ Ne pas ajouter de bonus de recharge, d'économie secondaire ou de mécanique de 
 | Destination déjà débloquée | Résultat normal ; pas de nouveau déblocage |
 | Il reste 1 charge et le Néant coûte 2 | Charges ramenées à 0 ; fin de session |
 | Double clic sur Voyager | Un seul départ et un seul débit |
-| Rechargement pendant une session | **MVP :** la session en cours n'est pas garantie récupérable ; carnet et langue restent sauvegardés |
+| Retour à l’accueil ou rechargement pendant une session | Expédition en pause, charges et historique conservés. Reprendre ne recharge pas. Un départ accepté se reprend à son résultat, sans résoudre ou débiter à nouveau. Si le stockage est indisponible, la reprise fonctionne en mémoire jusqu’au rechargement. |
 | Données de sauvegarde absentes ou corrompues | Réinitialiser proprement aux valeurs par défaut, sans bloquer l'accueil |
 | Toutes les destinations sont découvertes | Le joueur peut toujours jouer ; carnet complet à 30/30 |
 

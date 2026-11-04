@@ -1,7 +1,7 @@
 import { BALANCE, spendCharges } from './compass';
 import { isElementId, isReady } from './preparation';
 import type { Slots } from './preparation';
-import { resolveRecipe } from './recipes';
+import { destinationById, resolveRecipe } from './recipes';
 
 export type TripResult = {
   destinationId: string | null;
@@ -54,4 +54,47 @@ export function revealResult(session: SessionState): SessionState {
 export function continueSession(session: SessionState): SessionState {
   if (session.phase !== 'result') return session;
   return { ...session, phase: session.charges === 0 ? 'ended' : 'preparation', lastTrip: null };
+}
+
+/** Recover a committed trip at its result, without resolving or charging it again. */
+export function decodeSession(value: unknown): SessionState | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const v = value as Record<string, unknown>;
+  const ids = (input: unknown): input is string[] => Array.isArray(input)
+    && input.length <= BALANCE.initialCharges
+    && input.every(id => typeof id === 'string' && destinationById(id) !== undefined);
+  if (!ids(v.visitedDestinationIds) || !ids(v.newlyDiscoveredIds)
+    || new Set(v.newlyDiscoveredIds).size !== v.newlyDiscoveredIds.length
+    || typeof v.voidTrips !== 'number' || !Number.isInteger(v.voidTrips) || v.voidTrips < 0
+    || typeof v.charges !== 'number' || !Number.isInteger(v.charges)) return null;
+  const visited = v.visitedDestinationIds;
+  if (!v.newlyDiscoveredIds.every(id => visited.includes(id))) return null;
+  const spent = v.visitedDestinationIds.length * BALANCE.validDestinationCost + v.voidTrips * BALANCE.voidCost;
+  if (spent > BALANCE.initialCharges + BALANCE.voidCost - 1
+    || v.charges !== spendCharges(BALANCE.initialCharges, spent)) return null;
+  let lastTrip: TripResult | null = null;
+  let phase: SessionState['phase'];
+  if (v.phase === 'preparation' || v.phase === 'ended') {
+    if (v.lastTrip !== null || (v.phase === 'preparation' ? v.charges <= 0 : v.charges !== 0)) return null;
+    phase = v.phase;
+  } else if (v.phase === 'result' || v.phase === 'travelling') {
+    if (typeof v.lastTrip !== 'object' || v.lastTrip === null) return null;
+    const trip = v.lastTrip as Record<string, unknown>;
+    const id = trip.destinationId;
+    if (id !== null && (typeof id !== 'string' || !destinationById(id))) return null;
+    const isVoid = id === null;
+    const cost = isVoid ? BALANCE.voidCost : BALANCE.validDestinationCost;
+    if (trip.cost !== cost
+      || typeof trip.firstVisitInSession !== 'boolean' || typeof trip.isNewDiscovery !== 'boolean'
+      || (isVoid ? v.voidTrips === 0 || trip.firstVisitInSession || trip.isNewDiscovery
+        : v.visitedDestinationIds.at(-1) !== id
+          || trip.firstVisitInSession !== (v.visitedDestinationIds.filter(visited => visited === id).length === 1)
+          || trip.isNewDiscovery && (!trip.firstVisitInSession || !v.newlyDiscoveredIds.includes(id)))
+      || spent - cost >= BALANCE.initialCharges) return null;
+    lastTrip = { destinationId: id, cost, firstVisitInSession: trip.firstVisitInSession,
+      isNewDiscovery: trip.isNewDiscovery };
+    phase = 'result';
+  } else return null;
+  return { charges: v.charges, phase, visitedDestinationIds: [...v.visitedDestinationIds],
+    newlyDiscoveredIds: [...v.newlyDiscoveredIds], voidTrips: v.voidTrips, lastTrip };
 }

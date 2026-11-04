@@ -469,7 +469,7 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
     stopReveal = undefined;
     scene.children.getAll().forEach(child => child.destroy());
     if (content.void) {
-      stopReveal = drawVoid(scene, !motion.matches);
+      stopReveal = drawVoid(scene, !motion.matches, firstRender);
       const { width, height } = scene.scale;
       const portrait = width < 600 && height > width;
       const center = width * (portrait ? 0.5 : 0.77);

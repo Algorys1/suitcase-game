@@ -38,7 +38,7 @@ function prepareEnergy(scene: Phaser.Scene): void {
 }
 
 /** Presentation only: the trip and its energy cost have already been resolved. */
-export function drawVoid(scene: Phaser.Scene, animate: boolean): (() => void) | undefined {
+export function drawVoid(scene: Phaser.Scene, animate: boolean, reveal = true): (() => void) | undefined {
   const { width, height } = scene.scale;
   const portrait = width < 600 && height > width;
   if (scene.textures.exists('void-space')) {
@@ -54,6 +54,14 @@ export function drawVoid(scene: Phaser.Scene, animate: boolean): (() => void) | 
   const y = height * (portrait ? 0.26 : 0.37);
   const size = Math.min(width * (portrait ? 0.53 : 0.32), height * (portrait ? 0.31 : 0.58), 320);
   prepareEnergy(scene);
+  const arrival: Phaser.GameObjects.Image[] = [];
+  if (scene.textures.exists('void-dust')) {
+    // Broad, diffuse light behind the instrument, swallowed by a dark core.
+    arrival.push(scene.add.image(x, y, 'void-dust').setName('void-arrival-glow')
+      .setTint(0x9456ff).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0));
+    arrival.push(scene.add.image(x, y, 'void-dust').setName('void-arrival-shadow')
+      .setTint(0x090717).setAlpha(0));
+  }
   const veils: Phaser.GameObjects.Image[] = [];
   if (scene.textures.exists('void-veil')) {
     for (let i = 0; i < 4; i++) {
@@ -110,29 +118,48 @@ export function drawVoid(scene: Phaser.Scene, animate: boolean): (() => void) | 
       reflection.strokePath();
     }
   };
-  const start = scene.time.now;
+  // A newly started scene's clock is populated on its first update, after create().
+  let start: number | undefined;
   const paint = (t: number): void => {
+    const progress = animate && reveal ? Phaser.Math.Clamp(t / 1.6, 0, 1) : 1;
+    const surge = progress < 1 ? Math.sin(progress * Math.PI) ** 2 : 0;
+    const pull = (1 - progress) ** 3;
+    arrival[0]?.setDisplaySize(size * (3.8 - progress * 1.6), size * (2.8 - progress))
+      .setAlpha(surge * 0.85);
+    arrival[1]?.setDisplaySize(size * (0.4 + progress * 2.5), size * (0.4 + progress * 2.2))
+      .setAlpha(surge * 0.82);
     const breath = 0.5 + 0.5 * Math.sin(t * 0.8);
     compass.setPosition(x, y + Math.sin(t * 0.9) * 3);
     compass.setAngle(-12);
     needles.forEach((needle, index) => needle.setAngle((index === 0 ? -35 : 85)
-      + Math.sin(t * (index === 0 ? 1.7 : -1.3)) * 5 + Math.sin(t * 19 + index) * 0.6));
+      + Math.sin(t * (index === 0 ? 1.7 : -1.3)) * 5 + Math.sin(t * 19 + index) * 0.6
+      + pull * (index === 0 ? 320 : -260)));
     veils.forEach((veil, i) => {
       veil.setPosition(x + Math.sin(t * 0.23 + i * 1.8) * size * 0.18,
         y + (i - 1.5) * size * 0.36 + Math.sin(t * 0.38 + i) * size * 0.10)
-        .setAngle(-28 + i * 17 + Math.sin(t * 0.25 + i) * 8)
-        .setAlpha(0.48 + 0.20 * Math.sin(t * 0.65 + i * 1.7));
+        .setAngle(-28 + i * 17 + Math.sin(t * 0.25 + i) * 8 + pull * (i % 2 ? -55 : 55))
+        .setDisplaySize(size * (1.8 + surge * 0.8), size * (0.65 + surge * 0.24))
+        .setAlpha(0.48 + 0.20 * Math.sin(t * 0.65 + i * 1.7) + surge * 0.3);
     });
     wisps.forEach((wisp, i) => wisp.setPosition(x + Math.sin(t * 0.3 + i * 2) * size * 0.16,
       y + (i ? -0.32 : 0.32) * size + Math.sin(t * 0.5 + i) * size * 0.12)
       .setAngle(i ? 23 + Math.sin(t * 0.35) * 9 : -19 + Math.cos(t * 0.3) * 8)
-      .setAlpha(0.26 + Math.sin(t * 0.7 + i * 2) * 0.12));
+      .setAlpha(0.26 + Math.sin(t * 0.7 + i * 2) * 0.12 + surge * 0.48));
     dust.forEach((mote, i) => {
       const phase = (i * 0.6180339 + t * (0.028 + (i % 4) * 0.006)) % 1;
       const lane = Math.sin(i * 7.13);
       mote.setPosition(x + (phase - 0.5) * size * 1.5,
         y + lane * size * 0.62 - Math.sin(phase * Math.PI) * size * 0.22)
         .setAlpha(Math.sin(phase * Math.PI) ** 2 * (0.35 + 0.35 * Math.sin(t * 1.2 + i) ** 2));
+      if (progress < 1) {
+        const angle = i * 2.39996 + progress * 4.5;
+        const radius = size * (0.12 + (i % 7) * 0.12) * (1 - progress * 0.85);
+        const orbitX = x + Math.cos(angle) * radius;
+        const orbitY = y + Math.sin(angle) * radius * 0.7;
+        mote.setPosition(Phaser.Math.Linear(mote.x, orbitX, surge), Phaser.Math.Linear(mote.y, orbitY, surge))
+          .setAlpha(Math.max(mote.alpha, surge * (i % 4 === 0 ? 1 : 0.75)))
+          .setDisplaySize((i % 5 === 0 ? 11 : 5) * (1 + surge), (i % 5 === 0 ? 11 : 5) * (1 + surge));
+      } else mote.setDisplaySize(i % 5 === 0 ? 11 : 5, i % 5 === 0 ? 11 : 5);
     });
     drawReflection(t);
     reflection.setAlpha(0.5 + breath * 0.5);
@@ -143,7 +170,10 @@ export function drawVoid(scene: Phaser.Scene, animate: boolean): (() => void) | 
     needles.forEach((needle, index) => needle.setAngle(index === 0 ? -35 : 85));
     return undefined;
   }
-  const update = (): void => paint((scene.time.now - start) / 1000);
+  const update = (): void => {
+    start ??= scene.time.now;
+    paint((scene.time.now - start) / 1000);
+  };
   scene.events.on(Phaser.Scenes.Events.UPDATE, update);
   return () => {
     scene.events.off(Phaser.Scenes.Events.UPDATE, update);

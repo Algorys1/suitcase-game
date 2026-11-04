@@ -5,10 +5,6 @@ export function preloadAdventureArt(scene: Phaser.Scene): void {
     if (!scene.textures.exists(`adventure-${id}`))
       scene.load.image(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.png`);
   }
-  for (const id of ['archipel-channels', 'sylve-unlit', 'faille-bare', 'shell-closed', 'shore-pebble']) {
-    if (!scene.textures.exists(`adventure-${id}`))
-      scene.load.image(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
-  }
   for (const id of ['charge-full', 'charge-empty']) {
     if (!scene.textures.exists(`adventure-${id}`))
       scene.load.svg(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.svg`, { width: 64, height: 64 });

@@ -3,8 +3,6 @@ import { decodeSession } from '../domain/session';
 import type { SessionState } from '../domain/session';
 import { activateTarget, explorationComplete, isPilot, pilotTargetCounts, validSteps } from '../domain/pilotExploration';
 import type { PilotId, PilotSteps } from '../domain/pilotExploration';
-import { activityIds, hasActivity, decodeActivity, activityComplete, completedActivity, actOnWorld } from '../domain/worldActivities';
-import type { ActivityId, ActivityState, ActivityProgress, ActivityAction } from '../domain/worldActivities';
 
 export const PROGRESS_KEY = 'suitcase-game.progress.v1';
 export type Language = 'fr' | 'en';
@@ -19,7 +17,6 @@ export type Progress = {
   awakenedMycelia?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
-  activities?: ActivityProgress;
 };
 type StorageAccess = () => Pick<Storage, 'getItem' | 'setItem'>;
 const knownIds = new Set(destinations.map(({ id }) => id));
@@ -56,20 +53,7 @@ export function decodeProgress(serialized: string | null): Progress {
     }
     const tutorialSeen = 'tutorialSeen' in value && Array.isArray(value.tutorialSeen)
       ? tutorialSteps.filter(step => value.tutorialSeen instanceof Array && value.tutorialSeen.includes(step)) : [];
-    const activities: ActivityProgress = {};
-    if ('activities' in value && typeof value.activities === 'object' && value.activities !== null) {
-      for (const id of activityIds) {
-        if (!discoveredDestinationIds.includes(id) || !Object.hasOwn(value.activities, id)) continue;
-        const state = decodeActivity(id, Reflect.get(value.activities, id));
-        activities[id] = state;
-        if (activityComplete(id, state)) {
-          const index = pending.indexOf(id);
-          if (index >= 0) pending.splice(index, 1);
-        }
-      }
-    }
     return { schemaVersion: 1, language,
-      ...(Object.keys(activities).length ? { activities } : {}),
       ...(tutorialSeen.length ? { tutorialSeen } : {}),
       ...(Object.keys(pilotSteps).length ? { pilotSteps } : {}),
       ...(pending.length ? { pendingSouvenirIds: pending } : {}),
@@ -96,8 +80,6 @@ export class ProgressStore {
       catch { this.progress = emptyProgress(); this.canPersist = false; }
     }
     return { ...this.progress, discoveredDestinationIds: [...this.progress.discoveredDestinationIds],
-      ...(this.progress.activities ? { activities: Object.fromEntries(Object.entries(this.progress.activities)
-        .map(([id, state]) => [id, { ...state, moved: [...state.moved] }])) } : {}),
       ...(this.progress.tutorialSeen ? { tutorialSeen: [...this.progress.tutorialSeen] } : {}),
       ...(this.progress.pilotSteps ? { pilotSteps: Object.fromEntries(Object.entries(this.progress.pilotSteps)
         .map(([id, steps]) => [id, [...steps]])) } : {}),
@@ -148,7 +130,6 @@ export class ProgressStore {
     const progress = this.read();
     if (!progress.discoveredDestinationIds.includes(id) || !progress.pendingSouvenirIds?.includes(id)) return false;
     if (isPilot(id) && !explorationComplete(id, this.explorationSteps(id))) return false;
-    if (hasActivity(id) && !activityComplete(id, this.activityState(id))) return false;
     const remaining = progress.pendingSouvenirIds.filter(entry => entry !== id);
     delete progress.pendingSouvenirIds;
     this.save({ ...progress, ...(remaining.length ? { pendingSouvenirIds: remaining } : {}) });
@@ -187,27 +168,6 @@ export class ProgressStore {
       || !progress.expedition?.visitedDestinationIds.includes('mycelia')) return false;
     this.save({ ...progress, awakenedMycelia: true });
     return true;
-  }
-
-  activityState(id: ActivityId): ActivityState {
-    const stored = this.read().activities?.[id];
-    return stored ? decodeActivity(id, stored) : this.unlockedSouvenirIds().includes(id)
-      ? completedActivity(id) : decodeActivity(id, null);
-  }
-
-  act(id: ActivityId, action: ActivityAction): { changed: boolean; collected: boolean } {
-    const progress = this.read();
-    if (!progress.discoveredDestinationIds.includes(id)) return { changed: false, collected: false };
-    const before = this.activityState(id), after = actOnWorld(id, before, action);
-    const changed = JSON.stringify(before) !== JSON.stringify(after);
-    const collected = activityComplete(id, after) && !!progress.pendingSouvenirIds?.includes(id);
-    if (changed || collected) {
-      const pending = (progress.pendingSouvenirIds ?? []).filter(entry => entry !== id || !collected);
-      delete progress.pendingSouvenirIds;
-      this.save({ ...progress, activities: { ...progress.activities, [id]: after },
-        ...(pending.length ? { pendingSouvenirIds: pending } : {}) });
-    }
-    return { changed, collected };
   }
 
   finishSession(): void {

@@ -1,7 +1,5 @@
 # Direction artistique — Le monde tient dans une valise
 
-> **Archipel, Sylve et Faille :** trois fonds d’activité dérivés des cartes peintes, un coquillage fermé et un galet peint transparent. Les PNG restent dans `designs/adventure/activities-v1/` et les exports WebP dans `public/assets/adventure/`. [Sources et prompts de l’outil image_gen intégré](ADVENTURE_ASSETS.md). L’eau, les rayons et les rubans sont composés en calques manipulables ; la réussite de la Sylve révèle son illustration originale avec l’arc-en-ciel peint. Aucun marqueur scintillant avant le geste. Ces variantes attendent leur essai par le joueur.
-
 > **Carnet sur la carte et découverte guidée :** la couverture prune existante repose en bas à gauche ; son approche et son ouverture réutilisent les animations du carnet, sans nouvel asset. Les conseils sont de courts billets crème à languette de papier déchiré, sans flèches ni repères sur les cibles. L’enveloppe anonyme reste commune au carnet et aux explorations avant collecte. Les réactions décoratives sans récompense sont notées pour plus tard dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md).
 
 > **Chapitre Cimes → Mycélia :** [nouveaux calques et assets](ADVENTURE_ASSETS.md). Le papier illustré, les badges SVG, Alegreya locale, les étiquettes kraft et les deux aiguilles existantes composent le nouvel habillage. Les légendes restent hors des paysages. Les réactions animées sont limitées aux lieux pilotes et attendent la validation artistique du joueur.

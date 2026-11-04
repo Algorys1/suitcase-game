@@ -1,4 +1,18 @@
-# Assets du voyage Cimes → Mycélia
+# Assets de la carte et des escales
+
+## Trois gestes supplémentaires — 5 novembre 2026
+
+Outil : **image_gen intégré**, sans CLI ni clé API du projet. [Prompts exacts, chemins des sources et exports](../designs/adventure/activities-v1/prompts.json). Les PNG originaux sont conservés dans `designs/adventure/activities-v1/` ; les cinq exports WebP de qualité 88, avec alpha préservé pour les objets, sont dans `public/assets/adventure/` (environ 958 Ko au total au lieu de 9,7 Mo de PNG). Les illustrations de destinations et les autocollants d’origine ne sont pas remplacés.
+
+| Export | Rôle |
+| --- | --- |
+| `archipel-channels.webp` | Variante de l’Archipel avec deux rigoles sèches et un petit bassin sur un banc de sable au premier plan ; pas de marqueurs scintillants. |
+| `sylve-unlit.webp` | Forêt sans prisme ni corde fixes et sans arc-en-ciel ; support du prisme manipulable. Après réussite, fondu vers la peinture originale complète. |
+| `faille-bare.webp` | Poteau complet conservé, rubans fixes retirés ; les nouveaux rubans restent reliés au poteau pendant le geste. |
+| `shell-closed.webp` | Coquillage fermé sur fond transparent ; la réussite révèle le coquillage souvenir déjà présent dans le catalogue. |
+| `shore-pebble.webp` | Galet peint transparent, réutilisé pour les deux obstructions et leurs positions sur le sable. |
+
+Les rigoles sont remplies par des traits d’eau et d’écume ; les rubans utilisent des courbes épaisses avec ombres et reflets, et le nœud final reprend l’illustration souvenir existante. Les sprites du prisme et du nœud sont réutilisés sans modifier leurs sources. Les pièces restent des propositions de prototype à valider en jeu, particulièrement leur intégration et la découverte des gestes au toucher.
 
 Les sources des trente destinations et des trente autocollants sont conservées. Les nouveaux fichiers sont chargés localement ; aucune requête distante n’est nécessaire pour jouer. La police est attendue avant la création du canvas pour que les légendes soient mesurées avec leurs vraies dimensions.
 

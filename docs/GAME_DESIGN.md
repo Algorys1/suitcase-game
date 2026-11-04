@@ -1,5 +1,7 @@
 # Game Design — Le monde tient dans une valise
 
+> **Trois gestes supplémentaires prototypés, 5 novembre 2026 :** [Archipel, Sylve et Faille](DESTINATION_ACTIVITIES.md) ajoutent déplacement, orientation et rapprochement, sans nouvelles recettes ni dépense dans le lieu. Les nouveaux souvenirs attendent la résolution locale ; les anciennes collections restent acquises et les activités peuvent se rejouer sans gain. Ces trois prototypes attendent le retour du joueur ; les 25 autres activités restent à développer.
+
 > **Suite à concevoir après essai des deux explorations :** [petits jeux des 30 destinations, tutoriel, carnet sur la carte et animations gratuites](DESTINATION_ACTIVITIES.md). La direction des pilotes Mycélia/Cimes est appréciée par le joueur. Les nouvelles fiches sont des propositions de conception, sans modification des règles ni implémentation des 28 activités restantes.
 
 > **Évolution autorisée pour prototype, 4 novembre 2026 :** [carte d’aventure](ADVENTURE_MAP.md), exploration pour les nouveaux souvenirs et correspondance Cimes → Mycélia. Ces modifications priment sur les passages historiques correspondants. Les recettes, coûts et anciennes collections sont préservés ; le plaisir reste à valider en jeu.

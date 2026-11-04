@@ -1,5 +1,7 @@
 # Le monde tient dans une valise
 
+> **Cinq escales interactives :** aux fenêtres de Mycélia et aux pics des Cimes s’ajoutent les galets de l’Archipel, le prisme de la Sylve et les rubans de la Faille. Ces trois nouveaux essais permettent glisser ou clic/toucher, sauvegardent la progression et préservent les anciens souvenirs. « Rejouer cette escale » permet de les essayer même si leur autocollant est déjà acquis. [Conception et état des 30 activités](docs/DESTINATION_ACTIVITIES.md).
+
 > **Prototype carte d’aventure — 4 novembre 2026 :** carte d’itinéraire, dix badges de charge, escales accessibles et exploration pour trouver les nouveaux souvenirs. Premier lien interactif : clochette des Cimes → Mycélia. Cette évolution est à valider en jeu et prime sur les descriptions historiques ci-dessous. [Règles du prototype](docs/ADVENTURE_MAP.md).
 
 > **Première passe visuelle :** carte sur papier et vignettes illustrées, mouvements des instruments, arrivée en carte postale et découverte de la clochette des Cimes avec envol de son autocollant. Les cadrages d’arrivée et d’exploration sont communs ; les commandes et petits formats ont été retravaillés. La boucle attend un nouvel essai du joueur.

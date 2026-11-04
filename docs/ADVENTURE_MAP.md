@@ -1,5 +1,15 @@
 # Prototype — La carte d’aventure
 
+> **Trois gestes supplémentaires — 5 novembre 2026 :** l’Archipel d’Azur, la Sylve prismatique et la Faille des contraires ont leurs activités locales. Glisser ou sélectionner puis toucher pour déplacer galets/rubans ; clic ou glisser pour orienter le prisme. La progression normale persiste et une répétition locale permet d’essayer les jeux avec un souvenir déjà acquis. [Règles et propositions](DESTINATION_ACTIVITIES.md), [assets et prompts](ADVENTURE_ASSETS.md).
+
+### Vérifications des trois nouvelles activités
+
+- TypeScript strict, build Vite et **84 tests Vitest réussis**. Six tests supplémentaires couvrent les gestes distincts, la rotation dans les deux sens et son rebouclage, les états invalides, les anciennes collections, la reprise partielle, la collecte unique, les copies de sauvegarde et le stockage bloqué. Phaser installé : 4.2.1 ; aucune dépendance ajoutée.
+- Build servi sous `/jam/` dans Chrome : trois vrais voyages puis résolutions complètes en FR à 960 × 540 et 320 × 568, en EN à 640 × 360 et 360 × 640. Souris et toucher simulé : glissers, alternative par deux clics/touchers, dépôt incorrect sans progression, retour/rechargement partiel, reprise des rigoles et du prisme, rubans dans l’ordre inverse et absence de charge supplémentaire.
+- Exports WebP et répétition des trois activités contrôlés sur les quatre formats : aucun changement de sauvegarde pendant la répétition. Le parcours complet et les contrôles d’annulation sont repassés sur les versions corrigées. Les variantes finales de la Sylve et de l’Archipel sont contrôlées visuellement, dont le portrait 320 × 568.
+- Navigation complète au clavier, annulations par Échap/perte de focus/redimensionnement, réduction des animations, répétition depuis une ancienne collection et jeu avec stockage bloqué vérifiés dans Chrome. Textes et cibles dans le cadre, sans erreur JavaScript/HTTP sur les parcours réussis.
+- Le plaisir et la compréhension sans connaître les cibles attendent le premier essai du joueur. Firefox, tactile physique et publication itch.io restent à vérifier. Les vingt-cinq autres activités et une deuxième correspondance entre mondes ne sont pas implémentées dans cette passe.
+
 > **Dernière étape intégrée :** carnet accessible depuis la carte et trois conseils contextuels FR/EN, passables et consultables à nouveau depuis le carnet. La collection, l’expédition et les charges sont conservées lors des consultations. Les activités des 28 autres mondes restent des propositions dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md).
 
 ### Vérifications du carnet et du tutoriel — 5 novembre 2026

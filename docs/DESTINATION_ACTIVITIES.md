@@ -2,13 +2,17 @@
 
 ## Intention et statut
 
-Propositions de conception après le retour positif du joueur sur Mycélia et les Cimes. Document de travail : les deux pilotes sont jouables et leur direction est appréciée ; les 28 autres activités ci-dessous ne sont ni implémentées ni validées en jeu. Le joueur demande ici de les définir, avant de les produire.
+Propositions de conception après le retour positif du joueur sur Mycélia et les Cimes. Cinq activités sont maintenant intégrées : ces deux pilotes, puis l’Archipel d’Azur, la Sylve prismatique et la Faille des contraires. Les trois nouvelles attendent leur premier essai par le joueur ; les 25 autres activités ci-dessous restent des propositions.
 
 Sources examinées : les 30 illustrations de `public/assets/destinations/`, leurs autocollants, les récits français et le catalogue `src/data/destinations.json`. Les identifiants, recettes et souvenirs existants sont conservés. Les scènes initiales proposées demandent souvent une variante de l’illustration : leur absence dans l’image actuelle n’est pas un oubli à résoudre par une zone invisible.
 
 La ligne retenue : **un petit mystère par monde, un geste qui lui appartient, une transformation visible**. L’autocollant devient le souvenir de ce que le joueur a fait. Le résultat d’un voyage doit aussi donner des idées pour préparer le suivant ; la résolution locale reste indépendante des correspondances entre mondes.
 
 ## Cadre commun proposé
+
+**Passe du 5 novembre 2026 :** les deux galets de l’Archipel se glissent hors des rigoles ou se sélectionnent puis se déposent par clic/toucher. Le prisme de la Sylve tourne sur six orientations (clic/crans vers la droite ; glisser vers la gauche pour revenir) ; la pierre répond à la lumière, et l’orientation correspondante révèle la peinture originale avec son arc-en-ciel. Les deux rubans de la Faille se ramènent au poteau par glisser ou sélection puis clic/toucher. Les quantités et orientations sont des paramètres de ce prototype, sans ordre imposé pour galets/rubans ni contrainte de vitesse.
+
+Les étapes normales et l’orientation du prisme sont sauvegardées. Les anciennes collections restent acquises. Une commande discrète « Rejouer cette escale » permet aussi aux joueurs qui possèdent déjà le souvenir d’essayer chaque nouveau geste : cette répétition est locale, se remet à zéro en quittant le lieu et ne modifie ni collection, ni progression normale sauvegardée, ni charges. Les autres correspondances entre mondes ne sont pas ajoutées dans cette passe.
 
 - Quelques gestes, environ 15 à 40 secondes à découvrir, sans chronomètre ni sanction. Durées à tester, pas des objectifs de vitesse.
 - Pas d’étincelles, de flèche ou de curseur spécial pour dévoiler les cibles. La composition et l’état du paysage suggèrent une possibilité ; le geste produit une réponse immédiate.
@@ -114,7 +118,7 @@ Les trois nouvelles correspondances sont des idées à discuter, sans nouvelle r
 ## Ordre de prototypage recommandé
 
 1. **Intégré, à essayer :** carnet depuis la carte et tutoriel court, pour rendre la nouvelle boucle compréhensible avant d’étendre le contenu.
-2. Essayer trois gestes différents avec **Archipel d’Azur** (dégager et faire circuler), **Sylve prismatique** (orienter un rayon) et **Faille des contraires** (rapprocher). Vérifier la découverte sans guidage sur souris et toucher.
+2. **Intégré, à essayer :** trois gestes différents avec **Archipel d’Azur** (dégager et faire circuler), **Sylve prismatique** (orienter un rayon) et **Faille des contraires** (rapprocher). Valider maintenant le plaisir et la compréhension sans guidage sur souris et toucher.
 3. Ajuster les familles à partir de ces essais, puis étendre par petits groupes. Éviter de produire les 28 jeux avant de savoir si ces gestes sont agréables.
 4. Ajouter les correspondances retenues et quelques animations gratuites après stabilisation des activités locales.
 

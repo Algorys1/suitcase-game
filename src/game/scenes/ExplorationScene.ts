@@ -11,6 +11,9 @@ import { drawDestinationStage } from '../ui/destinationStage';
 import { drawSouvenir } from '../ui/souvenir';
 import { drawCimesSunrise, drawMyceliaLife } from '../ui/pilotWorlds';
 import { travelTutorial } from '../ui/travelTutorial';
+import { activityComplete, hasActivity, decodeActivity, actOnWorld } from '../../domain/worldActivities';
+import type { ActivityAction, ActivityId, ActivityState } from '../../domain/worldActivities';
+import { drawWorldActivity } from '../ui/worldActivities';
 
 export class ExplorationScene extends Phaser.Scene {
   private id = '';
@@ -27,6 +30,8 @@ export class ExplorationScene extends Phaser.Scene {
   private lastTouched: number | undefined;
   private lastActivated = false;
   private greet = () => {};
+  private disposeActivity = () => {};
+  private practiceState: ActivityState | undefined;
   constructor() { super('exploration'); }
 
   create({ id, session, fromResult = false, journalPage = 0, returnTo }: {
@@ -42,6 +47,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.returnTo = returnTo;
     this.offering = false;
     this.justFound = false;
+    this.practiceState = undefined;
     this.enter = !fromResult;
     this.waking = false;
     this.celebrate = false;
@@ -50,7 +56,10 @@ export class ExplorationScene extends Phaser.Scene {
     this.controls = new AdventureControls(this);
     this.render();
     this.scale.on('resize', this.render, this);
-    this.events.once('shutdown', () => this.scale.off('resize', this.render, this));
+    this.events.once('shutdown', () => {
+      this.disposeActivity(); this.disposeActivity = () => {};
+      this.scale.off('resize', this.render, this);
+    });
   }
 
   private back(): void {
@@ -74,6 +83,7 @@ export class ExplorationScene extends Phaser.Scene {
   }
 
   private render(): void {
+    this.disposeActivity(); this.disposeActivity = () => {};
     this.tweens.killAll();
     this.children.getAll().forEach(child => child.destroy());
     this.controls.clear();
@@ -82,9 +92,11 @@ export class ExplorationScene extends Phaser.Scene {
     const found = progressStore.unlockedSouvenirIds().includes(this.id);
     const awake = this.id === 'mycelia' && !!progress.awakenedMycelia;
     const steps = isPilot(this.id) ? progressStore.explorationSteps(this.id) : [];
-    const complete = isPilot(this.id) ? explorationComplete(this.id, steps) : found;
+    const activityState = hasActivity(this.id) ? this.practiceState ?? progressStore.activityState(this.id) : undefined;
+    const complete = isPilot(this.id) ? explorationComplete(this.id, steps)
+      : hasActivity(this.id) && activityState ? activityComplete(this.id, activityState) : found;
     const souvenir = souvenirs.find(entry => entry.destinationId === this.id);
-    const stage = drawDestinationStage(this, this.id, this.session, this.enter && !isPilot(this.id));
+    const stage = drawDestinationStage(this, this.id, this.session, this.enter && !isPilot(this.id) && !hasActivity(this.id));
     this.enter = false;
     const { left, top, width: artW, height: artH } = stage.art;
     const { sideX, sideW, stickerY: tagY, portrait, short } = stage;
@@ -92,10 +104,12 @@ export class ExplorationScene extends Phaser.Scene {
     this.greet = this.id === 'mycelia' ? drawMyceliaLife(this, stage.art, awake, this.waking, steps,
       this.lastActivated ? this.lastTouched : undefined) : () => {};
     this.waking = false;
+    const activityCelebration = this.celebrate;
     this.celebrate = false;
     this.lastTouched = undefined;
     this.lastActivated = false;
-    const instruction = this.offering ? copy.placeBell : !complete
+    const instruction = hasActivity(this.id) ? getTexts().activities[this.id][complete ? 'done' : 'mood']
+      : this.offering ? copy.placeBell : !complete
       ? this.id === 'cimes_eternelles' ? copy.peaksMood : this.id === 'mycelia' ? copy.windowsMood : copy.search
       : awake ? copy.awakened : this.id === 'cimes_eternelles' ? copy.sunrise : copy.explored;
     mapText(this, sideX, stage.bodyY + 12, instruction, portrait || short ? 12 : 15, sideW - 15)
@@ -108,6 +122,10 @@ export class ExplorationScene extends Phaser.Scene {
         this.controls.add(`${pilot === 'mycelia' ? 'window' : 'peak'}-${index}`, x, y, 44, 44,
           () => this.touch(pilot, index, x, y), false);
       });
+    } else if (hasActivity(this.id)) {
+      const id = this.id;
+      this.disposeActivity = drawWorldActivity(this, this.controls, stage.art, id,
+        activityState!, (action, point) => this.act(id, action, point.x, point.y), activityCelebration);
     } else if (!found) {
       // Other destinations retain their provisional interaction without sparkle markers.
       const seed = [...this.id].reduce((n, char) => n + char.charCodeAt(0), 0);
@@ -156,7 +174,13 @@ export class ExplorationScene extends Phaser.Scene {
       this.controls.add('offer-bell', panelX + panelW / 2, panelY + 23, panelW, 46,
         () => { this.offering = !this.offering; this.render(); });
     }
-    if (!canOffer) {
+    if (hasActivity(this.id) && found) {
+      const id = this.id;
+      this.controls.button('replay-activity', getTexts().activities.replay, sideX,
+        tagY - (portrait ? 58 : 66), sideW - 12, () => {
+          this.practiceState = decodeActivity(id, null); this.justFound = false; this.render();
+        });
+    } else if (!canOffer) {
       const hint = found && this.id === 'cimes_eternelles' && !progress.awakenedMycelia ? copy.bellWish
         : this.justFound ? copy.found : copy.takeTime;
       mapText(this, sideX, tagY - (portrait ? 58 : 66), hint, portrait || short ? 11 : 12, sideW - 12, '#a07f4b')
@@ -166,6 +190,19 @@ export class ExplorationScene extends Phaser.Scene {
       sideX, stage.secondaryY, Math.min(220, sideW - 15), () => this.back());
     if (!found) travelTutorial(this, this.controls, 'exploration', () => this.render());
     else if (this.justFound) travelTutorial(this, this.controls, 'souvenir', () => this.render());
+  }
+
+  private act(id: ActivityId, action: ActivityAction, x: number, y: number): void {
+    if (this.practiceState) {
+      const next = actOnWorld(id, this.practiceState, action);
+      this.celebrate = JSON.stringify(next) !== JSON.stringify(this.practiceState);
+      this.practiceState = next; this.render(); return;
+    }
+    const result = progressStore.act(id, action);
+    this.justFound ||= result.collected;
+    this.celebrate = result.changed;
+    this.render();
+    if (result.collected) this.collectSouvenir(x, y);
   }
 
   private collectSouvenir(x: number, y: number): void {

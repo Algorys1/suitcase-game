@@ -31,10 +31,11 @@ export class AdventureControls {
     });
   }
   clear(): void { this.items = []; this.index = -1; this.ring = undefined; }
-  add(name: string, x: number, y: number, w: number, h: number, action: () => void, hintCursor = true): void {
+  add(name: string, x: number, y: number, w: number, h: number, action: () => void,
+    hintCursor = true, pointerAction = true): void {
     this.items.push({ name, x, y, w, h, action });
-    this.scene.add.zone(x, y, w, h).setName(name).setInteractive({ useHandCursor: hintCursor })
-      .on('pointerdown', action);
+    const zone = this.scene.add.zone(x, y, w, h).setName(name).setInteractive({ useHandCursor: hintCursor });
+    if (pointerAction) zone.on('pointerdown', action);
   }
   button(name: string, label: string, x: number, y: number, w: number, action: () => void, primary = false): void {
     createButton(this.scene, x, y, w, 42, { name: `${name}-plate`, label, action,

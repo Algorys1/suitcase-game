@@ -338,5 +338,22 @@
     "pending": "Souvenir to discover",
     "collected": "Souvenir found",
     "wish": "A wish to travel"
+  },
+  "activities": {
+    "moveStone": "This pebble could rest on the sand beside its channel.",
+    "joinRibbon": "This ribbon could meet the other one by the post.",
+    "archipel_azur": {
+      "mood": "The tide stops at the edge of the little sandy channels.",
+      "done": "The water has found its way. The seashell holds a little piece of sky."
+    },
+    "sylve_prismatique": {
+      "mood": "The prism scatters its light among the trees. The path stays pale.",
+      "done": "Light has reached the stone. Colours now wander along the path."
+    },
+    "faille_des_contraires": {
+      "mood": "Two ribbons seek each other between embers and frost.",
+      "done": "The ribbons keep each other warm. A gentle mist crosses the rift."
+    },
+    "replay": "Play this stop again"
   }
 }

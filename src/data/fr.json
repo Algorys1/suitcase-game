@@ -338,5 +338,22 @@
     "pending": "Souvenir à découvrir",
     "collected": "Souvenir trouvé",
     "wish": "Une envie d’ailleurs"
+  },
+  "activities": {
+    "moveStone": "Ce galet pourrait reposer sur le sable, à côté de sa rigole.",
+    "joinRibbon": "Ce ruban pourrait rejoindre l’autre près du poteau.",
+    "archipel_azur": {
+      "mood": "La marée s’arrête au bord des petites rigoles de sable.",
+      "done": "L’eau a retrouvé son chemin. Le coquillage lui confie un éclat de ciel."
+    },
+    "sylve_prismatique": {
+      "mood": "Le prisme disperse sa lumière entre les arbres. Le sentier reste pâle.",
+      "done": "La lumière a trouvé la pierre. Les couleurs parcourent maintenant le sentier."
+    },
+    "faille_des_contraires": {
+      "mood": "Deux rubans se cherchent entre la braise et le givre.",
+      "done": "Les deux rubans se tiennent chaud. Une brume douce traverse la faille."
+    },
+    "replay": "Rejouer cette escale"
   }
 }

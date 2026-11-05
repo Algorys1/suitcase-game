@@ -46,9 +46,9 @@ export function addRuinsFish(scene: Phaser.Scene, controls: AdventureControls, a
   const background = scene.children.getByName('exploration-art') as Phaser.GameObjects.Image | null;
   background?.setTexture('adventure-ruins-water').setDisplaySize(art.width, art.height);
   const schools = [
-    { key: 'near', width: 0.095, from: { x: 0.381, y: 0.274 }, to: { x: 0.665, y: 0.398 },
+    { key: 'near', width: 0.095, distantWidth: 0.060, from: { x: 0.381, y: 0.274 }, to: { x: 0.655, y: 0.399 },
       a: { x: 0.48, y: 0.28 }, b: { x: 0.60, y: 0.37 } },
-    { key: 'far', width: 0.135, from: { x: 0.872, y: 0.183 }, to: { x: 0.790, y: 0.365 },
+    { key: 'far', width: 0.135, distantWidth: 0.060, from: { x: 0.872, y: 0.183 }, to: { x: 0.792, y: 0.367 },
       a: { x: 0.76, y: 0.20 }, b: { x: 0.75, y: 0.32 } },
   ];
   const point = (p: { x: number; y: number }) => new Phaser.Math.Vector2(art.left + p.x * art.width, art.top + p.y * art.height);
@@ -75,12 +75,17 @@ export function addRuinsFish(scene: Phaser.Scene, controls: AdventureControls, a
       const progress = { p: 0 };
       scene.tweens.add({ targets: progress, p: 1, duration: 1350, ease: 'Sine.InOut', onUpdate: () => {
         const p = curve.getPoint(progress.p);
+        // The rear openings are narrower: the whole school recedes into them,
+        // rather than leaving fish permanently clipped by the stone columns.
+        const depth = away ? 1 - progress.p : progress.p;
+        fish.setScale(art.width * Phaser.Math.Linear(school.width, school.distantWidth, depth) / fish.width);
         fish.setPosition(p.x, p.y).setAngle(Math.sin(progress.p * Math.PI * 5) * 3);
         controls.move(name, p.x, p.y);
       }, onComplete: () => {
         away = !away; busy = false;
         fish.setPosition(destination.x, destination.y).setAngle(0)
           .setData('swimming', false).setData('resting-place', away ? 1 : 0);
+        fish.setScale(art.width * (away ? school.distantWidth : school.width) / fish.width);
         controls.move(name, fish.x, fish.y);
       } });
     };

@@ -30,8 +30,8 @@ export class ExplorationScene extends Phaser.Scene {
   private lastActivated = false;
   private greet = () => {};
   private reflectionReplay: number[] | undefined;
-  private shellArrival = false;
-  private shellInFlight = false;
+  private souvenirArrival = false;
+  private souvenirInFlight = false;
   constructor() { super('exploration'); }
 
   create({ id, session, fromResult = false, journalPage = 0, returnTo }: {
@@ -48,8 +48,8 @@ export class ExplorationScene extends Phaser.Scene {
     this.offering = false;
     this.justFound = false;
     this.reflectionReplay = undefined;
-    this.shellArrival = false;
-    this.shellInFlight = false;
+    this.souvenirArrival = false;
+    this.souvenirInFlight = false;
     this.enter = !fromResult;
     this.waking = false;
     this.celebrate = false;
@@ -68,12 +68,12 @@ export class ExplorationScene extends Phaser.Scene {
   }
 
   private touch(id: PilotId, index: number, x: number, y: number): void {
-    if (this.shellInFlight) return;
+    if (this.souvenirInFlight) return;
     if (id === 'archipel_azur' && this.reflectionReplay !== undefined) {
       const before = this.reflectionReplay.length;
       this.reflectionReplay = activateTarget(id, this.reflectionReplay, index);
       if (this.reflectionReplay.length === before) return;
-      this.shellArrival = explorationComplete(id, this.reflectionReplay);
+      this.souvenirArrival = explorationComplete(id, this.reflectionReplay);
       this.lastActivated = true; this.render(); return;
     }
     const result = progressStore.touchExploration(id, index);
@@ -82,9 +82,9 @@ export class ExplorationScene extends Phaser.Scene {
     this.lastActivated = result.activated;
     this.celebrate = result.collected;
     this.justFound ||= result.collected;
-    this.shellArrival = id === 'archipel_azur' && result.collected;
+    this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles') && result.collected;
     this.render();
-    if (result.collected && id !== 'archipel_azur') this.collectSouvenir(x, y);
+    if (result.collected && id !== 'archipel_azur' && id !== 'cimes_eternelles') this.collectSouvenir(x, y);
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
       const window = this.children.getByName(`mycelia-window-${index}`) as Phaser.GameObjects.Image | null;
       if (window) this.tweens.add({ targets: window, alpha: { from: 0.45, to: 1 }, duration: 240 });
@@ -95,9 +95,9 @@ export class ExplorationScene extends Phaser.Scene {
     this.tweens.killAll();
     this.children.getAll().forEach(child => child.destroy());
     this.controls.clear();
-    const shellArrival = this.shellArrival;
-    this.shellArrival = false;
-    this.shellInFlight = shellArrival && !reducedMotion();
+    const souvenirArrival = this.souvenirArrival;
+    this.souvenirArrival = false;
+    this.souvenirInFlight = souvenirArrival && !reducedMotion();
     const copy = getTexts().adventure;
     const progress = progressStore.read();
     const earned = progressStore.unlockedSouvenirIds().includes(this.id);
@@ -112,14 +112,16 @@ export class ExplorationScene extends Phaser.Scene {
     this.enter = false;
     const { left, top, width: artW, height: artH } = stage.art;
     const { sideX, sideW, stickerY: tagY, portrait, short } = stage;
-    if (this.id === 'cimes_eternelles') drawCimesSunrise(this, stage.art, complete, this.celebrate, this.lastTouched);
+    if (this.id === 'cimes_eternelles') drawCimesSunrise(this, stage.art, complete, this.celebrate,
+      this.lastTouched, steps, this.lastActivated);
     this.greet = this.id === 'mycelia' ? drawMyceliaLife(this, stage.art, awake, this.waking, steps,
       this.lastActivated ? this.lastTouched : undefined) : () => {};
     this.waking = false;
     this.celebrate = false;
     this.lastTouched = undefined;
     this.lastActivated = false;
-    const instruction = this.shellInFlight ? copy.souvenirForming : this.offering ? copy.placeBell : !complete
+    const instruction = this.souvenirInFlight ? this.id === 'cimes_eternelles' ? copy.cloudsParting : copy.souvenirForming
+      : this.offering ? copy.placeBell : !complete
       ? this.id === 'cimes_eternelles' ? copy.peaksMood : this.id === 'mycelia' ? copy.windowsMood : copy.search
       : awake ? copy.awakened : this.id === 'cimes_eternelles' ? copy.sunrise : copy.explored;
     mapText(this, sideX, stage.bodyY + 12, instruction, portrait || short ? 12 : 15, sideW - 15)
@@ -166,7 +168,7 @@ export class ExplorationScene extends Phaser.Scene {
     if (awake) this.controls.add('greet-mycelia', left + artW * 0.603, top + artH * 0.68, 48, 44, () => this.greet());
 
     if (souvenir) {
-      const parts = drawSouvenir(this, souvenir, sideX, tagY - 32, sideW, 64, this.justFound, !found || this.shellInFlight);
+      const parts = drawSouvenir(this, souvenir, sideX, tagY - 32, sideW, 64, this.justFound, !found || this.souvenirInFlight);
       parts.find(object => object.name === `souvenir-${this.id}`)?.setName('exploration-sticker');
       parts.find(object => object.name === 'souvenir-name')?.setName('exploration-souvenir-name');
     }
@@ -184,10 +186,10 @@ export class ExplorationScene extends Phaser.Scene {
       this.controls.add('offer-bell', panelX + panelW / 2, panelY + 23, panelW, 46,
         () => { this.offering = !this.offering; this.render(); });
     }
-    if (earned && this.id === 'archipel_azur' && !this.shellInFlight) {
+    if (earned && this.id === 'archipel_azur' && !this.souvenirInFlight) {
       this.controls.button('replay-reflections', copy.replayReflections, sideX,
         tagY - (portrait ? 58 : 66), sideW - 12, () => {
-          if (this.shellInFlight) return;
+          if (this.souvenirInFlight) return;
           this.reflectionReplay = []; this.justFound = false; this.render();
         });
     } else if (!canOffer) {
@@ -198,8 +200,13 @@ export class ExplorationScene extends Phaser.Scene {
     }
     this.controls.button('back-to-map', !this.fromJournal ? (short ? copy.mapShort : copy.backToMap) : getTexts().notebook.back,
       sideX, stage.secondaryY, Math.min(220, sideW - 15), () => this.back());
-    if (this.shellInFlight) {
-      gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+    if (this.souvenirInFlight) {
+      if (this.id === 'archipel_azur') {
+        gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+      } else {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1400, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.13, top + artH * 0.25, () => this.render()) });
+      }
     } else if (this.reflectionReplay === undefined) {
       if (!found) travelTutorial(this, this.controls, 'exploration', () => this.render());
       else if (this.justFound) travelTutorial(this, this.controls, 'souvenir', () => this.render());

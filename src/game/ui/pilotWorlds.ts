@@ -6,7 +6,7 @@ export type WorldFrame = { left: number; top: number; width: number; height: num
 
 /** Keep the bell and its complete suspension painted into both lighting states. */
 export function drawCimesSunrise(scene: Phaser.Scene, art: WorldFrame, complete: boolean,
-  transition: boolean, touched?: number): void {
+  transition: boolean, touched?: number, visited: readonly number[] = [], newlyTouched = false): void {
   const background = scene.children.getByName('exploration-art') as Phaser.GameObjects.Image | null;
   if (!background) return;
   const night = (!complete || transition) && scene.textures.exists('adventure-cimes-predawn');
@@ -17,14 +17,23 @@ export function drawCimesSunrise(scene: Phaser.Scene, art: WorldFrame, complete:
       .setDisplaySize(art.width, art.height).setAlpha(0).setName('cimes-sunrise');
     scene.tweens.add({ targets: sunrise, alpha: 1, duration: 1400, ease: 'Sine.InOut' });
   } else if (complete) background.setTexture('destination-cimes_eternelles').setDisplaySize(art.width, art.height);
-  if (touched !== undefined && !reducedMotion()) {
-    const peak = pilotTargets.cimes_eternelles[touched];
-    if (!peak) return;
-    const response = scene.add.circle(art.left + art.width * peak.x, art.top + art.height * peak.y,
-      Math.max(8, art.height * 0.035), 0xffe6ba, 0.22).setName('peak-response');
-    scene.tweens.add({ targets: response, scaleX: 1.8, scaleY: 1.8, alpha: 0, duration: 600,
-      onComplete: () => response.destroy() });
-  }
+  if ((complete && !transition) || (complete && reducedMotion())
+    || !scene.textures.exists('preparation-element-cloud')) return;
+  pilotTargets.cimes_eternelles.forEach((peak, index) => {
+    if (!visited.includes(index)) return;
+    const x = art.left + art.width * peak.x, y = art.top + art.height * (peak.y + 0.065);
+    const cloud = scene.add.image(x, y, 'preparation-element-cloud')
+      .setDisplaySize(art.width * (index === 0 ? 0.17 : 0.145), art.height * 0.055)
+      .setAlpha(0.58).setName(`cimes-peak-cloud-${index}`);
+    if (complete) {
+      scene.tweens.add({ targets: cloud, x: x + art.width * (index === 2 ? 0.035 : -0.07),
+        y: y - art.height * 0.015, alpha: 0, delay: 120, duration: 1100, ease: 'Sine.InOut',
+        onComplete: () => cloud.destroy() });
+    } else if (index === touched && newlyTouched && !reducedMotion()) {
+      cloud.setAlpha(0).setY(y + 3);
+      scene.tweens.add({ targets: cloud, alpha: 0.58, y, duration: 380, ease: 'Sine.Out' });
+    }
+  });
 }
 
 /** Sleeping paint, sequential warm lights and a small visitor in the doorway. */

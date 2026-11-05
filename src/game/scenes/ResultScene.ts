@@ -24,7 +24,7 @@ export class ResultScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor('#24243e');
     createMenu(this, {
       title: texts.journey.voidTitle,
-      description: texts.journey.voidStory, dark: true, void: true,
+      description: texts.journey.voidStory, void: true,
       detail: cost,
       footer: progressStore.persistent ? undefined : texts.notebook.unavailable,
       buttons: [{

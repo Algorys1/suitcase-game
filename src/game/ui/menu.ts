@@ -35,7 +35,6 @@ type MenuContent = {
   reveal?: 'new' | 'revisit';
   home?: boolean;
   preferences?: { stamp: boolean; confirmReset?: boolean };
-  dark?: boolean;
   void?: boolean;
   footer?: string;
   postcard?: number;
@@ -468,7 +467,6 @@ export function createButton(
 /** Reflow at native canvas size to keep text and touch targets readable. */
 export function createMenu(scene: Phaser.Scene, content: MenuContent): () => void {
   scene.data.set('book-busy', false);
-  const texts = getTexts();
   scene.game.canvas.setAttribute('aria-label', content.title);
   const canvas = scene.game.canvas;
   canvas.tabIndex = 0;
@@ -530,67 +528,9 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
       firstRender = false;
       return;
     }
-    const { width, height } = scene.scale;
-    const compact = height < 600;
-    const panelWidth = Math.min(width - 32, 760);
-    const panelHeight = Math.min(height - 32, 620);
-    const left = (width - panelWidth) / 2;
-    const top = (height - panelHeight) / 2;
-    const center = width / 2;
-    const availableTextWidth = panelWidth - 32;
-
-    const backdrop = scene.add.graphics();
-    backdrop.fillStyle(0xb69ae8, 0.16);
-    backdrop.fillCircle(width * 0.12, height * 0.2, Math.min(width * 0.18, 160));
-    backdrop.fillStyle(0x59c9c2, 0.16);
-    backdrop.fillCircle(width * 0.9, height * 0.8, Math.min(width * 0.22, 200));
-    backdrop.fillStyle(0x79543f, 0.08);
-    backdrop.fillRoundedRect(left, top + 6, panelWidth, panelHeight, 24);
-    backdrop.fillStyle(content.dark ? 0x2f2f4e : 0xfffaf0);
-    backdrop.fillRoundedRect(left, top, panelWidth, panelHeight, 24);
-    backdrop.lineStyle(1.5, 0xc78b60, 0.45);
-    backdrop.strokeRoundedRect(left, top, panelWidth, panelHeight, 24);
-
-    if (!compact) {
-      scene.add.text(center, top + 32, texts.eyebrow, {
-        fontFamily, fontSize: width < 520 ? 11 : 14, color: content.dark ? '#eee3fa' : '#79543f',
-      }).setOrigin(0.5, 0);
-    }
-
-    const title = scene.add.text(center, top + (compact ? 22 : 84), content.title, {
-      fontFamily,
-      fontSize: compact ? 26 : width < 520 ? 32 : 46,
-      fontStyle: 'bold',
-      color: content.dark ? '#fff4df' : '#302a37',
-      align: 'center',
-      wordWrap: { width: Math.min(availableTextWidth, 640), useAdvancedWrap: true },
-    }).setOrigin(0.5, 0).setPadding(2).setName('menu-title');
-
-    if (!compact || !content.home) {
-      scene.add.text(center, title.y + title.height + 18, content.description, {
-        fontFamily,
-        fontSize: compact ? 17 : 20,
-        color: content.dark ? '#eee3fa' : '#79543f',
-        align: 'center',
-        wordWrap: { width: Math.min(availableTextWidth, 490), useAdvancedWrap: true },
-      }).setOrigin(0.5, 0).setPadding(2).setName('menu-description');
-    }
-
-    const buttonHeight = compact ? 48 : 58;
-    const gap = compact ? 12 : 16;
-    const buttonWidth = Math.min(panelWidth - 32, 360);
-    const buttonsHeight = content.buttons.length * (buttonHeight + gap) - gap;
-    const buttonsTop = top + panelHeight - (compact ? 26 : 68) - buttonsHeight;
-    content.buttons.forEach((button, index) => {
-      createButton(scene, center, buttonsTop + buttonHeight / 2 + index * (buttonHeight + gap),
-        buttonWidth, buttonHeight, { ...button, focused: index === focusIndex });
-    });
-
-    if (!compact || content.footer) {
-      scene.add.text(center, top + panelHeight - (compact ? 12 : 26), content.footer ?? texts.prototype, {
-        fontFamily, fontSize: width < 520 ? 12 : 14, color: content.dark ? '#eee3fa' : '#79543f',
-      }).setOrigin(0.5);
-    }
+    // Every additional screen inherits the illustrated stationery theme.
+    renderPreferencesMenu(scene, { ...content, preferences: { stamp: false, confirmReset: true } }, focusIndex, false);
+    firstRender = false;
   };
 
   render();

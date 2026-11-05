@@ -2,6 +2,13 @@
 
 ## Intention et statut
 
+**Dernier retour du joueur — à conserver pour la suite :**
+
+- **Validé après essai :** les étoiles/reflets de l’Archipel et leur conclusion actuelle conviennent au joueur.
+- **À reprendre : le tutoriel**, dans son contenu et sa présentation. La version actuelle reste en place en attendant cette reprise ; ne pas la considérer comme finalisée.
+- **DA obligatoire dès la création de chaque écran**, sans passer par un habillage générique. Cela inclut confirmations, erreurs et outils de test. L’ancien rendu générique a été retiré ; réutiliser les assets et composants illustrés du jeu.
+- **À revoir : l’accès à l’exploration.** Le bouton texte « Explorer » est jugé trop générique. Prévoir plutôt une **loupe ou une longue-vue en haut de la carte**. Le choix entre ces deux objets, le placement précis et l’animation restent à définir ; cette commande n’est pas encore remplacée.
+
 **Présentation commune validée :** les gestes et les réponses du paysage varient selon le monde, mais le souvenir conclut la découverte en se formant brièvement dans la scène puis en rejoignant l’étiquette kraft. Il n’a pas besoin d’être dessiné dans l’illustration de départ. L’étiquette reste anonyme avant cette conclusion. Pour l’Archipel, les reflets déjà visités gardent une ondulation discrète ; au sixième, leurs lueurs convergent dans l’eau et le coquillage s’envole vers son étiquette. Le dessin progressif de l’autocollant dans l’exploration, le carnet et les résultats est retiré. Les six étapes et les souvenirs existants sont conservés. La réduction des animations et une interruption de l’envol montrent directement la récompense acquise, sans perte ni nouveau débit. La relecture locale rejoue aussi la conclusion. L’illustration originale de l’Archipel est conservée ; la prochaine idée des Cimes viendra du joueur. Le retrait de la clé trop explicite dans l’illustration des Ruines reste prévu pour leur prochaine passe.
 
 **Ruines englouties — poissons seuls, essai autorisé :** après revue de l’illustration avec le joueur, les deux bancs existants répondent au toucher en nageant derrière les colonnes puis en ressortant sous une autre arche. Un nouveau toucher permet le retour. Les bancs gardent leur taille et leurs emplacements initiaux ; les arches sont recomposées au premier plan pour les masquer pendant le passage. Les poissons fixes ont été retirés uniquement d’un fond dérivé pour éviter les doublons ; l’original reste conservé. Aucune progression, ressource, récompense ou condition de déblocage de la clé n’est ajoutée. La réaction reste disponible si le souvenir est déjà acquis. Le mouvement réduit remplace le déplacement par un bref changement de lumière. Les algues et coraux restent à discuter plus tard.

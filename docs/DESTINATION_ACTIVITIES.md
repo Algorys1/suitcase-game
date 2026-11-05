@@ -2,6 +2,8 @@
 
 ## Intention et statut
 
+**Nouvel essai autorisé — reflets de l’Archipel :** après revue de l’image avec le joueur, six grandes étincelles déjà peintes sur l’eau répondent au toucher par une lueur brève et des rides elliptiques. Aucun fond modifié, objet ajouté à la scène, séquence imposée ou condition de collecte. C’est un détail contemplatif à essayer avant de décider d’un éventuel lien avec le souvenir. Le mécanisme provisoire de collecte antérieur reste indépendant. Le mouvement réduit utilise un retour bref sans expansion ; les effets sont supprimés à la fin, au redessin et à la sortie.
+
 **Retour du joueur — 5 novembre 2026 :** les essais de galets/rigoles de l’Archipel, du prisme à faisceaux de la Sylve et des rubans de la Faille sont rejetés et retirés, avec leurs assets et leur code. Les illustrations originales sont rétablies. Mycélia, les Cimes, le carnet et le tutoriel restent en place. Les souvenirs déjà gagnés sont conservés ; les données spécifiques aux essais sont ignorées au chargement.
 
 Avant toute nouvelle implémentation, revoir ensemble les illustrations originales : partir de leurs éléments présents, choisir un geste et une réaction compréhensibles, sans ajouter un mécanisme étranger au paysage ni une cible de dépôt invisible. Un lieu peut proposer une interaction contemplative sans énigme obligatoire. Les autres propositions du tableau restent à réexaminer selon cette direction ; elles ne constituent pas une liste de jeux à produire automatiquement. Aucun remplacement des trois essais n’est implémenté dans cette passe.

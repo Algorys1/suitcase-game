@@ -1,5 +1,9 @@
 # Prototype — La carte d’aventure
 
+> **Reflets de l’Archipel — nouvel essai ciblé :** les grandes étincelles de l’illustration originale réagissent par une petite lueur et des rides sur l’eau. Réaction décorative seulement, accessible même avec un souvenir déjà acquis ; aucune modification des recettes, charges, sauvegardes ou conditions de collecte. Implémentation isolée dans `archipelagoReflections.ts`, sans nouvel asset. Le plaisir de ce détail attend l’essai du joueur.
+
+Vérifications : build TypeScript/Vite et 78 tests existants réussis. Chrome sous `/jam/` en FR à 960 × 540 et 320 × 568, en EN à 640 × 360 et 360 × 640, avec toucher simulé sur les portraits : les six reflets répondent au bon emplacement sur la texture originale, sans changer la sauvegarde ni débloquer le souvenir. Clics répétés, suppression des effets terminés, réduction du mouvement et sortie vers le carnet vérifiés sans erreur JavaScript/HTTP. Firefox et tactile physique restent à vérifier.
+
 > **Retrait demandé le 5 novembre 2026 :** les trois essais Archipel/Sylve/Faille ont été supprimés après retour du joueur. Illustrations originales et comportement antérieur rétablis ; Mycélia, Cimes, carnet, tutoriel et collection conservés. La suite doit partir d’une revue des scènes originales avec le joueur, avant tout nouveau petit jeu. [Retour et direction retenue](DESTINATION_ACTIVITIES.md).
 
 Vérification du retrait : build TypeScript/Vite et 78 tests Vitest réussis. Dans Chrome sous `/jam/`, à 960 × 540 et 320 × 568, les trois scènes affichent leurs textures originales sans les commandes des essais ; fenêtres/pics, accès au carnet depuis la carte et relecture du tutoriel restent disponibles. Une sauvegarde contenant les anciens états partiels se charge et conserve le souvenir déjà acquis. Aucune erreur JavaScript/HTTP sur ce parcours. Aucune nouvelle interaction de remplacement ajoutée.

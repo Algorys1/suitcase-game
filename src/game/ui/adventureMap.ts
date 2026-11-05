@@ -31,6 +31,14 @@ export class AdventureControls {
     });
   }
   clear(): void { this.items = []; this.index = -1; this.ring = undefined; }
+  move(name: string, x: number, y: number): void {
+    const item = this.items.find(entry => entry.name === name);
+    if (!item) return;
+    const dx = x - item.x, dy = y - item.y;
+    item.x = x; item.y = y;
+    (this.scene.children.getByName(name) as Phaser.GameObjects.Zone | null)?.setPosition(x, y);
+    if (this.items[this.index] === item) this.ring?.setPosition(this.ring.x + dx, this.ring.y + dy);
+  }
   add(name: string, x: number, y: number, w: number, h: number, action: () => void, hintCursor = true): void {
     this.items.push({ name, x, y, w, h, action });
     this.scene.add.zone(x, y, w, h).setName(name).setInteractive({ useHandCursor: hintCursor })

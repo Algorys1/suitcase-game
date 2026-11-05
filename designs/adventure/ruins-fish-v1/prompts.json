@@ -1,0 +1,28 @@
+{
+  "tool": "image_gen intégré",
+  "date": "2026-11-05",
+  "reference": "public/assets/destinations/ruines_englouties.webp",
+  "assets": [
+    {
+      "name": "ruins-water",
+      "source": "designs/adventure/ruins-fish-v1/ruins-water.png",
+      "export": "public/assets/adventure/ruins-water.webp",
+      "generated": "C:/Users/badlo/.codex/generated_images/01a1a819-f2bf-7cc2-bc90-592053d606e5/exec-09966f7d-a7ef-4dc8-af68-0a6c37ebcf31.png",
+      "prompt": "Edit target: attached underwater ruins illustration. Make an EXACT clean animation background: remove ONLY the four little fish in the central opening of the largest arch (around x .35-.42 y .25-.30) and the entire small distant fish school in the upper right (around x .80-.94 y .14-.22). Fill only those tiny erased silhouettes with the same turquoise water and lighting. Preserve every stone, arch, column, key on its plinth, corals, algae, bubbles, caustic light, rays, colors, original soft painted texture, exact framing and 4:3 dimensions. Do not remove bubbles or change the water lighting. Do not add any fish, objects, lettering, sparkles or UI. This is the background underneath separate fish sprites, not a new interpretation of the scene."
+    },
+    {
+      "name": "ruins-fish-near",
+      "source": "designs/adventure/ruins-fish-v1/ruins-fish-near.png",
+      "export": "public/assets/adventure/ruins-fish-near.webp",
+      "generated": "C:/Users/badlo/.codex/generated_images/01a1a819-f2bf-7cc2-bc90-592053d606e5/exec-5a445721-884c-4a55-b5cd-906cf6c60768.png",
+      "prompt": "Edit target: attached underwater ruins illustration. Extract ONLY the four small pale yellow-green fish swimming together in the CENTRAL large arch opening, around x .35-.42 y .25-.30. Preserve their exact original shapes, spacing, direction (heads pointing right), pale watercolor colors and relative sizes. Keep all four as ONE compact group. Completely remove the ENTIRE landscape, water, rays, arches, bubbles and all other fish. Place the same four fish group centered on a genuinely transparent background with a small clear margin. No colored rectangle, glow, shadow, white sticker outline, text, extra fish or redesigned character. A small painted fish-school game sprite that will be composited back into the original scene."
+    },
+    {
+      "name": "ruins-fish-far",
+      "source": "designs/adventure/ruins-fish-v1/ruins-fish-far.png",
+      "export": "public/assets/adventure/ruins-fish-far.webp",
+      "generated": "C:/Users/badlo/.codex/generated_images/01a1a819-f2bf-7cc2-bc90-592053d606e5/exec-2e1a9846-1392-41e7-a5e8-87a7038e4f27.png",
+      "prompt": "Edit target: attached underwater ruins illustration. Extract ONLY the small distant school of fish at the UPPER RIGHT, around x .80-.94 y .14-.22. Preserve the original tiny muted pale sea-green silhouettes, exact arrangement, relative sizes and direction of the fish. Keep this school as ONE compact group, not enlarged individual cartoon characters. Completely remove ALL landscape, water, rays, arches, coral, bubbles and the central four fish. Place this one school centered on a genuinely transparent background with a small clear margin. No colored rectangle, shadow, glow, sticker border, writing, added fish or redesign. A distant painted game sprite to composite at its original size in the original scene."
+    }
+  ]
+}

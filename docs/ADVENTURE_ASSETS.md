@@ -1,4 +1,16 @@
-# Assets du voyage Cimes → Mycélia
+# Assets de la carte et des escales
+
+## Poissons des Ruines englouties
+
+Outil : **image_gen intégré**, sans CLI ni clé API du projet. [Prompts exacts et chemins des fichiers](../designs/adventure/ruins-fish-v1/prompts.json). Référence d’édition : `public/assets/destinations/ruines_englouties.webp`, conservée. Les PNG générés sont enregistrés dans `designs/adventure/ruins-fish-v1/` ; exports WebP de qualité 88 dans `public/assets/adventure/`, environ 369 Ko au total, alpha conservé pour les deux sprites.
+
+| Export | Utilisation |
+| --- | --- |
+| `ruins-water.webp` | Fond dérivé sans les deux bancs fixes ; arches, végétation, clé et ambiance conservées. |
+| `ruins-fish-near.webp` | Les quatre poissons clairs de la grande arche, isolés sur fond transparent. |
+| `ruins-fish-far.webp` | Le banc distant du coin supérieur droit, isolé sur fond transparent. |
+
+Les marges transparentes sont cadrées dans le moteur, sans modification des sources. Les silhouettes des pierres sont échantillonnées depuis ce même fond dans une texture de premier plan créée à l’exécution : les poissons passent derrière les arches, sans ajouter de pierre ni de cache opaque étranger au décor. Cette texture est réutilisée au redimensionnement. Les groupes et trajectoires restent un prototype artistique à essayer ; il s’agit de deux bancs peints animés ensemble, pas de poissons à nageoires articulées.
 
 Les sources des trente destinations et des trente autocollants sont conservées. Les nouveaux fichiers sont chargés localement ; aucune requête distante n’est nécessaire pour jouer. La police est attendue avant la création du canvas pour que les légendes soient mesurées avec leurs vraies dimensions.
 

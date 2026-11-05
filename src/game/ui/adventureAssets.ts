@@ -9,6 +9,10 @@ export function preloadAdventureArt(scene: Phaser.Scene): void {
     if (!scene.textures.exists(`adventure-${id}`))
       scene.load.svg(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.svg`, { width: 64, height: 64 });
   }
+  for (const id of ['ruins-water', 'ruins-fish-near', 'ruins-fish-far']) {
+    if (!scene.textures.exists(`adventure-${id}`))
+      scene.load.image(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
+  }
 }
 
 export function drawChargeBadge(scene: Phaser.Scene, x: number, y: number, radius: number,

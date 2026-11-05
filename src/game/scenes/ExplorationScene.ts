@@ -12,6 +12,7 @@ import { drawSouvenir } from '../ui/souvenir';
 import { drawCimesSunrise, drawMyceliaLife } from '../ui/pilotWorlds';
 import { travelTutorial } from '../ui/travelTutorial';
 import { addArchipelagoReflections } from '../ui/archipelagoReflections';
+import { addRuinsFish } from '../ui/ruinsFish';
 
 export class ExplorationScene extends Phaser.Scene {
   private id = '';
@@ -97,7 +98,7 @@ export class ExplorationScene extends Phaser.Scene {
     const found = earned && (this.reflectionReplay === undefined || complete);
     const souvenir = souvenirs.find(entry => entry.destinationId === this.id);
     const stage = drawDestinationStage(this, this.id, this.session,
-      this.enter && !isPilot(this.id) && this.id !== 'archipel_azur');
+      this.enter && !isPilot(this.id) && this.id !== 'archipel_azur' && this.id !== 'ruines_englouties');
     this.enter = false;
     const { left, top, width: artW, height: artH } = stage.art;
     const { sideX, sideW, stickerY: tagY, portrait, short } = stage;
@@ -133,6 +134,7 @@ export class ExplorationScene extends Phaser.Scene {
 
     if (this.id === 'archipel_azur') addArchipelagoReflections(this, this.controls, stage.art,
       (index, x, y) => this.touch('archipel_azur', index, x, y));
+    if (this.id === 'ruines_englouties') addRuinsFish(this, this.controls, stage.art);
 
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');

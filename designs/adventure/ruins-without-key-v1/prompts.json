@@ -1,0 +1,20 @@
+{
+  "tool": "image_gen intégré",
+  "reference": "public/assets/adventure/ruins-water.webp (version précédente avec clé)",
+  "originalsPreserved": [
+    "designs/adventure/ruins-fish-v1/ruins-water.png",
+    "designs/destinations/collection-v1/ruines_englouties.png"
+  ],
+  "assets": [
+    {
+      "source": "ruins-water.png",
+      "export": "public/assets/adventure/ruins-water.webp",
+      "prompt": "Use case: precise-object-edit. Edit target: attached underwater ruins background WITHOUT fish. Remove ONLY the enormous pearl key and its entire shadow from the foreground stone platform in the lower right half. Rebuild that occupied region as a natural continuation of the seabed ruins: worn pale stone slabs, a light dusting of sand, two or three modest weathered broken stones and a small unobtrusive coral growth in continuity with existing pink/purple corals. Keep the foreground terrace recognizable but make it feel like abandoned underwater masonry, not an empty reward pedestal. Match exactly the painterly storybook brushwork, golden underwater caustics, turquoise lighting and perspective. STRICT invariants: preserve framing, canvas aspect ratio 4:3, camera, every arch and column in exactly its original position and shape, all existing plants, stairs, distant scenery, surface rays, water palette and overall composition. Do not add fish: the two fish schools are separate animated layers. Do not add a chest, lock, key, treasure, writing, characters, magical glow or new focal object. No UI. Fill the key area seamlessly; no silhouette, key-shaped stain or leftover key fragment. Full opaque landscape image edge to edge."
+    },
+    {
+      "source": "ruines-englouties.png",
+      "export": "public/assets/destinations/ruines_englouties.webp",
+      "prompt": "Use case: compositing. Image 1 is the EDIT TARGET, the new final underwater ruins landscape without a key. Image 2 is supporting reference ONLY for the two schools of fish. Restore ONLY the two small fish schools from image 2 to image 1: four pale turquoise fish inside the large arch at normalized center (0.381,0.274), and the distant small school in the top-right water at (0.872,0.183). Match the reference fish scale, color, silhouette and placements. Preserve every other pixel/compositional feature of image 1 as closely as possible: exact same framing, arches, stones, stairs, sandy stone foreground terrace with small rocks and modest coral, golden caustics and turquoise water. NO key anywhere, no treasure, no chest, no locks, no new objects, no text or UI. This is the static postcard counterpart of the same background used with separately animated fish."
+    }
+  ]
+}

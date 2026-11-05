@@ -11,8 +11,24 @@ export function addArchipelagoReflections(scene: Phaser.Scene, controls: Adventu
   onTouch: (index: number, x: number, y: number) => void, touched: readonly number[] = []): void {
   reflections.forEach((reflection, index) => {
     const x = art.left + reflection.x * art.width, y = art.top + reflection.y * art.height;
-    if (touched.includes(index)) scene.add.ellipse(x, y + 3, Math.max(14, art.width * 0.035),
-      Math.max(4, art.height * 0.012)).setStrokeStyle(1, 0xf2ffe7, 0.28).setName(`sea-reflection-visited-${index}`);
+    if (touched.includes(index)) {
+      const water = scene.add.container(x, y).setName(`sea-reflection-visited-${index}`);
+      const size = Math.max(12, art.width * 0.045);
+      const glint = scene.add.graphics().lineStyle(1.5, 0xfff1bb, 0.85)
+        .lineBetween(-size * 0.24, 0, size * 0.24, 0)
+        .lineBetween(0, -size * 0.36, 0, size * 0.36);
+      water.add(glint);
+      for (let ring = 0; ring < 2; ring++) {
+        const ripple = scene.add.ellipse(0, size * 0.22, size * (1 + ring * 0.65), size * (0.25 + ring * 0.16))
+          .setStrokeStyle(1, 0xf2ffe7, ring ? 0.35 : 0.65);
+        water.add(ripple);
+        if (!reducedMotion()) scene.tweens.add({ targets: ripple,
+          scaleX: 1.18, scaleY: 1.18, alpha: 0.45,
+          delay: index * 170 + ring * 260, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+      }
+      if (!reducedMotion()) scene.tweens.add({ targets: glint, alpha: 0.4,
+        delay: index * 210, duration: 1600, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+    }
     const respond = () => {
       // Progress can redraw the tag; create the water response after that redraw.
       onTouch(index, x, y);

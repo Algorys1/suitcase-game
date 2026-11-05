@@ -1,5 +1,9 @@
 # Assets de la carte et des escales
 
+## Ruines sans clé — retouche du décor
+
+La grosse clé est retirée des deux fonds avec **image_gen intégré**. La terrasse retrouve des dalles usées, un peu de sable, quelques pierres et un petit corail, sans coffre ni serrure annonçant le souvenir. Les arches, la composition et les deux sprites de poissons sont conservés. `public/assets/adventure/ruins-water.webp` sert aux poissons animés. Après préparation des textures, la carte postale est composée avec ce même fond et ces mêmes sprites, aux mêmes positions et proportions : les poissons ne changent plus de couleur ou de forme au clic sur Explorer. Les paramètres des deux bancs sont partagés dans `ruinsFish.ts`. L'export statique généré `public/assets/destinations/ruines_englouties.webp` reste conservé comme source de repli ; sa variante de poissons n'est plus montrée en jeu. Sources PNG et [prompts exacts](../designs/adventure/ruins-without-key-v1/prompts.json) dans `designs/adventure/ruins-without-key-v1/`, exports WebP qualité 95, 1448 × 1086. Les anciens originaux restent dans `designs/adventure/ruins-fish-v1/` et `designs/destinations/collection-v1/`. Cette passe ne modifie pas le déblocage du souvenir ; la conclusion avec les poissons reste à développer.
+
 ## Brumes dédiées des Cimes
 
 Créées avec **image_gen intégré**, à partir de `public/assets/adventure/cimes-predawn.png`, après rejet du pictogramme de nuage réutilisé. Trois formes distinctes reprennent la peinture et les teintes de la mer de nuages des Cimes. Les sources PNG sont conservées dans `designs/adventure/cimes-mist-v1/` ; les [prompts exacts et chemins de génération](../designs/adventure/cimes-mist-v1/prompts.json) y sont enregistrés.
@@ -12,7 +16,7 @@ Outil : **image_gen intégré**, sans CLI ni clé API du projet. [Prompts exacts
 
 | Export | Utilisation |
 | --- | --- |
-| `ruins-water.webp` | Fond dérivé sans les deux bancs fixes ; arches, végétation, clé et ambiance conservées. |
+| `ruins-water.webp` | Fond dérivé sans les deux bancs fixes, désormais sans la clé ; arches, végétation et ambiance conservées. |
 | `ruins-fish-near.webp` | Les quatre poissons clairs de la grande arche, isolés sur fond transparent. |
 | `ruins-fish-far.webp` | Le banc distant du coin supérieur droit, isolé sur fond transparent. |
 

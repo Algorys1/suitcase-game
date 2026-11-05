@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { prepareRuinsPostcard } from './ruinsFish';
 
 /** Prepare cached, mipmapped textures for strong downscaling in cards and thumbnails. */
 export function prepareIllustrationTextures(scene: Phaser.Scene): void {
@@ -49,4 +50,5 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
       else prepared?.get().setSize(width, height, 0, 0);
     } else prepared?.get().setSize(width, height, 0, 0);
   }
+  prepareRuinsPostcard(scene);
 }

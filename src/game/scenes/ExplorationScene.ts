@@ -77,14 +77,16 @@ export class ExplorationScene extends Phaser.Scene {
       this.lastActivated = true; this.render(); return;
     }
     const result = progressStore.touchExploration(id, index);
-    if (id === 'archipel_azur' && !result.activated) return;
+    if ((id === 'archipel_azur' || id === 'ruines_englouties') && !result.activated) return;
+    // Keep the other school's in-progress swim alive after the first arrival.
+    if (id === 'ruines_englouties' && !result.collected) return;
     this.lastTouched = index;
     this.lastActivated = result.activated;
     this.celebrate = result.collected;
     this.justFound ||= result.collected;
-    this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles') && result.collected;
+    this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles' || id === 'ruines_englouties') && result.collected;
     this.render();
-    if (result.collected && id !== 'archipel_azur' && id !== 'cimes_eternelles') this.collectSouvenir(x, y);
+    if (result.collected && id === 'mycelia') this.collectSouvenir(x, y);
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
       const window = this.children.getByName(`mycelia-window-${index}`) as Phaser.GameObjects.Image | null;
       if (window) this.tweens.add({ targets: window, alpha: { from: 0.45, to: 1 }, duration: 240 });
@@ -120,21 +122,22 @@ export class ExplorationScene extends Phaser.Scene {
     this.celebrate = false;
     this.lastTouched = undefined;
     this.lastActivated = false;
-    const instruction = this.souvenirInFlight ? this.id === 'cimes_eternelles' ? copy.cloudsParting : copy.souvenirForming
+    const instruction = this.souvenirInFlight ? this.id === 'cimes_eternelles' ? copy.cloudsParting
+      : this.id === 'ruines_englouties' ? copy.fishGathering : copy.souvenirForming
       : this.offering ? copy.placeBell : !complete
       ? this.id === 'cimes_eternelles' ? copy.peaksMood : this.id === 'mycelia' ? copy.windowsMood : copy.search
       : awake ? copy.awakened : this.id === 'cimes_eternelles' ? copy.sunrise : copy.explored;
     mapText(this, sideX, stage.bodyY + 12, instruction, portrait || short ? 12 : 15, sideW - 15)
       .setFontFamily('Georgia, serif').setName('exploration-instruction');
 
-    if (isPilot(this.id) && this.id !== 'archipel_azur') {
+    if (isPilot(this.id) && this.id !== 'archipel_azur' && this.id !== 'ruines_englouties') {
       const pilot = this.id;
       pilotTargets[pilot].forEach((target, index) => {
         const x = left + artW * target.x, y = top + artH * target.y;
         this.controls.add(`${pilot === 'mycelia' ? 'window' : 'peak'}-${index}`, x, y, 44, 44,
           () => this.touch(pilot, index, x, y), false);
       });
-    } else if (!found && this.id !== 'archipel_azur') {
+    } else if (!found && !isPilot(this.id)) {
       // Other destinations retain their provisional interaction without sparkle markers.
       const seed = [...this.id].reduce((n, char) => n + char.charCodeAt(0), 0);
       const x = left + artW * (0.32 + seed % 4 * 0.1), y = top + artH * 0.58;
@@ -145,7 +148,8 @@ export class ExplorationScene extends Phaser.Scene {
 
     if (this.id === 'archipel_azur') addArchipelagoReflections(this, this.controls, stage.art,
       (index, x, y) => this.touch('archipel_azur', index, x, y), steps);
-    if (this.id === 'ruines_englouties') addRuinsFish(this, this.controls, stage.art);
+    if (this.id === 'ruines_englouties') addRuinsFish(this, this.controls, stage.art, steps,
+      (index, x, y) => this.touch('ruines_englouties', index, x, y), this.souvenirInFlight);
 
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');
@@ -203,6 +207,9 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.souvenirInFlight) {
       if (this.id === 'archipel_azur') {
         gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+      } else if (this.id === 'ruines_englouties') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1300, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.42, top + artH * 0.40, () => this.render(), true) });
       } else {
         this.tweens.addCounter({ from: 0, to: 1, duration: 1400, onComplete: () =>
           this.collectSouvenir(left + artW * 0.13, top + artH * 0.25, () => this.render()) });

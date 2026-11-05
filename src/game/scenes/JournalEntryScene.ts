@@ -7,7 +7,6 @@ import { hasPostcard } from '../ui/postcard';
 import { souvenirForDestination } from '../../domain/souvenirs';
 import { bookBusy, captureJournal } from '../ui/notebookMotion';
 import type { PageDirection } from '../ui/notebookMotion';
-import { pilotTargetCounts } from '../../domain/pilotExploration';
 
 export class JournalEntryScene extends Phaser.Scene {
   constructor() { super('journal-entry'); }
@@ -39,8 +38,6 @@ export class JournalEntryScene extends Phaser.Scene {
       postcard,
       souvenir: souvenirForDestination(id, progressStore.read().discoveredDestinationIds),
       souvenirLocked: !progressStore.unlockedSouvenirIds().includes(id),
-      souvenirReveal: id === 'archipel_azur'
-        ? progressStore.explorationSteps(id).length / pilotTargetCounts.archipel_azur : 0,
       buttons: [{ name: 'explore', label: texts.adventure.explore,
         action: () => this.scene.start('exploration', { id, journalPage: page, returnTo }) },
       { name: 'back-to-journal', label: texts.notebook.backToContents, primary: true,

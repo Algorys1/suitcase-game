@@ -323,8 +323,8 @@
     "windowsMood": "Le village semble endormi. Le paysage attend votre passage.",
     "sunrise": "Le soleil a franchi les sommets. Un souvenir de cette aube vous accompagne.",
     "travellingSouvenir": "SOUVENIR VOYAGEUR",
-    "revealing": "Un souvenir se dessine…",
-    "replayReflections": "Revoir l’apparition"
+    "replayReflections": "Revoir l’apparition",
+    "souvenirForming": "Les reflets se rassemblent. Un souvenir prend forme…"
   },
   "tutorial": {
     "title": "Quelques mots avant le voyage",

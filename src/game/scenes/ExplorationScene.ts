@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import type { SessionState } from '../../domain/session';
 import { destinationById } from '../../domain/recipes';
-import { activateTarget, explorationComplete, isPilot, pilotTargets, pilotTargetCounts } from '../../domain/pilotExploration';
+import { activateTarget, explorationComplete, isPilot, pilotTargets } from '../../domain/pilotExploration';
 import type { PilotId } from '../../domain/pilotExploration';
 import { progressStore } from '../../services/storage';
 import { getTexts } from '../../services/i18n';
@@ -11,7 +11,7 @@ import { drawDestinationStage } from '../ui/destinationStage';
 import { drawSouvenir } from '../ui/souvenir';
 import { drawCimesSunrise, drawMyceliaLife } from '../ui/pilotWorlds';
 import { travelTutorial } from '../ui/travelTutorial';
-import { addArchipelagoReflections } from '../ui/archipelagoReflections';
+import { addArchipelagoReflections, gatherArchipelagoLight } from '../ui/archipelagoReflections';
 import { addRuinsFish } from '../ui/ruinsFish';
 
 export class ExplorationScene extends Phaser.Scene {
@@ -30,6 +30,8 @@ export class ExplorationScene extends Phaser.Scene {
   private lastActivated = false;
   private greet = () => {};
   private reflectionReplay: number[] | undefined;
+  private shellArrival = false;
+  private shellInFlight = false;
   constructor() { super('exploration'); }
 
   create({ id, session, fromResult = false, journalPage = 0, returnTo }: {
@@ -46,6 +48,8 @@ export class ExplorationScene extends Phaser.Scene {
     this.offering = false;
     this.justFound = false;
     this.reflectionReplay = undefined;
+    this.shellArrival = false;
+    this.shellInFlight = false;
     this.enter = !fromResult;
     this.waking = false;
     this.celebrate = false;
@@ -64,10 +68,12 @@ export class ExplorationScene extends Phaser.Scene {
   }
 
   private touch(id: PilotId, index: number, x: number, y: number): void {
+    if (this.shellInFlight) return;
     if (id === 'archipel_azur' && this.reflectionReplay !== undefined) {
       const before = this.reflectionReplay.length;
       this.reflectionReplay = activateTarget(id, this.reflectionReplay, index);
       if (this.reflectionReplay.length === before) return;
+      this.shellArrival = explorationComplete(id, this.reflectionReplay);
       this.lastActivated = true; this.render(); return;
     }
     const result = progressStore.touchExploration(id, index);
@@ -76,6 +82,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.lastActivated = result.activated;
     this.celebrate = result.collected;
     this.justFound ||= result.collected;
+    this.shellArrival = id === 'archipel_azur' && result.collected;
     this.render();
     if (result.collected && id !== 'archipel_azur') this.collectSouvenir(x, y);
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
@@ -88,6 +95,9 @@ export class ExplorationScene extends Phaser.Scene {
     this.tweens.killAll();
     this.children.getAll().forEach(child => child.destroy());
     this.controls.clear();
+    const shellArrival = this.shellArrival;
+    this.shellArrival = false;
+    this.shellInFlight = shellArrival && !reducedMotion();
     const copy = getTexts().adventure;
     const progress = progressStore.read();
     const earned = progressStore.unlockedSouvenirIds().includes(this.id);
@@ -108,9 +118,8 @@ export class ExplorationScene extends Phaser.Scene {
     this.waking = false;
     this.celebrate = false;
     this.lastTouched = undefined;
-    const newlyRevealed = this.lastActivated;
     this.lastActivated = false;
-    const instruction = this.offering ? copy.placeBell : !complete
+    const instruction = this.shellInFlight ? copy.souvenirForming : this.offering ? copy.placeBell : !complete
       ? this.id === 'cimes_eternelles' ? copy.peaksMood : this.id === 'mycelia' ? copy.windowsMood : copy.search
       : awake ? copy.awakened : this.id === 'cimes_eternelles' ? copy.sunrise : copy.explored;
     mapText(this, sideX, stage.bodyY + 12, instruction, portrait || short ? 12 : 15, sideW - 15)
@@ -133,7 +142,7 @@ export class ExplorationScene extends Phaser.Scene {
     }
 
     if (this.id === 'archipel_azur') addArchipelagoReflections(this, this.controls, stage.art,
-      (index, x, y) => this.touch('archipel_azur', index, x, y));
+      (index, x, y) => this.touch('archipel_azur', index, x, y), steps);
     if (this.id === 'ruines_englouties') addRuinsFish(this, this.controls, stage.art);
 
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
@@ -157,9 +166,7 @@ export class ExplorationScene extends Phaser.Scene {
     if (awake) this.controls.add('greet-mycelia', left + artW * 0.603, top + artH * 0.68, 48, 44, () => this.greet());
 
     if (souvenir) {
-      const reveal = this.id === 'archipel_azur' ? steps.length / pilotTargetCounts.archipel_azur : 0;
-      const parts = drawSouvenir(this, souvenir, sideX, tagY - 32, sideW, 64, this.justFound, !found,
-        reveal, newlyRevealed && this.id === 'archipel_azur' ? Math.max(0, reveal - 1 / pilotTargetCounts.archipel_azur) : reveal);
+      const parts = drawSouvenir(this, souvenir, sideX, tagY - 32, sideW, 64, this.justFound, !found || this.shellInFlight);
       parts.find(object => object.name === `souvenir-${this.id}`)?.setName('exploration-sticker');
       parts.find(object => object.name === 'souvenir-name')?.setName('exploration-souvenir-name');
     }
@@ -177,9 +184,10 @@ export class ExplorationScene extends Phaser.Scene {
       this.controls.add('offer-bell', panelX + panelW / 2, panelY + 23, panelW, 46,
         () => { this.offering = !this.offering; this.render(); });
     }
-    if (earned && this.id === 'archipel_azur') {
+    if (earned && this.id === 'archipel_azur' && !this.shellInFlight) {
       this.controls.button('replay-reflections', copy.replayReflections, sideX,
         tagY - (portrait ? 58 : 66), sideW - 12, () => {
+          if (this.shellInFlight) return;
           this.reflectionReplay = []; this.justFound = false; this.render();
         });
     } else if (!canOffer) {
@@ -190,27 +198,37 @@ export class ExplorationScene extends Phaser.Scene {
     }
     this.controls.button('back-to-map', !this.fromJournal ? (short ? copy.mapShort : copy.backToMap) : getTexts().notebook.back,
       sideX, stage.secondaryY, Math.min(220, sideW - 15), () => this.back());
-    if (this.reflectionReplay === undefined) {
+    if (this.shellInFlight) {
+      gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+    } else if (this.reflectionReplay === undefined) {
       if (!found) travelTutorial(this, this.controls, 'exploration', () => this.render());
       else if (this.justFound) travelTutorial(this, this.controls, 'souvenir', () => this.render());
     }
   }
 
-  private collectSouvenir(x: number, y: number): void {
-    if (reducedMotion() || this.children.getByName('tutorial-paper')) return;
+  private collectSouvenir(x: number, y: number, complete?: () => void, forming = false): void {
+    if (reducedMotion() || this.children.getByName('tutorial-paper')) { complete?.(); return; }
     const target = this.children.getByName('exploration-sticker') as Phaser.GameObjects.Image | null;
-    if (!target) return;
+    const slot = this.children.getByName('souvenir-tag')?.getData('souvenir-slot') as
+      { x: number; y: number; size: number } | undefined;
+    if (!target && !slot) { complete?.(); return; }
     const flying = this.add.image(x, y, `souvenir-${this.id}`).setName('souvenir-flying');
-    const scale = target.scaleX;
+    const goal = target ?? slot!;
+    const scale = target?.scaleX ?? Math.min(slot!.size / flying.width, slot!.size / flying.height);
     const curve = new Phaser.Curves.CubicBezier(new Phaser.Math.Vector2(x, y),
-      new Phaser.Math.Vector2(x + 35, y - 65), new Phaser.Math.Vector2(target.x - 55, target.y - 95),
-      new Phaser.Math.Vector2(target.x, target.y));
-    target.setAlpha(0);
+      new Phaser.Math.Vector2(x + 35, y - 65), new Phaser.Math.Vector2(goal.x - 55, goal.y - 95),
+      new Phaser.Math.Vector2(goal.x, goal.y));
+    target?.setAlpha(0);
+    flying.setScale(scale * 0.55);
+    if (forming) {
+      flying.setAlpha(0);
+      this.tweens.add({ targets: flying, alpha: 1, duration: 220 });
+    }
     const state = { p: 0 };
-    this.tweens.add({ targets: state, p: 1, duration: 800, ease: 'Sine.InOut', onUpdate: () => {
+    this.tweens.add({ targets: state, p: 1, delay: forming ? 220 : 0, duration: 800, ease: 'Sine.InOut', onUpdate: () => {
       const point = curve.getPoint(state.p);
       flying.setPosition(point.x, point.y).setScale(scale * (0.55 + Math.sin(state.p * Math.PI) * 0.8 + state.p * 0.45))
         .setAngle(-14 + Math.sin(state.p * Math.PI) * 20);
-    }, onComplete: () => { flying.destroy(); target.setAlpha(1); } });
+    }, onComplete: () => { flying.destroy(); target?.setAlpha(1); complete?.(); } });
   }
 }

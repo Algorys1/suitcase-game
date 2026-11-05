@@ -1,6 +1,6 @@
 # Le monde tient dans une valise
 
-> **Reflets de l’Archipel :** les six grandes étincelles déjà peintes sur l’eau font apparaître progressivement le coquillage sur son étiquette. Chaque reflet différent révèle une portion, le dernier débloque le souvenir et son nom. Les étapes se conservent après retour au carnet ou rechargement ; les anciens souvenirs restent acquis. « Revoir l’apparition » permet de rejouer la révélation sans modifier sa collection.
+> **Reflets de l’Archipel :** les six grandes étincelles déjà peintes sur l’eau répondent au toucher ; une fine ondulation garde la trace des reflets visités. L’étiquette reste anonyme. Au dernier reflet, les lueurs se réunissent dans l’eau, le coquillage se forme brièvement puis rejoint son étiquette avec l’envol commun aux souvenirs. Les étapes et les anciens souvenirs sont conservés ; « Revoir l’apparition » rejoue cette conclusion sans modifier la collection.
 
 > **Prototype carte d’aventure — 4 novembre 2026 :** carte d’itinéraire, dix badges de charge, escales accessibles et exploration pour trouver les nouveaux souvenirs. Premier lien interactif : clochette des Cimes → Mycélia. Cette évolution est à valider en jeu et prime sur les descriptions historiques ci-dessous. [Règles du prototype](docs/ADVENTURE_MAP.md).
 

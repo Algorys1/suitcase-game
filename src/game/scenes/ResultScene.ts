@@ -9,7 +9,6 @@ import { souvenirForDestination } from '../../domain/souvenirs';
 import { AdventureControls, mapText } from '../ui/adventureMap';
 import { drawDestinationStage } from '../ui/destinationStage';
 import { drawSouvenir } from '../ui/souvenir';
-import { pilotTargetCounts } from '../../domain/pilotExploration';
 
 export class ResultScene extends Phaser.Scene {
   constructor() { super('result'); }
@@ -65,8 +64,7 @@ export class ResultScene extends Phaser.Scene {
       const souvenir = souvenirForDestination(id, progressStore.read().discoveredDestinationIds);
       const locked = !progressStore.unlockedSouvenirIds().includes(id);
       if (souvenir) drawSouvenir(this, souvenir, x, stickerY - 32, w, 64,
-        session.lastTrip?.isNewDiscovery ?? false, locked,
-        id === 'archipel_azur' ? progressStore.explorationSteps(id).length / pilotTargetCounts.archipel_azur : 0);
+        session.lastTrip?.isNewDiscovery ?? false, locked);
       const paired = portrait || short;
       const buttonWidth = paired ? (w - 8) / 2 : Math.min(215, w - 18);
       controls.button('explore', texts.adventure.exploreShort, paired ? x - (buttonWidth + 8) / 2 : x,

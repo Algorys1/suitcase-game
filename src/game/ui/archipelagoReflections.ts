@@ -8,9 +8,11 @@ const reflections = pilotTargets.archipel_azur;
 
 /** Keep the water response on repeated touches, independently of discovery progress. */
 export function addArchipelagoReflections(scene: Phaser.Scene, controls: AdventureControls, art: WorldFrame,
-  onTouch: (index: number, x: number, y: number) => void): void {
+  onTouch: (index: number, x: number, y: number) => void, touched: readonly number[] = []): void {
   reflections.forEach((reflection, index) => {
     const x = art.left + reflection.x * art.width, y = art.top + reflection.y * art.height;
+    if (touched.includes(index)) scene.add.ellipse(x, y + 3, Math.max(14, art.width * 0.035),
+      Math.max(4, art.height * 0.012)).setStrokeStyle(1, 0xf2ffe7, 0.28).setName(`sea-reflection-visited-${index}`);
     const respond = () => {
       // Progress can redraw the tag; create the water response after that redraw.
       onTouch(index, x, y);
@@ -48,5 +50,17 @@ export function addArchipelagoReflections(scene: Phaser.Scene, controls: Adventu
     controls.add(`sea-reflection-${index}`, x, y, 44, 44, respond, false);
     const target = scene.children.getByName(`sea-reflection-${index}`) as Phaser.GameObjects.Zone;
     target.setInteractive(new Phaser.Geom.Circle(22, 22, 22), Phaser.Geom.Circle.Contains);
+  });
+}
+
+export function gatherArchipelagoLight(scene: Phaser.Scene, art: WorldFrame,
+  complete: (x: number, y: number) => void): void {
+  const x = art.left + art.width * 0.48, y = art.top + art.height * 0.77;
+  reflections.forEach((reflection, index) => {
+    const light = scene.add.circle(art.left + reflection.x * art.width,
+      art.top + reflection.y * art.height, Math.max(1.5, art.width * 0.003), 0xffedb2, 0.8)
+      .setName(`souvenir-gather-light-${index}`);
+    scene.tweens.add({ targets: light, x, y, delay: index * 25, duration: 520, ease: 'Sine.InOut',
+      onComplete: () => { light.destroy(); if (index === reflections.length - 1) complete(x, y); } });
   });
 }

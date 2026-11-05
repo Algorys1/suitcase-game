@@ -41,6 +41,7 @@ type MenuContent = {
   postcard?: number;
   souvenir?: Souvenir;
   souvenirLocked?: boolean;
+  souvenirReveal?: number;
   buttons: MenuButton[];
   bookNavigation?: { previous: MenuButton; next: MenuButton; turn?: PageDirection };
 };
@@ -288,7 +289,8 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   }
   const art = drawPostcard(scene, artX, artY, fittedWidth, artHeight, postcard, true);
   const souvenir = content.souvenir ? drawSouvenir(scene, content.souvenir, textX,
-    description.y + description.height + gap, textWidth, souvenirHeight, content.reveal === 'new', content.souvenirLocked) : [];
+    description.y + description.height + gap, textWidth, souvenirHeight, content.reveal === 'new', content.souvenirLocked,
+    content.souvenirReveal) : [];
   content.buttons.forEach((button, index) => {
     const buttonWidth = pairedButtons ? (textWidth - buttonGap) / 2 : Math.min(textWidth, 240);
     createButton(scene, pairedButtons ? textX + (index === 0 ? -1 : 1) * (buttonWidth + buttonGap) / 2 : textX,

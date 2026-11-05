@@ -322,7 +322,9 @@
     "peaksMood": "Daylight is still hesitating behind the mountains.",
     "windowsMood": "The village seems asleep. The landscape awaits your touch.",
     "sunrise": "The sun has crossed the peaks. A souvenir of this dawn travels with you.",
-    "travellingSouvenir": "TRAVELLING SOUVENIR"
+    "travellingSouvenir": "TRAVELLING SOUVENIR",
+    "revealing": "A souvenir takes shape…",
+    "replayReflections": "Watch it appear again"
   },
   "tutorial": {
     "title": "A few words before you travel",

@@ -1,5 +1,9 @@
-export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5 } as const;
+export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6 } as const;
 export const pilotTargets = {
+  archipel_azur: [
+    { x: 0.272, y: 0.433 }, { x: 0.372, y: 0.380 }, { x: 0.288, y: 0.588 },
+    { x: 0.718, y: 0.737 }, { x: 0.942, y: 0.423 }, { x: 0.662, y: 0.912 },
+  ],
   cimes_eternelles: [{ x: 0.575, y: 0.178 }, { x: 0.345, y: 0.35 }, { x: 0.895, y: 0.37 }],
   mycelia: [
     { x: 0.225, y: 0.575, width: 0.058, height: 0.079 },

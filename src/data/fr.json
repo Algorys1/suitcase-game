@@ -322,7 +322,9 @@
     "peaksMood": "Le jour hésite encore derrière les montagnes.",
     "windowsMood": "Le village semble endormi. Le paysage attend votre passage.",
     "sunrise": "Le soleil a franchi les sommets. Un souvenir de cette aube vous accompagne.",
-    "travellingSouvenir": "SOUVENIR VOYAGEUR"
+    "travellingSouvenir": "SOUVENIR VOYAGEUR",
+    "revealing": "Un souvenir se dessine…",
+    "replayReflections": "Revoir l’apparition"
   },
   "tutorial": {
     "title": "Quelques mots avant le voyage",

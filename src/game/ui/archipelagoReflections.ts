@@ -1,20 +1,23 @@
 import Phaser from 'phaser';
 import { AdventureControls, reducedMotion } from './adventureMap';
 import type { WorldFrame } from './pilotWorlds';
+import { pilotTargets } from '../../domain/pilotExploration';
 
 /** Anchors of the six large sun glints already painted in the original illustration. */
-const reflections = [
-  { x: 0.272, y: 0.433 }, { x: 0.372, y: 0.380 }, { x: 0.288, y: 0.588 },
-  { x: 0.718, y: 0.737 }, { x: 0.942, y: 0.423 }, { x: 0.662, y: 0.912 },
-];
+const reflections = pilotTargets.archipel_azur;
 
-/** Decorative only: no counter, ordered sequence, reward or saved state. */
-export function addArchipelagoReflections(scene: Phaser.Scene, controls: AdventureControls, art: WorldFrame): void {
-  const active: Phaser.GameObjects.Container[] = [];
+/** Keep the water response on repeated touches, independently of discovery progress. */
+export function addArchipelagoReflections(scene: Phaser.Scene, controls: AdventureControls, art: WorldFrame,
+  onTouch: (index: number, x: number, y: number) => void): void {
   reflections.forEach((reflection, index) => {
     const x = art.left + reflection.x * art.width, y = art.top + reflection.y * art.height;
     const respond = () => {
+      // Progress can redraw the tag; create the water response after that redraw.
+      onTouch(index, x, y);
+      if (scene.children.getByName('tutorial-paper')) return;
       // Repeated taps remain lightweight, even before earlier ripples have faded.
+      const active = scene.children.list.filter((object): object is Phaser.GameObjects.Container =>
+        object instanceof Phaser.GameObjects.Container && object.name.startsWith('sea-reflection-response-'));
       if (active.length >= 3) {
         const oldest = active.shift()!;
         scene.tweens.killTweensOf(oldest.list);
@@ -22,7 +25,6 @@ export function addArchipelagoReflections(scene: Phaser.Scene, controls: Adventu
       }
       const reduced = reducedMotion();
       const effect = scene.add.container(x, y).setName(`sea-reflection-response-${index}`);
-      active.push(effect);
       const size = Phaser.Math.Clamp(art.width * 0.04, 12, 26);
       const light = scene.add.graphics().lineStyle(1, 0xfff1bb, 0.8)
         .lineBetween(-size * 0.18, 0, size * 0.18, 0)
@@ -38,8 +40,6 @@ export function addArchipelagoReflections(scene: Phaser.Scene, controls: Adventu
           delay: ring * 140, duration: reduced ? 240 : 760, ease: 'Sine.Out',
           onComplete: () => {
             if (ring !== (reduced ? 0 : 1)) return;
-            const position = active.indexOf(effect);
-            if (position >= 0) active.splice(position, 1);
             effect.destroy();
           },
         });

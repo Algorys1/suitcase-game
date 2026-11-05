@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import type { SessionState } from '../../domain/session';
 import { destinationById } from '../../domain/recipes';
-import { explorationComplete, isPilot, pilotTargets } from '../../domain/pilotExploration';
+import { activateTarget, explorationComplete, isPilot, pilotTargets, pilotTargetCounts } from '../../domain/pilotExploration';
 import type { PilotId } from '../../domain/pilotExploration';
 import { progressStore } from '../../services/storage';
 import { getTexts } from '../../services/i18n';
@@ -28,6 +28,7 @@ export class ExplorationScene extends Phaser.Scene {
   private lastTouched: number | undefined;
   private lastActivated = false;
   private greet = () => {};
+  private reflectionReplay: number[] | undefined;
   constructor() { super('exploration'); }
 
   create({ id, session, fromResult = false, journalPage = 0, returnTo }: {
@@ -43,6 +44,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.returnTo = returnTo;
     this.offering = false;
     this.justFound = false;
+    this.reflectionReplay = undefined;
     this.enter = !fromResult;
     this.waking = false;
     this.celebrate = false;
@@ -61,13 +63,20 @@ export class ExplorationScene extends Phaser.Scene {
   }
 
   private touch(id: PilotId, index: number, x: number, y: number): void {
+    if (id === 'archipel_azur' && this.reflectionReplay !== undefined) {
+      const before = this.reflectionReplay.length;
+      this.reflectionReplay = activateTarget(id, this.reflectionReplay, index);
+      if (this.reflectionReplay.length === before) return;
+      this.lastActivated = true; this.render(); return;
+    }
     const result = progressStore.touchExploration(id, index);
+    if (id === 'archipel_azur' && !result.activated) return;
     this.lastTouched = index;
     this.lastActivated = result.activated;
     this.celebrate = result.collected;
     this.justFound ||= result.collected;
     this.render();
-    if (result.collected) this.collectSouvenir(x, y);
+    if (result.collected && id !== 'archipel_azur') this.collectSouvenir(x, y);
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
       const window = this.children.getByName(`mycelia-window-${index}`) as Phaser.GameObjects.Image | null;
       if (window) this.tweens.add({ targets: window, alpha: { from: 0.45, to: 1 }, duration: 240 });
@@ -80,10 +89,12 @@ export class ExplorationScene extends Phaser.Scene {
     this.controls.clear();
     const copy = getTexts().adventure;
     const progress = progressStore.read();
-    const found = progressStore.unlockedSouvenirIds().includes(this.id);
+    const earned = progressStore.unlockedSouvenirIds().includes(this.id);
     const awake = this.id === 'mycelia' && !!progress.awakenedMycelia;
-    const steps = isPilot(this.id) ? progressStore.explorationSteps(this.id) : [];
-    const complete = isPilot(this.id) ? explorationComplete(this.id, steps) : found;
+    const steps = this.id === 'archipel_azur' && this.reflectionReplay !== undefined ? this.reflectionReplay
+      : isPilot(this.id) ? progressStore.explorationSteps(this.id) : [];
+    const complete = isPilot(this.id) ? explorationComplete(this.id, steps) : earned;
+    const found = earned && (this.reflectionReplay === undefined || complete);
     const souvenir = souvenirs.find(entry => entry.destinationId === this.id);
     const stage = drawDestinationStage(this, this.id, this.session,
       this.enter && !isPilot(this.id) && this.id !== 'archipel_azur');
@@ -96,6 +107,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.waking = false;
     this.celebrate = false;
     this.lastTouched = undefined;
+    const newlyRevealed = this.lastActivated;
     this.lastActivated = false;
     const instruction = this.offering ? copy.placeBell : !complete
       ? this.id === 'cimes_eternelles' ? copy.peaksMood : this.id === 'mycelia' ? copy.windowsMood : copy.search
@@ -103,14 +115,14 @@ export class ExplorationScene extends Phaser.Scene {
     mapText(this, sideX, stage.bodyY + 12, instruction, portrait || short ? 12 : 15, sideW - 15)
       .setFontFamily('Georgia, serif').setName('exploration-instruction');
 
-    if (isPilot(this.id)) {
+    if (isPilot(this.id) && this.id !== 'archipel_azur') {
       const pilot = this.id;
       pilotTargets[pilot].forEach((target, index) => {
         const x = left + artW * target.x, y = top + artH * target.y;
         this.controls.add(`${pilot === 'mycelia' ? 'window' : 'peak'}-${index}`, x, y, 44, 44,
           () => this.touch(pilot, index, x, y), false);
       });
-    } else if (!found) {
+    } else if (!found && this.id !== 'archipel_azur') {
       // Other destinations retain their provisional interaction without sparkle markers.
       const seed = [...this.id].reduce((n, char) => n + char.charCodeAt(0), 0);
       const x = left + artW * (0.32 + seed % 4 * 0.1), y = top + artH * 0.58;
@@ -119,7 +131,8 @@ export class ExplorationScene extends Phaser.Scene {
       }, false);
     }
 
-    if (this.id === 'archipel_azur') addArchipelagoReflections(this, this.controls, stage.art);
+    if (this.id === 'archipel_azur') addArchipelagoReflections(this, this.controls, stage.art,
+      (index, x, y) => this.touch('archipel_azur', index, x, y));
 
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');
@@ -142,7 +155,9 @@ export class ExplorationScene extends Phaser.Scene {
     if (awake) this.controls.add('greet-mycelia', left + artW * 0.603, top + artH * 0.68, 48, 44, () => this.greet());
 
     if (souvenir) {
-      const parts = drawSouvenir(this, souvenir, sideX, tagY - 32, sideW, 64, this.justFound, !found);
+      const reveal = this.id === 'archipel_azur' ? steps.length / pilotTargetCounts.archipel_azur : 0;
+      const parts = drawSouvenir(this, souvenir, sideX, tagY - 32, sideW, 64, this.justFound, !found,
+        reveal, newlyRevealed && this.id === 'archipel_azur' ? Math.max(0, reveal - 1 / pilotTargetCounts.archipel_azur) : reveal);
       parts.find(object => object.name === `souvenir-${this.id}`)?.setName('exploration-sticker');
       parts.find(object => object.name === 'souvenir-name')?.setName('exploration-souvenir-name');
     }
@@ -160,7 +175,12 @@ export class ExplorationScene extends Phaser.Scene {
       this.controls.add('offer-bell', panelX + panelW / 2, panelY + 23, panelW, 46,
         () => { this.offering = !this.offering; this.render(); });
     }
-    if (!canOffer) {
+    if (earned && this.id === 'archipel_azur') {
+      this.controls.button('replay-reflections', copy.replayReflections, sideX,
+        tagY - (portrait ? 58 : 66), sideW - 12, () => {
+          this.reflectionReplay = []; this.justFound = false; this.render();
+        });
+    } else if (!canOffer) {
       const hint = found && this.id === 'cimes_eternelles' && !progress.awakenedMycelia ? copy.bellWish
         : this.justFound ? copy.found : copy.takeTime;
       mapText(this, sideX, tagY - (portrait ? 58 : 66), hint, portrait || short ? 11 : 12, sideW - 12, '#a07f4b')
@@ -168,8 +188,10 @@ export class ExplorationScene extends Phaser.Scene {
     }
     this.controls.button('back-to-map', !this.fromJournal ? (short ? copy.mapShort : copy.backToMap) : getTexts().notebook.back,
       sideX, stage.secondaryY, Math.min(220, sideW - 15), () => this.back());
-    if (!found) travelTutorial(this, this.controls, 'exploration', () => this.render());
-    else if (this.justFound) travelTutorial(this, this.controls, 'souvenir', () => this.render());
+    if (this.reflectionReplay === undefined) {
+      if (!found) travelTutorial(this, this.controls, 'exploration', () => this.render());
+      else if (this.justFound) travelTutorial(this, this.controls, 'souvenir', () => this.render());
+    }
   }
 
   private collectSouvenir(x: number, y: number): void {

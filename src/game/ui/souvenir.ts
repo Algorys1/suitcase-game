@@ -15,7 +15,8 @@ export function preloadSouvenirs(scene: Phaser.Scene): void {
 
 /** The name remains readable even if its optional artwork cannot be loaded. */
 export function drawSouvenir(scene: Phaser.Scene, souvenir: Souvenir, x: number, y: number,
-  width: number, height: number, fresh: boolean, locked = false): Array<Phaser.GameObjects.Graphics | Phaser.GameObjects.Image | Phaser.GameObjects.Text> {
+  width: number, height: number, fresh: boolean, locked = false, reveal = 0,
+  revealFrom = reveal): Array<Phaser.GameObjects.Graphics | Phaser.GameObjects.Image | Phaser.GameObjects.Text> {
   const objects: Array<Phaser.GameObjects.Graphics | Phaser.GameObjects.Image | Phaser.GameObjects.Text> = [];
   const compact = height < 112;
   const tagWidth = Math.min(width - 18, 290);
@@ -65,7 +66,8 @@ export function drawSouvenir(scene: Phaser.Scene, souvenir: Souvenir, x: number,
   g.closePath().fillPath().strokePath();
   objects.push(g);
   const key = textureKey(souvenir.destinationId);
-  if (locked) {
+  const fraction = locked ? Phaser.Math.Clamp(reveal, 0, 1) : 1;
+  if (locked && fraction === 0) {
     const cy = y + height / 2;
     const cover = scene.add.graphics().setName('souvenir-unknown');
     cover.fillStyle(0x84623f, 0.15).fillRoundedRect(imageX - size * 0.36 + 1, cy - size * 0.38 + 2, size * 0.72, size * 0.76, 3);
@@ -79,7 +81,16 @@ export function drawSouvenir(scene: Phaser.Scene, souvenir: Souvenir, x: number,
   } else if (scene.textures.exists(key)) {
     const image = scene.add.image(imageX, y + height / 2, key).setName(`souvenir-${souvenir.destinationId}`);
     image.setScale(Math.min(size / image.width, size / image.height)).setAngle(angle);
-    image.enableFilters();
+    image.setData('revealed-fraction', fraction);
+    const crop = (amount: number) => image.setCrop(0, 0, image.width * amount, image.height);
+    if (fraction < 1) crop(fraction);
+    if (reveal > 0 && revealFrom < fraction && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const state = { amount: Math.max(0, revealFrom) };
+      crop(state.amount);
+      scene.tweens.add({ targets: state, amount: fraction, duration: 420, ease: 'Sine.Out',
+        onUpdate: () => crop(state.amount) });
+    }
+    if (fraction === 1) image.enableFilters();
     // Screen-space effects keep the cut-paper edge legible even on small stickers.
     image.filters?.external.addGlow(0xffffff, 8, 0, 1, false, 16, 3).setPaddingOverride(null);
     image.filters?.external.addShadow(0, 0, 0.04, 0.04, 0x51392c, 12, 0.25).setPaddingOverride(null);
@@ -92,7 +103,8 @@ export function drawSouvenir(scene: Phaser.Scene, souvenir: Souvenir, x: number,
     fontFamily: '"Trebuchet MS", Arial, sans-serif', fontSize, color, align: 'center',
     wordWrap: { width: textWidth - 4, useAdvancedWrap: true },
   }).setOrigin(0.5, 0).setPadding(2);
-  const status = text(locked ? getTexts().adventure.hidden : fresh ? getTexts().stickers.new : getTexts().stickers.kept, compact ? 9 : 11, '#60452d').setName('souvenir-status');
+  const status = text(locked ? fraction > 0 ? getTexts().adventure.revealing : getTexts().adventure.hidden
+    : fresh ? getTexts().stickers.new : getTexts().stickers.kept, compact ? 9 : 11, '#60452d').setName('souvenir-status');
   const name = text(locked ? '???' : translate(souvenir.nameKey), compact ? 11 : 14, '#3e2d21').setName('souvenir-name');
   const textTop = y + (height - status.height - name.height - 2) / 2;
   status.setY(textTop);

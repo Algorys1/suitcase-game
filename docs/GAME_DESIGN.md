@@ -1,5 +1,7 @@
 # Game Design — Le monde tient dans une valise
 
+> **Archipel — révélation progressive autorisée :** toucher les six grands reflets différents de l’image fait apparaître le coquillage sur son étiquette et le débloque à la fin. Rides décoratives conservées, ordre libre, étapes persistantes, anciennes collections préservées et aucune charge dépensée dans le lieu. Voir [la proposition actuelle](DESTINATION_ACTIVITIES.md). La disposition des objets du paysage original ne change pas.
+
 > **Suite à concevoir après essai des deux explorations :** [petits jeux des 30 destinations, tutoriel, carnet sur la carte et animations gratuites](DESTINATION_ACTIVITIES.md). La direction des pilotes Mycélia/Cimes est appréciée par le joueur. Les nouvelles fiches sont des propositions de conception, sans modification des règles ni implémentation des 28 activités restantes.
 
 > **Évolution autorisée pour prototype, 4 novembre 2026 :** [carte d’aventure](ADVENTURE_MAP.md), exploration pour les nouveaux souvenirs et correspondance Cimes → Mycélia. Ces modifications priment sur les passages historiques correspondants. Les recettes, coûts et anciennes collections sont préservés ; le plaisir reste à valider en jeu.

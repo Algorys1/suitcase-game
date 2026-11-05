@@ -1,0 +1,28 @@
+{
+  "tool": "image_gen intégré",
+  "reference": "public/assets/destinations/coeur_de_braise.webp",
+  "assets": [
+    {
+      "source": "braise-ground.png",
+      "export": "public/assets/adventure/braise-ground.webp",
+      "prompt": "Use case: precise-object-edit. EDIT TARGET attached storybook volcano illustration. Remove ONLY the THREE freestanding basalt columns in the LOWER LEFT foreground (tall at x .105 y .70, medium x .185 y .78, short x .27 y .81), reconstruct the dark plum volcanic ground behind them seamlessly. Keep the foreground low rock ridge along the very bottom EXACTLY unchanged. Keep all other columns on the RIGHT, crater, lava river, smoke, sky, embers, all geometry and colors unchanged. Do not create holes, sockets, platforms, mechanisms, or add objects. Same 1448x1086 4:3 canvas, no reframing. Match existing painterly cartoon brushwork exactly. Opaque landscape edge to edge."
+    },
+    {
+      "source": "braise-column-tall.png",
+      "export": "public/assets/adventure/braise-column-tall.webp",
+      "prompt": "Use case: background-extraction. Attached illustration is EDIT TARGET. Isolate ONLY the TALLEST freestanding foreground basalt column on the LEFT (x .105, top y .575, width about .12 of original canvas), warm orange flat hexagonal top and deep plum vertical facets. Preserve its exact painted silhouette, top perspective, warm highlights, brush texture and original colors, not a redesigned generic pillar. One single column, upright, complete, centered on genuinely TRANSPARENT background with modest padding. Extend the bottom straight down slightly to reconstruct the portion hidden behind the low foreground rock, so it can slide behind that rock in animation. Do NOT include any other pillar, ground, rock ridge, lava, shadow outside object, scenery, smoke, spark, writing or outline/sticker border. No glow, no 3D render. Same artist and exact object as original.",
+      "cleanupPrompt": "Use case: background-extraction. EDIT TARGET attached isolated basalt column. Remove ALL the diffuse purple/orange haze and halo OUTSIDE the straight painted column silhouette. Keep ONLY the solid stone polygon with its orange top and dark plum facets, unchanged. Hard clean painted alpha edge, actual fully transparent exterior right up to stone, no soft outer glow, no shadow, no colored fog or fringe. Preserve exact column shape, artwork, detail and full column including bottom. Transparent padding around single upright column. Do not redesign, no scenery, no other objects."
+    },
+    {
+      "source": "braise-column-medium.png",
+      "export": "public/assets/adventure/braise-column-medium.webp",
+      "prompt": "Use case: background-extraction. Attached illustration is EDIT TARGET. Isolate ONLY the MIDDLE freestanding foreground basalt column on the LEFT (x .185, top y .70, width about .10 of original canvas), orange flat hexagonal top and deep plum vertical facets. Preserve its exact painted silhouette, top perspective, warm highlights, brush texture and original colors, not a redesigned generic pillar. One single column, upright, complete, centered on genuinely TRANSPARENT background with modest padding. Extend the bottom straight down slightly to reconstruct the portion hidden behind the low foreground rock, so it can slide behind that rock in animation. Do NOT include any other pillar, ground, rock ridge, lava, shadow outside object, scenery, smoke, spark, writing or outline/sticker border. No glow, no 3D render. Same artist and exact object as original.",
+      "cleanupPrompt": "Use case: background-extraction. EDIT TARGET attached isolated basalt column. Remove ALL the diffuse purple/orange haze and halo OUTSIDE the straight painted column silhouette. Keep ONLY the solid stone polygon with its orange top and dark plum facets, unchanged. Hard clean painted alpha edge, actual fully transparent exterior right up to stone, no soft outer glow, no shadow, no colored fog or fringe. Preserve exact column shape, artwork, detail and full column including bottom. Transparent padding around single upright column. Do not redesign, no scenery, no other objects."
+    },
+    {
+      "source": "braise-column-short.png",
+      "export": "public/assets/adventure/braise-column-short.webp",
+      "prompt": "Use case: background-extraction. Attached illustration is EDIT TARGET. Isolate ONLY the SHORTEST freestanding foreground basalt column on the LEFT (x .27, top y .765, width about .08 of original canvas), orange flat hexagonal top and deep plum vertical facets. Preserve its exact painted silhouette, top perspective, warm highlights, brush texture and original colors, not a redesigned generic pillar. One single column, upright, complete, centered on genuinely TRANSPARENT background with modest padding. Extend the bottom straight down slightly to reconstruct the portion hidden behind the low foreground rock, so it can slide behind that rock in animation. Do NOT include any other pillar, ground, rock ridge, lava, shadow outside object, scenery, smoke, spark, writing or outline/sticker border. No glow, no 3D render. Same artist and exact object as original."
+    }
+  ]
+}

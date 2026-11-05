@@ -1,0 +1,36 @@
+{
+  "tool": "image_gen intégré",
+  "reference": "public/assets/destinations/iles_suspendues.webp",
+  "assets": [
+    {
+      "source": "isles-sky.png",
+      "export": "public/assets/adventure/isles-sky.webp",
+      "generated": "exec-3f4ac7c6-4409-4c32-ade5-e4dee1c316e1.png",
+      "prompt": "Use case: precise-object-edit. EDIT TARGET attached floating islands painting. Create the clean background plate: remove ALL THREE foreground/middle floating islands (large left tree island, right arch island, small middle waterfall island), the entire rope bridge and all posts, AND the enormous foreground pebble and yellow ribbon. Reconstruct ONLY the soft peach/lavender cloud sea and sky behind these removed objects, keeping the distant mountains and distant stone arch mountain top right. Do not invent any new island. Match the exact existing painterly storybook style, color palette, camera and original 1448x1086 4:3 canvas. DO NOT reframe or zoom. Every retained object stays at its EXACT original pixel coordinates and scale. This is a REGISTERED FULL-CANVAS GAME LAYER, NOT a centered object cutout. No writing, UI, borders, new objects or redesign."
+    },
+    {
+      "source": "isles-left.png",
+      "export": "public/assets/adventure/isles-left.webp",
+      "generated": "exec-c5803e3e-63c3-45c8-88aa-6b60be05f1e2.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET attached painting. Retain ONLY the complete LARGE LEFT FLOATING ISLAND with its large tree, flowers, rocks, hanging vines, grassy bank and EXACT same silhouette. Remove rope bridge and its wooden posts; reconstruct grass locally where posts were. Remove background, other islands, pebble and yellow ribbon. Genuinely TRANSPARENT outside this island and tree; preserve painted edges without halos. Match the exact existing painterly storybook style, color palette, camera and original 1448x1086 4:3 canvas. DO NOT reframe or zoom. Every retained object stays at its EXACT original pixel coordinates and scale. This is a REGISTERED FULL-CANVAS GAME LAYER, NOT a centered object cutout. No writing, UI, borders, new objects or redesign."
+    },
+    {
+      "source": "isles-right.png",
+      "export": "public/assets/adventure/isles-right.webp",
+      "generated": "exec-e962be77-119e-4eff-a2a2-f25d73db48df.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET attached painting. Retain ONLY the complete RIGHT FLOATING ISLAND with its stone arch, flowers, rocks, hanging vines, grassy bank and EXACT same silhouette. Remove rope bridge and its wooden posts; reconstruct grass locally where posts were. Remove background, other islands, pebble and yellow ribbon. Genuinely TRANSPARENT outside island and arch; preserve painted edges without halos. Match the exact existing painterly storybook style, color palette, camera and original 1448x1086 4:3 canvas. DO NOT reframe or zoom. Every retained object stays at its EXACT original pixel coordinates and scale. This is a REGISTERED FULL-CANVAS GAME LAYER, NOT a centered object cutout. No writing, UI, borders, new objects or redesign."
+    },
+    {
+      "source": "isles-waterfall.png",
+      "export": "public/assets/adventure/isles-waterfall.webp",
+      "generated": "exec-c6d5a3c8-24b4-44da-bc3d-68b1bf0c9526.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET attached painting. Retain ONLY the SMALL MIDDLE FLOATING ISLAND, its trees, flowers and its waterfall, with EXACT original silhouette and positions. Include the entire thin waterfall, its delicate misty fading tip and droplets, but no surrounding cloud chunk. Remove all other islands, bridge, pebble, ribbon and background to genuine transparency. Match the exact existing painterly storybook style, color palette, camera and original 1448x1086 4:3 canvas. DO NOT reframe or zoom. Every retained object stays at its EXACT original pixel coordinates and scale. This is a REGISTERED FULL-CANVAS GAME LAYER, NOT a centered object cutout. No writing, UI, borders, new objects or redesign."
+    },
+    {
+      "source": "isles-bridge.png",
+      "export": "public/assets/adventure/isles-bridge.webp",
+      "generated": "exec-9d902049-128c-4108-9e42-76d77db721fe.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET attached painting. Retain ONLY the COMPLETE WOODEN ROPE BRIDGE including ALL its wooden planks, ropes, vertical rope ties and FOUR wooden anchor posts. EXACT same shape, curve, positions, scale and perspective. Genuine transparency between the ropes and outside bridge. Remove islands, trees, grass, flowers, background, pebble and ribbon. Clean painted edges, no halos, no added shadow. Do not straighten bridge or remove any plank. Match the exact existing painterly storybook style, color palette, camera and original 1448x1086 4:3 canvas. DO NOT reframe or zoom. Every retained object stays at its EXACT original pixel coordinates and scale. This is a REGISTERED FULL-CANVAS GAME LAYER, NOT a centered object cutout. No writing, UI, borders, new objects or redesign."
+    }
+  ]
+}

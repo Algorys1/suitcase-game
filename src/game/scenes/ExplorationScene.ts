@@ -13,6 +13,8 @@ import { drawCimesSunrise, drawMyceliaLife } from '../ui/pilotWorlds';
 import { travelTutorial } from '../ui/travelTutorial';
 import { addArchipelagoReflections, gatherArchipelagoLight } from '../ui/archipelagoReflections';
 import { addRuinsFish } from '../ui/ruinsFish';
+import { addBraiseColumns } from '../ui/braiseColumns';
+import { addIslesBridge } from '../ui/islesBridge';
 
 export class ExplorationScene extends Phaser.Scene {
   private id = '';
@@ -32,6 +34,7 @@ export class ExplorationScene extends Phaser.Scene {
   private reflectionReplay: number[] | undefined;
   private souvenirArrival = false;
   private souvenirInFlight = false;
+  private stopBridge = () => {};
   constructor() { super('exploration'); }
 
   create({ id, session, fromResult = false, journalPage = 0, returnTo }: {
@@ -58,7 +61,10 @@ export class ExplorationScene extends Phaser.Scene {
     this.controls = new AdventureControls(this);
     this.render();
     this.scale.on('resize', this.render, this);
-    this.events.once('shutdown', () => this.scale.off('resize', this.render, this));
+    this.events.once('shutdown', () => {
+      this.scale.off('resize', this.render, this);
+      this.stopBridge(); this.stopBridge = () => {};
+    });
   }
 
   private back(): void {
@@ -77,14 +83,16 @@ export class ExplorationScene extends Phaser.Scene {
       this.lastActivated = true; this.render(); return;
     }
     const result = progressStore.touchExploration(id, index);
-    if ((id === 'archipel_azur' || id === 'ruines_englouties') && !result.activated) return;
+    if ((id === 'archipel_azur' || id === 'ruines_englouties' || id === 'coeur_de_braise'
+      || id === 'iles_suspendues') && !result.activated) return;
     // Keep the other school's in-progress swim alive after the first arrival.
-    if (id === 'ruines_englouties' && !result.collected) return;
+    if ((id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues') && !result.collected) return;
     this.lastTouched = index;
     this.lastActivated = result.activated;
     this.celebrate = result.collected;
     this.justFound ||= result.collected;
-    this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles' || id === 'ruines_englouties') && result.collected;
+    this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles'
+      || id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues') && result.collected;
     this.render();
     if (result.collected && id === 'mycelia') this.collectSouvenir(x, y);
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
@@ -94,6 +102,7 @@ export class ExplorationScene extends Phaser.Scene {
   }
 
   private render(): void {
+    this.stopBridge(); this.stopBridge = () => {};
     this.tweens.killAll();
     this.children.getAll().forEach(child => child.destroy());
     this.controls.clear();
@@ -123,14 +132,16 @@ export class ExplorationScene extends Phaser.Scene {
     this.lastTouched = undefined;
     this.lastActivated = false;
     const instruction = this.souvenirInFlight ? this.id === 'cimes_eternelles' ? copy.cloudsParting
-      : this.id === 'ruines_englouties' ? copy.fishGathering : copy.souvenirForming
+      : this.id === 'ruines_englouties' ? copy.fishGathering
+      : this.id === 'coeur_de_braise' ? copy.basaltAwakening
+      : this.id === 'iles_suspendues' ? copy.islesAwakening : copy.souvenirForming
       : this.offering ? copy.placeBell : !complete
       ? this.id === 'cimes_eternelles' ? copy.peaksMood : this.id === 'mycelia' ? copy.windowsMood : copy.search
       : awake ? copy.awakened : this.id === 'cimes_eternelles' ? copy.sunrise : copy.explored;
     mapText(this, sideX, stage.bodyY + 12, instruction, portrait || short ? 12 : 15, sideW - 15)
       .setFontFamily('Georgia, serif').setName('exploration-instruction');
 
-    if (isPilot(this.id) && this.id !== 'archipel_azur' && this.id !== 'ruines_englouties') {
+    if (this.id === 'mycelia' || this.id === 'cimes_eternelles') {
       const pilot = this.id;
       pilotTargets[pilot].forEach((target, index) => {
         const x = left + artW * target.x, y = top + artH * target.y;
@@ -150,6 +161,10 @@ export class ExplorationScene extends Phaser.Scene {
       (index, x, y) => this.touch('archipel_azur', index, x, y), steps);
     if (this.id === 'ruines_englouties') addRuinsFish(this, this.controls, stage.art, steps,
       (index, x, y) => this.touch('ruines_englouties', index, x, y), this.souvenirInFlight);
+    if (this.id === 'coeur_de_braise') addBraiseColumns(this, this.controls, stage.art, steps,
+      (index, x, y) => this.touch('coeur_de_braise', index, x, y), this.souvenirInFlight);
+    if (this.id === 'iles_suspendues') this.stopBridge = addIslesBridge(this, this.controls, stage.art, steps,
+      (index, x, y) => this.touch('iles_suspendues', index, x, y), this.souvenirInFlight);
 
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');
@@ -172,7 +187,9 @@ export class ExplorationScene extends Phaser.Scene {
     if (awake) this.controls.add('greet-mycelia', left + artW * 0.603, top + artH * 0.68, 48, 44, () => this.greet());
 
     if (souvenir) {
-      const parts = drawSouvenir(this, souvenir, sideX, tagY - 32, sideW, 64, this.justFound, !found || this.souvenirInFlight);
+      const tagHeight = portrait ? 92 : short ? 84 : 104;
+      const parts = drawSouvenir(this, souvenir, sideX, tagY - tagHeight / 2, sideW, tagHeight,
+        this.justFound, !found || this.souvenirInFlight);
       parts.find(object => object.name === `souvenir-${this.id}`)?.setName('exploration-sticker');
       parts.find(object => object.name === 'souvenir-name')?.setName('exploration-souvenir-name');
     }
@@ -207,6 +224,12 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.souvenirInFlight) {
       if (this.id === 'archipel_azur') {
         gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+      } else if (this.id === 'iles_suspendues') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1300, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.56, top + artH * 0.62, () => this.render(), true) });
+      } else if (this.id === 'coeur_de_braise') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1400, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.50, top + artH * 0.51, () => this.render(), true) });
       } else if (this.id === 'ruines_englouties') {
         this.tweens.addCounter({ from: 0, to: 1, duration: 1300, onComplete: () =>
           this.collectSouvenir(left + artW * 0.42, top + artH * 0.40, () => this.render(), true) });

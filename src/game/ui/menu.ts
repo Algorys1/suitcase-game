@@ -224,7 +224,7 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   const left = (width - panelWidth) / 2;
   const top = (height - panelHeight) / 2;
   const padding = short ? 16 : 20;
-  const gap = short ? 10 : 14;
+  const gap = short ? 8 : 14;
   const innerWidth = panelWidth - padding * 2;
   const artWidth = landscape ? panelWidth / 2 - padding * 2 : innerWidth;
   const textWidth = artWidth;
@@ -240,13 +240,13 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   if (spacious) {
     text(top + padding + 6, getTexts().journal, 12).setColor('#806748').setName('postcard-eyebrow');
   }
-  const title = text(top + padding + (spacious ? 52 : content.bookNavigation ? 32 : 0), content.title,
-    short ? 22 : landscape ? 30 : 24, true).setName('menu-title');
+  const title = text(top + padding + (spacious ? 52 : content.bookNavigation ? short ? 20 : 32 : 0), content.title,
+    short ? 20 : landscape ? 30 : 24, true).setName('menu-title');
   words.push(title);
   let contentTop = title.y + title.height + gap;
   if (content.caption) {
     const badge = scene.add.graphics();
-    const caption = text(contentTop + 3, content.caption, short ? 13 : 14, true).setName('postcard-caption');
+    const caption = text(contentTop + 3, content.caption, short ? 12 : 14, true).setName('postcard-caption');
     const badgeWidth = Math.min(textWidth, caption.width + 24);
     badge.fillStyle(content.reveal === 'new' ? 0xf1d79a : 0xe7deca)
       .fillRoundedRect(textX - badgeWidth / 2, contentTop, badgeWidth, caption.height + 6, 5);
@@ -260,15 +260,22 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   }
   const buttonHeight = 44;
   const buttonGap = 10;
-  const pairedButtons = !landscape && content.buttons.length === 2;
+  const pairedButtons = (!landscape || short) && content.buttons.length === 2;
   const buttonRows = pairedButtons ? 1 : content.buttons.length;
   const footerSpace = content.footer ? 28 : 0;
   const buttonsTop = top + panelHeight - padding - footerSpace
     - buttonRows * (buttonHeight + buttonGap) + buttonGap;
   const description = text(0, content.description, short ? 14 : 16).setName('menu-description');
+  if (short) description.setLineSpacing(-2);
   words.push(description);
+  if (content.souvenir && landscape) {
+    const reservedTag = spacious ? 136 : 88;
+    const available = buttonsTop - contentTop - gap * 2 - reservedTag;
+    let descriptionSize = short ? 14 : 16;
+    while (description.height > available && descriptionSize > 10) description.setFontSize(--descriptionSize);
+  }
   const souvenirHeight = content.souvenir
-    ? landscape ? Math.min(spacious ? 136 : 64, Math.max(0, buttonsTop - contentTop - description.height - gap * 2)) : 70
+    ? landscape ? Math.min(spacious ? 136 : 88, Math.max(60, buttonsTop - contentTop - description.height - gap * 2)) : 96
     : 0;
   const souvenirSpace = content.souvenir ? souvenirHeight + gap : 0;
   let artX: number;

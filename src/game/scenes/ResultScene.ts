@@ -59,11 +59,13 @@ export class ResultScene extends Phaser.Scene {
       mapText(this, x, bodyY, `${caption} · −${session.lastTrip?.cost ?? 1}`, 11, w - 10, '#a17a39').setName('postcard-caption');
       const story = mapText(this, x, bodyY + 20, getDestinationTexts(id)?.story ?? '', portrait || short ? 13 : 15,
         w - 14, '#6d5844').setFontFamily('Georgia, serif').setOrigin(0.5, 0).setName('menu-description');
+      if (short) story.setLineSpacing(-1);
       let size = portrait || short ? 13 : 15;
-      while (story.height > stickerY - (short ? 28 : 47) - story.y && size > 10) story.setFontSize(--size);
+      const tagHeight = portrait ? 92 : short ? 84 : 104;
+      while (story.height > stickerY - tagHeight / 2 - 12 - story.y && size > 10) story.setFontSize(--size);
       const souvenir = souvenirForDestination(id, progressStore.read().discoveredDestinationIds);
       const locked = !progressStore.unlockedSouvenirIds().includes(id);
-      if (souvenir) drawSouvenir(this, souvenir, x, stickerY - 32, w, 64,
+      if (souvenir) drawSouvenir(this, souvenir, x, stickerY - tagHeight / 2, w, tagHeight,
         session.lastTrip?.isNewDiscovery ?? false, locked);
       const paired = portrait || short;
       const buttonWidth = paired ? (w - 8) / 2 : Math.min(215, w - 18);

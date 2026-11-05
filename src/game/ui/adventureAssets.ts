@@ -10,7 +10,10 @@ export function preloadAdventureArt(scene: Phaser.Scene): void {
       scene.load.svg(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.svg`, { width: 64, height: 64 });
   }
   for (const id of ['ruins-water', 'ruins-fish-near', 'ruins-fish-far',
-    'cimes-mist-high', 'cimes-mist-left', 'cimes-mist-right']) {
+    'cimes-mist-high', 'cimes-mist-left', 'cimes-mist-right',
+    'braise-ground', 'braise-column-tall', 'braise-column-medium', 'braise-column-short',
+    'isles-sky', 'isles-left', 'isles-right', 'isles-waterfall', 'isles-bridge',
+    'isles-grass-left', 'isles-grass-right']) {
     if (!scene.textures.exists(`adventure-${id}`))
       scene.load.image(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
   }

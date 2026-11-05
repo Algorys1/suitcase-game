@@ -1,0 +1,16 @@
+{
+  "tool": "image_gen intégré",
+  "reference": ".tmp/bridge-fixed-start-960.png (capture du jeu)",
+  "assets": [
+    {
+      "source": "isles-grass-left.png",
+      "export": "public/assets/adventure/isles-grass-left.webp",
+      "prompt": "Use case: stylized-concept. Reference is the attached in-game floating-islands scene, ONLY for exact grass art style and palette. Create ONE small dedicated foreground grass LIP to overlap the base of a wooden bridge anchor post and blend the first plank into a grassy bank. A WIDE, VERY LOW irregular strip of short meadow grass, olive green shadowed underside, warm yellow-green painted blades and tiny trailing tufts, matching the grass on the floating islands exactly. Visible silhouette roughly FIVE times wider than tall, low and sparse at ends, only a few slightly taller blades. Painterly storybook game texture, subtle dark olive outlines, warm light from above-left. Genuine transparent exterior and gaps between blades, no colored haze or drop shadow. No dirt mound, no earth slab, no rock, no post, no bridge, no flowers, no mushrooms, no tall bush or leafy plant, no objects or scenery, no text, no icon/sticker border. Entire grass strip centered with transparent padding. This is a small production overlay, not a landscape. Left landing variant: a slightly fuller tuft just LEFT of center; blades lean gently toward the RIGHT with a thin taper at the right end."
+    },
+    {
+      "source": "isles-grass-right.png",
+      "export": "public/assets/adventure/isles-grass-right.webp",
+      "prompt": "Use case: stylized-concept. Reference is the attached in-game floating-islands scene, ONLY for exact grass art style and palette. Create ONE small dedicated foreground grass LIP to overlap the base of a wooden bridge anchor post and blend the first plank into a grassy bank. A WIDE, VERY LOW irregular strip of short meadow grass, olive green shadowed underside, warm yellow-green painted blades and tiny trailing tufts, matching the grass on the floating islands exactly. Visible silhouette roughly FIVE times wider than tall, low and sparse at ends, only a few slightly taller blades. Painterly storybook game texture, subtle dark olive outlines, warm light from above-left. Genuine transparent exterior and gaps between blades, no colored haze or drop shadow. No dirt mound, no earth slab, no rock, no post, no bridge, no flowers, no mushrooms, no tall bush or leafy plant, no objects or scenery, no text, no icon/sticker border. Entire grass strip centered with transparent padding. This is a small production overlay, not a landscape. Right landing variant: a slightly fuller tuft just RIGHT of center; blades lean gently toward the LEFT with a thin taper at the left end. A distinct natural shape, not a mirrored copy."
+    }
+  ]
+}

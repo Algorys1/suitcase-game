@@ -29,13 +29,13 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
     paper.lineStyle(1, 0xb69a70, 0.3).lineBetween(sideX - sideW / 2 + 15, h - 124, sideX + sideW / 2 - 15, h - 124);
     paper.fillStyle(0xddc58e, 0.65).fillRect(sideX - 21, 33, 42, 18);
   }
-  mapText(scene, sideX, portrait ? 33 : 70, getTexts().adventure.arrival, 9, sideW - 20, '#a08052').setLetterSpacing(2);
-  const title = mapText(scene, sideX, portrait ? 61 : short ? 97 : 116,
-    getDestinationTexts(id)?.title ?? '', portrait ? 23 : short ? 23 : 29, sideW - 18, '#5b4030')
+  mapText(scene, sideX, portrait ? 33 : short ? 56 : 70, getTexts().adventure.arrival, 9, sideW - 20, '#a08052').setLetterSpacing(2);
+  const title = mapText(scene, sideX, portrait ? 61 : short ? 90 : 116,
+    getDestinationTexts(id)?.title ?? '', portrait ? 23 : short ? 21 : 29, sideW - 18, '#5b4030')
     .setFontFamily('Georgia, serif').setName('menu-title');
   const artTop = portrait ? Math.max(104, title.y + title.height / 2 + 15) : short ? 38 : 60;
   const artAreaW = portrait ? w - 44 : w * 0.615 - 28;
-  const artAreaH = portrait ? Math.max(80, h - artTop - 250) : h - artTop - (short ? 38 : 53);
+  const artAreaH = portrait ? Math.max(80, h - artTop - 264) : h - artTop - (short ? 38 : 53);
   const key = worldTexture(scene, id);
   let artW = artAreaW, artH = Math.min(artAreaH, artW * 0.75);
   if (scene.textures.exists(key)) {
@@ -68,7 +68,7 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   }
   return { portrait, short, sideX, sideW,
     art: { left: artLeft, top: artUpper, width: artW, height: artH },
-    bodyY: portrait ? artUpper + artH + 31 : title.y + title.height / 2 + (short ? 14 : 28),
+    bodyY: portrait ? artUpper + artH + 31 : title.y + title.height / 2 + (short ? 8 : 28),
     stickerY: portrait ? h - 112 : short ? h - 107 : h - 159,
     primaryY: portrait || short ? h - 45 : h - 89,
     secondaryY: portrait || short ? h - 45 : h - 46 };

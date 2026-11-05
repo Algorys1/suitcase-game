@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import { prepareRuinsPostcard } from './ruinsFish';
+import { prepareBraisePostcard } from './braiseColumns';
+import { prepareIslesPostcard } from './islesBridge';
 
 /** Prepare cached, mipmapped textures for strong downscaling in cards and thumbnails. */
 export function prepareIllustrationTextures(scene: Phaser.Scene): void {
@@ -35,8 +37,10 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     const prepared = scene.textures.addCanvas(key, canvas);
     // Exclude unused padding from the frame; keep the original artwork ratio.
     // The two vial states must retain a shared frame to composite the dust without shifts.
-    if ((preparation || home || journal || key === 'adventure-mycelia-resident' || key === 'adventure-cimes-bell'
-      || key.startsWith('adventure-ruins-fish-') || key.startsWith('adventure-cimes-mist-')) && !backdrop && !vial) {
+    if ((key.startsWith('souvenir-') || preparation || home || journal || key === 'adventure-mycelia-resident' || key === 'adventure-cimes-bell'
+      || key.startsWith('adventure-ruins-fish-') || key.startsWith('adventure-cimes-mist-')
+      || key.startsWith('adventure-braise-column-') || key === 'adventure-isles-bridge'
+      || key.startsWith('adventure-isles-grass-')) && !backdrop && !vial) {
       // Generated sprites have different transparent margins. Frame their visible
       // silhouette once so every icon has a consistent size, keeping source files intact.
       const pixels = context.getImageData(0, 0, width, height).data;
@@ -51,4 +55,6 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     } else prepared?.get().setSize(width, height, 0, 0);
   }
   prepareRuinsPostcard(scene);
+  prepareBraisePostcard(scene);
+  prepareIslesPostcard(scene);
 }

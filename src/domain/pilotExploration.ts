@@ -1,5 +1,8 @@
-export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2 } as const;
+export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, iles_suspendues: 5 } as const;
 export const pilotTargets = {
+  iles_suspendues: [{ x: 0.42, y: 0.465 }, { x: 0.485, y: 0.48 }, { x: 0.555, y: 0.485 },
+    { x: 0.625, y: 0.48 }, { x: 0.695, y: 0.465 }],
+  coeur_de_braise: [{ x: 0.105, y: 0.575 }, { x: 0.184, y: 0.70 }, { x: 0.27, y: 0.765 }],
   ruines_englouties: [{ x: 0.381, y: 0.274 }, { x: 0.872, y: 0.183 }],
   archipel_azur: [
     { x: 0.272, y: 0.433 }, { x: 0.372, y: 0.380 }, { x: 0.288, y: 0.588 },

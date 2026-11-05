@@ -1,0 +1,8 @@
+{
+  "tool": "image_gen intégré",
+  "reference": "designs/adventure/isles-bridge-v1/isles-bridge.png",
+  "source": "isles-bridge.png",
+  "export": "public/assets/adventure/isles-bridge.webp",
+  "generated": "exec-b1f503e7-907d-412d-af6e-17feb05b2a0d.png",
+  "prompt": "Use case: precise-object-edit. EDIT TARGET attached transparent painted rope bridge. Correct ONLY its LEFT LANDING: the wooden deck is missing the last few planks BETWEEN the two LEFT anchor posts. Add the 3 or 4 missing wide wooden planks so the deck extends continuously diagonally up-left from the existing leftmost planks (near x480,y535) to the far left anchor post foot (near x375,y485). The deck must have proper visible top surfaces spanning the FULL walkway width between near and far rope rails; connect both left posts naturally with a solid, walkable plank landing. No floating post, no diagonal narrow beam pretending to be the deck, no empty gap. Match the existing planks' honey-gold wood, dark painted outlines, thickness and perspective. Preserve EXACTLY all four post positions, ALL existing ropes and vertical ties, the middle and right deck, entire existing bridge curve, style, palette, scale, and transparent canvas layout. Do not move, shrink, enlarge or redesign bridge. Keep original full 1448x1086 4:3 canvas, no centering/reframing. Only the empty left landing area becomes wooden deck; the rest of the exterior remains genuinely transparent. No scenery, grass, islands, writing, shadows or additional objects."
+}

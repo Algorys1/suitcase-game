@@ -17,21 +17,22 @@ export function drawCimesSunrise(scene: Phaser.Scene, art: WorldFrame, complete:
       .setDisplaySize(art.width, art.height).setAlpha(0).setName('cimes-sunrise');
     scene.tweens.add({ targets: sunrise, alpha: 1, duration: 1400, ease: 'Sine.InOut' });
   } else if (complete) background.setTexture('destination-cimes_eternelles').setDisplaySize(art.width, art.height);
-  if ((complete && !transition) || (complete && reducedMotion())
-    || !scene.textures.exists('preparation-element-cloud')) return;
+  if ((complete && !transition) || (complete && reducedMotion())) return;
+  const mistKeys = ['high', 'left', 'right'];
   pilotTargets.cimes_eternelles.forEach((peak, index) => {
     if (!visited.includes(index)) return;
+    const key = `adventure-cimes-mist-${mistKeys[index]}`;
+    if (!scene.textures.exists(key)) return;
     const x = art.left + art.width * peak.x, y = art.top + art.height * (peak.y + 0.065);
-    const cloud = scene.add.image(x, y, 'preparation-element-cloud')
-      .setDisplaySize(art.width * (index === 0 ? 0.17 : 0.145), art.height * 0.055)
-      .setAlpha(0.58).setName(`cimes-peak-cloud-${index}`);
+    const cloud = scene.add.image(x, y, key).setAlpha(0.8).setName(`cimes-peak-cloud-${index}`);
+    cloud.setScale(art.width * (index === 0 ? 0.20 : 0.17) / cloud.width);
     if (complete) {
       scene.tweens.add({ targets: cloud, x: x + art.width * (index === 2 ? 0.035 : -0.07),
         y: y - art.height * 0.015, alpha: 0, delay: 120, duration: 1100, ease: 'Sine.InOut',
         onComplete: () => cloud.destroy() });
     } else if (index === touched && newlyTouched && !reducedMotion()) {
       cloud.setAlpha(0).setY(y + 3);
-      scene.tweens.add({ targets: cloud, alpha: 0.58, y, duration: 380, ease: 'Sine.Out' });
+      scene.tweens.add({ targets: cloud, alpha: 0.8, y, duration: 380, ease: 'Sine.Out' });
     }
   });
 }

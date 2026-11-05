@@ -20,7 +20,7 @@ Les données implémentées dans `src/data/elements.json` et `src/data/destinati
 
 ## Stack et contraintes
 
-- **DA obligatoire sur chaque nouvel écran**, y compris tutoriel, confirmations, erreurs et outils de test : reprendre les décors illustrés, papiers, matières, typographies et étiquettes du jeu. Aucun écran générique, panneau pastel ou bouton standard hors thème. Réutiliser les composants et assets existants ; retirer les anciens rendus génériques et leurs ressources devenues inutiles. Vérifier visuellement le résultat avant de le présenter.
+- **DA obligatoire sur chaque nouvel écran**, y compris tutoriel, confirmations, erreurs et outils de test : reprendre les décors illustrés, papiers, matières, typographies et étiquettes du jeu. Aucun écran générique, panneau pastel ou bouton standard hors thème. Réutiliser les composants de mise en page validés. Créer des assets dédiés quand le rendu demandé l’exige ; ne pas détourner un pictogramme ni recycler un visuel inadapté par économie. Retirer les anciens rendus génériques et leurs ressources devenues inutiles. Vérifier visuellement le résultat avant de le présenter.
 
 - **Phaser 4 + TypeScript strict + Vite** ; **Vitest** pour la logique métier.
 - Vérifier la version de Phaser effectivement installée et ses API avant de coder ; verrouiller les dépendances avec un lockfile. Ne pas supposer qu'une API Phaser 3 fonctionne inchangée.

@@ -1,0 +1,27 @@
+{
+  "tool": "image_gen intégré",
+  "reference": "public/assets/adventure/cimes-predawn.png",
+  "assets": [
+    {
+      "name": "cimes-mist-high",
+      "source": "designs/adventure/cimes-mist-v1/cimes-mist-high.png",
+      "export": "public/assets/adventure/cimes-mist-high.webp",
+      "generated": "exec-827e2c75-ac0d-463b-bdf6-6de366bc36bb.png",
+      "prompt": "Reference image: the attached Eternal Peaks painting supplies the EXACT painterly rendering, lavender/blue/muted pink predawn palette, fine brush grain and cloud treatment. Create ONE dedicated transparent game overlay of mountain mist to sit just below a snowy peak. It must look like a small piece of the LOWER CLOUD SEA of this painting lifted onto a transparent layer, not an icon or a different artist's cloud. Wide shallow irregular mass, wisps at both ends, slightly broken trailing threads, subtle internal mauve shadows, soft rose/lavender upper light. Fine irregular hand-painted edges that dissolve into genuine transparency, varying opacity. No outline, no brown border, no circular cotton balls, no three-lobed icon, no bevel, no sticker, no hard oval bottom, no glowing halo. No mountains, ground, scenery, stars, writing or other objects. Not photorealistic, no 3D render, no flat vector. Natural visible mist footprint about FOUR times wider than tall, centered, entire mist visible with transparent padding. Preserve the reference's painted texture rather than generic smooth airbrush.\nShape: an asymmetric high-altitude veil, fuller on the left-center, drifting gently toward a long frayed right tip; small translucent gaps along its upper edge."
+    },
+    {
+      "name": "cimes-mist-left",
+      "source": "designs/adventure/cimes-mist-v1/cimes-mist-left.png",
+      "export": "public/assets/adventure/cimes-mist-left.webp",
+      "generated": "exec-95e8104a-9282-44a1-ad2d-ce892de351c7.png",
+      "prompt": "Reference image: the attached Eternal Peaks painting supplies the EXACT painterly rendering, lavender/blue/muted pink predawn palette, fine brush grain and cloud treatment. Create ONE dedicated transparent game overlay of mountain mist to sit just below a snowy peak. It must look like a small piece of the LOWER CLOUD SEA of this painting lifted onto a transparent layer, not an icon or a different artist's cloud. Wide shallow irregular mass, wisps at both ends, slightly broken trailing threads, subtle internal mauve shadows, soft rose/lavender upper light. Fine irregular hand-painted edges that dissolve into genuine transparency, varying opacity. No outline, no brown border, no circular cotton balls, no three-lobed icon, no bevel, no sticker, no hard oval bottom, no glowing halo. No mountains, ground, scenery, stars, writing or other objects. Not photorealistic, no 3D render, no flat vector. Natural visible mist footprint about FOUR times wider than tall, centered, entire mist visible with transparent padding. Preserve the reference's painted texture rather than generic smooth airbrush.\nShape: a low bank of mountain fog, fuller toward the right, tapering into two thin wind-torn wisps on the left; shallow uneven upper ridgeline."
+    },
+    {
+      "name": "cimes-mist-right",
+      "source": "designs/adventure/cimes-mist-v1/cimes-mist-right.png",
+      "export": "public/assets/adventure/cimes-mist-right.webp",
+      "generated": "exec-97bb47cc-2850-4e45-8720-8c66da829799.png",
+      "prompt": "Reference image: the attached Eternal Peaks painting supplies the EXACT painterly rendering, lavender/blue/muted pink predawn palette, fine brush grain and cloud treatment. Create ONE dedicated transparent game overlay of mountain mist to sit just below a snowy peak. It must look like a small piece of the LOWER CLOUD SEA of this painting lifted onto a transparent layer, not an icon or a different artist's cloud. Wide shallow irregular mass, wisps at both ends, slightly broken trailing threads, subtle internal mauve shadows, soft rose/lavender upper light. Fine irregular hand-painted edges that dissolve into genuine transparency, varying opacity. No outline, no brown border, no circular cotton balls, no three-lobed icon, no bevel, no sticker, no hard oval bottom, no glowing halo. No mountains, ground, scenery, stars, writing or other objects. Not photorealistic, no 3D render, no flat vector. Natural visible mist footprint about FOUR times wider than tall, centered, entire mist visible with transparent padding. Preserve the reference's painted texture rather than generic smooth airbrush.\nShape: a delicate broken ribbon of mist, denser left lobe and a smaller offset right wisp, connected by translucent haze, no distinct round lobes."
+    }
+  ]
+}

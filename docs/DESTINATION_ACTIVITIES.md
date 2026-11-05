@@ -2,7 +2,7 @@
 
 ## Intention et statut
 
-**Cimes éternelles — nuages après toucher, idée du joueur intégrée :** un petit voile de nuage apparaît sous chaque sommet touché sans cacher sa pointe. Les nuages se déduisent des étapes déjà sauvegardées, restent visibles après une reprise partielle et ne se multiplient pas lors d’un nouveau toucher sur le même pic. Au troisième sommet, ils s’écartent pendant le lever du soleil ; la clochette rejoint ensuite l’étiquette, qui reste anonyme jusqu’à l’arrivée. Le mouvement réduit affiche directement les états sans déplacement. Le nuage peint existant est réutilisé ; aucune nouvelle illustration ni règle de collecte n’est ajoutée.
+**Cimes éternelles — nuages après toucher, idée du joueur intégrée :** un petit voile de nuage apparaît sous chaque sommet touché sans cacher sa pointe. Les nuages se déduisent des étapes déjà sauvegardées, restent visibles après une reprise partielle et ne se multiplient pas lors d’un nouveau toucher sur le même pic. Au troisième sommet, ils s’écartent pendant le lever du soleil ; la clochette rejoint ensuite l’étiquette, qui reste anonyme jusqu’à l’arrivée. Le mouvement réduit affiche directement les états sans déplacement. Trois voiles de brume dédiés, créés à partir de la peinture des Cimes, remplacent le pictogramme de nuage initial. Leurs proportions sont conservées ; aucune règle de collecte ne change.
 
 **Dernier retour du joueur — à conserver pour la suite :**
 

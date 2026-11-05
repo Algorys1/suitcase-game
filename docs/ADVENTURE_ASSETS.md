@@ -1,5 +1,11 @@
 # Assets de la carte et des escales
 
+## Brumes dédiées des Cimes
+
+Créées avec **image_gen intégré**, à partir de `public/assets/adventure/cimes-predawn.png`, après rejet du pictogramme de nuage réutilisé. Trois formes distinctes reprennent la peinture et les teintes de la mer de nuages des Cimes. Les sources PNG sont conservées dans `designs/adventure/cimes-mist-v1/` ; les [prompts exacts et chemins de génération](../designs/adventure/cimes-mist-v1/prompts.json) y sont enregistrés.
+
+Exports dans `public/assets/adventure/` : `cimes-mist-high.webp`, `cimes-mist-left.webp`, `cimes-mist-right.webp`. WebP qualité 95 avec alpha préservé. Les marges transparentes sont cadrées à l’affichage ; chaque voile conserve son rapport largeur/hauteur et n’est pas étiré pour entrer dans une taille arbitraire. Le pictogramme `assets/elements/cloud.webp` reste utilisé pour son rôle de symbole de boussole, mais n’intervient plus dans les nuages du paysage.
+
 ## Poissons des Ruines englouties
 
 Outil : **image_gen intégré**, sans CLI ni clé API du projet. [Prompts exacts et chemins des fichiers](../designs/adventure/ruins-fish-v1/prompts.json). Référence d’édition : `public/assets/destinations/ruines_englouties.webp`, conservée. Les PNG générés sont enregistrés dans `designs/adventure/ruins-fish-v1/` ; exports WebP de qualité 88 dans `public/assets/adventure/`, environ 369 Ko au total, alpha conservé pour les deux sprites.

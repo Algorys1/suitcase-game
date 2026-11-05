@@ -18,7 +18,7 @@ export type Progress = {
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
 };
-type StorageAccess = () => Pick<Storage, 'getItem' | 'setItem'>;
+type StorageAccess = () => Pick<Storage, 'getItem' | 'setItem'> & Partial<Pick<Storage, 'removeItem'>>;
 const knownIds = new Set(destinations.map(({ id }) => id));
 
 function emptyProgress(): Progress {
@@ -175,6 +175,18 @@ export class ProgressStore {
     if (progress.expedition?.phase !== 'ended') return;
     delete progress.expedition;
     this.save(progress);
+  }
+
+  /** Clear this game's save and its in-memory cache, without touching other site data. */
+  reset(): boolean {
+    this.progress = emptyProgress();
+    try {
+      const storage = this.storage();
+      if (storage.removeItem) storage.removeItem(PROGRESS_KEY);
+      else storage.setItem(PROGRESS_KEY, JSON.stringify(this.progress));
+      this.canPersist = true;
+    } catch { this.canPersist = false; }
+    return this.canPersist;
   }
 
   private save(progress: Progress): void {

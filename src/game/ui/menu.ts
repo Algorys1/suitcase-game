@@ -34,7 +34,7 @@ type MenuContent = {
   detail?: string;
   reveal?: 'new' | 'revisit';
   home?: boolean;
-  preferences?: { stamp: boolean };
+  preferences?: { stamp: boolean; confirmReset?: boolean };
   dark?: boolean;
   void?: boolean;
   footer?: string;
@@ -85,11 +85,20 @@ function renderPreferencesMenu(scene: Phaser.Scene, content: MenuContent, focusI
   doodle.strokeCircle(compassX, compassY, 10).strokeCircle(compassX, compassY, 13);
   doodle.fillStyle(0x79506b).fillTriangle(compassX, compassY - 8, compassX - 3, compassY + 3, compassX + 3, compassY + 3);
   doodle.lineStyle(1, 0xa5814e).lineBetween(compassX, compassY + 3, compassX, compassY + 9);
-  const title = words(top + sheetHeight * (portrait ? 0.18 : 0.21), texts.preferences.title,
+  const title = words(top + sheetHeight * (portrait ? 0.18 : 0.21),
+    content.preferences?.confirmReset ? content.title : texts.preferences.title,
     Math.min(short ? 26 : 36, textWidth / 10), 'menu-title', '#513322');
   title.setFontFamily('Georgia, "Times New Roman", serif').setFontStyle('bold');
   const description = words(Math.max(title.y + title.height + (short ? 5 : 10), top + sheetHeight * 0.34),
     content.description, short || portrait ? 14 : 17, 'menu-description');
+
+  if (content.preferences?.confirmReset) {
+    const firstY = Math.max(top + sheetHeight * 0.64, description.y + description.height + 32);
+    content.buttons.forEach((button, index) => createButton(scene, center, firstY + index * 50,
+      Math.min(textWidth, 285), 44, { ...button, focused: focusIndex === index,
+        stationery: true, fontSize: portrait || short ? 14 : 17 }));
+    return undefined;
+  }
 
   const gap = portrait ? 12 : 22;
   const ticketWidth = Math.min(224, (textWidth - gap) / 2);
@@ -125,12 +134,16 @@ function renderPreferencesMenu(scene: Phaser.Scene, content: MenuContent, focusI
       .setAngle(-7).setAlpha(0.92).setName('language-stamp');
     if (animate) animatedStamp = stamp;
   });
-  const footer = words(Math.max(top + sheetHeight * 0.70, ticketY + ticketHeight / 2 + 14),
+  const reset = content.buttons[3];
+  const footer = words(Math.max(top + sheetHeight * (reset ? 0.67 : 0.70), ticketY + ticketHeight / 2 + (reset ? 10 : 14)),
     content.footer ?? '', portrait || short ? 11 : 13, 'settings-saved');
   const back = content.buttons[2];
-  if (back) createButton(scene, center, Math.max(top + sheetHeight * 0.84, footer.y + footer.height + 34),
+  const backY = Math.max(top + sheetHeight * (reset ? 0.80 : 0.84), footer.y + footer.height + (reset ? 26 : 34));
+  if (back) createButton(scene, center, backY,
     Math.min(textWidth, 270), 44,
     { ...back, focused: focusIndex === 2, stationery: true, fontSize: portrait || short ? 15 : 18 });
+  if (reset) createButton(scene, center, backY + 40, Math.min(textWidth, 270), 32,
+    { ...reset, focused: focusIndex === 3, textOnly: true, fontSize: 12 });
   if (!animatedStamp) return undefined;
   const stamp = animatedStamp;
   const y = stamp.y;

@@ -18,6 +18,8 @@ Jeu expérimental de découverte fantastique, créé pour l'**Indie Park Game Ja
 
 ## Lancer le prototype
 
+Pour recommencer les essais sans DevTools : **Paramètres → Reset · effacer la sauvegarde**, puis confirmation sur la même fiche papier. Cela efface uniquement la sauvegarde du jeu et son état en mémoire, y compris la langue et les conseils.
+
 Prérequis : **Node.js 24 LTS** recommandé (versions compatibles précisées dans `package.json`) et npm.
 
 ```sh

@@ -16,7 +16,13 @@
     "selected": "Choisi",
     "french": "Français",
     "english": "English",
-    "saved": "Choix enregistré dans ce navigateur."
+    "saved": "Choix enregistré dans ce navigateur.",
+    "reset": "Reset · effacer la sauvegarde",
+    "resetTitle": "Effacer la sauvegarde ?",
+    "resetDescription": "Les découvertes, les autocollants, le voyage en cours, les conseils et la langue seront remis à zéro dans ce navigateur.",
+    "resetConfirm": "Oui, tout recommencer",
+    "resetCancel": "Annuler",
+    "resetUnavailable": "Le navigateur bloque l’effacement de la sauvegarde. Le jeu est remis à zéro en mémoire pour cette session, mais les anciennes données peuvent revenir après rechargement."
   },
   "back": "Retour à l’accueil",
   "prototype": "Prototype · Premiers voyages",

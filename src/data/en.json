@@ -16,7 +16,13 @@
     "selected": "Selected",
     "french": "Français",
     "english": "English",
-    "saved": "Choice saved in this browser."
+    "saved": "Choice saved in this browser.",
+    "reset": "Reset · clear saved progress",
+    "resetTitle": "Clear saved progress?",
+    "resetDescription": "Discoveries, stickers, the current journey, travel tips and language will all be reset in this browser.",
+    "resetConfirm": "Yes, start fresh",
+    "resetCancel": "Cancel",
+    "resetUnavailable": "The browser blocked clearing the save. Progress has been reset in memory for this session, but old data may return after reloading."
   },
   "back": "Back to home",
   "prototype": "Prototype · First journeys",

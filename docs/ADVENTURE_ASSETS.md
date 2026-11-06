@@ -182,3 +182,12 @@ Original généré : C:/Users/badlo/.codex/generated_images/01a1a819-f2bf-7cc2-b
 Prompt exact :
 
 > Edit target: attached snowy mountain illustration. Create the BEFORE-SUNRISE lighting state of exactly this same scene. Keep the exact framing, dimensions, all three mountain peaks, stone arch, plants and ALL of the hanging bell, its leather strap, suspension rings and leaf pendulum fully intact in their exact places. Change ONLY lighting and sky: a calm blue-violet predawn, cool lavender snow and pale muted coral low on the horizon. The sun has not risen yet: remove the visible yellow sun disk and its golden glare, replacing just that sky area naturally with predawn clouds. No moon, no stars, no new objects. No new highlights or markers on the peaks. Preserve the original hand-painted texture, silhouettes, details and 4:3 aspect ratio. Readable cozy twilight, not pitch dark. It is an alternate animation background, not a redesigned scene. No text.
+
+
+## Récif de verre — reflets des coraux
+
+Après retour du joueur, suppression du balayage rectangulaire qui formait des bandes montantes. Neuf petits reflets à contours diffus suivent maintenant des courbes vers les extrémités des ramifications, avec délais, durées et pauses décalés et apparition/disparition douce. Build réussi ; mouvement échantillonné dans Chrome sur 6,3 s à 960 × 540 et 320 × 568, déplacements latéraux vérifiés, deux captures espacées inspectées par format. Mode réduit sans tween et aucune erreur JavaScript/HTTP. Progression et décor inchangés.
+
+Source unique : `public/assets/destinations/recif_de_verre.webp`, conservée intacte. `reefCorals.ts` échantillonne les trois régions de corail et filtre leurs couleurs rose/vert pour rééclairer leurs pixels sans éclairer les rochers ou le ciel. Textures de lumière douce produites par canvas natif ; animation, déplacements et fondus par Phaser 4.2.1. Aucun asset généré, aucune nouvelle dépendance. Le secret laisse des reflets lents sur les coraux, l’eau et la perle ; mode réduit fixe.
+
+Vérifications : build TypeScript/Vite et 106 tests réussis. Chrome sur build sous `/jam/`, à 960 × 540 FR et 320 × 568 EN : souris/toucher simulé, répétitions, reprise partielle après rechargement, collecte unique, revisite, absence de curseur révélateur, contrôles dans la fenêtre et anciennes collections. Mouvement réduit vérifié avec zéro tween. Captures avant, pendant et après révélation inspectées aux deux formats ; aucune erreur JavaScript ni HTTP. Essai artistique du joueur attendu.

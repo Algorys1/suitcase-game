@@ -21,6 +21,7 @@ import { addFrostBranches } from '../ui/frostBranches';
 import { addTempleGuardians } from '../ui/templeGuardians';
 import { addAshVolcano } from '../ui/ashVolcano';
 import { addGrottoSpores } from '../ui/grottoSpores';
+import { addReefCorals } from '../ui/reefCorals';
 import { addCanopyDew } from '../ui/canopyDew';
 
 export class ExplorationScene extends Phaser.Scene {
@@ -92,17 +93,17 @@ export class ExplorationScene extends Phaser.Scene {
     }
     const result = progressStore.touchExploration(id, index);
     if ((id === 'archipel_azur' || id === 'ruines_englouties' || id === 'coeur_de_braise'
-      || id === 'iles_suspendues' || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes') && !result.activated) return;
+      || id === 'iles_suspendues' || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre') && !result.activated) return;
     // Keep the other school's in-progress swim alive after the first arrival.
     if ((id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues'
-      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes') && !result.collected) return;
+      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre') && !result.collected) return;
     this.lastTouched = index;
     this.lastActivated = result.activated;
     this.celebrate = result.collected;
     this.justFound ||= result.collected;
     this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles'
       || id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues'
-      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes') && result.collected;
+      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre') && result.collected;
     this.render();
     if (result.collected && id === 'mycelia') this.collectSouvenir(x, y);
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
@@ -148,6 +149,7 @@ export class ExplorationScene extends Phaser.Scene {
       : this.id === 'coeur_de_braise' ? copy.basaltAwakening
       : this.id === 'iles_suspendues' ? copy.islesAwakening
       : this.id === 'marais_des_lucioles' ? copy.marshAwakening
+      : this.id === 'recif_de_verre' ? copy.reefAwakening
       : this.id === 'canopee_des_brumes' ? copy.canopyAwakening
       : this.id === 'grottes_sporiferes' ? copy.grottoAwakening
       : this.id === 'ile_des_cendres' ? copy.ashAwakening
@@ -203,6 +205,9 @@ export class ExplorationScene extends Phaser.Scene {
 
     if (this.id === 'canopee_des_brumes') addCanopyDew(this, this.controls, stage.art, steps,
       (index, x, y) => this.touch('canopee_des_brumes', index, x, y), this.souvenirInFlight);
+
+    if (this.id === 'recif_de_verre') addReefCorals(this, this.controls, stage.art, steps,
+      (index, x, y) => this.touch('recif_de_verre', index, x, y), this.souvenirInFlight);
 
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');
@@ -263,6 +268,9 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.souvenirInFlight) {
       if (this.id === 'archipel_azur') {
         gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+      } else if (this.id === 'recif_de_verre') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1600, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.282, top + artH * 0.69, () => this.render(), true) });
       } else if (this.id === 'canopee_des_brumes') {
         this.tweens.addCounter({ from: 0, to: 1, duration: 1400, onComplete: () =>
           this.collectSouvenir(left + artW * 0.362, top + artH * 0.69, () => this.render(), true) });

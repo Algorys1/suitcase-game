@@ -139,6 +139,11 @@ export class ProgressStore {
   explorationSteps(id: PilotId): number[] {
     const progress = this.read();
     const stored = progress.pilotSteps?.[id];
+    // Previously earned desert souvenirs used three dunes; keep them earned.
+    if (id === 'desert_de_cristal' && this.unlockedSouvenirIds().includes(id)
+      && stored?.length !== pilotTargetCounts[id]) {
+      return Array.from({ length: pilotTargetCounts[id] }, (_, index) => index);
+    }
     if (stored) return [...stored];
     // Older, already-earned souvenirs retain their completed landscapes.
     return this.unlockedSouvenirIds().includes(id)

@@ -13,7 +13,7 @@ export function preloadAdventureArt(scene: Phaser.Scene): void {
     'cimes-mist-high', 'cimes-mist-left', 'cimes-mist-right',
     'braise-ground', 'braise-column-tall', 'braise-column-medium', 'braise-column-short',
     'isles-sky', 'isles-left', 'isles-right', 'isles-waterfall', 'isles-bridge',
-    'isles-grass-left', 'isles-grass-right']) {
+    'isles-grass-left', 'isles-grass-right', 'marsh-water', 'marsh-pad-far', 'marsh-pad-middle', 'marsh-pad-near']) {
     if (!scene.textures.exists(`adventure-${id}`))
       scene.load.image(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
   }

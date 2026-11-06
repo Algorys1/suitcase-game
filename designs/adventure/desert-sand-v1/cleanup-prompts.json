@@ -1,0 +1,23 @@
+{
+  "tool": "image_gen intégré",
+  "assets": [
+    {
+      "source": "desert-sand-near.png",
+      "reference": "desert-sand-near-initial.png",
+      "generated": "exec-c75ad37a-3ed8-49eb-968a-effd4efdcc3e.png",
+      "prompt": "Use case: precise-object-edit. EDIT TARGET attached transparent sand overlay. Remove EVERY crystal from this overlay, including all purple/pink/green faceted shapes, their bright edges and outlines, replacing their visible area with GENUINE TRANSPARENCY. Preserve the orange sand mound and its fine sandy fading edge EXACTLY as it is, including the sand already lying over crystal bases. Do not fill the removed upper crystals with more sand: those shapes must become transparent holes/exterior, so the original underlying game crystals will be visible. The output must contain ONLY warm orange/peach SAND, no purple, pink or green crystal remnants. Keep the full same 1448x1086 transparent canvas, every sand pixel in original position and scale. No repositioning, no added scenery or objects, no redesign of sand."
+    },
+    {
+      "source": "desert-sand-left.png",
+      "reference": "desert-sand-left-initial.png",
+      "generated": "exec-185d8031-086d-4bc2-9615-cb079303dc58.png",
+      "prompt": "Use case: precise-object-edit. EDIT TARGET attached transparent sand overlay. Remove EVERY crystal from this overlay, including all purple/pink/green faceted shapes, their bright edges and outlines, replacing their visible area with GENUINE TRANSPARENCY. Preserve the orange sand mound and its fine sandy fading edge EXACTLY as it is, including the sand already lying over crystal bases. Do not fill the removed upper crystals with more sand: those shapes must become transparent holes/exterior, so the original underlying game crystals will be visible. The output must contain ONLY warm orange/peach SAND, no purple, pink or green crystal remnants. Keep the full same 1448x1086 transparent canvas, every sand pixel in original position and scale. No repositioning, no added scenery or objects, no redesign of sand."
+    },
+    {
+      "source": "desert-sand-right.png",
+      "reference": "desert-sand-right-initial.png",
+      "generated": "exec-9c907b5d-d734-4491-bc44-20975af9c619.png",
+      "prompt": "Use case: precise-object-edit. EDIT TARGET attached transparent sand overlay. Remove EVERY crystal from this overlay, including all purple/pink/green faceted shapes, their bright edges and outlines, replacing their visible area with GENUINE TRANSPARENCY. Preserve the orange sand mound and its fine sandy fading edge EXACTLY as it is, including the sand already lying over crystal bases. Do not fill the removed upper crystals with more sand: those shapes must become transparent holes/exterior, so the original underlying game crystals will be visible. The output must contain ONLY warm orange/peach SAND, no purple, pink or green crystal remnants. Keep the full same 1448x1086 transparent canvas, every sand pixel in original position and scale. No repositioning, no added scenery or objects, no redesign of sand."
+    }
+  ]
+}

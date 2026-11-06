@@ -1,0 +1,30 @@
+{
+  "tool": "image_gen intégré",
+  "reference": "public/assets/destinations/desert_de_cristal.webp",
+  "assets": [
+    {
+      "source": "desert-clean.png",
+      "export": "public/assets/adventure/desert-clean.webp",
+      "generated": "exec-7395cb90-07b3-45aa-9f75-cdf77a51b788.png",
+      "prompt": "Use case: precise-object-edit. EDIT TARGET attached crystal desert. Remove ONLY the large golden hourglass and its shadow from the rock shelf on the RIGHT foreground. Reconstruct the warm reddish rock shelf naturally behind it, with the same painted stone surface. Keep every crystal, plant, dune, arch, sunset and all other scene details in their exact original positions and colors. No replacement treasure or new focal object. No hourglass fragment, stain, glow, chest or writing. Opaque full landscape. Match the exact warm peach/orange sand palette, sunset lighting and painterly storybook rendering of the reference. Original 1448x1086 4:3 canvas, same camera and scene registration, no reframing or centering of the object."
+    },
+    {
+      "source": "desert-sand-near.png",
+      "export": "public/assets/adventure/desert-sand-near.webp",
+      "generated": "exec-1a352cd6-3723-4d88-9ac6-7276dd116222.png",
+      "prompt": "Use case: stylized-concept. Reference is attached crystal desert. Generate ONE transparent foreground overlay: a natural wind-deposited drape of peach-orange SAND covering the LOWER HALF of the large crystal cluster in the LOWER LEFT. Registered location: visible sandy shape from x 0.0 to 0.35, y .69 to .93 of the original canvas. Its upper edge is irregular and lower at the right, leaving the tallest crystal tip at (.16,.58) visible above it. The mound should look like fine dune sand dusting and partly burying the crystals and the nearby rocks, not a separate object. Soft feathered sandy fringes dissolve into genuine transparency, a few tiny sand grains only near edges. Transparent everywhere else. Do NOT paint any crystal, rock, plant or background: only the covering sand layer, so rubbing this layer away will reveal the original painting underneath. Do not include the hourglass. Match the exact warm peach/orange sand palette, sunset lighting and painterly storybook rendering of the reference. Original 1448x1086 4:3 canvas, same camera and scene registration, no reframing or centering of the object."
+    },
+    {
+      "source": "desert-sand-left.png",
+      "export": "public/assets/adventure/desert-sand-left.webp",
+      "generated": "exec-62a6313c-728b-40d0-bc1e-8b43195aa854.png",
+      "prompt": "Use case: stylized-concept. Reference is attached crystal desert. Generate ONE transparent overlay of natural windblown peach-orange SAND covering the LOWER HALF of the prominent crystal cluster on the LEFT MIDDLE bank. Registered location: x 0.0 to 0.21, y .37 to .51 of original canvas. Leave the tall purple crystal tip at (.11,.28) visible above the overlay. A low soft sandy drift lying over the crystal bases, not a boulder or slab. Irregular wind-carved upper edge and feathered sandy fringes that dissolve to real transparency. No crystal or scenery painted into it: ONLY the covering sand, removable by rubbing. Transparent rest of canvas; no grass, plants, rocks, writing or hourglass. Match the exact warm peach/orange sand palette, sunset lighting and painterly storybook rendering of the reference. Original 1448x1086 4:3 canvas, same camera and scene registration, no reframing or centering of the object."
+    },
+    {
+      "source": "desert-sand-right.png",
+      "export": "public/assets/adventure/desert-sand-right.webp",
+      "generated": "exec-2832bca2-ef9c-4e36-accf-f875f8193ba8.png",
+      "prompt": "Use case: stylized-concept. Reference is attached crystal desert. Generate ONE transparent overlay of natural windblown peach-orange SAND covering the LOWER HALF of the large GREEN crystal cluster on the RIGHT foreground, adjacent to the rock shelf. Registered location: x .83 to 1.0, y .56 to .69 of the original canvas. Leave the green crystal tip at (.95,.50) visible. A modest wind-deposited sand veil lying against the facets and bases, not a new rock or object. Irregular upper edge, soft fringe fading into genuine transparency, small grain near edges. Only sand: no crystal, stone, plant or scenery pixels; no hourglass or writing. Transparent everywhere outside this registered sand patch. Match the exact warm peach/orange sand palette, sunset lighting and painterly storybook rendering of the reference. Original 1448x1086 4:3 canvas, same camera and scene registration, no reframing or centering of the object."
+    }
+  ]
+}

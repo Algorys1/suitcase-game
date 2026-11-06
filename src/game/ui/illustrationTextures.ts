@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { prepareRuinsPostcard } from './ruinsFish';
 import { prepareBraisePostcard } from './braiseColumns';
 import { prepareIslesPostcard } from './islesBridge';
+import { prepareMarshPostcard } from './marshFireflies';
 
 /** Prepare cached, mipmapped textures for strong downscaling in cards and thumbnails. */
 export function prepareIllustrationTextures(scene: Phaser.Scene): void {
@@ -57,4 +58,5 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
   prepareRuinsPostcard(scene);
   prepareBraisePostcard(scene);
   prepareIslesPostcard(scene);
+  prepareMarshPostcard(scene);
 }

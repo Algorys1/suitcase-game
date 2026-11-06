@@ -334,7 +334,10 @@
     "cloudsParting": "The clouds part. A new day dawns…",
     "fishGathering": "The fish gather. A light takes shape between them…",
     "basaltAwakening": "The columns rise. The heart of the volcano awakens…",
-    "islesAwakening": "A ripple travels along the bridge. The islands gently sway…"
+    "islesAwakening": "A ripple travels along the bridge. The islands gently sway…",
+    "marshAwakening": "The ripples wake the fireflies. A path of light takes shape…",
+    "desertAwakening": "The crystals weave a path of light. A souvenir takes shape…",
+    "replayCrystals": "Light the crystals again"
   },
   "tutorial": {
     "title": "A few words before you travel",

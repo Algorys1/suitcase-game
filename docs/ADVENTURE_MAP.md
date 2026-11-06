@@ -1,5 +1,9 @@
 # Prototype — La carte d’aventure
 
+> **Désert de cristal — cristaux reliés (remplace les dunes) :** illustration originale fixe, sans recomposition ni asset généré. Toucher les six groupes de cristaux déjà peints les allume sur leurs pixels existants. Chaque nouveau cristal est relié au précédent dans l'ordre choisi ; le sixième ferme la boucle. Ordre sauvegardé, double toucher ignoré, aucun débit supplémentaire. Le sablier rejoint ensuite l'étiquette. Anciennes collections préservées ; les étapes partielles déjà obtenues sont conservées sous forme de cristaux allumés. Essai visuel du joueur attendu.
+
+> **Marais des lucioles — trois nénuphars :** réactions sur l'eau, réveil progressif des lucioles et chemin lumineux conservé à la revisite. Étapes persistantes, étiquette anonyme jusqu'à l'envol du souvenir, fanal toujours vide, mouvement réduit et anciennes collections préservées. Aucun coût dans le lieu ; l'ancienne collecte par point invisible est remplacée. Nouvel essai visuel du joueur attendu.
+
 > **Îles suspendues — traversée du pont :** touches ou glisser sur les cinq portions du pont, progression persistante sans ordre ni débit supplémentaire. Vague finale, galet formé dans l'air puis envol commun ; îles doucement animées à la revisite. Les mêmes calques composent le carnet, les cartes et l'exploration. Anciennes collections préservées, mouvement réduit pris en charge ; essai visuel du joueur attendu.
 
 > **Cœur de braise — colonnes animées :** trois premières descentes distinctes déverrouillent le souvenir. Remontée en cascade puis mouvement lent permanent des colonnes et pulsation de la lave. Étapes persistantes, anciennes collections et charges conservées, mouvement réduit, étiquette anonyme jusqu'à l'arrivée du souvenir. Cette version remplace la collecte provisoire par point caché et attend l'essai visuel du joueur.

@@ -1,0 +1,30 @@
+{
+  "tool": "image_gen intégré",
+  "reference": "public/assets/destinations/marais_des_lucioles.webp",
+  "assets": [
+    {
+      "source": "marsh-water.png",
+      "export": "public/assets/adventure/marsh-water.webp",
+      "generated": "exec-09d7ba9a-9366-4063-8f41-af777607a7dd.png",
+      "prompt": "Use case: precise-object-edit. Edit target attached marsh painting. Prepare a clean background for animation. Remove ONLY these three water-lily groups: (1) the farther white flower and surrounding flat green pads in the water at x .31 to .46, y .586 to .657; (2) the lone large flat pad centered x .465 y .698; (3) the nearer white flower and its pads centered x .525 y .731 (roughly x .48 to .57,y .68 to .76). Reconstruct the teal water and its soft reflections naturally behind them. Also REMOVE the visible golden FIREFLIES and their surrounding halos from the lower landscape/water/shore, including bright points at x.07 y.55, x.13 y.50, x.165 y.38,x.25 y.50,x.25 y.60,x.43 y.74,x.575 y.686,x.63 y.76,x.87 y.35,x.98 y.48,x.97 y.68, and the small lower-landscape golden specks. Preserve stars in the SKY. All fireflies will be animated separately; do not add replacement lights. Preserve absolutely everything else: the entire wooden jetty and its perspective, lantern and its empty glass, tree and suspension loop, mushrooms, reeds, distant arch, sunset and moon. Keep the EXACT painterly storybook style, palette, camera, original object positions and scale. FULL REGISTERED 1448x1086 4:3 canvas, no zoom, no recentering, no redesign, no text or UI."
+    },
+    {
+      "source": "marsh-pad-far.png",
+      "export": "public/assets/adventure/marsh-pad-far.webp",
+      "generated": "exec-df8b8cc0-86ff-4ccb-aeb0-6a5eece04d44.png",
+      "prompt": "Use case: background-extraction. Edit target attached marsh painting. Isolate ONLY the FARTHER white water-lily flower and its surrounding green lily pads in the water at x .31 to .46 and y .586 to .657. Keep that whole small natural cluster at its exact original coordinates. Exclude the nearer large pad at (.465,.698) and nearer flower (.525,.731). Genuine transparency everywhere outside the selected leaves and flower, including holes and gaps; no rectangular water patch, no reflection, ripple, glow, firefly or other objects. Keep the EXACT painterly storybook style, palette, camera, original object positions and scale. FULL REGISTERED 1448x1086 4:3 canvas, no zoom, no recentering, no redesign, no text or UI."
+    },
+    {
+      "source": "marsh-pad-middle.png",
+      "export": "public/assets/adventure/marsh-pad-middle.webp",
+      "generated": "exec-2bba41c0-43d5-49a2-b29b-fcf34fd24084.png",
+      "prompt": "Use case: background-extraction. Edit target attached marsh painting. Isolate ONLY the SINGLE LARGE flat green lily pad centered x .465 y .698 (around x .415 to .511,y .68 to .721), the unflowered leaf between the two white flowers. Retain exact size, painted details and position. Genuine transparency outside this single leaf, no surrounding water, other leaves, flower, glow or ripple. Keep the EXACT painterly storybook style, palette, camera, original object positions and scale. FULL REGISTERED 1448x1086 4:3 canvas, no zoom, no recentering, no redesign, no text or UI."
+    },
+    {
+      "source": "marsh-pad-near.png",
+      "export": "public/assets/adventure/marsh-pad-near.webp",
+      "generated": "exec-8a0bb1bf-820d-45d4-8862-74e54f0822f0.png",
+      "prompt": "Use case: background-extraction. Edit target attached marsh painting. Isolate ONLY the NEARER WHITE water-lily flower and its immediately supporting green pad leaves centered (.525,.731), roughly x .48 to .57 and y .68 to .76. Retain exact size, painted details and position. Exclude the lone unflowered large leaf at (.465,.698) and all farther pads. Genuine transparency outside the selected flower and its small leaf cluster, no water rectangle, ripple, reflection, firefly, light halo or other objects. Keep the EXACT painterly storybook style, palette, camera, original object positions and scale. FULL REGISTERED 1448x1086 4:3 canvas, no zoom, no recentering, no redesign, no text or UI."
+    }
+  ]
+}

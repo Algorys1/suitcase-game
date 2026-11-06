@@ -334,7 +334,10 @@
     "cloudsParting": "Les nuages s’écartent. Le jour se lève…",
     "fishGathering": "Les poissons se rejoignent. Une lueur naît entre eux…",
     "basaltAwakening": "Les colonnes se soulèvent. Le cœur du volcan s’éveille…",
-    "islesAwakening": "Une vague parcourt le pont. Les îles se laissent bercer…"
+    "islesAwakening": "Une vague parcourt le pont. Les îles se laissent bercer…",
+    "marshAwakening": "Les rides réveillent les lucioles. Un chemin de lumière se dessine…",
+    "desertAwakening": "Les cristaux tissent un chemin de lumière. Un souvenir se forme…",
+    "replayCrystals": "Rallumer les cristaux"
   },
   "tutorial": {
     "title": "Quelques mots avant le voyage",

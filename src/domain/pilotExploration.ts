@@ -1,5 +1,9 @@
-export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, iles_suspendues: 5 } as const;
+export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, iles_suspendues: 5, marais_des_lucioles: 3, desert_de_cristal: 6 } as const;
 export const pilotTargets = {
+  desert_de_cristal: [{ x: 0.116, y: 0.335 }, { x: 0.336, y: 0.433 },
+    { x: 0.931, y: 0.357 }, { x: 0.936, y: 0.565 },
+    { x: 0.829, y: 0.859 }, { x: 0.164, y: 0.643 }],
+  marais_des_lucioles: [{ x: 0.373, y: 0.626 }, { x: 0.465, y: 0.698 }, { x: 0.525, y: 0.738 }],
   iles_suspendues: [{ x: 0.42, y: 0.465 }, { x: 0.485, y: 0.48 }, { x: 0.555, y: 0.485 },
     { x: 0.625, y: 0.48 }, { x: 0.695, y: 0.465 }],
   coeur_de_braise: [{ x: 0.105, y: 0.575 }, { x: 0.184, y: 0.70 }, { x: 0.27, y: 0.765 }],
@@ -26,8 +30,10 @@ export function isPilot(id: string): id is PilotId {
 
 export function validSteps(id: PilotId, value: unknown): number[] {
   if (!Array.isArray(value)) return [];
-  return [...new Set(value.filter((index: unknown): index is number => typeof index === 'number'
-    && Number.isInteger(index) && index >= 0 && index < pilotTargetCounts[id]))].sort((a, b) => a - b);
+  const steps = [...new Set(value.filter((index: unknown): index is number => typeof index === 'number'
+    && Number.isInteger(index) && index >= 0 && index < pilotTargetCounts[id]))];
+  // The desert beams follow the player's actual order, including after reload.
+  return id === 'desert_de_cristal' ? steps : steps.sort((a, b) => a - b);
 }
 
 export function explorationComplete(id: PilotId, steps: readonly number[]): boolean {

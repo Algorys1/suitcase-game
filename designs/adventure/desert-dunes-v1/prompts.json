@@ -1,0 +1,42 @@
+{
+  "tool": "image_gen intégré",
+  "reference": "designs/adventure/desert-sand-v1/desert-clean.png (fond sans sablier conservé)",
+  "assets": [
+    {
+      "source": "desert-dunes-backdrop.png",
+      "export": "public/assets/adventure/desert-dunes-backdrop.webp",
+      "generated": "exec-2919e9e9-e5bd-438b-838f-03fec143e15f.png",
+      "prompt": "Use case: precise-object-edit. EDIT TARGET attached crystal desert (hourglass already removed). Create the BACKGROUND PLATE for separated moving dunes: keep sky, sunset, complete large stone arch, distant rock spires and very distant horizon. Remove ALL crystals and ALL foreground rocks/plants. Remove the three prominent near/midground dune ridges across the lower landscape, reconstruct a quiet continuous softly shaded orange sandy floor behind them, without copying their original sharp crests: separate dune layers will cover this floor. Keep the distant mountain silhouettes and arch exact. Opaque full canvas. CRITICAL: this is an exact layer extraction from the attached painting, not a new sand asset. Preserve original warm flat peach/orange/lavender colors, softly brushed storybook shading, exact crest shapes and registration. NO realistic sand grain, no new mound/pile, no added detail, no new objects. Full original 1448x1086 4:3 canvas with every retained part in its original position and scale, no recentering or zoom. No text or UI."
+    },
+    {
+      "source": "desert-dunes-crystals.png",
+      "export": "public/assets/adventure/desert-dunes-crystals.webp",
+      "generated": "exec-65d5dce8-563f-44c6-9581-4a7376f47eba.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET attached desert. Isolate ONLY these THREE small crystal groups: (A) upper RIGHT distant purple/green group around x .84-.99,y .31-.44; (B) small central-left purple/green group around x .30-.40,y .40-.47; (C) single small purple fragment around x .26-.30,y .50-.56. Keep their exact original visible tips, colors, facets, positions and size; reconstruct a little of their hidden lower bodies BELOW the original dune crest so a moving dune can uncover them (about .04 of canvas height). Real transparency around each separate group. No sand, dune, stone shelf, plants, outlines outside crystal or other clusters. Do not include the large foreground crystal groups. CRITICAL: this is an exact layer extraction from the attached painting, not a new sand asset. Preserve original warm flat peach/orange/lavender colors, softly brushed storybook shading, exact crest shapes and registration. NO realistic sand grain, no new mound/pile, no added detail, no new objects. Full original 1448x1086 4:3 canvas with every retained part in its original position and scale, no recentering or zoom. No text or UI."
+    },
+    {
+      "source": "desert-dune-far.png",
+      "export": "public/assets/adventure/desert-dune-far.webp",
+      "generated": "exec-597f1b47-d52c-4de3-989a-83b41e6545bb.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET attached desert. Extract the FAR movable dune layer, a continuous sandy landmass starting at the original back dune crests (around y .27 at LEFT, low y .36 at CENTER, y .29-.37 at RIGHT) and continuing as opaque sand all the way to bottom and both side edges. Retain the original curving upper silhouettes exactly, including the far orange dune behind the small right crystal cluster. Reconstruct continuous sand underneath all objects and nearer dunes that originally hid it, as this is a complete lower land layer. Transparent ABOVE the original back dune crest, opaque BELOW. Remove ALL crystals, all rocks/plants, arch and sky from this layer. Do not create an isolated blob: this is an entire terrain depth layer reaching canvas bottom, following the source's original crests. CRITICAL: this is an exact layer extraction from the attached painting, not a new sand asset. Preserve original warm flat peach/orange/lavender colors, softly brushed storybook shading, exact crest shapes and registration. NO realistic sand grain, no new mound/pile, no added detail, no new objects. Full original 1448x1086 4:3 canvas with every retained part in its original position and scale, no recentering or zoom. No text or UI."
+    },
+    {
+      "source": "desert-dune-middle.png",
+      "export": "public/assets/adventure/desert-dune-middle.webp",
+      "generated": "exec-39c67f16-257e-4eca-9696-2867603519d0.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET attached desert. Extract the MIDDLE continuous dune layer: follow the existing winding middle dune crest from left around (0,.41), past (.24,.435), (.40,.46), up along the bright sweeping ridge toward (.65,.40), ending right around (1,.40). Keep the original broad curved orange dune face and warm highlights below this crest, no invented sand textures. Fill occluded parts under foreground objects as continuous matching sand down to canvas bottom and both sides. Genuine transparency ABOVE the crest; fully painted sand BELOW, including hidden lower region. Remove ALL crystals and all foreground rocks/plants, do not bake the small middle crystal group into the dune. No arch/sky or far dunes above this crest. CRITICAL: this is an exact layer extraction from the attached painting, not a new sand asset. Preserve original warm flat peach/orange/lavender colors, softly brushed storybook shading, exact crest shapes and registration. NO realistic sand grain, no new mound/pile, no added detail, no new objects. Full original 1448x1086 4:3 canvas with every retained part in its original position and scale, no recentering or zoom. No text or UI."
+    },
+    {
+      "source": "desert-dune-near.png",
+      "export": "public/assets/adventure/desert-dune-near.webp",
+      "generated": "exec-489b4c47-2958-45c7-8a9e-f90cc8a5d95d.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET attached desert. Extract the NEAREST SAND DUNE layer following its ACTUAL existing long curving crest: begins at LEFT near (0,.51), sweeps through (.24,.55), (.45,.61), then rises toward (.71,.49) and RIGHT around (1,.43). Keep this precise familiar sweeping curve and its original softly shaded orange surface. Transparent ABOVE this nearest crest, continuous opaque matching sand BELOW all the way to canvas bottom and both edges. Reconstruct the hidden sand underneath foreground rocks and crystals. Remove ALL crystals, all rock shelves, stones, vegetation and sky. No extra isolated mound; one full terrain stratum, source paint only. CRITICAL: this is an exact layer extraction from the attached painting, not a new sand asset. Preserve original warm flat peach/orange/lavender colors, softly brushed storybook shading, exact crest shapes and registration. NO realistic sand grain, no new mound/pile, no added detail, no new objects. Full original 1448x1086 4:3 canvas with every retained part in its original position and scale, no recentering or zoom. No text or UI."
+    },
+    {
+      "source": "desert-dunes-foreground.png",
+      "export": "public/assets/adventure/desert-dunes-foreground.webp",
+      "generated": "exec-72203313-bb55-4b3d-8a79-8727afaf5d2d.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET attached desert. Isolate ONLY the FIXED FOREGROUND ROCKS, plants and large crystals: the large left-middle crystal cluster and its rocks (x0-.23, y.27-.53), the large lower-left crystal/rock/plant cluster (x0-.36,y.56-1), and the entire foreground rocky shelf on the right/bottom with its large green and purple crystals and plants (roughly x.36-1,y.49-1). Preserve their exact visible silhouettes, positions, painted colors and every cut edge. Remove ALL sand and dunes to true transparency, so moving dune layers can be visible behind the rocks. Remove the small middle-left crystal at(.34,.44), the small fragment at(.275,.53), and small far-right crystal group at(.92,.36): those belong to separate depth layers. Do not include the sky/arch. No new hourglass, object, sand pile or scene redesign. CRITICAL: this is an exact layer extraction from the attached painting, not a new sand asset. Preserve original warm flat peach/orange/lavender colors, softly brushed storybook shading, exact crest shapes and registration. NO realistic sand grain, no new mound/pile, no added detail, no new objects. Full original 1448x1086 4:3 canvas with every retained part in its original position and scale, no recentering or zoom. No text or UI."
+    }
+  ]
+}

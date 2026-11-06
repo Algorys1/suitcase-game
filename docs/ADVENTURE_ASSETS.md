@@ -1,5 +1,11 @@
 # Assets de la carte et des escales
 
+## Palais de givre — gouttes et nacre
+
+Vérifications exécutées : TypeScript strict, build Vite et 96 tests Vitest réussis. Chrome sur le build sous `/jam/`, 960 × 540 FR et 320 × 568 EN, souris et toucher simulé : trois branches en ordre libre, répétitions sans doublon, reprise partielle et complète après rechargement, anciennes collections, mouvement réduit, chutes simultanées, redimensionnement et sortie pendant l'envol. Captures des gouttes et des surfaces nacrées inspectées sur les deux formats ; luminosité atténuée et sélection des reflets du canal resserrée après inspection. Aucune erreur JavaScript ni ressource HTTP manquante. Essai artistique du joueur et appareil tactile réel attendus.
+
+`frostBranches.ts` conserve directement `public/assets/destinations/palais_de_givre.webp`. Aucun asset généré, paysage recomposé ou pictogramme détourné. Les trois branches enneigées en haut à gauche ont des zones souris/toucher et clavier sans curseur révélateur. Cinq petites gouttes facettées Phaser tombent vers les roses du premier plan gauche, l'eau du canal ou le cristal du pont près des marches. Les couleurs de la peinture sont échantillonnées dans des masques locaux ; les pixels violets des pétales et du cristal, et les reflets du canal, sont éclairés en addition à faible opacité. Les lumières et les quelques scintillements restent après collecte et revisite, déduits des étapes sauvegardées. Le mouvement réduit supprime chute, pulsation et scintillement animé. Les objets sont détruits au redessin et à la sortie ; les trois textures de lumière sont mises en cache. La rose de givre utilise la formation et l'envol communs, sans changer les anciens souvenirs ni les charges.
+
 ## Désert de cristal — cristaux de la peinture originale
 
 L'activité de dunes coulissantes est abandonnée à la demande du joueur. Le décor utilise directement `public/assets/destinations/desert_de_cristal.webp`, intact (arche, dunes, cristaux et sablier). Aucun asset généré pour cette activité.

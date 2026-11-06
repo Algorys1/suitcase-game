@@ -17,6 +17,7 @@ import { addBraiseColumns } from '../ui/braiseColumns';
 import { addIslesBridge } from '../ui/islesBridge';
 import { addMarshFireflies } from '../ui/marshFireflies';
 import { addDesertCrystals } from '../ui/desertCrystals';
+import { addFrostBranches } from '../ui/frostBranches';
 
 export class ExplorationScene extends Phaser.Scene {
   private id = '';
@@ -87,17 +88,17 @@ export class ExplorationScene extends Phaser.Scene {
     }
     const result = progressStore.touchExploration(id, index);
     if ((id === 'archipel_azur' || id === 'ruines_englouties' || id === 'coeur_de_braise'
-      || id === 'iles_suspendues' || id === 'marais_des_lucioles' || id === 'desert_de_cristal') && !result.activated) return;
+      || id === 'iles_suspendues' || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre') && !result.activated) return;
     // Keep the other school's in-progress swim alive after the first arrival.
     if ((id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues'
-      || id === 'marais_des_lucioles' || id === 'desert_de_cristal') && !result.collected) return;
+      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre') && !result.collected) return;
     this.lastTouched = index;
     this.lastActivated = result.activated;
     this.celebrate = result.collected;
     this.justFound ||= result.collected;
     this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles'
       || id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues'
-      || id === 'marais_des_lucioles' || id === 'desert_de_cristal') && result.collected;
+      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre') && result.collected;
     this.render();
     if (result.collected && id === 'mycelia') this.collectSouvenir(x, y);
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
@@ -143,6 +144,7 @@ export class ExplorationScene extends Phaser.Scene {
       : this.id === 'coeur_de_braise' ? copy.basaltAwakening
       : this.id === 'iles_suspendues' ? copy.islesAwakening
       : this.id === 'marais_des_lucioles' ? copy.marshAwakening
+      : this.id === 'palais_de_givre' ? copy.frostAwakening
       : this.id === 'desert_de_cristal' ? copy.desertAwakening : copy.souvenirForming
       : this.offering ? copy.placeBell : !complete
       ? this.id === 'cimes_eternelles' ? copy.peaksMood : this.id === 'mycelia' ? copy.windowsMood : ''
@@ -178,6 +180,9 @@ export class ExplorationScene extends Phaser.Scene {
       (index, x, y) => this.touch('marais_des_lucioles', index, x, y), this.souvenirInFlight, marshWaking);
     if (this.id === 'desert_de_cristal') addDesertCrystals(this, this.controls, stage.art, steps,
       (index, x, y) => this.touch('desert_de_cristal', index, x, y), this.souvenirInFlight);
+
+    if (this.id === 'palais_de_givre') addFrostBranches(this, this.controls, stage.art, steps,
+      (index, x, y) => this.touch('palais_de_givre', index, x, y), this.souvenirInFlight);
 
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');
@@ -238,6 +243,9 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.souvenirInFlight) {
       if (this.id === 'archipel_azur') {
         gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+      } else if (this.id === 'palais_de_givre') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 800, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.82, top + artH * 0.53, () => this.render(), true) });
       } else if (this.id === 'desert_de_cristal') {
         this.tweens.addCounter({ from: 0, to: 1, duration: 1500, onComplete: () =>
           this.collectSouvenir(left + artW * 0.70, top + artH * 0.61, () => this.render(), true) });

@@ -31,6 +31,7 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
   if (destination && hasPostcard(scene, seed)) {
     const picture = scene.add.image(x, y + height / 2,
       destination.id === 'ile_des_cendres' || destination.id === 'grottes_sporiferes'
+        || destination.id === 'canopee_des_brumes'
         ? worldTexture(scene, destination.id) : textureKey(destination.id))
       .setName(`postcard-${destination.id}`);
     const scale = Math.min((width - 8) / picture.width, (height - 8) / picture.height);

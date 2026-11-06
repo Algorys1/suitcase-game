@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 
 export function preloadAdventureArt(scene: Phaser.Scene): void {
+  if (!scene.textures.exists('canopy-water-source')) scene.load.image('canopy-water-source',
+    `${import.meta.env.BASE_URL}assets/destinations/canopee_des_brumes.webp`);
   for (const id of ['right', 'left', 'center']) {
     const key = `temple-carving-mask-${id}`;
     if (!scene.textures.exists(key)) scene.load.svg(key,

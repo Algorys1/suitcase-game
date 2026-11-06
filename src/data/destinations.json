@@ -127,7 +127,7 @@
     ],
     "titleKey": "destinations.canopee_des_brumes.title",
     "storyKey": "destinations.canopee_des_brumes.story",
-    "image": "assets/destinations/canopee_des_brumes.webp"
+    "image": "assets/destinations/canopee_des_brumes-empty.webp"
   },
   {
     "id": "recif_de_verre",

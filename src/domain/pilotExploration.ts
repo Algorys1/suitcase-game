@@ -1,5 +1,6 @@
-export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, iles_suspendues: 5, marais_des_lucioles: 3, desert_de_cristal: 6, palais_de_givre: 3, temple_oublie: 3 } as const;
+export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, iles_suspendues: 5, marais_des_lucioles: 3, desert_de_cristal: 6, palais_de_givre: 3, temple_oublie: 3, ile_des_cendres: 3 } as const;
 export const pilotTargets = {
+  ile_des_cendres: [{ x: 0.195, y: 0.34 }],
   temple_oublie: [{ x: 0.779, y: 0.572 }, { x: 0.497, y: 0.584 }, { x: 0.645, y: 0.285 }],
   palais_de_givre: [{ x: 0.075, y: 0.205 }, { x: 0.25, y: 0.12 }, { x: 0.445, y: 0.045 }],
   desert_de_cristal: [{ x: 0.116, y: 0.335 }, { x: 0.336, y: 0.433 },
@@ -34,6 +35,12 @@ export function validSteps(id: PilotId, value: unknown): number[] {
   if (!Array.isArray(value)) return [];
   const steps = [...new Set(value.filter((index: unknown): index is number => typeof index === 'number'
     && Number.isInteger(index) && index >= 0 && index < pilotTargetCounts[id]))];
+  if (id === 'ile_des_cendres') {
+    // These are successive presses on one volcano, rather than independent targets.
+    let count = 0;
+    while (steps.includes(count)) count++;
+    return Array.from({ length: count }, (_, index) => index);
+  }
   // The desert beams follow the player's actual order, including after reload.
   return id === 'desert_de_cristal' ? steps : steps.sort((a, b) => a - b);
 }

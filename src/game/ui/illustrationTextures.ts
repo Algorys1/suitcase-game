@@ -42,7 +42,8 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     if ((key.startsWith('souvenir-') || preparation || home || journal || key === 'adventure-mycelia-resident' || key === 'adventure-cimes-bell'
       || key.startsWith('adventure-ruins-fish-') || key.startsWith('adventure-cimes-mist-')
       || key.startsWith('adventure-braise-column-') || key === 'adventure-isles-bridge'
-      || key.startsWith('adventure-isles-grass-') || key.startsWith('adventure-temple-')) && !backdrop && !vial) {
+      || key.startsWith('adventure-isles-grass-') || key.startsWith('adventure-temple-')
+      || key.startsWith('adventure-ash-')) && !backdrop && !vial) {
       // Generated sprites have different transparent margins. Frame their visible
       // silhouette once so every icon has a consistent size, keeping source files intact.
       const pixels = context.getImageData(0, 0, width, height).data;

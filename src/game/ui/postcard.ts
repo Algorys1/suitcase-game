@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { destinations } from '../../domain/recipes';
+import { worldTexture } from './worldTexture';
 
 const textureKey = (id: string): string => `destination-${id}`;
 
@@ -28,7 +29,8 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
   g.fillStyle(0xfffaf0).fillRoundedRect(left, y, width, height, 8);
   const destination = destinations[seed];
   if (destination && hasPostcard(scene, seed)) {
-    const picture = scene.add.image(x, y + height / 2, textureKey(destination.id))
+    const picture = scene.add.image(x, y + height / 2,
+      destination.id === 'ile_des_cendres' ? worldTexture(scene, destination.id) : textureKey(destination.id))
       .setName(`postcard-${destination.id}`);
     const scale = Math.min((width - 8) / picture.width, (height - 8) / picture.height);
     picture.setScale(scale);

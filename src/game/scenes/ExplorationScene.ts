@@ -19,6 +19,7 @@ import { addMarshFireflies } from '../ui/marshFireflies';
 import { addDesertCrystals } from '../ui/desertCrystals';
 import { addFrostBranches } from '../ui/frostBranches';
 import { addTempleGuardians } from '../ui/templeGuardians';
+import { addAshVolcano } from '../ui/ashVolcano';
 
 export class ExplorationScene extends Phaser.Scene {
   private id = '';
@@ -89,17 +90,17 @@ export class ExplorationScene extends Phaser.Scene {
     }
     const result = progressStore.touchExploration(id, index);
     if ((id === 'archipel_azur' || id === 'ruines_englouties' || id === 'coeur_de_braise'
-      || id === 'iles_suspendues' || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie') && !result.activated) return;
+      || id === 'iles_suspendues' || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres') && !result.activated) return;
     // Keep the other school's in-progress swim alive after the first arrival.
     if ((id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues'
-      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie') && !result.collected) return;
+      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres') && !result.collected) return;
     this.lastTouched = index;
     this.lastActivated = result.activated;
     this.celebrate = result.collected;
     this.justFound ||= result.collected;
     this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles'
       || id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues'
-      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie') && result.collected;
+      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres') && result.collected;
     this.render();
     if (result.collected && id === 'mycelia') this.collectSouvenir(x, y);
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
@@ -145,6 +146,7 @@ export class ExplorationScene extends Phaser.Scene {
       : this.id === 'coeur_de_braise' ? copy.basaltAwakening
       : this.id === 'iles_suspendues' ? copy.islesAwakening
       : this.id === 'marais_des_lucioles' ? copy.marshAwakening
+      : this.id === 'ile_des_cendres' ? copy.ashAwakening
       : this.id === 'temple_oublie' ? copy.templeAwakening
       : this.id === 'palais_de_givre' ? copy.frostAwakening
       : this.id === 'desert_de_cristal' ? copy.desertAwakening : copy.souvenirForming
@@ -188,6 +190,9 @@ export class ExplorationScene extends Phaser.Scene {
 
     if (this.id === 'temple_oublie') addTempleGuardians(this, this.controls, stage.art, steps,
       (index, x, y) => this.touch('temple_oublie', index, x, y), this.souvenirInFlight);
+
+    if (this.id === 'ile_des_cendres') addAshVolcano(this, this.controls, stage.art, steps,
+      (index, x, y) => this.touch('ile_des_cendres', index, x, y), this.souvenirInFlight);
 
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');
@@ -248,6 +253,9 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.souvenirInFlight) {
       if (this.id === 'archipel_azur') {
         gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+      } else if (this.id === 'ile_des_cendres') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1400, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.645, top + artH * 0.73, () => this.render(), true) });
       } else if (this.id === 'temple_oublie') {
         this.tweens.addCounter({ from: 0, to: 1, duration: 650, onComplete: () =>
           this.collectSouvenir(left + artW * 0.65, top + artH * 0.70, () => this.render(), true) });

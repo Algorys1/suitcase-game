@@ -19,7 +19,8 @@ export function preloadAdventureArt(scene: Phaser.Scene): void {
     'braise-ground', 'braise-column-tall', 'braise-column-medium', 'braise-column-short',
     'isles-sky', 'isles-left', 'isles-right', 'isles-waterfall', 'isles-bridge',
     'isles-grass-left', 'isles-grass-right', 'marsh-water', 'marsh-pad-far', 'marsh-pad-middle', 'marsh-pad-near',
-    'temple-bird', 'temple-round', 'temple-leaf', 'ash-seed', 'ash-shoot', 'ash-smoke', 'ash-sand-rim']) {
+    'temple-bird', 'temple-round', 'temple-leaf', 'ash-seed', 'ash-shoot', 'ash-smoke', 'ash-sand-rim',
+    'grotto-dormant']) {
     if (!scene.textures.exists(`adventure-${id}`))
       scene.load.image(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
   }

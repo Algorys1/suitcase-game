@@ -1,5 +1,6 @@
-export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, iles_suspendues: 5, marais_des_lucioles: 3, desert_de_cristal: 6, palais_de_givre: 3, temple_oublie: 3, ile_des_cendres: 3 } as const;
+export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, iles_suspendues: 5, marais_des_lucioles: 3, desert_de_cristal: 6, palais_de_givre: 3, temple_oublie: 3, ile_des_cendres: 3, grottes_sporiferes: 3 } as const;
 export const pilotTargets = {
+  grottes_sporiferes: [{ x: 0.22, y: 0.20 }, { x: 0.428, y: 0.43 }, { x: 0.932, y: 0.322 }],
   ile_des_cendres: [{ x: 0.195, y: 0.34 }],
   temple_oublie: [{ x: 0.779, y: 0.572 }, { x: 0.497, y: 0.584 }, { x: 0.645, y: 0.285 }],
   palais_de_givre: [{ x: 0.075, y: 0.205 }, { x: 0.25, y: 0.12 }, { x: 0.445, y: 0.045 }],

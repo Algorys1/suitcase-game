@@ -12,7 +12,8 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     const journal = key === 'journal-closed';
     const settings = key.startsWith('settings-');
     const adventure = key.startsWith('adventure-') && !key.startsWith('adventure-charge-');
-    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home && !journal && !settings && !adventure && key !== 'void-space') continue;
+    const carvingMask = key.startsWith('temple-carving-mask-');
+    if (!key.startsWith('destination-') && !key.startsWith('souvenir-') && !preparation && !home && !journal && !settings && !adventure && !carvingMask && key !== 'void-space') continue;
     const texture = scene.textures.get(key);
     const source = texture.getSourceImage();
     // A canvas source has already been prepared during an earlier visit to Home.
@@ -41,7 +42,7 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
     if ((key.startsWith('souvenir-') || preparation || home || journal || key === 'adventure-mycelia-resident' || key === 'adventure-cimes-bell'
       || key.startsWith('adventure-ruins-fish-') || key.startsWith('adventure-cimes-mist-')
       || key.startsWith('adventure-braise-column-') || key === 'adventure-isles-bridge'
-      || key.startsWith('adventure-isles-grass-')) && !backdrop && !vial) {
+      || key.startsWith('adventure-isles-grass-') || key.startsWith('adventure-temple-')) && !backdrop && !vial) {
       // Generated sprites have different transparent margins. Frame their visible
       // silhouette once so every icon has a consistent size, keeping source files intact.
       const pixels = context.getImageData(0, 0, width, height).data;

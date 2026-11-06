@@ -1,6 +1,11 @@
 import Phaser from 'phaser';
 
 export function preloadAdventureArt(scene: Phaser.Scene): void {
+  for (const id of ['right', 'left', 'center']) {
+    const key = `temple-carving-mask-${id}`;
+    if (!scene.textures.exists(key)) scene.load.svg(key,
+      `${import.meta.env.BASE_URL}assets/adventure/temple-carving-${id}.svg`, { scale: 3 });
+  }
   for (const id of ['map-paper', 'mycelia-resident', 'mycelia-sleeping', 'cimes-predawn']) {
     if (!scene.textures.exists(`adventure-${id}`))
       scene.load.image(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.png`);
@@ -13,7 +18,8 @@ export function preloadAdventureArt(scene: Phaser.Scene): void {
     'cimes-mist-high', 'cimes-mist-left', 'cimes-mist-right',
     'braise-ground', 'braise-column-tall', 'braise-column-medium', 'braise-column-short',
     'isles-sky', 'isles-left', 'isles-right', 'isles-waterfall', 'isles-bridge',
-    'isles-grass-left', 'isles-grass-right', 'marsh-water', 'marsh-pad-far', 'marsh-pad-middle', 'marsh-pad-near']) {
+    'isles-grass-left', 'isles-grass-right', 'marsh-water', 'marsh-pad-far', 'marsh-pad-middle', 'marsh-pad-near',
+    'temple-bird', 'temple-round', 'temple-leaf']) {
     if (!scene.textures.exists(`adventure-${id}`))
       scene.load.image(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
   }

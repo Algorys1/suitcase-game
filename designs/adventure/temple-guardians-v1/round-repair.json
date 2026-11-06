@@ -1,0 +1,4 @@
+{
+  "tool": "image_gen integrated",
+  "prompt": "Use case: precise-object-edit. Edit target: supplied stone forest creature guardian sprite. Remove ONLY all white/grey glow, halo, mist and cast shadow outside the carved creature's silhouette. Everything outside its sandstone, moss and leaf silhouette must be fully transparent. Keep the exact guardian pose, colours, painting, carving, size and framing. No backdrop, no aura, no glow, no new objects."
+}

@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "public/assets/destinations/foret_du_silence.webp",
+  "prompts": [
+    "Use case: precise-object-edit. Edit target: attached snowy forest painting. Remove ONLY the white feather lying on the foreground tree stump, including shaft and its cast shadow. Reconstruct the warm tree rings and wood grain seamlessly underneath. Preserve exact stump outline, snow, berries, trees, mountains, sky, path, colours and composition. No other changes. Exact same 4:3 framing. This is a clean game background for moving the feather as a separate sprite.",
+    "Use case: background-extraction. Extract ONLY the white feather resting on the foreground stump of the attached snowy forest painting. Single game sprite on actual transparent background. Preserve exact original orientation: bare quill tip at lower left, broad feathery tip at upper right. Same cream white plumage, delicate warm pink shaft and fine layered barbs, hand-painted storybook texture. Tightly frame the complete feather with a small transparent margin. No stump, snow, cast ground shadow, landscape, border or text. No redesign."
+  ]
+}

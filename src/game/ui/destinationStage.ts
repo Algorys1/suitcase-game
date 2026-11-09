@@ -6,6 +6,9 @@ import { drawPreparationDesk } from './preparationArt';
 import { arriveObjects } from './travelMotion';
 import { drawPostcard } from './postcard';
 import { destinations } from '../../domain/recipes';
+import { drawForestSnow } from './forestSnow';
+import { addNecropoleLamps } from './necropoleLamps';
+import { addSylvePath } from './sylvePath';
 import { addCityWindows } from './cityWindows';
 import { worldTexture } from './worldTexture';
 import { addZenithWatering } from './zenithWatering';
@@ -68,6 +71,15 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   if (id === 'cite_immobile' && scene.sys.settings.key !== 'exploration')
     objects.push(...addCityWindows(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('cite_immobile')));
+  if (id === 'sylve_prismatique' && scene.sys.settings.key !== 'exploration')
+    objects.push(...addSylvePath(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('sylve_prismatique')));
+  if (id === 'necropole_ardente' && scene.sys.settings.key !== 'exploration')
+    objects.push(...addNecropoleLamps(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('necropole_ardente')));
+  if (id === 'foret_du_silence' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawForestSnow(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('foret_du_silence')).objects);
   const corners = scene.add.graphics().setName('arrival-photo-corners');
   corners.fillStyle(0xc7aa72, 0.65).fillTriangle(artLeft - 12, artUpper - 12, artLeft + 15, artUpper - 12, artLeft - 12, artUpper + 15);
   corners.fillTriangle(artLeft + artW + 12, artUpper + artH + 16,

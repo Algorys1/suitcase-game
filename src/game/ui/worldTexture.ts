@@ -1,11 +1,14 @@
 import type Phaser from 'phaser';
 import { explorationComplete, isPilot } from '../../domain/pilotExploration';
 import { progressStore } from '../../services/storage';
+import { necropoleBase } from './necropoleLamps';
 import { ashPostcard } from './ashVolcano';
 import { grottoPostcard } from './grottoSpores';
 import { canopyPostcard } from './canopyDew';
 
 export function worldTexture(scene: Phaser.Scene, id: string): string {
+  if (id === 'foret_du_silence' && scene.textures.exists('adventure-forest-empty')) return 'adventure-forest-empty';
+  if (id === 'necropole_ardente') return necropoleBase(scene);
   if (id === 'jardins_du_zenith' && scene.textures.exists('adventure-zenith-empty')) return 'adventure-zenith-empty';
   if (id === 'ile_des_cendres') return ashPostcard(scene, progressStore.explorationSteps(id).length);
   if (id === 'grottes_sporiferes') return grottoPostcard(scene, progressStore.explorationSteps(id));

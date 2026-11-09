@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
 import { destinations } from '../../domain/recipes';
+import { drawForestSnow } from './forestSnow';
+import { addNecropoleLamps } from './necropoleLamps';
+import { addSylvePath } from './sylvePath';
 import { addCityWindows } from './cityWindows';
 import { worldTexture } from './worldTexture';
 import { addZenithWatering } from './zenithWatering';
@@ -34,7 +37,7 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
   if (destination && hasPostcard(scene, seed)) {
     const picture = scene.add.image(x, y + height / 2,
       destination.id === 'ile_des_cendres' || destination.id === 'grottes_sporiferes'
-        || destination.id === 'canopee_des_brumes' || destination.id === 'jardins_du_zenith'
+        || destination.id === 'canopee_des_brumes' || destination.id === 'jardins_du_zenith' || destination.id === 'necropole_ardente' || destination.id === 'foret_du_silence'
         ? worldTexture(scene, destination.id) : textureKey(destination.id))
       .setName(`postcard-${destination.id}`);
     const scale = Math.min((width - 8) / picture.width, (height - 8) / picture.height);
@@ -52,6 +55,15 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
     if (destination.id === 'cite_immobile') objects.push(...addCityWindows(scene,
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('cite_immobile')));
+    if (destination.id === 'sylve_prismatique') objects.push(...addSylvePath(scene,
+      { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+        width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('sylve_prismatique')));
+    if (destination.id === 'necropole_ardente') objects.push(...addNecropoleLamps(scene,
+      { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+        width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('necropole_ardente')));
+    if (destination.id === 'foret_du_silence') objects.push(...drawForestSnow(scene,
+      { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+        width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('foret_du_silence')).objects);
     if (mounted) {
       const corners = scene.add.graphics();
       corners.fillStyle(0xb58b4c);

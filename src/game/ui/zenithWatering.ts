@@ -43,7 +43,7 @@ export function addZenithWatering(scene: Phaser.Scene, art: WorldFrame, steps: r
   };
   steps.forEach(illuminate);
   if (!interactive) return () => {};
-  can.setInteractive({ useHandCursor: true });
+  can.setInteractive();
   scene.input.setDraggable(can);
   const reset = () => { dragging = false; can.setPosition(home.x, home.y).setAngle(0); };
   can.on('dragstart', () => {

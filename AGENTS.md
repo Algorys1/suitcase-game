@@ -20,6 +20,8 @@ Les données implémentées dans `src/data/elements.json` et `src/data/destinati
 
 ## Stack et contraintes
 
+- **Cartes et exploration : curseur normal sur le paysage**, y compris les objets à glisser-déposer. Ne pas utiliser de main, de `pointer`, de `grab` ni d’autre curseur spécial pour révéler une cible interactive. Cette consigne de découverte figure dans `docs/DESTINATION_ACTIVITIES.md` ; elle s’applique à chaque nouvelle activité.
+
 - **DA obligatoire sur chaque nouvel écran**, y compris tutoriel, confirmations, erreurs et outils de test : reprendre les décors illustrés, papiers, matières, typographies et étiquettes du jeu. Aucun écran générique, panneau pastel ou bouton standard hors thème. Réutiliser les composants de mise en page validés. Créer des assets dédiés quand le rendu demandé l’exige ; ne pas détourner un pictogramme ni recycler un visuel inadapté par économie. Retirer les anciens rendus génériques et leurs ressources devenues inutiles. Vérifier visuellement le résultat avant de le présenter.
 
 - **Phaser 4 + TypeScript strict + Vite** ; **Vitest** pour la logique métier.

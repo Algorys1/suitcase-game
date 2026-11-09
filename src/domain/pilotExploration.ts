@@ -1,5 +1,7 @@
-export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, marais_des_lucioles: 3, iles_suspendues: 5, desert_de_cristal: 6, palais_de_givre: 3, temple_oublie: 3, ile_des_cendres: 3, grottes_sporiferes: 3, canopee_des_brumes: 3, recif_de_verre: 3, jardins_du_zenith: 3, cite_immobile: 3 } as const;
+export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, marais_des_lucioles: 3, iles_suspendues: 5, desert_de_cristal: 6, palais_de_givre: 3, temple_oublie: 3, ile_des_cendres: 3, grottes_sporiferes: 3, canopee_des_brumes: 3, recif_de_verre: 3, jardins_du_zenith: 3, cite_immobile: 3, sylve_prismatique: 5, necropole_ardente: 4, foret_du_silence: 3 } as const;
 export const pilotTargets = {
+  necropole_ardente: [{ x: 0.430, y: 0.239 }, { x: 0.572, y: 0.113 }, { x: 0.671, y: 0.188 }, { x: 0.706, y: 0.276 }],
+  sylve_prismatique: [{ x: 0.555, y: 0.933 }, { x: 0.568, y: 0.875 }, { x: 0.493, y: 0.794 }, { x: 0.580, y: 0.754 }, { x: 0.597, y: 0.711 }],
   cite_immobile: [{ x: 0.130, y: 0.291 }, { x: 0.679, y: 0.432 }, { x: 0.974, y: 0.413 }],
   jardins_du_zenith: [{ x: 0.115, y: 0.82 }, { x: 0.866, y: 0.704 }, { x: 0.696, y: 0.493 }],
   recif_de_verre: [{ x: 0.115, y: 0.28 }, { x: 0.393, y: 0.402 }, { x: 0.87, y: 0.77 }],
@@ -40,8 +42,8 @@ export function validSteps(id: PilotId, value: unknown): number[] {
   if (!Array.isArray(value)) return [];
   const steps = [...new Set(value.filter((index: unknown): index is number => typeof index === 'number'
     && Number.isInteger(index) && index >= 0 && index < pilotTargetCounts[id]))];
-  if (id === 'ile_des_cendres') {
-    // These are successive presses on one volcano, rather than independent targets.
+  if (id === 'ile_des_cendres' || id === 'foret_du_silence') {
+    // Successive gestures (volcano presses or free snow strokes), rather than independent targets.
     let count = 0;
     while (steps.includes(count)) count++;
     return Array.from({ length: count }, (_, index) => index);

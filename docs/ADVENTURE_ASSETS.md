@@ -1,5 +1,19 @@
 # Assets de la carte et des escales
 
+## Forêt du silence — plume mobile et neige dessinable
+
+Original conservé : `public/assets/destinations/foret_du_silence.webp`. Deux éditions avec l’outil intégré image_gen : souche sans plume et plume sur fond transparent. PNG sources et prompts exacts : `designs/adventure/forest-snow-v1/`. WebP distribués : `public/assets/adventure/forest-empty.webp`, `forest-feather.webp`. Le cadrage alpha et le filtrage mipmap existants préparent le sprite. `forestSnow.ts` partage plume, fond et piste d’empreintes entre carte, carnet et exploration ; le dessin et les empreintes locales sont des traits natifs Phaser 4.2.1 aux couleurs de la neige. `domain/forestDrawing.ts` délimite le chemin et mesure les seuls segments dans la neige, indépendamment de Phaser. Dessins et empreintes temporaires sont bornés et ne sont pas sauvegardés ; les trois gestes accomplis utilisent les étapes de sauvegarde existantes.
+
+## Nécropole ardente — signes et quatre lampes
+
+Placement revu après retour du joueur : signes réduits, centres et inclinaisons ajustés individuellement sur les faces dégagées des pierres. Les zones de toucher suivent les mêmes ancrages. Gros plan de la scène vérifié dans Chrome après correction ; build TypeScript/Vite réussi.
+
+Peinture originale conservée : `public/assets/destinations/necropole_ardente.webp`. Retouche avec l’outil intégré image_gen : quatre petites lampes éteintes, grande lampe du premier plan inchangée. Source PNG et prompt exact : `designs/adventure/necropole-lamps-v1/`. WebP distribué : `public/assets/adventure/necropole-unlit.webp`. `necropoleLamps.ts` ne reprend que quatre zones locales avec un masque doux autour des petites flammes : le reste du décor utilise les pixels originaux. Les lampes allumées proviennent de la peinture originale, avec vacillement d’opacité. Quatre gravures linéaires dédiées, tracées dans Phaser 4.2.1, suivent les pierres de la voûte ; aucun pictogramme d’interface n’est détourné. Même fond et mêmes signes/lampes sauvegardés dans l’arrivée, le carnet et l’exploration.
+
+## Sylve prismatique — dalles et courant
+
+Original conservé : `public/assets/destinations/sylve_prismatique.webp`. Deux retouches avec l’outil intégré image_gen : sol moussu sous cinq dalles et rivière qui déborde naturellement vers le chemin. Sources PNG et prompts exacts : `designs/adventure/sylve-path-v1/`. WebP : `public/assets/adventure/sylve-ground.webp`, `sylve-stream.webp`. `sylvePath.ts` découpe les pierres de la peinture originale, affiche uniquement leur fond local lorsqu’elles s’abaissent, puis révèle le courant avec une bordure courbe autour du chemin. Arbres, prisme, pont et feuillages hors de cette zone conservent la peinture originale. Rendu partagé entre arrivée, carnet et exploration ; cinq étapes dans la sauvegarde existante. Pas de nouvel état persistant pour l’eau, déduite de la complétion des dalles.
+
 ## Cité immobile — fenêtres habitées et constellation
 
 Peinture `public/assets/destinations/cite_immobile.webp` intacte, sans nouvel asset généré. `cityWindows.ts` extrait les pixels dorés des vitres dans trois régions de la texture préparée pour les éclairer ; les cadres en pierre et croisillons sont conservés. Petits plis de rideaux dans les vitres, lueurs mobiles et flocons à six branches dessinés dans Phaser 4.2.1. Même rendu partagé par arrivée, carnet et exploration ; seules les interactions sont propres à l’exploration. Les étapes sauvegardées déterminent les fenêtres actives et la constellation durable. Aucun mécanisme ajouté à l’horloge.

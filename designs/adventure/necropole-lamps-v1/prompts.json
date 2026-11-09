@@ -1,0 +1,5 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "public/assets/destinations/necropole_ardente.webp",
+  "prompt": "Use case: precise-object-edit. Edit target: attached Necropolis painting. Extinguish ONLY the four SMALL oil lamps behind the huge foreground lamp: (1) lamp on pedestal left of main arch at x41.4%, y50.5%; (2) tiny back left lamp x53%,y53%; (3) tiny back right lamp x63.8%,y53%; (4) lamp on right pedestal x85.4%,y57%. Remove each small flame and its local golden cast glow, leaving dark unlit wicks and intact terracotta bowls. Restore natural pink stone and twilight shadows behind these four flames. Keep the LARGE foreground lamp at x30%,y72% fully burning with its original flame and halo. Preserve all architecture, stones, foliage, flowers, inscriptions, sky and sea in the exact same positions, same 4:3 framing. Do not add symbols or any other objects. Minimal exact local edit only."
+}

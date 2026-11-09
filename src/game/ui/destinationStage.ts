@@ -6,6 +6,8 @@ import { drawPreparationDesk } from './preparationArt';
 import { arriveObjects } from './travelMotion';
 import { drawPostcard } from './postcard';
 import { destinations } from '../../domain/recipes';
+import { drawKingdomWaterfalls } from './kingdomWaterfalls';
+import { drawSanctuarySpores } from './sanctuarySpores';
 import { drawForestSnow } from './forestSnow';
 import { addNecropoleLamps } from './necropoleLamps';
 import { addSylvePath } from './sylvePath';
@@ -80,6 +82,12 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   if (id === 'foret_du_silence' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawForestSnow(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('foret_du_silence')).objects);
+  if (id === 'sanctuaire_des_spores' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawSanctuarySpores(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.sanctuaryPuzzle(), progressStore.unlockedSouvenirIds().includes(id)).objects);
+  if (id === 'royaume_des_spores_celestes' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawKingdomWaterfalls(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('royaume_des_spores_celestes')).objects);
   const corners = scene.add.graphics().setName('arrival-photo-corners');
   corners.fillStyle(0xc7aa72, 0.65).fillTriangle(artLeft - 12, artUpper - 12, artLeft + 15, artUpper - 12, artLeft - 12, artUpper + 15);
   corners.fillTriangle(artLeft + artW + 12, artUpper + artH + 16,

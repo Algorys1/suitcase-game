@@ -1,12 +1,16 @@
 import type Phaser from 'phaser';
 import { explorationComplete, isPilot } from '../../domain/pilotExploration';
 import { progressStore } from '../../services/storage';
+import { kingdomBase } from './kingdomWaterfalls';
+import { sanctuaryBase } from './sanctuarySpores';
 import { necropoleBase } from './necropoleLamps';
 import { ashPostcard } from './ashVolcano';
 import { grottoPostcard } from './grottoSpores';
 import { canopyPostcard } from './canopyDew';
 
 export function worldTexture(scene: Phaser.Scene, id: string): string {
+  if (id === 'royaume_des_spores_celestes') return kingdomBase(scene);
+  if (id === 'sanctuaire_des_spores') return sanctuaryBase(scene, progressStore.unlockedSouvenirIds().includes(id));
   if (id === 'foret_du_silence' && scene.textures.exists('adventure-forest-empty')) return 'adventure-forest-empty';
   if (id === 'necropole_ardente') return necropoleBase(scene);
   if (id === 'jardins_du_zenith' && scene.textures.exists('adventure-zenith-empty')) return 'adventure-zenith-empty';

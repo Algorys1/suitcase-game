@@ -1,0 +1,6 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "kingdom-umbrella.png",
+  "prompt": "Use case: background-extraction repair. Edit target is the attached transparent parasol sprite. Keep the parasol canopy, ribs, wooden handle, bow and both ribbon tails EXACTLY as they are, same shapes and colours. Remove ALL diffuse brown, orange, pink and black atmospheric glow or haze surrounding the silhouette. Outside the physical object must be fully alpha=0, including the open gap between canopy/handle/ribbons. No backdrop, vignette, ambient shadow or drop shadow. Preserve smooth antialiased edges tightly around the object and genuine transparency. Do not redraw, rotate, crop or omit any ribbon or tip.",
+  "selected": "kingdom-umbrella-clean.png"
+}

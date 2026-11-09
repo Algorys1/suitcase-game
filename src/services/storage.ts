@@ -3,6 +3,8 @@ import { decodeSession } from '../domain/session';
 import type { SessionState } from '../domain/session';
 import { activateTarget, explorationComplete, isPilot, pilotTargetCounts, validSteps } from '../domain/pilotExploration';
 import type { PilotId, PilotSteps } from '../domain/pilotExploration';
+import { decodeSanctuaryPuzzle, initialSanctuaryPuzzle, sanctuaryAligned, turnSanctuary } from '../domain/sanctuaryPuzzle';
+import type { SanctuaryPuzzle } from '../domain/sanctuaryPuzzle';
 
 export const PROGRESS_KEY = 'suitcase-game.progress.v1';
 export type Language = 'fr' | 'en';
@@ -17,6 +19,7 @@ export type Progress = {
   awakenedMycelia?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
+  sanctuaryPuzzle?: SanctuaryPuzzle;
 };
 type StorageAccess = () => Pick<Storage, 'getItem' | 'setItem'> & Partial<Pick<Storage, 'removeItem'>>;
 const knownIds = new Set(destinations.map(({ id }) => id));
@@ -53,7 +56,10 @@ export function decodeProgress(serialized: string | null): Progress {
     }
     const tutorialSeen = 'tutorialSeen' in value && Array.isArray(value.tutorialSeen)
       ? tutorialSteps.filter(step => value.tutorialSeen instanceof Array && value.tutorialSeen.includes(step)) : [];
+    const sanctuaryPuzzle = discoveredDestinationIds.includes('sanctuaire_des_spores') && 'sanctuaryPuzzle' in value
+      ? decodeSanctuaryPuzzle(value.sanctuaryPuzzle) : undefined;
     return { schemaVersion: 1, language,
+      ...(sanctuaryPuzzle ? { sanctuaryPuzzle } : {}),
       ...(tutorialSeen.length ? { tutorialSeen } : {}),
       ...(Object.keys(pilotSteps).length ? { pilotSteps } : {}),
       ...(pending.length ? { pendingSouvenirIds: pending } : {}),
@@ -80,6 +86,7 @@ export class ProgressStore {
       catch { this.progress = emptyProgress(); this.canPersist = false; }
     }
     return { ...this.progress, discoveredDestinationIds: [...this.progress.discoveredDestinationIds],
+      ...(this.progress.sanctuaryPuzzle ? { sanctuaryPuzzle: decodeSanctuaryPuzzle(this.progress.sanctuaryPuzzle)! } : {}),
       ...(this.progress.tutorialSeen ? { tutorialSeen: [...this.progress.tutorialSeen] } : {}),
       ...(this.progress.pilotSteps ? { pilotSteps: Object.fromEntries(Object.entries(this.progress.pilotSteps)
         .map(([id, steps]) => [id, [...steps]])) } : {}),
@@ -154,6 +161,8 @@ export class ProgressStore {
     const progress = this.read();
     const before = this.explorationSteps(id);
     if (!progress.discoveredDestinationIds.includes(id)) return { activated: false, complete: false, collected: false };
+    if (id === 'sanctuaire_des_spores' && !sanctuaryAligned(this.sanctuaryPuzzle()))
+      return { activated: false, complete: false, collected: false };
     const steps = activateTarget(id, before, index);
     const activated = steps.length !== before.length;
     const complete = explorationComplete(id, steps);
@@ -165,6 +174,33 @@ export class ProgressStore {
         ...(pending.length ? { pendingSouvenirIds: pending } : {}) });
     }
     return { activated, complete, collected };
+  }
+
+  sanctuaryPuzzle(): SanctuaryPuzzle {
+    return this.read().sanctuaryPuzzle
+      ?? initialSanctuaryPuzzle(this.unlockedSouvenirIds().includes('sanctuaire_des_spores'));
+  }
+
+  showSanctuaryClue(): boolean {
+    const progress = this.read();
+    if (!progress.discoveredDestinationIds.includes('sanctuaire_des_spores')) return false;
+    this.save({ ...progress, sanctuaryPuzzle: { ...this.sanctuaryPuzzle(), clueSeen: true } });
+    return true;
+  }
+
+  rotateSanctuary(index: number): { changed: boolean; collected: boolean } {
+    const progress = this.read(), id = 'sanctuaire_des_spores';
+    if (!progress.discoveredDestinationIds.includes(id) || !Number.isInteger(index) || index < 0 || index > 2)
+      return { changed: false, collected: false };
+    const puzzle = turnSanctuary(this.sanctuaryPuzzle(), index), solved = sanctuaryAligned(puzzle);
+    const collected = solved && (progress.pendingSouvenirIds?.includes(id) ?? false);
+    const pending = (progress.pendingSouvenirIds ?? []).filter(entry => entry !== id || !collected);
+    delete progress.pendingSouvenirIds;
+    // Positions and collection are saved atomically, independently of the reveal animation.
+    this.save({ ...progress, sanctuaryPuzzle: puzzle,
+      ...(solved ? { pilotSteps: { ...progress.pilotSteps, sanctuaire_des_spores: [0] } } : {}),
+      ...(pending.length ? { pendingSouvenirIds: pending } : {}) });
+    return { changed: true, collected };
   }
 
   offerBell(): boolean {

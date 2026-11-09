@@ -22,7 +22,7 @@ export function preloadAdventureArt(scene: Phaser.Scene): void {
     'isles-sky', 'isles-left', 'isles-right', 'isles-waterfall', 'isles-bridge',
     'isles-grass-left', 'isles-grass-right', 'marsh-water', 'marsh-pad-far', 'marsh-pad-middle', 'marsh-pad-near',
     'temple-bird', 'temple-round', 'temple-leaf', 'ash-seed', 'ash-shoot', 'ash-smoke', 'ash-sand-rim',
-    'grotto-dormant']) {
+    'grotto-dormant', 'zenith-empty', 'zenith-can']) {
     if (!scene.textures.exists(`adventure-${id}`))
       scene.load.image(`adventure-${id}`, `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
   }

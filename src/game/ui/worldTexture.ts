@@ -6,6 +6,7 @@ import { grottoPostcard } from './grottoSpores';
 import { canopyPostcard } from './canopyDew';
 
 export function worldTexture(scene: Phaser.Scene, id: string): string {
+  if (id === 'jardins_du_zenith' && scene.textures.exists('adventure-zenith-empty')) return 'adventure-zenith-empty';
   if (id === 'ile_des_cendres') return ashPostcard(scene, progressStore.explorationSteps(id).length);
   if (id === 'grottes_sporiferes') return grottoPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'canopee_des_brumes') return canopyPostcard(scene, progressStore.explorationSteps(id));

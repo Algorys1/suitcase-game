@@ -6,7 +6,10 @@ import { drawPreparationDesk } from './preparationArt';
 import { arriveObjects } from './travelMotion';
 import { drawPostcard } from './postcard';
 import { destinations } from '../../domain/recipes';
+import { addCityWindows } from './cityWindows';
 import { worldTexture } from './worldTexture';
+import { addZenithWatering } from './zenithWatering';
+import { progressStore } from '../../services/storage';
 
 /** Shared framing keeps the landscape in place when the player chooses to explore. */
 export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: SessionState,
@@ -56,6 +59,15 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
     .setDisplaySize(artW, artH).setName('exploration-art'));
   else objects.push(...drawPostcard(scene, artX, artUpper, artW, artH,
     destinations.findIndex(destination => destination.id === id)));
+  if (id === 'jardins_du_zenith' && scene.sys.settings.key !== 'exploration') {
+    const before = new Set(scene.children.getAll());
+    addZenithWatering(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('jardins_du_zenith'), () => {}, false, false);
+    objects.push(...scene.children.getAll().filter(child => !before.has(child)));
+  }
+  if (id === 'cite_immobile' && scene.sys.settings.key !== 'exploration')
+    objects.push(...addCityWindows(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('cite_immobile')));
   const corners = scene.add.graphics().setName('arrival-photo-corners');
   corners.fillStyle(0xc7aa72, 0.65).fillTriangle(artLeft - 12, artUpper - 12, artLeft + 15, artUpper - 12, artLeft - 12, artUpper + 15);
   corners.fillTriangle(artLeft + artW + 12, artUpper + artH + 16,

@@ -1,6 +1,9 @@
 import Phaser from 'phaser';
 import { destinations } from '../../domain/recipes';
+import { addCityWindows } from './cityWindows';
 import { worldTexture } from './worldTexture';
+import { addZenithWatering } from './zenithWatering';
+import { progressStore } from '../../services/storage';
 
 const textureKey = (id: string): string => `destination-${id}`;
 
@@ -31,13 +34,24 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
   if (destination && hasPostcard(scene, seed)) {
     const picture = scene.add.image(x, y + height / 2,
       destination.id === 'ile_des_cendres' || destination.id === 'grottes_sporiferes'
-        || destination.id === 'canopee_des_brumes'
+        || destination.id === 'canopee_des_brumes' || destination.id === 'jardins_du_zenith'
         ? worldTexture(scene, destination.id) : textureKey(destination.id))
       .setName(`postcard-${destination.id}`);
     const scale = Math.min((width - 8) / picture.width, (height - 8) / picture.height);
     picture.setScale(scale);
     g.lineStyle(1, 0xc78b60).strokeRoundedRect(left, y, width, height, 8);
     objects.push(picture);
+    if (destination.id === 'jardins_du_zenith') {
+      const before = new Set(scene.children.getAll());
+      addZenithWatering(scene, { left: picture.x - picture.displayWidth / 2,
+        top: picture.y - picture.displayHeight / 2, width: picture.displayWidth, height: picture.displayHeight },
+      progressStore.explorationSteps('jardins_du_zenith'), () => {}, false, false);
+      objects.push(...scene.children.getAll().filter((object): object is Phaser.GameObjects.Image =>
+        !before.has(object) && object instanceof Phaser.GameObjects.Image));
+    }
+    if (destination.id === 'cite_immobile') objects.push(...addCityWindows(scene,
+      { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+        width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('cite_immobile')));
     if (mounted) {
       const corners = scene.add.graphics();
       corners.fillStyle(0xb58b4c);

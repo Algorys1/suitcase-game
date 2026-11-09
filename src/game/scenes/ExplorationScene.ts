@@ -21,6 +21,8 @@ import { addFrostBranches } from '../ui/frostBranches';
 import { addTempleGuardians } from '../ui/templeGuardians';
 import { addAshVolcano } from '../ui/ashVolcano';
 import { addGrottoSpores } from '../ui/grottoSpores';
+import { addCityWindows } from '../ui/cityWindows';
+import { addZenithWatering } from '../ui/zenithWatering';
 import { addReefCorals } from '../ui/reefCorals';
 import { addCanopyDew } from '../ui/canopyDew';
 
@@ -93,17 +95,17 @@ export class ExplorationScene extends Phaser.Scene {
     }
     const result = progressStore.touchExploration(id, index);
     if ((id === 'archipel_azur' || id === 'ruines_englouties' || id === 'coeur_de_braise'
-      || id === 'iles_suspendues' || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre') && !result.activated) return;
+      || id === 'iles_suspendues' || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre' || id === 'jardins_du_zenith' || id === 'cite_immobile') && !result.activated) return;
     // Keep the other school's in-progress swim alive after the first arrival.
     if ((id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues'
-      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre') && !result.collected) return;
+      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre' || id === 'jardins_du_zenith' || id === 'cite_immobile') && !result.collected) return;
     this.lastTouched = index;
     this.lastActivated = result.activated;
     this.celebrate = result.collected;
     this.justFound ||= result.collected;
     this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles'
       || id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues'
-      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre') && result.collected;
+      || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre' || id === 'jardins_du_zenith' || id === 'cite_immobile') && result.collected;
     this.render();
     if (result.collected && id === 'mycelia') this.collectSouvenir(x, y);
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
@@ -144,7 +146,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.celebrate = false;
     this.lastTouched = undefined;
     this.lastActivated = false;
-    const instruction = this.souvenirInFlight ? this.id === 'cimes_eternelles' ? copy.cloudsParting
+    const instruction = this.souvenirInFlight ? this.id === 'cite_immobile' ? copy.cityAwakening : this.id === 'jardins_du_zenith' ? copy.zenithAwakening : this.id === 'cimes_eternelles' ? copy.cloudsParting
       : this.id === 'ruines_englouties' ? copy.fishGathering
       : this.id === 'coeur_de_braise' ? copy.basaltAwakening
       : this.id === 'iles_suspendues' ? copy.islesAwakening
@@ -156,7 +158,7 @@ export class ExplorationScene extends Phaser.Scene {
       : this.id === 'temple_oublie' ? copy.templeAwakening
       : this.id === 'palais_de_givre' ? copy.frostAwakening
       : this.id === 'desert_de_cristal' ? copy.desertAwakening : copy.souvenirForming
-      : this.offering ? copy.placeBell : !complete
+      : this.id === 'cite_immobile' && !complete ? copy.cityMood : this.id === 'jardins_du_zenith' && !complete ? copy.zenithMood : this.offering ? copy.placeBell : !complete
       ? this.id === 'cimes_eternelles' ? copy.peaksMood : this.id === 'mycelia' ? copy.windowsMood : ''
       : awake ? copy.awakened : this.id === 'cimes_eternelles' ? copy.sunrise : copy.explored;
     mapText(this, sideX, stage.bodyY + 12, instruction, portrait || short ? 12 : 15, sideW - 15)
@@ -208,6 +210,12 @@ export class ExplorationScene extends Phaser.Scene {
 
     if (this.id === 'recif_de_verre') addReefCorals(this, this.controls, stage.art, steps,
       (index, x, y) => this.touch('recif_de_verre', index, x, y), this.souvenirInFlight);
+
+    if (this.id === 'jardins_du_zenith') this.stopBridge = addZenithWatering(this, stage.art, steps,
+      (index, x, y) => this.touch('jardins_du_zenith', index, x, y), this.souvenirInFlight);
+
+    if (this.id === 'cite_immobile') addCityWindows(this, stage.art, steps, this.controls,
+      (index, x, y) => this.touch('cite_immobile', index, x, y), this.souvenirInFlight);
 
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');
@@ -268,6 +276,12 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.souvenirInFlight) {
       if (this.id === 'archipel_azur') {
         gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+      } else if (this.id === 'cite_immobile') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1200, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.557, top + artH * 0.535, () => this.render(), true) });
+      } else if (this.id === 'jardins_du_zenith') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1000, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.417, top + artH * 0.23, () => this.render(), true) });
       } else if (this.id === 'recif_de_verre') {
         this.tweens.addCounter({ from: 0, to: 1, duration: 1600, onComplete: () =>
           this.collectSouvenir(left + artW * 0.282, top + artH * 0.69, () => this.render(), true) });

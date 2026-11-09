@@ -1,0 +1,14 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "public/assets/destinations/jardins_du_zenith.webp",
+  "prompts": [
+    {
+      "asset": "zenith-empty.png",
+      "prompt": "Remove only golden watering can, including handle and spout, from original garden painting. Reconstruct warm stone railing and background. Preserve flowers, vegetation, architecture, pavilion, clouds, palette and composition."
+    },
+    {
+      "asset": "zenith-can.png",
+      "prompt": "Extract only golden watering can from original garden painting on transparent background including handle opening. Preserve view, shape, golden painterly shading, flower motif and upper-right spout. No shadow, water, text or redesign."
+    }
+  ]
+}

@@ -1,5 +1,13 @@
 # Assets de la carte et des escales
 
+## Cité immobile — fenêtres habitées et constellation
+
+Peinture `public/assets/destinations/cite_immobile.webp` intacte, sans nouvel asset généré. `cityWindows.ts` extrait les pixels dorés des vitres dans trois régions de la texture préparée pour les éclairer ; les cadres en pierre et croisillons sont conservés. Petits plis de rideaux dans les vitres, lueurs mobiles et flocons à six branches dessinés dans Phaser 4.2.1. Même rendu partagé par arrivée, carnet et exploration ; seules les interactions sont propres à l’exploration. Les étapes sauvegardées déterminent les fenêtres actives et la constellation durable. Aucun mécanisme ajouté à l’horloge.
+
+## Jardins du zénith — arrosoir mobile
+
+Source : `public/assets/destinations/jardins_du_zenith.webp`, conservée. Deux éditions avec l’outil intégré image_gen : fond sans arrosoir et arrosoir transparent. Sources PNG et prompts : `designs/adventure/zenith-watering-v1/`. WebP distribués : `public/assets/adventure/zenith-empty.webp` et `zenith-can.webp`. Les arches, gouttes et lueurs sont animées par `zenithWatering.ts`. Carte d’arrivée, carnet et exploration partagent désormais les mêmes calques, proportions et lumières sauvegardées : aucun remplacement de peinture au clic sur Explorer. Seule l’exploration rend l’arrosoir déplaçable.
+
 ## Canopée des brumes — gouttes et tasse sans pont
 
 Rosée revue à partir de la référence précise du joueur : les marqueurs opaques dessinés en code sont remplacés par les reflets de la grande goutte déjà peinte sur le bord de la tasse originale. Son contour et ses éclats sont échantillonnés ; l'ancien fond coloré et le trait du rebord de tasse sont rendus transparents, pour laisser voir la feuille actuelle au travers. Les gouttes reposent sur les feuilles supérieures plutôt que de pendre en forme de larme. Aucun nouvel asset généré ; animation de chute et progression inchangées. Build réussi et gros plans Chrome inspectés à 960 × 540 et 320 × 568, sans erreur JavaScript/HTTP.

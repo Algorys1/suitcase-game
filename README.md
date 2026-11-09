@@ -1,5 +1,9 @@
 # Le monde tient dans une valise
 
+> **Atoll boréal — nouvel essai :** Palmier + Neige. Glisser les deux reflets vert et violet du lagon vers le bracelet ; ses brins retrouvent leurs couleurs dans un ordre libre, puis le souvenir rejoint son étiquette. Progression sauvegardée, aucune charge sur place, FR/EN, clavier et mouvement réduit pris en charge. [Activité](docs/DESTINATION_ACTIVITIES.md), [asset et prompt](designs/adventure/atoll-v1/prompts.json). Essai du joueur attendu.
+
+> **Tempête écarlate — nouvel essai :** Feu + Nuage. Glisser le bouchon de la fiole vers l’éclair dans les nuages, puis le ramener au col : la petite étincelle le suit et entre dans le verre. Capture et rebouchage sont sauvegardés ; aucune charge consommée sur place. Souris, toucher et alternative clavier, textes FR/EN, mouvement réduit et anciennes collections conservés. [Interaction proposée](docs/DESTINATION_ACTIVITIES.md), [assets et prompts](designs/adventure/storm-v1/prompts.json). Cet essai attend la validation du joueur.
+
 > **Reflets de l’Archipel :** les six grandes étincelles déjà peintes sur l’eau répondent au toucher ; une fine ondulation garde la trace des reflets visités. L’étiquette reste anonyme. Au dernier reflet, les lueurs se réunissent dans l’eau, le coquillage se forme brièvement puis rejoint son étiquette avec l’envol commun aux souvenirs. Les étapes et les anciens souvenirs sont conservés ; « Revoir l’apparition » rejoue cette conclusion sans modifier la collection.
 
 > **Prototype carte d’aventure — 4 novembre 2026 :** carte d’itinéraire, dix badges de charge, escales accessibles et exploration pour trouver les nouveaux souvenirs. Premier lien interactif : clochette des Cimes → Mycélia. Cette évolution est à valider en jeu et prime sur les descriptions historiques ci-dessous. [Règles du prototype](docs/ADVENTURE_MAP.md).

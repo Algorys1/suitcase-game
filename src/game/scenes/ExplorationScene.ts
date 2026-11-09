@@ -21,6 +21,8 @@ import { addFrostBranches } from '../ui/frostBranches';
 import { addTempleGuardians } from '../ui/templeGuardians';
 import { addAshVolcano } from '../ui/ashVolcano';
 import { addGrottoSpores } from '../ui/grottoSpores';
+import { addAtollReflections } from '../ui/atollAurora';
+import { addStormLightning } from '../ui/stormLightning';
 import { addKingdomClouds } from '../ui/kingdomWaterfalls';
 import { addSanctuaryPuzzle } from '../ui/sanctuarySpores';
 import { addForestDrawing } from '../ui/forestSnow';
@@ -151,7 +153,9 @@ export class ExplorationScene extends Phaser.Scene {
     this.celebrate = false;
     this.lastTouched = undefined;
     this.lastActivated = false;
-    const instruction = this.souvenirInFlight ? this.id === 'royaume_des_spores_celestes' ? copy.kingdomAwakening
+    const instruction = this.souvenirInFlight ? this.id === 'atoll_boreal' ? copy.atollAwakening
+      : this.id === 'tempete_ecarlate' ? copy.stormAwakening
+      : this.id === 'royaume_des_spores_celestes' ? copy.kingdomAwakening
       : this.id === 'sanctuaire_des_spores' ? copy.sanctuaryAwakening
       : this.id === 'foret_du_silence' ? copy.forestAwakening : this.id === 'necropole_ardente' ? copy.necropoleAwakening : this.id === 'sylve_prismatique' ? copy.sylveAwakening : this.id === 'cite_immobile' ? copy.cityAwakening : this.id === 'jardins_du_zenith' ? copy.zenithAwakening : this.id === 'cimes_eternelles' ? copy.cloudsParting
       : this.id === 'ruines_englouties' ? copy.fishGathering
@@ -165,6 +169,8 @@ export class ExplorationScene extends Phaser.Scene {
       : this.id === 'temple_oublie' ? copy.templeAwakening
       : this.id === 'palais_de_givre' ? copy.frostAwakening
       : this.id === 'desert_de_cristal' ? copy.desertAwakening : copy.souvenirForming
+      : this.id === 'atoll_boreal' ? complete ? copy.atollWoven : copy.atollMood
+      : this.id === 'tempete_ecarlate' ? complete ? copy.stormCalm : steps.includes(0) ? copy.stormReturn : copy.stormMood
       : this.id === 'royaume_des_spores_celestes' ? complete ? copy.kingdomFlowing : copy.kingdomMood
       : this.id === 'sanctuaire_des_spores' ? complete ? copy.sanctuaryAwake : progress.sanctuaryPuzzle?.clueSeen ? copy.sanctuaryTune : copy.sanctuaryMood
       : this.id === 'foret_du_silence' ? complete ? copy.forestDrawAgain : copy.forestMood : this.id === 'necropole_ardente' && !complete ? copy.necropoleMood : this.id === 'sylve_prismatique' && !complete ? copy.sylveMood : this.id === 'cite_immobile' && !complete ? copy.cityMood : this.id === 'jardins_du_zenith' && !complete ? copy.zenithMood : this.offering ? copy.placeBell : !complete
@@ -250,6 +256,14 @@ export class ExplorationScene extends Phaser.Scene {
       index => progressStore.touchExploration('royaume_des_spores_celestes', index),
       () => { this.justFound = true; this.souvenirArrival = true; this.render(); }, this.souvenirInFlight);
 
+    if (this.id === 'tempete_ecarlate') this.stopBridge = addStormLightning(this, this.controls, stage.art, steps,
+      index => progressStore.touchExploration('tempete_ecarlate', index),
+      () => { this.justFound = true; this.souvenirArrival = true; this.render(); }, this.souvenirInFlight);
+
+    if (this.id === 'atoll_boreal') this.stopBridge = addAtollReflections(this, this.controls, stage.art, steps,
+      index => progressStore.touchExploration('atoll_boreal', index),
+      () => { this.justFound = true; this.souvenirArrival = true; this.render(); }, this.souvenirInFlight);
+
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');
     if ((canOffer && this.offering) || awake) {
@@ -309,6 +323,12 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.souvenirInFlight) {
       if (this.id === 'archipel_azur') {
         gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+      } else if (this.id === 'atoll_boreal') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1100, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.658, top + artH * 0.744, () => this.render(), true) });
+      } else if (this.id === 'tempete_ecarlate') {
+        this.tweens.addCounter({ from: 0, to: 1, duration: 1450, onComplete: () =>
+          this.collectSouvenir(left + artW * 0.724, top + artH * 0.705, () => this.render(), true) });
       } else if (this.id === 'royaume_des_spores_celestes') {
         this.tweens.addCounter({ from: 0, to: 1, duration: 1600, onComplete: () =>
           this.collectSouvenir(left + artW * 0.777, top + artH * 0.661, () => this.render(), true) });

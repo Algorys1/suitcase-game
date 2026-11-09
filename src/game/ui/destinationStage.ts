@@ -15,6 +15,8 @@ import { addCityWindows } from './cityWindows';
 import { worldTexture } from './worldTexture';
 import { addZenithWatering } from './zenithWatering';
 import { progressStore } from '../../services/storage';
+import { drawAtollAurora } from './atollAurora';
+import { drawStormBottle } from './stormLightning';
 
 /** Shared framing keeps the landscape in place when the player chooses to explore. */
 export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: SessionState,
@@ -88,6 +90,12 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   if (id === 'royaume_des_spores_celestes' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawKingdomWaterfalls(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('royaume_des_spores_celestes')).objects);
+  if (id === 'tempete_ecarlate' && scene.sys.settings.key !== 'exploration'
+    && progressStore.explorationSteps('tempete_ecarlate').includes(1))
+    objects.push(...drawStormBottle(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
+  if (id === 'atoll_boreal' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawAtollAurora(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('atoll_boreal').length === 2));
   const corners = scene.add.graphics().setName('arrival-photo-corners');
   corners.fillStyle(0xc7aa72, 0.65).fillTriangle(artLeft - 12, artUpper - 12, artLeft + 15, artUpper - 12, artLeft - 12, artUpper + 15);
   corners.fillTriangle(artLeft + artW + 12, artUpper + artH + 16,

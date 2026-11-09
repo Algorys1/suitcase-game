@@ -1,0 +1,19 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "reference": "public/assets/destinations/tempete_ecarlate.webp",
+  "assets": [
+    {
+      "source": "storm-empty.png",
+      "export": "public/assets/adventure/storm-empty.webp",
+      "transparent_background": false,
+      "prompt": "Use case: precise-object-edit. Edit target: the provided fantasy game landscape. Create an exact registration-matched game background variant. Change ONLY the foreground bottle at lower right: remove its cork stopper (reconstruct the small patch of purple distant hillside behind the cork), show its open elliptical glass mouth, and remove ALL lightning, sparks, golden swirling magic and internal golden glow from inside the bottle so it is EMPTY transparent glass with muted sunset reflections. Retain bottle outline, rope, glass highlights, shape, exact size and exact position. Retain natural sunlight on the rock. Keep EVERYTHING else identical: same framing, tree, sky and large sky lightning, red clouds, waterfalls, river, stone arch, flowers, colors, brush style. Do not add anything. Output same landscape aspect ratio. No text."
+    },
+    {
+      "source": "storm-cork.png",
+      "export": "public/assets/adventure/storm-cork.webp",
+      "transparent_background": true,
+      "prompt": "Use case: background-extraction. Asset type: transparent game sprite. Extract ONLY the small cork stopper seated in the glass bottle in the lower right of the reference illustration. Reproduce this exact squat tapered orange-brown cork: wide elliptical golden ochre top, slightly narrower bottom, dark brown cartoon painted contour, irregular small porous marks, warm sunset lighting. Front view with top visible, same angle and proportions as reference cork (roughly 100 wide by 60 tall). Centered isolated cork, large enough to see texture. True transparent background. NO bottle, NO glass rim, NO rope, NO lightning, NO other objects, NO shadow outside cork, NO text. Preserve reference brushwork. This is the removable stopper for that exact bottle."
+    }
+  ],
+  "export": "Pillow: WebP quality=93, method=6, exact=True; alpha preserved. Runtime alpha framing uses existing prepareIllustrationTextures. Original painting untouched. Only a local bottle patch is composited into the dormant background by native canvas."
+}

@@ -1,0 +1,9 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "reference": "public/assets/destinations/atoll_boreal.webp",
+  "source": "atoll-dormant.png",
+  "export": "public/assets/adventure/atoll-dormant.webp",
+  "transparent_background": false,
+  "prompt": "Use case: precise-object-edit. Edit target: provided illustrated snowy tropical atoll game landscape. Produce an EXACT registration-matched dormant variant. Change ONLY the braided bracelet on the foreground snow (including its two tassels): replace its green/turquoise and purple/violet strands with muted pale grey-lavender, dull desaturated fibre, keeping every individual braid, woven contour, shadow, outline, exact size and position. Leave the ivory/cream strands unchanged. Remove the magical golden sparkles surrounding the bracelet and reduce the golden light on the snow immediately underneath it to ordinary cool moonlit snow. Keep bracelet closed and keep its knots. Everything else MUST stay identical: original green and violet auroras, sky stars, mountain, palm trees, lagoon and its existing reflections, snow, flowers, framing, colors and painted cartoon style. Do NOT add gold light to the sky or water. Do not add any new objects, text or interface. Keep original landscape aspect ratio and composition.",
+  "conversion": "Pillow, WebP quality=93, method=6, exact=True. Original preserved; local bracelet region composited at runtime."
+}

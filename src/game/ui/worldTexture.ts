@@ -1,6 +1,8 @@
 import type Phaser from 'phaser';
 import { explorationComplete, isPilot } from '../../domain/pilotExploration';
 import { progressStore } from '../../services/storage';
+import { atollPostcard } from './atollAurora';
+import { stormPostcard } from './stormLightning';
 import { kingdomBase } from './kingdomWaterfalls';
 import { sanctuaryBase } from './sanctuarySpores';
 import { necropoleBase } from './necropoleLamps';
@@ -9,6 +11,8 @@ import { grottoPostcard } from './grottoSpores';
 import { canopyPostcard } from './canopyDew';
 
 export function worldTexture(scene: Phaser.Scene, id: string): string {
+  if (id === 'atoll_boreal') return atollPostcard(scene, progressStore.explorationSteps(id));
+  if (id === 'tempete_ecarlate') return stormPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'royaume_des_spores_celestes') return kingdomBase(scene);
   if (id === 'sanctuaire_des_spores') return sanctuaryBase(scene, progressStore.unlockedSouvenirIds().includes(id));
   if (id === 'foret_du_silence' && scene.textures.exists('adventure-forest-empty')) return 'adventure-forest-empty';

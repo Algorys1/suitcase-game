@@ -9,6 +9,8 @@ import { addCityWindows } from './cityWindows';
 import { worldTexture } from './worldTexture';
 import { addZenithWatering } from './zenithWatering';
 import { progressStore } from '../../services/storage';
+import { drawAtollAurora } from './atollAurora';
+import { drawStormBottle } from './stormLightning';
 
 const textureKey = (id: string): string => `destination-${id}`;
 
@@ -39,7 +41,7 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
   if (destination && hasPostcard(scene, seed)) {
     const picture = scene.add.image(x, y + height / 2,
       destination.id === 'ile_des_cendres' || destination.id === 'grottes_sporiferes'
-        || destination.id === 'canopee_des_brumes' || destination.id === 'jardins_du_zenith' || destination.id === 'necropole_ardente' || destination.id === 'foret_du_silence' || destination.id === 'sanctuaire_des_spores' || destination.id === 'royaume_des_spores_celestes'
+        || destination.id === 'canopee_des_brumes' || destination.id === 'jardins_du_zenith' || destination.id === 'necropole_ardente' || destination.id === 'foret_du_silence' || destination.id === 'sanctuaire_des_spores' || destination.id === 'royaume_des_spores_celestes' || destination.id === 'tempete_ecarlate' || destination.id === 'atoll_boreal'
         ? worldTexture(scene, destination.id) : textureKey(destination.id))
       .setName(`postcard-${destination.id}`);
     const scale = Math.min((width - 8) / picture.width, (height - 8) / picture.height);
@@ -74,6 +76,12 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight },
       progressStore.explorationSteps('royaume_des_spores_celestes')).objects);
+    if (destination.id === 'tempete_ecarlate' && progressStore.explorationSteps('tempete_ecarlate').includes(1))
+      objects.push(...drawStormBottle(scene, { left: picture.x - picture.displayWidth / 2,
+        top: picture.y - picture.displayHeight / 2, width: picture.displayWidth, height: picture.displayHeight }));
+    if (destination.id === 'atoll_boreal') objects.push(...drawAtollAurora(scene,
+      { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+        width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('atoll_boreal').length === 2));
     if (mounted) {
       const corners = scene.add.graphics();
       corners.fillStyle(0xb58b4c);

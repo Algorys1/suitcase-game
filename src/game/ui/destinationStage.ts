@@ -1,3 +1,5 @@
+import { drawEmpireSmoke } from './empireLamp';
+import { drawGardenLight } from './gemGarden';
 import { drawFruitPulse } from './jungleHeat';
 import { drawGlobeSnow } from './frozenGlobe';
 import Phaser from 'phaser';
@@ -99,6 +101,12 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   if (id === 'atoll_boreal' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawAtollAurora(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('atoll_boreal').length === 2));
+  if (id === 'empire_des_sables' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawEmpireSmoke(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('empire_des_sables').length === 1));
+  if (id === 'jardins_de_gemmes' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawGardenLight(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('jardins_de_gemmes')));
   if (id === 'jungle_incandescente' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawFruitPulse(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('jungle_incandescente').length === 2));

@@ -294,6 +294,12 @@
     }
   },
   "adventure": {
+    "empireMood": "The wind leaves its mark beneath the city walls.",
+    "empireComplete": "A secret coolness drifts through the warm stones.",
+    "replayLamp": "See the oasis again",
+    "gemMood": "Night rests among the stones and leaves.",
+    "gemComplete": "A moonlit gleam rests within the petals.",
+    "replayGarden": "See the bloom again",
     "jungleMood": "Beneath the foliage, the air holds the day’s warmth.",
     "jungleComplete": "A gentle ember breathes in the shade of the leaves.",
     "replayJungle": "Rekindle the fruit",

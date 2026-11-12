@@ -1,0 +1,5 @@
+{
+  "tool": "image_gen (built-in)",
+  "reference": "designs/adventure/gem-garden-v1/closed.png",
+  "prompt": "Precise clean-plate edit for animation. In this exact fantasy landscape, remove ONLY the FOUR hanging cream/pink bell-shaped flower heads on the curved plant at far right: centers approximately (88.5%,54.5%), (94.5%,52%), (92.7%,59.5%), (96.5%,65%). Reconstruct natural green foliage/background behind the removed flower heads. Keep the thin curved golden stems and the main curved stalk unchanged, with bare little ends where flower heads were attached. Keep EVERYTHING ELSE unchanged, especially the large closed crystal bud lower right, its leaves, waterfalls, mushrooms, moon and original composition. No new flowers, no text. Same full 4:3 image. This clean plate will sit behind the original separately animated bell flowers."
+}

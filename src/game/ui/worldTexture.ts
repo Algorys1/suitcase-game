@@ -1,3 +1,5 @@
+import { empirePostcard } from './empireLamp';
+import { gardenPostcard } from './gemGarden';
 import { junglePostcard } from './jungleHeat';
 import type Phaser from 'phaser';
 import { explorationComplete, isPilot } from '../../domain/pilotExploration';
@@ -14,6 +16,8 @@ import { globePostcard } from './frozenGlobe';
 import { stairsPostcard } from './vestigesStairs';
 
 export function worldTexture(scene: Phaser.Scene, id: string): string {
+  if (id === 'empire_des_sables') return empirePostcard(scene, progressStore.explorationSteps(id).length === 1);
+  if (id === 'jardins_de_gemmes') return gardenPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'jungle_incandescente') return junglePostcard(scene, progressStore.explorationSteps(id));
   if (id === 'mer_figee') return globePostcard(scene, progressStore.explorationSteps(id));
   if (id === 'vestiges_celestes') return stairsPostcard(scene, progressStore.explorationSteps(id));

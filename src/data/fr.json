@@ -294,6 +294,12 @@
     }
   },
   "adventure": {
+    "empireMood": "Le vent laisse son empreinte au pied des murailles.",
+    "empireComplete": "Une fraîcheur secrète traverse les pierres chaudes.",
+    "replayLamp": "Revoir l’oasis",
+    "gemMood": "La nuit repose entre les pierres et les feuillages.",
+    "gemComplete": "Un éclat de lune veille au creux des pétales.",
+    "replayGarden": "Revoir l’éclosion",
     "jungleMood": "Sous les feuillages, l’air garde la chaleur du jour.",
     "jungleComplete": "Une douce braise respire à l’ombre des feuilles.",
     "replayJungle": "Raviver le fruit",

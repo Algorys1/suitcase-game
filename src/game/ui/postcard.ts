@@ -1,3 +1,5 @@
+import { drawEmpireSmoke } from './empireLamp';
+import { drawGardenLight } from './gemGarden';
 import { drawFruitPulse } from './jungleHeat';
 import { drawGlobeSnow } from './frozenGlobe';
 import Phaser from 'phaser';
@@ -45,7 +47,7 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
     const picture = scene.add.image(x, y + height / 2,
       destination.id === 'ile_des_cendres' || destination.id === 'grottes_sporiferes'
         || destination.id === 'canopee_des_brumes' || destination.id === 'jardins_du_zenith' || destination.id === 'necropole_ardente' || destination.id === 'foret_du_silence' || destination.id === 'sanctuaire_des_spores' || destination.id === 'royaume_des_spores_celestes' || destination.id === 'tempete_ecarlate' || destination.id === 'atoll_boreal'
-        || destination.id === 'vestiges_celestes' || destination.id === 'mer_figee' || destination.id === 'jungle_incandescente' ? worldTexture(scene, destination.id) : textureKey(destination.id))
+        || destination.id === 'vestiges_celestes' || destination.id === 'mer_figee' || destination.id === 'jungle_incandescente' || destination.id === 'jardins_de_gemmes' || destination.id === 'empire_des_sables' ? worldTexture(scene, destination.id) : textureKey(destination.id))
       .setName(`postcard-${destination.id}`);
     const scale = Math.min((width - 8) / picture.width, (height - 8) / picture.height);
     picture.setScale(scale);
@@ -85,6 +87,12 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
     if (destination.id === 'atoll_boreal') objects.push(...drawAtollAurora(scene,
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('atoll_boreal').length === 2));
+    if (destination.id === 'empire_des_sables') objects.push(...drawEmpireSmoke(scene,
+      { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+        width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('empire_des_sables').length === 1));
+    if (destination.id === 'jardins_de_gemmes') objects.push(...drawGardenLight(scene,
+      { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+        width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('jardins_de_gemmes')));
     if (destination.id === 'jungle_incandescente') objects.push(...drawFruitPulse(scene,
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('jungle_incandescente').length === 2));

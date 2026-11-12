@@ -1,5 +1,9 @@
 # Le monde tient dans une valise
 
+> **Empire des sables — nouvel essai :** Palmier + Ruines. Frotter la lampe pour envoyer sa fumée vers la grande porte et révéler un jardin d’oasis. Après résolution, un mince filet de fumée reste animé au bec. Progression sauvegardée, FR/EN, souris/toucher, clavier et mouvement réduit. [Activité et statut](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.
+
+> **Jardins de gemmes — nouvel essai :** Champignon + Cristal. Amener la lumière de la lune au grand champignon, puis son reflet aux clochettes pour ouvrir la fleur. Après résolution, des reflets lunaires parcourent ses facettes. Deux étapes sauvegardées, FR/EN, souris/toucher, clavier, anciennes collections et mouvement réduit. [Activité et statut](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.
+
 > **Jungle incandescente — nouvel essai :** Arbre + Feu. Tirer la chaleur d’une liane rouge et d’une fleur vers le fruit éteint, dans l’ordre libre. Après résolution, sa lumière pulse doucement comme une braise. Progression sauvegardée, FR/EN, clavier, souris/toucher et mouvement réduit. [Activité et statut](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.
 
 > **Mer figée — nouvel essai :** composer le globe vide en tirant neige → glace → étoiles depuis le paysage. Après résolution, la neige tombe dans le verre ; grande vague immobile. Progression sauvegardée, anciennes collections conservées, FR/EN, souris/toucher, clavier et mouvement réduit. [Détails](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.

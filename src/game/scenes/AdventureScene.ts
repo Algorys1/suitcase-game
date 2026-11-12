@@ -39,12 +39,6 @@ export class AdventureScene extends Phaser.Scene {
     const { journal } = mapInstruments(width, height);
     this.controls.add('map-journal', journal.x, journal.y, Math.max(48, journal.width + 12), journal.height + 14,
       () => approachJournal(this, opening => this.scene.start('journal', { opening, returnTo: 'adventure' })));
-    if (this.session.charges > 0) {
-      const { compass, suitcase } = mapInstruments(width, height);
-      this.controls.add('map-compass', compass.x, compass.y, compass.radius * 2, compass.radius * 2, depart);
-      this.controls.add('map-suitcase', suitcase.x, suitcase.top + suitcase.height / 2,
-        suitcase.width, suitcase.height, depart);
-    }
     if (width >= 600 && (height >= 450 || this.session.visitedDestinationIds.length + this.session.voidTrips <= 6)) {
       mapText(this, width < 600 ? (width - 110) / 2 + 8 : width / 2, height - (width < 600 ? 100 : 70),
         this.session.charges > 0 ? copy.mapHelp : copy.exhausted, width < 600 ? 10 : 12,

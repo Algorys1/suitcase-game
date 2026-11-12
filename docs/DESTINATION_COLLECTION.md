@@ -1,8 +1,16 @@
 # Collection des 30 destinations et souvenirs
 
+## État actuel — 13 novembre 2026
+
+**Nouvelle présentation intégrée, à essayer :** [valise-boussole](SUITCASE_COMPASS.md). La mini-valise remplace le « ? » sur le trajet ; le cadran occupe son couvercle et deux manifestations magiques apparaissent en bas. Les aiguilles et règles sont conservées. Le départ animé selon les éléments est intégré ; charges métalliques dans la doublure, mode liste retiré et fond de carte flouté. Cette nouvelle passe reste à essayer.
+
+Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) pour le bilan consolidé. Les 30 destinations ont leur illustration, histoire FR/EN, souvenir et activité implémentés. La carte, le carnet et le tutoriel sont intégrés. Les validations particulières, dont les derniers essais Faille et Observatoire, sont consignées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md) ; elles ne valent pas validation globale de l’équilibrage ou de tous les textes. La phase C n’est pas commencée et demande validation préalable. Les Escales enchantées restent une proposition distincte à arbitrer, pas une suite automatiquement autorisée.
+
+**Lecture des notes historiques :** les essais et vérifications ci-dessous conservent leurs limites d’origine. Une version explicitement validée plus récemment remplace le statut « essai attendu » de sa note initiale. Les mentions de deux/trois pilotes, de contenus à créer ou d’activités restantes décrivent les étapes antérieures, pas le périmètre actuellement implémenté.
+
 Les trois pilotes validés sont conservés. Les 27 nouvelles illustrations et les 27 nouveaux autocollants prolongent leur direction artistique. Les histoires FR/EN et les nouveaux visuels sont des propositions intégrées pour relecture en jeu, pas une validation éditoriale du joueur.
 
-Les recettes, les charges, les sauvegardes et la présentation du carnet restent inchangées. Les souvenirs se déduisent des découvertes, y compris celles des sauvegardes antérieures. Aucun souvenir pour le Néant. La décoration de la valise et les Escales enchantées restent des phases ultérieures.
+Ce catalogue conserve les recettes et les contenus illustrés. Dans le prototype actuel, le carnet inscrit le monde dès l’arrivée ; son nouveau souvenir reste masqué jusqu’à résolution de l’activité. Les souvenirs des anciennes sauvegardes restent acquis. Aucun souvenir pour le Néant. La décoration de la valise est non commencée et soumise à validation ; le système distinct des Escales enchantées reste à arbitrer.
 
 ## Catalogue pour relecture
 

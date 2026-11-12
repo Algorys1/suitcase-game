@@ -1,5 +1,15 @@
 # Prototype — La carte d’aventure
 
+## État actuel — 13 novembre 2026
+
+**Nouvelle présentation intégrée, à essayer :** [valise-boussole](SUITCASE_COMPASS.md). La mini-valise remplace le « ? » sur le trajet ; le cadran occupe son couvercle et deux manifestations magiques apparaissent en bas. Les aiguilles et règles sont conservées. Le départ animé selon les éléments est intégré ; charges métalliques dans la doublure, mode liste retiré et fond de carte flouté. Cette nouvelle passe reste à essayer.
+
+Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) pour le bilan consolidé. Les 30 destinations ont leur illustration, histoire FR/EN, souvenir et activité implémentés. La carte, le carnet et le tutoriel sont intégrés. Les validations particulières, dont les derniers essais Faille et Observatoire, sont consignées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md) ; elles ne valent pas validation globale de l’équilibrage ou de tous les textes. La phase C n’est pas commencée et demande validation préalable. Les Escales enchantées restent une proposition distincte à arbitrer, pas une suite automatiquement autorisée.
+
+**Lecture des notes historiques :** les essais et vérifications ci-dessous conservent leurs limites d’origine. Une version explicitement validée plus récemment remplace le statut « essai attendu » de sa note initiale. Les mentions de deux/trois pilotes, de contenus à créer ou d’activités restantes décrivent les étapes antérieures, pas le périmètre actuellement implémenté.
+
+## Historique des versions et décisions
+
 > **Désert de cristal — cristaux reliés (remplace les dunes) :** illustration originale fixe, sans recomposition ni asset généré. Toucher les six groupes de cristaux déjà peints les allume sur leurs pixels existants. Chaque nouveau cristal est relié au précédent dans l'ordre choisi ; le sixième ferme la boucle. Ordre sauvegardé, double toucher ignoré, aucun débit supplémentaire. Le sablier rejoint ensuite l'étiquette. Anciennes collections préservées ; les étapes partielles déjà obtenues sont conservées sous forme de cristaux allumés. Essai visuel du joueur attendu.
 
 > **Marais des lucioles — trois nénuphars :** réactions sur l'eau, réveil progressif des lucioles et chemin lumineux conservé à la revisite. Étapes persistantes, étiquette anonyme jusqu'à l'envol du souvenir, fanal toujours vide, mouvement réduit et anciennes collections préservées. Aucun coût dans le lieu ; l'ancienne collecte par point invisible est remplacée. Nouvel essai visuel du joueur attendu.

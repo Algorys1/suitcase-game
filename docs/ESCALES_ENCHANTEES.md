@@ -1,5 +1,11 @@
 # Les Escales enchantées — extension de gameplay
 
+## Statut actuel — proposition historique à réévaluer
+
+Au 12 novembre 2026, les 30 activités locales sont implémentées dans le prototype carte/exploration. Le système distinct de trois familles de mini-jeux et de tampons décrit ici n’est pas implémenté et n’est pas une prochaine phase automatiquement autorisée. Son remplacement, son complément ou son abandon reste à arbitrer avec le joueur. Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) et [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md).
+
+## Proposition initiale
+
 > **Projet :** Le monde tient dans une valise  
 > **Statut :** proposition de conception validée dans son intention, **à prototyper après la finalisation des 30 destinations et de leurs autocollants**.  
 > **Références :** `GAME_DESIGN.md`, `COMPASS_AND_STICKERS.md`, `ART_DIRECTION.md`, `TECHNICAL.md`, `destinations.json`.  

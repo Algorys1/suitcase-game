@@ -1,5 +1,15 @@
 # Spécification technique — Le monde tient dans une valise
 
+## État actuel — 13 novembre 2026
+
+**Nouvelle présentation intégrée, à essayer :** [valise-boussole](SUITCASE_COMPASS.md). La mini-valise remplace le « ? » sur le trajet ; le cadran occupe son couvercle et deux manifestations magiques apparaissent en bas. Les aiguilles et règles sont conservées. Le départ animé selon les éléments est intégré ; charges métalliques dans la doublure, mode liste retiré et fond de carte flouté. Cette nouvelle passe reste à essayer.
+
+Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) pour le bilan consolidé. Les 30 destinations ont leur illustration, histoire FR/EN, souvenir et activité implémentés. La carte, le carnet et le tutoriel sont intégrés. Les validations particulières, dont les derniers essais Faille et Observatoire, sont consignées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md) ; elles ne valent pas validation globale de l’équilibrage ou de tous les textes. La phase C n’est pas commencée et demande validation préalable. Les Escales enchantées restent une proposition distincte à arbitrer, pas une suite automatiquement autorisée.
+
+**Lecture des notes historiques :** les essais et vérifications ci-dessous conservent leurs limites d’origine. Une version explicitement validée plus récemment remplace le statut « essai attendu » de sa note initiale. Les mentions de deux/trois pilotes, de contenus à créer ou d’activités restantes décrivent les étapes antérieures, pas le périmètre actuellement implémenté.
+
+## Historique des versions et décisions
+
 > **Vestiges — trois pierres et porte isolée :** `domain/vestigesStairs.ts` définit trois sources, trois accroches successives et les bandes diagonales qui suivent les contremarches de la nouvelle peinture. `ui/vestigesStairs.ts` extrait trois portions d’escalier et l’intérieur de la porte depuis `adventure-vestiges-complete`, en petites textures transparentes cadrées et mipmappées ; `stairsPostcard()` les compose sur le fond brisé et fermé. L’exploration anime ces mêmes morceaux peints, puis révèle le jardin derrière la porte avant l’envol du souvenir. Les pierres libres utilisent le sprite de grès dédié, avec prises de 44 px minimum et choix du centre le plus proche dans leurs zones communes. Le curseur reste normal. `pilotSteps.vestiges_celestes` contient trois IDs (0–2) ; `vestigesLayout: 2` identifie cette disposition. Le décodeur convertit les anciens dépôts parmi 0–3 en autant de nouveaux dépôts, plafonnés à trois, puis marque la nouvelle version. Les sauvegardes de cette version gardent leurs IDs exacts. Collecte et dépôt partagent l’écriture atomique existante ; anciennes récompenses et relecture locale conservées. Le puzzle rotatif, les dalles bleues et leur chemin ne sont plus chargés. Les règles communes de glisser, annulation et nettoyage restent inchangées.
 
 > **Sanctuaire — puzzle rotatif :** `domain/sanctuaryPuzzle.ts` porte les trois réglages à quatre positions et leur validation, sans Phaser. Champ optionnel `sanctuaryPuzzle` du schéma v1 : positions entières 0–3, tableau de taille trois, `clueSeen` booléen ; les données invalides sont ignorées sans effacer carnet ni langue. Les anciennes récompenses initialisent un motif concordant. `ProgressStore.rotateSanctuary()` sauvegarde atomiquement réglages, résolution et retrait du souvenir en attente ; les animations ne décident pas de la collecte. Les réglages peuvent encore changer après collecte, avec résolution permanente conservée. Les copies de lecture ne partagent pas le tableau des positions.
@@ -45,59 +55,18 @@
 
 Pas de React, moteur physique, serveur, framework d'état ou système de rendu 3D dans le MVP.
 
-## 3. Architecture proposée
+## 3. Architecture actuelle
 
-```text
-suitcase-game/
-├── README.md
-├── AGENTS.md                         # À rédiger
-├── docs/
-│   ├── GAME_DESIGN.md
-│   ├── ART_DIRECTION.md
-│   └── TECHNICAL.md
-├── public/
-│   └── assets/
-│       ├── ui/
-│       ├── elements/
-│       ├── destinations/
-│       └── audio/
-├── src/
-│   ├── main.ts
-│   ├── game/
-│   │   ├── config.ts
-│   │   └── scenes/
-│   │       ├── BootScene.ts
-│   │       ├── HomeScene.ts
-│   │       ├── PreparationScene.ts
-│   │       ├── TravelScene.ts
-│   │       ├── ResultScene.ts
-│   │       ├── SummaryScene.ts
-│   │       ├── JournalScene.ts
-│   │       └── SettingsScene.ts
-│   ├── domain/
-│   │   ├── types.ts
-│   │   ├── recipes.ts
-│   │   ├── compass.ts
-│   │   └── session.ts
-│   ├── services/
-│   │   ├── storage.ts
-│   │   └── i18n.ts
-│   ├── data/
-│   │   ├── elements.json            # À créer
-│   │   ├── destinations.json        # À créer
-│   │   ├── fr.json                  # À créer
-│   │   └── en.json                  # À créer
-│   └── tests/
-│       ├── recipes.test.ts
-│       ├── compass.test.ts
-│       └── storage.test.ts
-├── index.html
-├── package.json
-├── tsconfig.json
-└── vite.config.ts
-```
+- `src/domain/` : logique pure de sélection, recettes, énergie, session et activités, sans Phaser ; tests dans `src/tests/`.
+- `src/services/` : stockage et internationalisation.
+- `src/game/scenes/` : neuf scènes — accueil, carte d’aventure, préparation, résultat, exploration, bilan, sommaire du carnet, fiche de destination et paramètres. Le départ est animé dans la préparation ; pas de `BootScene` ni de `TravelScene` séparée.
+- `src/game/ui/` : composants illustrés, contrôles, transitions et calques d’activité.
+- `src/data/` : éléments, destinations, souvenirs et textes FR/EN. Les données implémentées font foi.
+- `public/assets/` : ressources locales distribuées ; `designs/` : sources et prompts hors build.
+- `package.json` et `package-lock.json` : versions exactes, dont Phaser 4.2.1 ; `vite.config.ts` : chemins relatifs `base: './'`.
+- L’audio est désactivé (`audio: { noAudio: true }`) et aucun asset sonore n’est actuellement distribué.
 
-Cette structure est indicative : Codex peut regrouper les scènes ou services si cela simplifie l'implémentation. Éviter de créer des fichiers vides uniquement pour respecter l'arborescence.
+Garder des modules explicites ; ne pas créer de fichiers vides pour reproduire une ancienne arborescence de préproduction.
 
 ## 4. Modèle de données
 
@@ -148,6 +117,9 @@ function recipeKey(a: ElementId, b: ElementId): string {
 Construire une table `Map<string, DestinationDefinition>` une seule fois ; si la paire n'est pas présente, le résultat est le **Néant**. Ne jamais déduire une destination de la position des éléments dans la valise.
 
 ## 5. État du jeu et transitions
+
+**Navigation actuelle :** accueil → carte d’aventure → préparation → résultat → exploration facultative ou carte. `continueSession` conserve les phases métier existantes ; la carte et l’exploration n’ajoutent pas de débit. À zéro, la carte bloque tout départ et propose le bilan, tout en permettant la consultation des lieux. Le détail du cycle préparation/résultat ci-dessous décrit la logique métier initiale ; il ne signifie plus un retour direct obligatoire à la préparation.
+
 
 Séparer **état de session** et **progression permanente**.
 
@@ -202,6 +174,11 @@ export const BALANCE = {
 
 ### Sauvegarde
 
+**Schéma implémenté :** clé `suitcase-game.progress.v1`, `schemaVersion: 1`, `discoveredDestinationIds`, `language`, et champs optionnels `expedition` (dont `route`), `pendingSouvenirIds`, `awakenedMycelia`, `pilotSteps`, `tutorialSeen`, `sanctuaryPuzzle`, `vestigesLayout`. Les références typées et validations sont dans `src/services/storage.ts` et `src/domain/session.ts`. Aucun champ de disposition décorative n’existe encore.
+
+`pendingSouvenirIds` distingue les mondes découverts des souvenirs encore masqués. La résolution retire le souvenir en attente et conserve les étapes avant l’animation ; les anciennes collections sans attente restent acquises. Les noms techniques `pilotSteps` et `pilotTargetCounts` couvrent les 30 activités. Les données optionnelles invalides sont filtrées ; le carnet et la langue sont préservés lorsque seule l’expédition est invalide.
+
+
 - Clé proposée : `suitcase-game.progress.v1`.
 - Écrire les identifiants de destinations découvertes, la langue et, si une expédition existe, son état sous le champ optionnel `expedition`. Le schéma v1 et les anciennes sauvegardes restent compatibles.
 - `decodeSession` valide phases, IDs, historique, découvertes de session, coût du dernier voyage et cohérence des charges avec les voyages effectués. Une expédition invalide est écartée sans effacer le carnet ni la langue. Les copies lues et écrites ne partagent pas leurs tableaux ou leur dernier résultat avec l’état interne du stockage.
@@ -220,39 +197,45 @@ export const BALANCE = {
 
 - Phase A : les deux aiguilles pilotent les mêmes IDs d'éléments que la préparation actuelle. Garder une logique pure partagée pour la validité de la paire et empêcher tout départ incomplet ou en doublon ; ne pas dupliquer les règles dans une seconde interface.
 - Le choix d'aiguille active et ses orientations sont transitoires. Aucun débit de charge lors d'un changement de sélection. Le cas de deux aiguilles sur le même symbole doit être affiché comme invalide, sans résolution de recette.
-- Le réglage initial de phase A est **Arbre / Arbre**, aiguille 1 active, à chaque nouvelle préparation. `compassSelection.ts` utilise l'ordre de `elements.json` pour les crans et le rebouclage ; `preparation.ts` partage les deux IDs et la validation `isReady` avec la palette de repli. Le doublon transitoire est affiché, mais le départ reste bloqué. Aucun état d'énergie n'est ajouté à la sélection.
-- Phases B/C : déduire les autocollants disponibles des IDs de destinations découvertes. Sauvegarder uniquement la disposition supplémentaire, avec 6 positions proposées, distinctes des deux emplacements de sélection.
+- Le réglage initial de phase A est **Arbre / Arbre**, aiguille 1 active, à chaque nouvelle préparation. `compassSelection.ts` utilise l'ordre de `elements.json` pour les crans et le rebouclage ; `preparation.ts` partage les deux IDs et la validation `isReady` avec le clic sur les signes et les aiguilles. Le doublon transitoire est affiché, mais le départ reste bloqué. Aucun état d'énergie n'est ajouté à la sélection.
+- Phase B implémentée : déduire les souvenirs révélés des découvertes et des souvenirs en attente, via le stockage commun. Phase C proposée : sauvegarder seulement la disposition décorative supplémentaire, avec six positions provisoires distinctes des deux emplacements de sélection.
 - Valider les IDs et les doublons invalides à la lecture de la décoration. Une sauvegarde ancienne sans décoration doit charger des positions vides ; conserver la récupération gracieuse du carnet et de la langue.
 - Les nouveaux contrôles et messages restent externalisés en FR/EN. Les critères de test propres à chaque phase sont dans [l'extension](COMPASS_AND_STICKERS.md).
 
 ## 8. Interface, affichage et assets
 
+**Valise-boussole actuelle :** `suitcaseCompass.ts` mesure les ancrages du cadran et des deux manifestations dans l’illustration `preparation-suitcase_compass`. `compass.ts` utilise les signes `preparation-glyph-*` sans supports et sans redessiner un cadran séparé. `mapRouteLayout` et `mapDeparture` partagent la position du prochain arrêt entre carte et approche/retour ; une seule mini-valise remplace le « ? ». `PreparationScene` conserve la sélection et le verrou de départ ; aucune règle métier ni sauvegarde nouvelle. Les anciens exports de valise ouverte sans cadran sont retirés. Sources et prompts dans [SUITCASE_COMPASS.md](SUITCASE_COMPASS.md). `suitcaseDeparture.ts` présente désormais la séquence de 1,9 seconde, sans intervenir dans le débit ni la sauvegarde. Le fond est capturé une fois par taille dans une RenderTexture, puis flouté par le filtre Blur externe de Phaser 4. Les dix charges métalliques sans chiffre sont dessinées dans la doublure ; le mode liste a été retiré.
+
+
 - **Réduction des illustrations :** le rendu utilise un filtrage trilinéaire (`LINEAR_MIPMAP_LINEAR`). Phaser 4.2.1 ne génère ces niveaux réduits que pour des textures de dimensions puissances de deux. `ui/illustrationTextures.ts` prépare donc une fois, après chargement dans `HomeScene`, un cache canvas de 1024 px maximum avec lissage de qualité élevée ; le cadre exclut le remplissage transparent et conserve le ratio original. Les fichiers sources et WebP restent inchangés. Les retours à l'accueil réutilisent ce cache, et un asset rechargé est préparé à nouveau.
 - **Découpe des autocollants :** deux filtres Phaser 4 en espace écran ajoutent un liseré blanc et une ombre légère autour de la silhouette. Ils suivent l'opacité de l'autocollant et sont détruits avec lui. En repli Canvas, les images restent visibles sans ces effets WebGL.
 
-- **Souvenirs pilotes :** `souvenirs.json` fournit trois associations destination/asset/clé de traduction. `domain/souvenirs.ts` déduit la disponibilité du carnet, sans Phaser et sans état supplémentaire. `HomeScene` précharge les trois WebP transparents via `ui/souvenir.ts`. Le nom reste lisible si la texture manque. Le rendu et les effets réutilisent le cycle des cartes ; les scènes passent seulement le souvenir autorisé. [Détails des pilotes](SOUVENIR_PILOTS.md).
+- **Souvenirs :** `src/data/souvenirs.json` contient les 30 associations destination/asset/clé de traduction. `domain/souvenirs.ts` fournit le souvenir associé à un monde découvert ; `ProgressStore.unlockedSouvenirIds()` tient compte des souvenirs en attente de collecte. Les vues masquent image et nom avant résolution, et conservent les anciennes collections.
 
-- **Pilotes illustrés :** `src/data/pilotDestinations.json` contient uniquement les trois IDs dont les fichiers sont fournis. `HomeScene.preload()` charge leurs chemins depuis le catalogue via la base Vite relative. `ui/postcard.ts` partage les textures entre résultats et carnet, conserve leur ratio et utilise le dessin temporaire si une texture manque. Aucun chargement n'est demandé pour les 27 assets non produits.
+- **Collection illustrée :** les 30 chemins des illustrations viennent de `src/data/destinations.json`, sans catalogue séparé de pilotes. `HomeScene` précharge les ressources ; `ui/postcard.ts` et `ui/destinationStage.ts` partagent les rendus entre arrivée, carnet et exploration, avec calques de progression. Les sources et prompts sont conservés dans `designs/`, les WebP distribués dans `public/assets/`.
 - `ui/menu.ts` présente les résultats et fiches en deux colonnes en paysage, ou avec l'image entre le titre et l'histoire en portrait. Les PNG sources et prompts sont conservés dans `designs/destinations/pilot-v1/` ; seuls les WebP de `public/assets/destinations/` sont distribués. Voir [les pilotes](DESTINATION_PILOTS.md).
 - `ui/notebook.ts` dessine le papier et la reliure avec un grain déterministe, et gère les fondus/étincelles de révélation. `ResultScene` transmet uniquement le statut nouvelle découverte/revisite, le coût et le contenu déjà résolus. Le rendu ne débite aucune charge et ne modifie pas le carnet. Les effets sont annulés au redimensionnement, à la navigation clavier, à l'activation de la réduction des animations et à la sortie de scène ; ils ne repartent pas lors d'un nouveau rendu. Les fiches du carnet restent statiques.
 
 - Scène de préparation cible : valise au centre, **deux emplacements**, boussole à dix symboles et deux aiguilles, charges lisibles, bouton Voyager.
-- La manipulation directe des aiguilles est le prototype courant : glisser une pointe ou un contrepoids, ou sélectionner une aiguille puis cliquer un symbole. `elementAtAngle` convertit l'angle en élément par crans de 36°, puis la sélection commune est réutilisée. Les commandes précédent/suivant restent au clavier et dans la palette de repli. Le geste est transitoire, ne coûte aucune charge et bloque le départ ; les écouteurs de pointeur sont nettoyés à la sortie de scène.
+- La manipulation directe des aiguilles est le prototype courant : glisser une pointe ou un contrepoids, ou sélectionner une aiguille puis cliquer un symbole. `elementAtAngle` convertit l'angle en élément par crans de 36°, puis la sélection commune est réutilisée. Les commandes précédent/suivant restent au clavier ; le mode liste est retiré. Le geste est transitoire, ne coûte aucune charge et bloque le départ ; les écouteurs de pointeur sont nettoyés à la sortie de scène.
 - Résolution logique indépendante des coordonnées ou des assets.
 - **Habillage de préparation :** `ui/preparationArt.ts` charge les dix chemins d'éléments depuis le catalogue, cinq pièces d'interface (cadran, deux aiguilles, valise ouverte/fermée) et le fond `travel_desk`. `illustrationTextures.ts` cadre les silhouettes d'après leur alpha dans le cache, sans modifier les sources. Cache de 512 px maximum pour les éléments/aiguilles, 1024 px pour les autres illustrations et 2048 px pour le fond opaque, avec dimensions puissances de deux et filtrage trilinéaire. Le fond conserve son ratio et couvre la fenêtre, centré en paysage et cadré à gauche en portrait. Les deux ancrages de compartiments restent fixes ; aucun nouvel état métier ou champ de sauvegarde.
 - **Nettoyage du rendu :** dans Phaser 4.2.1, `DisplayList.removeAll(true)` détache les objets sans les détruire (`true` signifie `skipCallback`). La préparation, le carnet et les menus détruisent désormais explicitement une copie de la liste avant de redessiner, pour libérer les textures de texte, les cibles d'entrée et les écouteurs. Les illustrations partagées restent dans le gestionnaire de textures.
 - **Fiole de charges illustrée :** `ui/chargeVial.ts` compose les sources peintes `preparation-vial_empty` et `preparation-vial_full` : base vide fixe, poussière de la version pleine révélée de bas en haut à l'intérieur du verre, avec une transition douce au bord. Les sources passent dans un cache de 512 px maximum, avec cadre original commun (pas de recadrage alpha indépendant), mipmaps et `willReadFrequently`. Le cadre final coupe seulement les marges communes et masque la selle en mode liste. Les niveaux composés sont réutilisés, au plus 22 textures pour les onze niveaux et les deux présentations. Aucun débit ni état de sauvegarde supplémentaire ; `session.charges` et le maximum métier restent les seules entrées. Si une source manque, le compteur numérique demeure visible. La monture et le verre sont entièrement illustrés, sans bouchon ni raccord géométrique superposé.
-- **Inserts de la valise :** la texture `preparation-suitcase_open` charge `suitcase_open_inlaid.webp`, réillustré avec les deux inserts en cuivre. Les ancrages de `suitcase.ts` suivent leurs centres et zones inscriptibles dans le cadre alpha recadré. `menu.ts` affiche uniquement les noms inclinés et le repère de sélection, avec une cible invisible de 44 px de haut ; aucun métal ni cadre géométrique superposé. Les noms restent sur une ligne et se resserrent si nécessaire sur petit écran.
+- **Ancienne valise ouverte — historique :** la texture `preparation-suitcase_open` charge `suitcase_open_inlaid.webp`, réillustré avec les deux inserts en cuivre. Les ancrages de `suitcase.ts` suivent leurs centres et zones inscriptibles dans le cadre alpha recadré. `menu.ts` affiche uniquement les noms inclinés et le repère de sélection, avec une cible invisible de 44 px de haut ; aucun métal ni cadre géométrique superposé. Les noms restent sur une ligne et se resserrent si nécessaire sur petit écran.
 - **Lecture des pixels :** les contextes du cache d'illustrations sont créés dès le premier `getContext` avec `{ willReadFrequently: true }`. `CanvasTexture` lit aussi les pixels lors de `addCanvas` ; activer cette option seulement après la création du contexte ne suffit pas. La lueur de sélection utilise un unique dégradé radial de 128 px mis en cache, teinté sous les symboles, avec le même réglage de contexte.
 - Dimensions d'intégration itch.io retenues : **960 × 540 px (16:9)**. Utiliser ce format comme référence principale de composition et de test ; conserver le redimensionnement Phaser et vérifier aussi les petites résolutions et la lisibilité.
 - Prévoir des cibles tactiles suffisamment larges, états sélectionné/désactivé, et contraste du texte.
 - La valise est une **illustration 2D isométrique**, pas un inventaire physique avec collisions.
 - Éviter les chemins d'assets absolus incompatibles avec un hébergement sous sous-chemin ; utiliser une base Vite relative (`base: './'`) et vérifier les chargements dans le ZIP final.
-- Utiliser des placeholders propres et remplaçables pour permettre le prototype avant la production des 30 illustrations.
+- Les 30 illustrations sont intégrées ; conserver un repli lisible en cas de texture absente, sans recréer une étape de production de placeholders.
 
 ## 9. Tests automatisés et tests manuels
 
 ### Vitest — tests métier prioritaires
+
+Vérification exécutée le 12 novembre 2026 : **161 tests dans 41 fichiers**, TypeScript strict et build Vite réussis. Aucun nouveau parcours navigateur pour la consolidation documentaire. Les comptes rendus Chrome sont dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md). Firefox, tactile physique et iframe itch.io restent à vérifier avant publication.
+
 
 - Les 30 recettes sont uniques et résolues dans les deux ordres.
 - Il existe 45 paires distinctes possibles parmi 10 éléments, dont 30 valides et 15 menant au Néant.
@@ -285,7 +268,7 @@ Page du projet fournie par le développeur : [The world in a suitcase](https://a
 
 Ne pas supposer qu'un build réussi garantit le bon fonctionnement dans l'iframe itch.io : **tester le jeu publié**.
 
-## 11. Ordre d'implémentation conseillé pour Codex
+## 11. Ordre initial d’implémentation — historique
 
 1. **Fondations** : Vite + Phaser 4 + TypeScript strict + écran d'accueil minimal.
 2. **Données et règles** : 10 éléments, 30 recettes, normalisation, boussole, tests Vitest.

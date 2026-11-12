@@ -8,15 +8,20 @@ Développer **Le monde tient dans une valise**, un petit jeu de découverte fant
 
 Lire avant de modifier le projet :
 
-1. `docs/GAME_DESIGN.md` — règles du jeu, contenu et critères d'acceptation.
-2. `docs/COMPASS_AND_STICKERS.md` — extension à prototyper : sélection par aiguilles et autocollants cosmétiques.
-3. `docs/TECHNICAL.md` — stack, architecture, tests, publication.
-4. `docs/ART_DIRECTION.md` — identité graphique et animations.
-5. `README.md` — présentation et instructions de lancement.
+1. `docs/PROJECT_STATUS.md` — état consolidé, validations consignées et travaux ouverts ; les notes historiques ne sont pas une liste de tâches actuelle.
+2. `docs/GAME_DESIGN.md` — règles du jeu, contenu et critères d'acceptation.
+3. `docs/COMPASS_AND_STICKERS.md` — sélection par aiguilles, souvenirs intégrés et proposition de décoration.
+4. `docs/TECHNICAL.md` — stack, architecture, tests, publication.
+5. `docs/ART_DIRECTION.md` — identité graphique et animations.
+6. `README.md` — présentation et instructions de lancement.
 
-Priorité explicitement définie par [l'extension](docs/COMPASS_AND_STICKERS.md) : les deux aiguilles remplacent la palette comme **méthode de sélection cible**. La palette actuelle peut rester provisoirement comme solution de repli ou outil de debug. `GAME_DESIGN.md` reste la référence pour les recettes, l'énergie, le carnet et la fin de session. Cette extension est une **proposition à prototyper, non encore validée en jeu** ; distinguer ses phases A (aiguilles), B (déblocage des autocollants) et C (décoration, après la boucle jouable), et attendre la validation de chaque phase avant la suivante.
+Priorité explicitement définie par [l'extension](docs/COMPASS_AND_STICKERS.md) : les deux aiguilles remplacent la palette comme **méthode de sélection cible**. Le joueur a demandé le retrait du mode liste le 13 novembre 2026 : conserver le clic sur les symboles et les commandes clavier, sans palette de repli. `GAME_DESIGN.md` reste la référence pour les recettes, l'énergie, le carnet et la fin de session. Distinguer ses phases A (aiguilles, manipulation directe retenue), B (30 souvenirs intégrés, collecte adaptée au prototype d’exploration autorisé) et C (décoration, non commencée). Attendre la validation de la phase C avant de l’implémenter ; les validations particulières ne remplacent pas le playtest global.
 
-Les données implémentées dans `src/data/elements.json` et `src/data/destinations.json` doivent être la source de vérité du catalogue une fois créées. Si deux documents se contredisent, **ne pas improviser une règle** : signaler le conflit et demander confirmation. Distinguer les décisions validées des paramètres provisoires à tester.
+Les données implémentées dans `src/data/elements.json` et `src/data/destinations.json` sont la source de vérité du catalogue. Si deux documents se contredisent, **ne pas improviser une règle** : signaler le conflit et demander confirmation. Distinguer les décisions validées des paramètres provisoires à tester.
+
+**Évolution déjà autorisée — carte et activités :** le prototype décrit dans `docs/ADVENTURE_MAP.md` et `docs/DESTINATION_ACTIVITIES.md` est implémenté : 30 activités locales, découverte du monde dès l’arrivée, nouveau souvenir masqué jusqu’à résolution, anciens souvenirs conservés, aucun coût d’exploration. La correspondance Cimes → Mycélia est implémentée sans consommation de la clochette. Ces décisions priment sur les anciennes mentions de déblocage automatique et de rôle uniquement cosmétique ; elles n’autorisent pas de nouvelles correspondances. A est implémentée et sa manipulation directe retenue ; B couvre les 30 souvenirs. La phase C reste non commencée et demande validation préalable. Voir `docs/PROJECT_STATUS.md` pour distinguer les validations particulières des vérifications globales encore à faire.
+
+**Présentation autorisée le 13 novembre 2026 :** voir `docs/SUITCASE_COMPASS.md`. La valise-boussole fusionne les deux instruments : mini-valise à la prochaine étape, ouverture au-dessus de la carte, cadran dans le couvercle et deux manifestations sans socles dans la doublure. Conserver les deux aiguilles et les règles communes. La première réalisation doit être essayée ; la nouvelle séquence au clic sur Voyager est intégrée : énergie des éléments, fermeture, tremblement, libération et arrivée. Les charges métalliques sans chiffre sont au fond de la valise et la carte est floutée derrière elle. Cette fusion ne lance pas la décoration de phase C.
 
 ## Stack et contraintes
 
@@ -42,8 +47,8 @@ Les données implémentées dans `src/data/elements.json` et `src/data/destinati
 - **Boussole, valeurs provisoires :** 10 charges au départ, −1 pour une destination valide (même déjà connue), −2 pour le Néant ; jamais de valeur négative. Fin de session à zéro. Ces chiffres devront être ajustés après playtests.
 - Pas d'autre ressource, de recettes à trois éléments, de crafting, de simulation écologique ni d'exploration libre des destinations.
 - Le carnet permanent présente les destinations découvertes avec leur nom, illustration et courte histoire. La fin de session présente un récapitulatif.
-- Extension à prototyper : tourner les aiguilles ne consomme aucune charge ; une sélection identique sur les deux aiguilles bloque Voyager. Réutiliser la logique de sélection commune, sans créer de règles parallèles pour la palette.
-- Les autocollants proposés sont purement cosmétiques : un par destination découverte, aucun pour le Néant. Déduire leur déblocage du carnet ; sauvegarder seulement leur disposition en supplément. Les **6 emplacements décoratifs provisoires** sont distincts des **2 emplacements d'éléments**.
+- Sélection par aiguilles : tourner les aiguilles ne consomme aucune charge ; une sélection identique sur les deux aiguilles bloque Voyager. Réutiliser la logique de sélection commune, sans réintroduire le mode liste retiré.
+- Un souvenir par destination, aucun pour le Néant ; aucun bonus de charge ou de recette. Dans le prototype autorisé, distinguer découverte du monde et collecte par activité, préserver les anciens souvenirs et la correspondance Cimes → Mycélia sans consommation. Réutiliser les champs existants de progression ; pour la future décoration, sauvegarder seulement la disposition en supplément. Les **6 emplacements décoratifs provisoires** sont distincts des **2 emplacements d'éléments**.
 - Textes FR/EN externalisés ; éviter les chaînes visibles codées en dur dans les scènes.
 
 ## Organisation du code
@@ -62,6 +67,7 @@ Les données implémentées dans `src/data/elements.json` et `src/data/destinati
 4. Ne pas déclarer un test réussi sans l'avoir exécuté. Si un outil, une dépendance ou un asset manque, le dire clairement et proposer une solution minimale.
 5. Ne pas ajouter de fonctionnalité, dépendance ou règle importante non demandée ; demander validation si une décision produit un impact sur le gameplay.
 6. Tester les parcours réels dans un navigateur avant publication, pas uniquement les fonctions unitaires.
+7. Pour les retouches visuelles locales, le joueur demande des vérifications rapides : un build et une capture ciblée suffisent en général. Ne pas relancer les suites ni les parcours complets sans changement de logique ou risque concret qui le justifie.
 
 ## Tests minimum
 

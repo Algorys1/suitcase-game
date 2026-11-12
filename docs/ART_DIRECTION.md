@@ -1,5 +1,15 @@
 # Direction artistique — Le monde tient dans une valise
 
+## État actuel — 13 novembre 2026
+
+**Nouvelle présentation intégrée, à essayer :** [valise-boussole](SUITCASE_COMPASS.md). La mini-valise remplace le « ? » sur le trajet ; le cadran occupe son couvercle et deux manifestations magiques apparaissent en bas. Les aiguilles et règles sont conservées. Le départ animé selon les éléments est intégré ; charges métalliques dans la doublure, mode liste retiré et fond de carte flouté. Cette nouvelle passe reste à essayer.
+
+Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) pour le bilan consolidé. Les 30 destinations ont leur illustration, histoire FR/EN, souvenir et activité implémentés. La carte, le carnet et le tutoriel sont intégrés. Les validations particulières, dont les derniers essais Faille et Observatoire, sont consignées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md) ; elles ne valent pas validation globale de l’équilibrage ou de tous les textes. La phase C n’est pas commencée et demande validation préalable. Les Escales enchantées restent une proposition distincte à arbitrer, pas une suite automatiquement autorisée.
+
+**Lecture des notes historiques :** les essais et vérifications ci-dessous conservent leurs limites d’origine. Une version explicitement validée plus récemment remplace le statut « essai attendu » de sa note initiale. Les mentions de deux/trois pilotes, de contenus à créer ou d’activités restantes décrivent les étapes antérieures, pas le périmètre actuellement implémenté.
+
+## Historique des versions et décisions
+
 **Observatoire — sens et taille de la lentille portée :** sprites retournés horizontalement pour retrouver l’inclinaison du verre peint sur le socle. Taille portée ramenée à 90 % de l’objet au repos, soit 25 % de moins que le premier sprite desktop et un tiers de moins en portrait. Même orientation et taille dans l’état capturé sauvegardé ; prises tactiles de 44 px minimum conservées.
 
 **Observatoire — lentille portée dédiée v2 :** après retour du joueur sur l’effet découpé, deux sprites autonomes transparents remplacent entièrement l’extraction de la peinture pendant le transport : verre vide et verre étoilé, monture de laiton entière, sans attaches ni morceaux de nuage. Leurs limites alpha partagent un cadre commun pour la révélation progressive. Au repos, la lentille peinte est conservée ; au clic, le support nettoyé et le sprite dédié prennent le relais. Une courte transition la réintègre au tableau lors du retour au socle. La logique de capture, l’absence d’indice et le scintillement final restent identiques. Cette version remplace le détourage v1 décrit ci-dessous. [Sources et prompts imagegen](../designs/adventure/observatory-lens-v2/prompts.json).

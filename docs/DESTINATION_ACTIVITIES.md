@@ -1,5 +1,15 @@
 # Petits jeux des 30 destinations
 
+## État actuel — 13 novembre 2026
+
+**Nouvelle présentation intégrée, à essayer :** [valise-boussole](SUITCASE_COMPASS.md). La mini-valise remplace le « ? » sur le trajet ; le cadran occupe son couvercle et deux manifestations magiques apparaissent en bas. Les aiguilles et règles sont conservées. Le départ animé selon les éléments est intégré ; charges métalliques dans la doublure, mode liste retiré et fond de carte flouté. Cette nouvelle passe reste à essayer.
+
+Les **30 activités sont implémentées**. Le dernier essai Observatoire et Faille clôt la série ; les validations particulières restent consignées dans le journal ci-dessous. Le tutoriel et le carnet depuis la carte sont intégrés ; leur compréhension dans un parcours complet reste à évaluer. Le catalogue initial et l’ordre de prototypage sont historiques et ne relancent pas les essais remplacés.
+
+Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) pour les travaux ouverts et les vérifications globales. Les comptes rendus conservent les limites de leur version : une note initiale « essai attendu » est remplacée par une validation ultérieure explicite du même essai. Ne pas déduire une validation du seul fait qu’une activité est implémentée.
+
+## Journal des essais, corrections et validations
+
 **Observatoire — validation du joueur et fin de la collection :** recherche avec lentille mobile dédiée, capture puis retour au socle, scintillement final, sens corrigé et taille portée réduite acceptés après essai. La demande de commit clôt cette étape avec la Faille des contraires. Les 30 destinations disposent maintenant de leur activité implémentée ; les validations particulières et limites de vérification restent détaillées ci-dessous.
 
 **Observatoire — correction visuelle v2 :** au clic, la lentille portée utilise désormais des sprites dédiés sur fond transparent (vide et étoilé), sans extraction de morceaux de l’illustration. Objet peint au repos, support nettoyé après prise et transition au retour sur le socle. Aucun changement des étapes sauvegardées ni ajout d’indice. [Assets et prompts](../designs/adventure/observatory-lens-v2/prompts.json). Remplace le détourage v1, même élargi.
@@ -148,7 +158,7 @@ Vérification de cet essai : 108 tests Vitest et build TypeScript/Vite réussis.
 
 > **Trace durable après exploration — nouvel essai :** les trois brumes des Cimes sont remontées de 4 % de la hauteur du paysage. Au lever du soleil, elles s'écartent légèrement mais restent autour des sommets, y compris après retour et rechargement. Les reflets touchés de l'Archipel gardent deux rides et une lumière lente, plus présentes que les anciennes ondulations. Le mouvement réduit conserve ces états sans animation continue. Aucun nouveau champ de sauvegarde ni changement de collecte.
 
-## Intention et statut
+## Intention, retours ouverts et historique
 
 **Cimes éternelles — nuages après toucher, idée du joueur intégrée :** un petit voile de nuage apparaît sous chaque sommet touché sans cacher sa pointe. Les nuages se déduisent des étapes déjà sauvegardées, restent visibles après une reprise partielle et ne se multiplient pas lors d’un nouveau toucher sur le même pic. Au troisième sommet, ils s’écartent pendant le lever du soleil ; la clochette rejoint ensuite l’étiquette, qui reste anonyme jusqu’à l’arrivée. Le mouvement réduit affiche directement les états sans déplacement. Trois voiles de brume dédiés, créés à partir de la peinture des Cimes, remplacent le pictogramme de nuage initial. Leurs proportions sont conservées ; aucune règle de collecte ne change.
 
@@ -179,7 +189,7 @@ Sources examinées : les 30 illustrations de `public/assets/destinations/`, leur
 
 La ligne retenue : **un petit mystère par monde, un geste qui lui appartient, une transformation visible**. L’autocollant devient le souvenir de ce que le joueur a fait. Le résultat d’un voyage doit aussi donner des idées pour préparer le suivant ; la résolution locale reste indépendante des correspondances entre mondes.
 
-## Cadre commun proposé
+## Cadre commun des activités
 
 - **Consigne confirmée par le joueur :** avant résolution, les textes d’exploration donnent uniquement une ambiance, sans désigner les cibles, leur nombre, le geste, la solution ou la nature du souvenir. Aucun contour ajouté pour annoncer un objet manipulable. Les réponses au geste rendent l’interaction perceptible une fois découverte.
 
@@ -190,10 +200,10 @@ La ligne retenue : **un petit mystère par monde, un geste qui lui appartient, u
 - Éviter trente variantes de « toucher trois objets ». Alterner réveil, circulation, ouverture, orientation, rapprochement et passage d’un phénomène dans le paysage.
 - Les glissers proposés ont un équivalent par sélection puis clic/toucher sur la destination du mouvement. Cibles généreuses, aucun tracé précis, aucune vitesse exigée. Les rotations se font par crans, sans dépendre de l’audio ou de la seule couleur.
 - Un geste incorrect reçoit une réaction douce, sans perdre les étapes déjà acquises. La transformation finale peut se rejouer sans nouveau gain ni dépense.
-- Sauvegarder les étapes utiles et le souvenir acquis ; conserver les anciennes collections. Les règles exactes de persistance des futures activités seront définies à leur prototypage.
+- Sauvegarder les étapes utiles et le souvenir acquis ; conserver les anciennes collections. Les règles de persistance des activités implémentées sont détaillées dans les comptes rendus ci-dessus et dans `TECHNICAL.md`.
 - L’enveloppe anonyme reste identique jusqu’à la collecte. Ne pas annoncer le nom du souvenir ou sa forme dans l’aide.
 
-## Catalogue proposé
+## Catalogue initial — historique, remplacé par les essais ci-dessus
 
 Les retouches mentionnées concernent des états et des calques des illustrations existantes, pas une refonte de leur direction artistique. Les quantités hors pilotes sont des paramètres de prototype.
 
@@ -248,9 +258,11 @@ Exemples de réactions locales, sans compteur, ressource ou sauvegarde propre :
 
 Ces réactions sont discrètes et brèves, sans scintillement de guidage ni fausse animation de récompense. D’abord réussir l’activité principale et la lisibilité du lieu ; ajouter ensuite une ou deux touches si le budget le permet. Elles respectent la réduction des animations.
 
-## Tutoriel — première intégration
+## Tutoriel — intégré, reprise demandée
 
-**Mise à jour — première intégration réalisée :** les trois conseils contextuels ci-dessous sont maintenant présents en FR/EN, peuvent être passés et relus depuis le sommaire du carnet. Leur acquittement est conservé. Les textes, le rythme et leur compréhension restent à valider par le joueur. Le descriptif de proposition ci-dessous conserve les intentions initiales.
+**Retour du joueur encore ouvert :** reprendre le contenu et la présentation du tutoriel ; les conseils actuels restent disponibles mais ne sont pas finalisés.
+
+**Première intégration réalisée :** les trois conseils contextuels ci-dessous sont maintenant présents en FR/EN, peuvent être passés et relus depuis le sommaire du carnet. Leur acquittement est conservé. Les textes, le rythme et leur compréhension restent à valider par le joueur. Le descriptif de proposition ci-dessous conserve les intentions initiales.
 
 Direction retenue : trois messages contextuels courts au fil de la première aventure. Ils expliquent la possibilité d’explorer et de gagner un souvenir sans donner la solution du lieu.
 
@@ -285,11 +297,11 @@ Le petit jeu local ne suffit pas à lui seul à répondre au problème initial :
 
 Les trois nouvelles correspondances sont des idées à discuter, sans nouvelle règle de consommation ni nouvelle récompense définie ici.
 
-## Ordre de prototypage recommandé
+## Ordre de prototypage initial — historique
 
 1. **Intégré, à essayer :** carnet depuis la carte et tutoriel court, pour rendre la nouvelle boucle compréhensible avant d’étendre le contenu.
 2. **Essais retirés après retour du joueur :** revoir ensemble les illustrations originales de l’Archipel, de la Sylve et de la Faille avant de proposer une autre interaction. Ne pas reprendre les rigoles artificielles, les faisceaux à trois clics ou les dépôts de rubans.
 3. Ajuster les familles à partir de ces essais, puis étendre par petits groupes. Éviter de produire les 28 jeux avant de savoir si ces gestes sont agréables.
 4. Ajouter les correspondances retenues et quelques animations gratuites après stabilisation des activités locales.
 
-Pour chaque prototype : départ toujours facultatif après la découverte, souvenir attribué une seule fois, progression conservée après retour/rechargement, aucune charge dépensée dans le lieu, absence d’indice scintillant, transformation lisible, alternative au glisser et mouvement réduit. Ces points sont des vérifications à venir, pas des tests déjà exécutés.
+Pour chaque prototype : départ toujours facultatif après la découverte, souvenir attribué une seule fois, progression conservée après retour/rechargement, aucune charge dépensée dans le lieu, absence d’indice scintillant, transformation lisible, alternative au glisser et mouvement réduit. Cette liste décrivait les vérifications prévues au démarrage. Les contrôles réellement exécutés et leurs limites sont consignés par version dans le journal ci-dessus ; les essais de publication restent ouverts.

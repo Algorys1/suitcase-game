@@ -4,19 +4,35 @@ import type { ElementId } from '../../domain/preparation';
 
 /** The catalogue owns the element paths; UI-only objects have separate textures. */
 export function preloadPreparationArt(scene: Phaser.Scene): void {
+  for (const state of ['full', 'empty']) {
+    const key = `preparation-metal-charge-${state}`;
+    if (!scene.textures.exists(key)) scene.load.svg(key,
+      `${import.meta.env.BASE_URL}assets/preparation/charge-${state}.svg`, { width: 96, height: 96 });
+  }
   for (const element of elements) {
     const key = `preparation-element-${element.id}`;
     if (!scene.textures.exists(key)) scene.load.image(key, `${import.meta.env.BASE_URL}${element.image}`);
+    const glyph = `preparation-glyph-${element.id}`;
+    if (!scene.textures.exists(glyph)) scene.load.image(glyph,
+      `${import.meta.env.BASE_URL}assets/preparation/glyphs/${element.id}.webp`);
   }
-  for (const id of ['compass_dial', 'suitcase_open', 'suitcase_closed', 'needle_teal', 'needle_violet', 'travel_desk',
-    'vial_full', 'vial_empty']) {
+  for (const id of ['compass_dial', 'suitcase_closed', 'needle_teal', 'needle_violet', 'travel_desk',
+    'vial_full', 'vial_empty', 'suitcase_compass']) {
     const key = `preparation-${id}`;
-    const asset = id === 'suitcase_open' ? 'suitcase_open_inlaid' : id;
-    if (!scene.textures.exists(key)) scene.load.image(key, `${import.meta.env.BASE_URL}assets/preparation/${asset}.webp`);
+    if (!scene.textures.exists(key)) scene.load.image(key, `${import.meta.env.BASE_URL}assets/preparation/${id}.webp`);
   }
 }
 
-/** Fit the same miniature to the dial or a compartment, without stretching it. */
+/** Painted illuminated signs, shared by the lid and its two magical projections. */
+export function drawElementGlyph(scene: Phaser.Scene, id: ElementId, x: number, y: number, size: number) {
+  const key = `preparation-glyph-${id}`;
+  if (!scene.textures.exists(key)) return drawElement(scene, id, x, y, size);
+  const image = scene.add.image(x, y, key);
+  image.setScale(Math.min(size / image.width, size / image.height));
+  return image;
+}
+
+/** Original catalogue illustrations, still used beside the worlds on the route. */
 export function drawElement(scene: Phaser.Scene, id: ElementId, x: number, y: number, size: number) {
   const key = `preparation-element-${id}`;
   if (!scene.textures.exists(key)) return undefined;

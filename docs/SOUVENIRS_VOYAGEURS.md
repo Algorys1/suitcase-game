@@ -1,5 +1,11 @@
 # Souvenirs voyageurs et gestes magiques
 
+## Statut actuel — proposition partiellement concrétisée
+
+La carte d’aventure, les gestes locaux des 30 destinations et la correspondance Cimes → Mycélia sont implémentés. Le prototype autorisé précise cette première correspondance : offrir la clochette sans la consommer, indépendamment du souvenir local de Mycélia. La lettre et les autres correspondances de la proposition initiale ne sont pas implémentées. Ne pas généraliser ce fonctionnement à tous les souvenirs sans décision du joueur. Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) et [ADVENTURE_MAP.md](ADVENTURE_MAP.md).
+
+## Proposition initiale
+
 > **Projet :** Le monde tient dans une valise  
 > **Statut :** piste appréciée par le joueur et consignée pour approfondissement ; règles proposées, non prototypées et non validées en jeu. Ce document ne lance pas leur implémentation.  
 > **Références :** [Game Design](GAME_DESIGN.md), [Boussole et autocollants](COMPASS_AND_STICKERS.md), [Escales enchantées](ESCALES_ENCHANTEES.md), [Direction artistique](ART_DIRECTION.md).

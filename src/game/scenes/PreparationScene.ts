@@ -1,28 +1,25 @@
 import Phaser from 'phaser';
 import { getTexts } from '../../services/i18n';
 import { isReady, selectElement } from '../../domain/preparation';
-import { compassAngle, compassElements, elementAtAngle, initialCompassSelection, rotateSelection } from '../../domain/compassSelection';
+import { compassAngle, elementAtAngle, initialCompassSelection, rotateSelection } from '../../domain/compassSelection';
 import type { ElementId, SlotIndex, Slots } from '../../domain/preparation';
 import { createButton } from '../ui/menu';
 import type { MenuButton } from '../ui/menu';
-import { drawSuitcase } from '../ui/suitcase';
-import { drawClosedSuitcase } from '../ui/suitcase';
 import { drawCompass } from '../ui/compass';
 import { beginTravel, createSession, revealResult } from '../../domain/session';
 import type { SessionState } from '../../domain/session';
 import { BALANCE } from '../../domain/compass';
 import { progressStore } from '../../services/storage';
-import { drawElement } from '../ui/preparationArt';
-import { drawAdventureMap, mapInstruments, reducedMotion } from '../ui/adventureMap';
+import { drawManifestation, drawSuitcaseCompass, drawSuitcaseInstruction, drawSuitcaseCharges } from '../ui/suitcaseCompass';
+import { drawAdventureMap, mapDeparture, reducedMotion } from '../ui/adventureMap';
 import { arriveObjects } from '../ui/travelMotion';
-import { drawChargeBadge } from '../ui/adventureAssets';
+import { playSuitcaseDeparture } from '../ui/suitcaseDeparture';
 
 type Control = { name: string; action: () => void };
 
 export class PreparationScene extends Phaser.Scene {
   private slots: Slots = initialCompassSelection();
   private activeNeedle: SlotIndex = 0;
-  private paletteVisible = false;
   private message = '';
   private focusName: string | null = null;
   private controls: Control[] = [];
@@ -32,9 +29,12 @@ export class PreparationScene extends Phaser.Scene {
   private entering = false;
   private returning = false;
   private finishEntrance: (() => void) | null = null;
-  private compassParts: Phaser.GameObjects.GameObject[] = [];
   private caseParts: Phaser.GameObjects.GameObject[] = [];
+  private lidParts: Phaser.GameObjects.GameObject[] = [];
   private casePivot = { x: 0, y: 0, width: 1 };
+  private suitcaseLayout: ReturnType<typeof drawSuitcaseCompass> | null = null;
+  private mapBackground: Phaser.GameObjects.RenderTexture | null = null;
+  private departure: ReturnType<typeof playSuitcaseDeparture> | null = null;
 
   constructor() { super('preparation'); }
 
@@ -47,8 +47,9 @@ export class PreparationScene extends Phaser.Scene {
     progressStore.saveSession(this.session);
     this.slots = initialCompassSelection();
     this.activeNeedle = 0;
-    this.paletteVisible = false;
     this.message = '';
+    this.mapBackground = null;
+    this.departure = null;
     this.focusName = null;
     this.drag = null;
     this.entering = false;
@@ -83,6 +84,9 @@ export class PreparationScene extends Phaser.Scene {
       canvas.removeAttribute('tabindex');
       canvas.removeAttribute('aria-description');
       this.controls = [];
+      this.departure?.cancel();
+      this.departure = null;
+      this.mapBackground = null;
       this.finishEntrance?.();
       this.finishEntrance = null;
       this.input.enabled = true;
@@ -90,6 +94,7 @@ export class PreparationScene extends Phaser.Scene {
   }
 
   private onResize(): void {
+    if (this.session.phase === 'travelling') { this.departure?.finish(); return; }
     if (this.returning) { this.scene.start('adventure', { session: this.session }); return; }
     this.drag = null;
     this.game.canvas.style.cursor = '';
@@ -138,6 +143,7 @@ export class PreparationScene extends Phaser.Scene {
   };
 
   private chooseNeedle(index: SlotIndex): void {
+    if (this.session.phase !== 'preparation') return;
     this.activeNeedle = index;
     this.message = '';
     this.render();
@@ -159,31 +165,26 @@ export class PreparationScene extends Phaser.Scene {
   }
 
   private depart(): void {
-    if (this.drag || this.entering) return;
+    if (this.drag || this.entering || !this.suitcaseLayout) return;
+    const before = this.session.charges;
     const next = beginTravel(this.session, this.slots, progressStore.read().discoveredDestinationIds);
     if (next === this.session) return;
     this.session = next;
     progressStore.saveSession(next);
-    this.message = getTexts().journey.departing;
-    this.render();
-    const reduced = reducedMotion();
-    if (!reduced) {
-      const closed = this.children.getByName('suitcase-closed-art') as Phaser.GameObjects.Image | null;
-      if (closed) {
-        const scale = closed.scaleX;
-        this.tweens.add({ targets: closed, scaleX: scale * 1.025, scaleY: scale * 0.975,
-          duration: 140, yoyo: true, ease: 'Sine.InOut' });
-      }
-      for (let i = 0; i < 12; i++) {
-        const spark = this.add.circle(this.casePivot.x + Math.sin(i * 2.4) * 80,
-          this.casePivot.y - 50, 1 + i % 3, 0xffdf99, 0.6);
-        this.tweens.add({ targets: spark, y: spark.y - 25 - i * 4, alpha: 0, duration: 350 + i * 12 });
-      }
-      this.time.delayedCall(200, () => this.cameras.main.fadeOut(250, 249, 237, 213));
+    this.input.enabled = false;
+    this.controls = [];
+    (this.children.getByName('preparation-status') as Phaser.GameObjects.Text | null)
+      ?.setText(getTexts().journey.departing);
+    for (const name of ['home-label', 'travel-label']) {
+      (this.children.getByName(name) as Phaser.GameObjects.Text | null)?.setAlpha(0.45);
     }
-    this.time.delayedCall(reduced ? 0 : 450, () => {
+    const showResult = () => {
+      this.departure = null;
       this.scene.start('result', { session: revealResult(this.session) });
-    });
+    };
+    if (reducedMotion()) { showResult(); return; }
+    this.departure = playSuitcaseDeparture(this, this.suitcaseLayout, this.caseParts, this.lidParts,
+      this.slots, before, next.charges, showResult);
   }
 
   private onKeyDown = (event: KeyboardEvent): void => {
@@ -245,170 +246,109 @@ export class PreparationScene extends Phaser.Scene {
   private render(): void {
     this.finishEntrance?.();
     this.finishEntrance = null;
-    const texts = getTexts();
-    const copy = texts.preparation;
-    const compassCopy = texts.compass;
-    // DisplayList.removeAll(true) only detaches objects in Phaser 4.
-    // Destroy them to release text textures, input targets and event listeners.
-    this.children.getAll().forEach(child => child.destroy());
+    this.tweens.killAll();
+    this.children.getAll().filter(child => child !== this.mapBackground).forEach(child => child.destroy());
     this.controls = [];
+    const texts = getTexts(), copy = texts.preparation, compassCopy = texts.compass;
     const { width, height } = this.scale;
-    const split = width >= 600;
-    const short = height < 500;
-    const contentWidth = Math.min(width - 32, 1100);
-    const left = (width - contentWidth) / 2;
-    const dialWidth = split ? contentWidth * (this.paletteVisible && short ? 0.62 : 0.44) : contentWidth;
-    const dialX = split ? left + dialWidth / 2 : width / 2;
-    const controlsWidth = split ? contentWidth - dialWidth - 20 : contentWidth;
-    const controlsX = split ? left + contentWidth - controlsWidth / 2 : width / 2;
-    const footerY = height - 30;
-    const statusY = height - (split ? 86 : 104);
-    const caseHeight = split ? Math.min(460, statusY - (short ? 76 : 90))
-      : Math.min(205, Math.max(156, height * 0.26));
-    const caseTop = statusY - caseHeight + (split ? -10 : 8);
-    const vialHeight = split ? (short ? 60 : 90) : this.paletteVisible ? 44 : 64;
-    const dialTop = short || !split ? 68 : 76;
-    const dialBottom = split ? statusY - vialHeight + 6 : caseTop - vialHeight - 4;
-    const radius = Math.min(198, (dialWidth - 20) / 2, (dialBottom - dialTop) / 2);
-    const dialY = (dialTop + dialBottom) / 2;
-    this.dial = { x: dialX, y: dialY, radius };
-    // Twelve cells: ten elements and the two step controls kept in the fallback.
-    const paletteColumns = short ? 4 : 3;
+    const landscape = width >= 760 || (width >= 600 && height < 450);
+    const short = height < 450;
     const ready = isReady(this.slots);
     const status = this.message || (ready ? copy.ready : compassCopy.duplicate);
-
-    drawAdventureMap(this, this.session);
-    this.children.getAll().filter(child => child.type === 'Text').forEach(child => child.destroy());
-    for (const name of ['map-compass-art', 'map-compass-hands', 'map-needle-0', 'map-needle-1', 'map-suitcase-art', 'energy-ticket']) {
-      const object = this.children.getByName(name) as Phaser.GameObjects.Image | Phaser.GameObjects.Graphics | null;
-      object?.setVisible(false);
+    if (this.mapBackground && this.mapBackground.getData('viewport') !== `${width}x${height}`) {
+      this.mapBackground.destroy();
+      this.mapBackground = null;
     }
-    for (let i = 0; i < BALANCE.initialCharges; i++) {
-      (this.children.getByName(`charge-badge-${i}`) as Phaser.GameObjects.Graphics | null)?.setVisible(false);
-    }
-    this.add.rectangle(width / 2, height / 2, width, height, 0x382e28, 0.3);
-    this.add.graphics().fillStyle(0xfff4df, 0.93).lineStyle(1, 0xbb9a6d, 0.4)
-      .fillRoundedRect(12, 5, width - 24, height - 10, 8)
-      .strokeRoundedRect(12, 5, width - 24, height - 10, 8);
-    this.text(width / 2, 8, copy.title, short || !split ? 23 : 30, contentWidth, true).setFontFamily('Georgia, serif');
-    this.text(width / 2, short || !split ? 39 : 46,
-      this.paletteVisible ? compassCopy.paletteInstructions : compassCopy.instructions,
-      short || !split ? 13 : 15, contentWidth).setColor('#68523e');
-
-    const compassStart = this.children.length;
-    if (this.paletteVisible) {
-      const columns = paletteColumns;
-      const rows = Math.ceil(compassElements.length / columns);
-      const tileWidth = (dialWidth - (columns - 1) * 8) / columns;
-      const paletteTop = dialY - (rows * 50 - 6) / 2;
-      compassElements.forEach((id, index) => {
-        this.button(dialX - dialWidth / 2 + tileWidth / 2 + (index % columns) * (tileWidth + 8),
-          paletteTop + 22 + Math.floor(index / columns) * 50, tileWidth, {
-            name: `element-${id}`, label: texts.elements[id].name, fontSize: tileWidth < 110 ? 12 : 16,
-            selected: this.slots[this.activeNeedle] === id, action: () => this.chooseElement(id),
-          });
-      });
-      for (const [index, direction] of [[10, -1], [11, 1]] as const) {
-        this.button(dialX - dialWidth / 2 + tileWidth / 2 + (index % columns) * (tileWidth + 8),
-          paletteTop + 22 + Math.floor(index / columns) * 50, tileWidth, {
-            name: direction === -1 ? 'previous' : 'next',
-            label: direction === -1 ? compassCopy.turnPrevious : compassCopy.turnNext,
-            fontSize: 22, action: () => this.rotate(direction),
-          });
+    if (!this.mapBackground) {
+      drawAdventureMap(this, this.session);
+      this.children.getAll().filter(child => child.type === 'Text').forEach(child => child.destroy());
+      for (const name of ['next-suitcase-art', 'map-journal-art', 'energy-ticket',
+        ...Array.from({ length: BALANCE.initialCharges }, (_, i) => `charge-badge-${i}`)]) {
+        this.children.getByName(name)?.destroy();
       }
-    } else {
-      drawCompass(this, dialX, dialY, radius, this.slots, this.activeNeedle, texts.elements, {
-        disabled: this.session.phase !== 'preparation' || this.drag !== null,
-        charged: this.session.charges > 0,
-        dragAngle: this.drag?.angle ?? null,
-        grab: (index, pointer) => this.grabNeedle(index, pointer),
-        select: id => this.chooseElement(id),
-      });
+      const mapParts = this.children.getAll();
+      const background = this.add.renderTexture(0, 0, width, height).setOrigin(0).setName('preparation-map-blur')
+        .setData('viewport', `${width}x${height}`);
+      // Phaser 4 buffers draw commands: flush before destroying the source objects.
+      background.draw(mapParts).render();
+      mapParts.forEach(child => child.destroy());
+      if (this.game.renderer.type === Phaser.WEBGL) {
+        background.enableFilters();
+        background.filters?.external.addBlur(0, 2, 2, 1, 0xffffff, 3);
+      }
+      this.mapBackground = background;
     }
+    this.add.rectangle(width / 2, height / 2, width, height, 0x30281f, 0.14).setName('preparation-scrim');
 
-    this.compassParts = this.children.getAll().slice(compassStart);
+    const caseTop = 12;
+    const maxHeight = height - (landscape ? 76 : 200);
     const suitcaseStart = this.children.length;
-    const suitcaseWidth = Math.min(controlsWidth, 580);
-    this.casePivot = { x: controlsX, y: caseTop + caseHeight, width: suitcaseWidth };
-    let positions: ReturnType<typeof drawSuitcase> | null = null;
-    if (this.session.phase === 'travelling') {
-      drawClosedSuitcase(this, controlsX, caseTop, suitcaseWidth, caseHeight);
-    } else {
-      positions = drawSuitcase(this, controlsX, caseTop, suitcaseWidth, caseHeight);
-    }
+    const art = drawSuitcaseCompass(this, width / 2, caseTop, width - 36, maxHeight);
+    this.suitcaseLayout = art;
+    this.casePivot = { x: width / 2, y: caseTop + art.height / 2, width: art.width };
+    this.dial = art.dial;
+    const { x: dialX, y: dialY, radius } = art.dial;
+    const compassStart = this.children.length;
+    drawCompass(this, dialX, dialY, radius, this.slots, this.activeNeedle, texts.elements, {
+      embedded: true, disabled: this.drag !== null, charged: this.session.charges > 0,
+      dragAngle: this.drag?.angle ?? null,
+      grab: (index, pointer) => this.grabNeedle(index, pointer), select: id => this.chooseElement(id),
+    });
+    this.lidParts = this.children.getAll().slice(compassStart);
     for (const index of [0, 1] as const) {
-      if (positions === null) break;
+      const position = art.slots[index]!;
       const id = this.slots[index];
-      const position = positions[index];
-      const figurine = id === null ? undefined : drawElement(this, id, position.x, position.y, position.size);
-      figurine?.setOrigin(0.5, 1).setName(`slot-figurine-${index}`);
-      // Copper inlays follow the front rim above the clasps and select each needle.
-      const plateWidth = position.labelWidth;
-      this.button(position.labelX, position.labelY, plateWidth, {
-        name: `needle-${index}`, label: id === null ? copy.empty : texts.elements[id].name,
+      if (id) drawManifestation(this, id, position.x, position.y, position.size, index);
+      this.button(position.x, position.labelY, position.labelWidth, {
+        name: `needle-${index}`, label: `${index === 0 ? '▲' : '◆'} ${id ? texts.elements[id].name : copy.empty}`,
         stationery: false, plateColor: index === 0 ? 0x78cdbb : 0xc2a0e4,
-        plateAngle: position.labelAngle, plateHeight: position.labelHeight,
-        fontSize: plateWidth < 85 ? 10 : plateWidth < 115 ? 12 : 15,
+        plateHeight: 18, fontSize: position.labelWidth < 100 ? 11 : 14,
         selected: this.activeNeedle === index, action: () => this.chooseNeedle(index),
       });
     }
+    drawSuitcaseCharges(this, art, this.session.charges);
+    drawSuitcaseInstruction(this, art, compassCopy.instructions);
     this.caseParts = this.children.getAll().slice(suitcaseStart);
-    const charges = texts.journey.charges.replace('{charges}', String(this.session.charges))
-      .replace('{max}', String(BALANCE.initialCharges));
-    const paletteBottom = dialY + (Math.ceil(12 / paletteColumns) * 50 - 6) / 2;
-    const vialTop = this.paletteVisible ? Math.max(dialY + radius - 8, paletteBottom + 4) : dialY + radius - 8;
-    for (let i = 0; i < BALANCE.initialCharges; i++) {
-      const x = dialX + (i - 4.5) * (split ? 19 : 17), y = vialTop + (split ? 18 : 12);
-      drawChargeBadge(this, x, y, 6, i < this.session.charges, `preparation-charge-${i}`);
-    }
-    const count = compassCopy.chargeCount.replace('{charges}', String(this.session.charges))
-      .replace('{max}', String(BALANCE.initialCharges));
-    this.text(dialX, vialTop + (split ? 30 : 23),
-      count, split ? 15 : 13, 72, true)
-      .setName('preparation-charges');
-    if (split) {
-      this.text(controlsX, statusY, status, 13, controlsWidth).setName('preparation-status');
-    } else this.text(controlsX, statusY + 12, status, 12, controlsWidth).setName('preparation-status');
 
-    const footerWidth = Math.min(contentWidth, 650);
-    const footerButtonWidth = (footerWidth - 16) / 3;
-    this.button(width / 2 - footerButtonWidth - 8, footerY, footerButtonWidth, {
-      name: 'home', label: texts.adventure.backToMap, textOnly: true, stationery: false,
-      fontSize: split ? 15 : 12, action: () => this.animateInstruments(true),
+    const sideWidth = Math.max(110, Math.min(220, (width - art.width) / 2 - 28));
+    const statusX = landscape ? width - (width - art.width) / 4 : width / 2;
+    const statusY = landscape ? height * 0.43 : height - 88;
+    this.text(statusX, statusY, status, short || !landscape ? 12 : 14, landscape ? sideWidth : width - 24)
+      .setName('preparation-status');
+    const footerWidth = Math.min(width - 24, 510), buttonWidth = (footerWidth - 16) / 2;
+    const footerY = height - 28;
+    this.button(width / 2 - (buttonWidth + 16) / 2, footerY, buttonWidth, {
+      name: 'home', label: texts.adventure.backToMap, fontSize: landscape ? 14 : 12,
+      action: () => this.animateInstruments(true),
     });
-    this.button(width / 2, footerY, footerButtonWidth, {
-      name: 'toggle-palette', label: this.paletteVisible ? compassCopy.compass : compassCopy.palette,
-      stationery: false, textOnly: true,
-      fontSize: split ? 15 : 12, action: () => { this.paletteVisible = !this.paletteVisible; this.render(); },
-    });
-    this.button(width / 2 + footerButtonWidth + 8, footerY, footerButtonWidth, {
-      name: 'travel', label: copy.travel, fontSize: split ? 18 : 13, primary: true, disabled: !ready,
+    this.button(width / 2 + (buttonWidth + 16) / 2, footerY, buttonWidth, {
+      name: 'travel', label: copy.travel, fontSize: landscape ? 18 : 16, primary: true, disabled: !ready,
       action: () => this.depart(),
     });
-    this.game.canvas.setAttribute('aria-description', [
-      charges, ...this.slots.map((id, index) => compassCopy.needle.replace('{number}', String(index + 1))
-        + ': ' + (id === null ? copy.empty : texts.elements[id].name)), status, compassCopy.keyboard,
-    ].join('. '));
+    const charges = texts.journey.charges.replace('{charges}', String(this.session.charges))
+      .replace('{max}', String(BALANCE.initialCharges));
+    this.game.canvas.setAttribute('aria-description', [charges, ...this.slots.map((id, index) =>
+      compassCopy.needle.replace('{number}', String(index + 1)) + ': ' + (id ? texts.elements[id].name : copy.empty)),
+      status, compassCopy.keyboard].join('. '));
   }
 
   private animateInstruments(reverse: boolean): void {
     if (this.entering) return;
     if (reducedMotion()) { if (reverse) this.scene.start('adventure', { session: this.session }); return; }
-    const { compass, suitcase } = mapInstruments(this.scale.width, this.scale.height);
+    const from = mapDeparture(this.scale.width, this.scale.height, this.session);
     this.entering = true;
     this.returning = reverse;
     this.input.enabled = false;
-    const duration = reverse ? 300 : this.session.visitedDestinationIds.length ? 360 : 480;
     const done = () => {
       this.entering = false;
       this.input.enabled = true;
+      this.returning = false;
+      this.finishEntrance = null;
       if (reverse) this.scene.start('adventure', { session: this.session });
     };
-    const finishCompass = arriveObjects(this, this.compassParts, this.dial,
-      { x: compass.x, y: compass.y, scale: compass.radius / this.dial.radius, alpha: 0.25, angle: -11 }, duration, undefined, reverse);
-    const finishCase = arriveObjects(this, this.caseParts, this.casePivot,
-      { x: suitcase.x, y: suitcase.top + suitcase.height, scale: suitcase.width / this.casePivot.width, alpha: 0 },
-      duration, done, reverse);
-    this.finishEntrance = () => { finishCompass(); finishCase(); this.entering = false; this.input.enabled = true; };
+    const finish = arriveObjects(this, this.caseParts, this.casePivot,
+      { x: from.x, y: from.y, scale: from.width / this.casePivot.width, alpha: 0 },
+      reverse ? 260 : 360, done, reverse);
+    this.finishEntrance = () => { finish(); this.entering = false; this.input.enabled = true; };
   }
 }

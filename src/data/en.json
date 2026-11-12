@@ -83,19 +83,14 @@
   "compass": {
     "chargeCount": "{charges} / {max}",
     "instructions": "Drag a needle towards a symbol.",
-    "paletteInstructions": "Choose a needle, then an element.",
-    "turnPrevious": "↶",
-    "turnNext": "↷",
     "needle": "Needle {number}",
     "previous": "← Previous",
     "next": "Next →",
     "duplicate": "Same element: turn one needle before travelling.",
-    "palette": "Choose from list",
-    "compass": "Show compass",
     "keyboard": "Keyboard: 1 / 2 to pick a needle, ← / → to turn. Tab and Enter for buttons."
   },
   "preparation": {
-    "title": "Pack your suitcase",
+    "title": "The suitcase compass",
     "instructions": "Choose an element, then a slot.",
     "selected": "{element} selected: tap a slot.",
     "choose": "First choose an element from the palette.",

@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-13",
+  "tool": "image_gen (built-in)",
+  "assets": [
+    {
+      "source": "open.png",
+      "export": "public/assets/preparation/suitcase_compass.webp",
+      "references": [
+        "public/assets/preparation/suitcase_open_inlaid.webp (historical export; original source retained in designs/preparation/inlaid-suitcase-v2/)",
+        "public/assets/preparation/compass_dial.webp"
+      ],
+      "prompt": "Create a production game asset for the existing illustrated fantasy travel game, style references attached: warm caramel leather, painterly storybook rendering, golden brass corners, soft dark brown outlines, detailed tactile textile. ONE OPEN MAGICAL SUITCASE isolated on a genuinely transparent background, no other objects, no text. Nearly front-facing, very gentle isometric view from above so both lid and bottom interior are visible; symmetrical usable game UI silhouette. Portrait composition about 4:5. Large tall upper lid occupying upper 65 percent, lower open tray occupies lower 35 percent. Upper lid interior dark teal velvet, framed by warm cognac leather. At center of lid integrate a LARGE PERFECTLY CIRCULAR ivory parchment and antique brass compass dial, viewed straight enough to remain circular: circle center at image x50% y35%, diameter about 65% image width. Faint engraved compass rose in center. Completely blank outer parchment ring for ten interactive symbols to be overlaid by code. NO needles NO element icons NO numbers NO labels painted on dial. No straps crossing dial. Bottom tray lined with deep teal velvet, one continuous fabric surface, NO compartments NO plinths NO physical pedestals NO plates. TWO faint magical embroidered elliptical constellations side by side in fabric, turquoise on left, muted lavender on right, centered x32% and x68% y78%; delicate tiny gold stitches around them, quiet empty space above each for floating elemental apparitions. Front leather rim and handle at bottom, brass clasps. Entire suitcase visible with narrow transparent margin all around. Polished painted object, belongs to same world as references, not a flat vector UI. Background fully transparent."
+    },
+    {
+      "source": "glyphs.png",
+      "exports": "public/assets/preparation/glyphs/{tree,mushroom,water,fire,rock,palm,snow,cloud,ruins,crystal}.webp",
+      "grid": {
+        "columns": 5,
+        "rows": 2
+      },
+      "prompt": "Game UI asset sprite sheet on a truly transparent background. Exactly TEN separate magical elemental sigils, arranged as a precise 5-column by 2-row regular grid, each symbol perfectly centered within its own equally sized cell, generous transparent margins and absolutely no contact between cells. Landscape 5:2 composition. Row 1 left to right: TREE (branching trunk with canopy), MUSHROOM (one elegant cap and stem), WATER (one curled water droplet), FIRE (one dancing flame), ROCK (angular mountain stone). Row 2 left to right: PALM TREE (curved trunk with palm fronds), SNOW (six-branched snowflake), CLOUD (soft swirling cloud), RUINS (two broken ancient columns with lintel), CRYSTAL (one faceted pointed crystal). These are magical illuminated ink signs, NOT miniatures, NOT realistic objects, NO pedestals NO plinths NO ground NO circles NO cards NO background NO lettering NO numbers. Style painterly storybook fantasy, delicately hand-painted brown-gold contour, luminous warm ivory centers, teal/turquoise accents, tiny lavender accents, restrained fine golden dust close to each symbol. Strong clear distinct silhouettes at 28px. Same visual family as an antique leather magical suitcase with a parchment compass. Polished beautiful airy glyphs, transparent background, muted dark teal edges ensure contrast on ivory parchment. Each sigil isolated and complete, centered in its cell."
+    }
+  ],
+  "notes": "Transparent generated PNG sources copied into the repository. WebP exports retain alpha; the glyph sheet is split into equal cells for runtime use. No catalogue, recipes, charges or save schema changed. New departure animation deferred."
+}

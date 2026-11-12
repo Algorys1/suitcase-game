@@ -1,5 +1,15 @@
 # Assets de la carte et des escales
 
+## État actuel — 13 novembre 2026
+
+**Nouvelle présentation intégrée, à essayer :** [valise-boussole](SUITCASE_COMPASS.md). La mini-valise remplace le « ? » sur le trajet ; le cadran occupe son couvercle et deux manifestations magiques apparaissent en bas. Les aiguilles et règles sont conservées. Le départ animé selon les éléments est intégré ; charges métalliques dans la doublure, mode liste retiré et fond de carte flouté. Cette nouvelle passe reste à essayer.
+
+Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) pour le bilan consolidé. Les 30 destinations ont leur illustration, histoire FR/EN, souvenir et activité implémentés. La carte, le carnet et le tutoriel sont intégrés. Les validations particulières, dont les derniers essais Faille et Observatoire, sont consignées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md) ; elles ne valent pas validation globale de l’équilibrage ou de tous les textes. La phase C n’est pas commencée et demande validation préalable. Les Escales enchantées restent une proposition distincte à arbitrer, pas une suite automatiquement autorisée.
+
+**Lecture des notes historiques :** les essais et vérifications ci-dessous conservent leurs limites d’origine. Une version explicitement validée plus récemment remplace le statut « essai attendu » de sa note initiale. Les mentions de deux/trois pilotes, de contenus à créer ou d’activités restantes décrivent les étapes antérieures, pas le périmètre actuellement implémenté.
+
+## Historique des versions et décisions
+
 ## Vestiges célestes — trois pierres et porte isolée, version courante
 
 **Brume après résolution :** `ui/vestigesMist.ts` dessine trois volutes irrégulières dans une petite texture transparente animée, couleur crème rosée et lavande assortie à la mer de nuages. Un masque doux épouse la surface des marches, en conservant la lisibilité des contremarches, du raccord inférieur et de la porte. Cycle de vingt-six secondes avec vitesses, tailles et densités variables, contours bruités et espacements irréguliers ; aucun déplacement des éléments peints. Une seule image et un seul tween par vue, voile fixe avec le mouvement réduit. Texture et tween supprimés avec l’image au redessin ou à la sortie. Le même effet est partagé par arrivée, exploration et carnet, uniquement lorsque les trois pierres de l’état consulté sont posées. Aucune ressource distante, nouvel asset bitmap, dépendance ou écriture de sauvegarde.

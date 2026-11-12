@@ -1,24 +1,11 @@
 import Phaser from 'phaser';
 import { compassAngle, compassElements } from '../../domain/compassSelection';
 import type { ElementId, SlotIndex, Slots } from '../../domain/preparation';
-import { drawElement } from './preparationArt';
+import { drawElementGlyph } from './preparationArt';
 
 const needleColors = [0x217b76, 0x8050a8] as const;
 const brass = 0xc79442;
 const darkBrass = 0x79512e;
-
-/** Low ivory plinths give the miniatures a shared base on the parchment dial. */
-function elementSupport(scene: Phaser.Scene, x: number, y: number, size: number, id: ElementId): void {
-  const base = scene.add.graphics().setName(`compass-support-${id}`);
-  const width = size * 1.08;
-  const height = size * 0.26;
-  const depth = size * 0.055;
-  base.fillStyle(0x725331, 0.13).fillEllipse(x, y + depth + size * 0.035, width + size * 0.12, height + size * 0.1);
-  base.fillStyle(0x9d733c).fillEllipse(x, y + depth, width, height);
-  base.fillStyle(0xd3ac67).fillEllipse(x, y, width, height);
-  base.fillStyle(0xfff5dc).fillEllipse(x, y - depth * 0.2, width - size * 0.09, height - size * 0.055);
-  base.lineStyle(1, 0xfffdf0, 0.7).lineBetween(x - width * 0.23, y - height * 0.24, x + width * 0.14, y - height * 0.24);
-}
 
 /** One cached radial gradient, drawn behind icons without a hard selection edge. */
 function selectionLight(scene: Phaser.Scene, x: number, y: number, size: number, index: SlotIndex): void {
@@ -87,6 +74,7 @@ export function drawCompass(
   scene: Phaser.Scene, x: number, y: number, radius: number,
   slots: Slots, active: SlotIndex, names: Record<ElementId, { name: string }>,
   interaction: {
+    embedded?: boolean;
     disabled: boolean;
     charged: boolean;
     dragAngle: number | null;
@@ -95,12 +83,12 @@ export function drawCompass(
   },
 ): void {
   const illustrated = scene.textures.exists('preparation-compass_dial');
-  if (illustrated) {
+  if (illustrated && !interaction.embedded) {
     scene.add.image(x, y, 'preparation-compass_dial')
       .setDisplaySize(radius * 2, radius * 2).setName('compass-art');
   }
   const face = scene.add.graphics();
-  if (!illustrated) {
+  if (!illustrated && !interaction.embedded) {
     face.fillStyle(darkBrass, 0.16).fillCircle(x, y + 7, radius + 2);
     face.fillStyle(darkBrass).fillCircle(x, y, radius);
     face.fillStyle(brass).fillCircle(x, y - 2, radius - 3);
@@ -151,8 +139,6 @@ export function drawCompass(
     const angle = Phaser.Math.DegToRad(compassAngle(id) - 90);
     const sx = x + Math.cos(angle) * radius * 0.73;
     const sy = y + Math.sin(angle) * radius * 0.73;
-    const baseY = sy + iconSize * 0.4;
-    elementSupport(scene, sx, baseY, iconSize, id);
     // Offset the two soft lights slightly when both needles share a symbol.
     const duplicate = slots[0] === id && slots[1] === id;
     for (const index of [0, 1] as const) {
@@ -161,8 +147,8 @@ export function drawCompass(
           sy + iconSize * 0.12, iconSize * 1.9, index);
       }
     }
-    const icon = drawElement(scene, id, sx, sy, iconSize);
-    if (icon) icon.setOrigin(0.5, 1).setY(baseY).setName(`compass-icon-${id}`);
+    const icon = drawElementGlyph(scene, id, sx, sy, iconSize);
+    if (icon) icon.setName(`compass-icon-${id}`);
     else symbol(scene, sx, sy, id);
     const hitSize = Math.max(28, Math.min(44, radius * 0.35));
     const target = scene.add.zone(sx, sy, hitSize, hitSize).setName(`dial-element-${id}`)

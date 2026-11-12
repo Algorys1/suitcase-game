@@ -1,5 +1,15 @@
 # Game Design — Le monde tient dans une valise
 
+## État actuel — 13 novembre 2026
+
+**Nouvelle présentation intégrée, à essayer :** [valise-boussole](SUITCASE_COMPASS.md). La mini-valise remplace le « ? » sur le trajet ; le cadran occupe son couvercle et deux manifestations magiques apparaissent en bas. Les aiguilles et règles sont conservées. Le départ animé selon les éléments est intégré ; charges métalliques dans la doublure, mode liste retiré et fond de carte flouté. Cette nouvelle passe reste à essayer.
+
+Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) pour le bilan consolidé. Les 30 destinations ont leur illustration, histoire FR/EN, souvenir et activité implémentés. La carte, le carnet et le tutoriel sont intégrés. Les validations particulières, dont les derniers essais Faille et Observatoire, sont consignées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md) ; elles ne valent pas validation globale de l’équilibrage ou de tous les textes. La phase C n’est pas commencée et demande validation préalable. Les Escales enchantées restent une proposition distincte à arbitrer, pas une suite automatiquement autorisée.
+
+**Lecture des notes historiques :** les essais et vérifications ci-dessous conservent leurs limites d’origine. Une version explicitement validée plus récemment remplace le statut « essai attendu » de sa note initiale. Les mentions de deux/trois pilotes, de contenus à créer ou d’activités restantes décrivent les étapes antérieures, pas le périmètre actuellement implémenté.
+
+## Historique des versions et décisions
+
 > **Archipel — conclusion harmonisée :** toucher les six grands reflets différents garde des ondulations discrètes dans le paysage. L’étiquette reste anonyme jusqu’à la fin : les lueurs convergent dans l’eau, le souvenir s’y forme puis s’envole vers l’étiquette. L’apparition progressive de l’image sur l’étiquette est retirée. Ordre libre, étapes persistantes, anciennes collections préservées et aucune charge dépensée dans le lieu. Voir [la proposition actuelle](DESTINATION_ACTIVITIES.md). La disposition du paysage original ne change pas.
 
 > **Suite à concevoir après essai des deux explorations :** [petits jeux des 30 destinations, tutoriel, carnet sur la carte et animations gratuites](DESTINATION_ACTIVITIES.md). La direction des pilotes Mycélia/Cimes est appréciée par le joueur. Les nouvelles fiches sont des propositions de conception, sans modification des règles ni implémentation des 28 activités restantes.
@@ -53,62 +63,41 @@ La boussole constitue **la seule ressource de session**. Aucun compteur de voyag
 
 ## 3. Parcours du joueur
 
-### 3.1 Accueil
+**Parcours actuel :** accueil → carte d’aventure → préparation → arrivée → exploration facultative ou retour à la carte. La carte ouvre les lieux visités et le carnet sans nouveau débit. À zéro charge, elle bloque les départs mais conserve exploration et accès au bilan ; le retour à l’accueil depuis le bilan clôt l’expédition. Le monde est découvert dès l’arrivée ; son nouveau souvenir demande de résoudre l’activité. Avant collecte, image et nom du souvenir restent masqués dans toutes les vues ; les anciens souvenirs restent acquis. Cimes → Mycélia est la seule correspondance implémentée, sans consommation du souvenir. Voir [ADVENTURE_MAP.md](ADVENTURE_MAP.md) et [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md).
 
-Actions :
-- **Commencer un voyage** : disponible seulement sans expédition en cours ; démarre une session avec la boussole pleine.
-- **Reprendre le voyage** remplace cette action pendant une expédition en pause, sans recharge. Après un départ interrompu ou un résultat non acquitté, reprend au résultat sans nouveau débit. À zéro, le dernier résultat mène au bilan ; un bilan en attente se reprend par **Voir le bilan**. Le retour à l’accueil depuis ce bilan clôt l’expédition et permet un nouveau départ.
-- **Carnet de voyage** : ouvre les destinations découvertes lors de toutes les sessions précédentes, y compris la session la plus récente.
-- **Paramètres** : au minimum choix de langue FR/EN.
+Les sous-sections suivantes décrivent ce parcours implémenté ; les anciens essais et comptes rendus restent consultables dans [l’historique de production](PRODUCTION_HISTORY.md).
 
-L'accueil peut afficher une progression discrète, par exemple « 12 / 30 destinations découvertes ».
 
-### 3.2 Préparation
+### 3.1 Accueil et reprise
 
-L'écran présente :
-- La valise ouverte en **2D isométrique**, avec **deux emplacements** visuellement lisibles.
-- Une boussole avec **10 symboles d'éléments et deux aiguilles distinctes**, sélection cible définie dans [l'extension](COMPASS_AND_STICKERS.md).
-- Les charges restantes, lisibles sur la boussole ou à proximité et distinctes de la sélection.
-- Un bouton **Voyager**, inactif tant que deux éléments distincts ne sont pas placés.
+- Sans expédition : commencer un voyage crée une session à 10 charges puis ouvre la carte.
+- Avec expédition : reprendre conserve charges et historique ; un départ accepté reprend à son résultat, sans nouveau débit. Un bilan en attente reste accessible.
+- Carnet permanent et paramètres FR/EN restent accessibles. Quitter ou recharger met l’expédition en pause si le stockage est disponible.
 
-Interaction cible à prototyper, précisée après le retour du joueur : orienter directement les aiguilles à la souris ou au doigt, avec aimantation aux crans de **36°**. Choisir une aiguille puis cliquer un symbole permet aussi de la régler ; les commandes précédent/suivant restent au clavier et dans la palette de repli. La valise reflète immédiatement les deux éléments sélectionnés. Tourner une aiguille ne coûte rien ; pendant le geste ou lorsque les choix sont identiques, Voyager est désactivé.
+### 3.2 Carte et préparation
 
-Le prototype de phase A utilise les aiguilles ; une palette de repli permet de choisir directement l'élément de l'aiguille active. Les deux interfaces partagent la même sélection et la même validation du départ. À l'ouverture d'une préparation, les aiguilles pointent provisoirement toutes deux sur Arbre, aiguille 1 active : le joueur doit rendre les deux choix distincts avant de valider.
+La carte affiche le trajet, les lieux visités et les charges. Le carnet s’ouvre puis revient à la même aventure sans voyage supplémentaire. Valise et boussole donnent accès à la préparation tant qu’il reste une charge.
 
-**Règle de simplicité :** pas de placement libre, de voisinage, de rotation ni de taille variable. Les deux emplacements sont des choix d'objets, pas une grille spatiale. L'ordre gauche/droite n'influence jamais la destination.
+La valise 2D isométrique présente exactement deux emplacements ; les deux aiguilles choisissent parmi les dix éléments. Glisser une pointe ou un contrepoids, ou choisir une aiguille puis cliquer un symbole, règle les choix avec aimantation à 36°. Le clic sur les signes et le clavier utilisent la même sélection ; le mode liste est retiré à la demande du joueur. Chaque nouvelle préparation commence sur Arbre / Arbre, aiguille 1 active ; le redimensionnement conserve les choix.
 
-### 3.3 Départ et révélation
+Tourner les aiguilles est gratuit. Voyager reste inactif pendant un geste, avec deux éléments identiques, sans paire valide ou sans charge. L’ordre des éléments ne change pas la recette. Aucun placement libre ni grille.
 
-1. Le joueur clique sur **Voyager**.
-2. Le jeu verrouille les interactions pour éviter les doubles validations.
-3. La valise se ferme, puis une animation magique courte se joue.
-4. Le système résout la paire choisie : destination connue ou **Néant**.
-5. La boussole perd les charges correspondantes.
-6. Un écran de résultat montre le lieu (ou le Néant), puis propose **Continuer**.
+### 3.3 Départ, arrivée et exploration
 
-Pour une destination valide : illustration, nom, indication **Nouvelle découverte !** si première visite globale, et court texte d'ambiance. Si elle était déjà découverte, afficher simplement une mention « Déjà visité » sans empêcher la visite.
+Le départ verrouille les interactions, résout et débite une seule fois, sauvegarde l’état puis joue la fermeture et la transition. Le coût ne dépend jamais d’une animation.
 
-Pour le Néant : visuel spécifique, court message, perte de charges affichée clairement. Le Néant n'est **pas** une des 30 destinations et ne s'ajoute **pas** au carnet.
+- Destination valide : inscription immédiate au carnet, illustration, nom et histoire FR/EN, statut nouvelle découverte ou revisite. Coût 1, y compris pour un lieu déjà connu.
+- Néant : présentation dédiée, aucun monde ni souvenir ajouté, coût 2 borné par les charges restantes.
+- Après arrivée : explorer ou revenir à la carte. L’exploration est facultative, sans coût supplémentaire ; on peut revenir au lieu depuis la carte ou sa fiche du carnet.
+- Chaque monde possède une activité locale. Les textes avant résolution restent de l’ambiance sans solution ; curseur normal, aucun repère artificiel de cible.
+- Le nouveau souvenir reste anonyme dans toutes les vues jusqu’à résolution. Les étapes sont sauvegardées avant les animations ; la collecte est unique. Les anciens souvenirs restent acquis, la relecture locale ne réécrit pas la collection.
+- La clochette des Cimes peut être offerte à Mycélia sans consommation ; cette correspondance est indépendante de son activité locale. Aucune autre correspondance n’est implémentée.
 
-### 3.4 Suite ou fin de session
+Les interactions, versions retenues et validations particulières sont détaillées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md). Le tutoriel actuel comporte trois conseils FR/EN passables et relisibles ; sa reprise est demandée. L’accès « Explorer » doit encore être remplacé par un objet illustré, loupe ou longue-vue à définir.
 
-Après le résultat :
-- Si les charges restantes sont **supérieures à zéro**, retour à la valise pour une nouvelle association. **Par défaut, vider les deux emplacements** pour rendre la nouvelle tentative explicite (choix UX à vérifier en playtest).
-- Si les charges restantes sont **égales à zéro**, afficher l'écran de **fin de voyage**.
+### 3.4 Fin d’expédition
 
-Pour le prototype à aiguilles, la règle de réinitialisation retenue est **Arbre / Arbre, aiguille 1 active**, avec départ bloqué jusqu'à deux choix distincts. Elle s'applique à chaque nouvelle préparation ; son intégration après un vrai voyage viendra avec la boucle de jeu. Le vidage indiqué ci-dessus décrit l'ancienne préparation par placement direct.
-
-La boussole ne peut jamais passer sous zéro : `charges = max(0, charges - coût)`.
-
-### 3.5 Récapitulatif de fin de voyage
-
-Afficher :
-- Les destinations valides **visitées pendant cette session**.
-- Les destinations **découvertes pour la première fois** pendant cette session, clairement distinguées.
-- Le nombre de lieux uniques visités pendant cette session et le total permanent découvert sur 30.
-- Une action **Retour à l'accueil**, d'où l'on peut recommencer.
-
-Une destination visitée plusieurs fois peut apparaître une seule fois avec un nombre de visites, afin de ne pas surcharger l'écran. Les tentatives dans le Néant peuvent être comptées dans le bilan, mais ne sont pas des destinations découvertes.
+À zéro charge, la carte bloque tout nouveau départ mais permet encore l’exploration et l’accès au bilan. Le bilan récapitule les lieux visités, revisites, nouvelles découvertes et passages au Néant. Le retour à l’accueil depuis le bilan clôt l’expédition ; la suivante repart à 10 charges avec un historique vide et le carnet permanent conservé. Un bilan interrompu reste récupérable.
 
 ## 4. Règles de combinaison
 
@@ -173,7 +162,7 @@ Arbre, Champignon, Eau, Feu, Rocher, Palmier, Neige, Nuage, Ruines, Cristal.
 | 29 | La Faille des contraires | Feu + Neige |
 | 30 | L'Observatoire des étoiles | Nuage + Cristal |
 
-> Ce tableau capture le catalogue convenu. Les descriptions narratives détaillées et les traductions anglaises restent à écrire ; ne pas les inventer silencieusement dans l'implémentation finale sans validation éditoriale.
+> Ce tableau capture le catalogue convenu. Les 30 histoires FR/EN et titres localisés sont intégrés dans les catalogues. Leur relecture éditoriale d’ensemble reste distincte des validations d’interaction.
 
 ## 5. Boussole et équilibrage
 
@@ -199,7 +188,7 @@ Ne pas ajouter de bonus de recharge, d'économie secondaire ou de mécanique de 
 - La langue choisie doit aussi persister.
 - Aucun compte utilisateur ni synchronisation cloud.
 
-**Extension cosmétique à prototyper :** une première découverte permanente donne accès à un autocollant associé à la destination ; les revisites et le Néant n'en ajoutent pas. Ce déblocage se déduit du carnet, sans collection persistante redondante. La décoration du couvercle utilise 6 positions fixes provisoires, indépendantes des deux emplacements d'éléments ; sa disposition sera sauvegardée. Les phases B et C et leurs critères figurent dans [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md).
+**Souvenirs dans le prototype actuel :** la destination est inscrite au carnet dès l’arrivée, mais son souvenir reste en attente jusqu’à résolution de l’activité locale. Les souvenirs déjà acquis restent disponibles ; revisites et Néant ne créent aucun doublon. La décoration du couvercle (phase C) reste une proposition distincte : six positions fixes provisoires, indépendantes des deux emplacements d’éléments, avec sauvegarde de la disposition après validation. Voir [COMPASS_AND_STICKERS.md](COMPASS_AND_STICKERS.md).
 
 **Note UX :** prévenir sobrement que le carnet est enregistré dans ce navigateur et peut être perdu si les données du site sont effacées.
 
@@ -208,7 +197,7 @@ Ne pas ajouter de bonus de recharge, d'économie secondaire ou de mécanique de 
 | Situation | Comportement attendu |
 | --- | --- |
 | 0 ou 1 élément placé | Bouton Voyager désactivé |
-| Même élément sélectionné deux fois | Départ interdit et indication claire ; la valise reflète le doublon. Aiguilles et palette de repli utilisent la même validation du départ. |
+| Même élément sélectionné deux fois | Départ interdit et indication claire ; la valise reflète le doublon. Clic sur les signes et aiguilles utilisent la même validation du départ. |
 | Éléments placés dans l'ordre inverse | Même destination |
 | Paire sans recette | Néant ; coût 2 |
 | Destination déjà débloquée | Résultat normal ; pas de nouveau déblocage |
@@ -246,7 +235,7 @@ Les animations doivent être **courtes** et ne pas rendre les tentatives répét
 - [ ] Les textes de l'interface sont disponibles en français et en anglais.
 - [ ] Le jeu est jouable directement dans le navigateur, avec les interactions principales accessibles à la souris / au toucher.
 
-## 11. Ordre d'implémentation recommandé
+## 11. Ordre initial d’implémentation — historique
 
 1. Modèle de données, IDs, résolution de paire, tests des 45 cas.
 2. Écran de valise avec visuels temporaires, deux slots et sélection.

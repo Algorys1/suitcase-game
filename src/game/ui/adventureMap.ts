@@ -77,14 +77,35 @@ export function mapText(scene: Phaser.Scene, x: number, y: number, value: string
 
 /** Shared anchors let the instruments travel from their actual resting places. */
 export function mapInstruments(w: number, h: number) {
-  const portrait = w < 600;
   return {
     journal: { x: w < 600 ? 46 : h < 450 ? 45 : 100, y: h - 122,
       width: w < 600 || h < 450 ? 52 : 72, height: w < 600 || h < 450 ? 70 : 88 },
-    compass: { x: portrait ? 60 : 87, y: portrait ? 101 : 84, radius: portrait ? 32 : 45 },
-    suitcase: { x: w - (portrait ? 64 : 113), top: h - (portrait ? 101 : 145),
-      width: portrait ? 106 : 185, height: portrait ? 72 : 115 },
   };
+}
+
+/** Shared route geometry keeps the single suitcase at the actual next stop. */
+export function mapRouteLayout(w: number, h: number, session: SessionState) {
+  const portrait = w < 600, short = h < 450;
+  const route = sessionRoute(session);
+  const count = route.length + (session.charges > 0 ? 1 : 0);
+  const top = portrait ? 223 : short ? 151 : 195;
+  const span = Math.max(portrait ? 150 : 85, h - (portrait ? 130 : short ? 110 : 160) - top);
+  const left = portrait ? 50 : 113, areaW = w - left * 2;
+  const anchors = portrait
+    ? [[0.02, 0.03], [0.50, 0.12], [0.98, 0.02], [0.96, 0.36], [0.48, 0.46], [0.02, 0.36], [0.04, 0.72], [0.50, 0.83], [0.96, 0.72], [0.27, 0.99]]
+    : [[0.05, 0.12], [0.34, 0.02], [0.65, 0.13], [0.94, 0.01], [0.96, 0.58], [0.65, 0.68], [0.34, 0.51], [0.02, 0.66], [0.24, 1.11], [0.48, 1.13]];
+  const points = anchors.slice(0, count).map(([x = 0, y = 0]) => ({ x: left + x * areaW, y: top + y * span }));
+  // Let the map breathe at the first stop, then fit the growing itinerary on small paper.
+  const size = portrait
+    ? Math.min(79, (w - 64) / 3, count <= 3 ? 79 : span * 0.15)
+    : Math.min(short ? 66 : 119, w * 0.13, count <= 4 ? 119 : span * (short ? 0.32 : 0.40));
+  return { points, size };
+}
+
+export function mapDeparture(w: number, h: number, session: SessionState) {
+  const { points } = mapRouteLayout(w, h, session);
+  const point = points.at(-1) ?? { x: w / 2, y: h / 2 };
+  return { ...point, width: w < 600 || h < 450 ? 70 : 100, height: w < 600 || h < 450 ? 53 : 72 };
 }
 
 /** Soft vignettes use the existing illustration, without altering its source file. */
@@ -180,19 +201,7 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
   mapText(scene, w / 2, portrait ? 31 : short ? 32 : 48, copy.eyebrow, 9, w - 70, '#a08052').setLetterSpacing(2);
   mapText(scene, w / 2, portrait ? 53 : short ? 59 : 74, copy.title, portrait ? 19 : short ? 21 : 27, portrait ? w - 35 : w - 350)
     .setFontFamily('"Travel Serif", Georgia, serif').setName('adventure-title');
-  const { compass, suitcase, journal } = mapInstruments(w, h);
-  if (scene.textures.exists('preparation-compass_dial')) scene.add.image(compass.x, compass.y, 'preparation-compass_dial')
-    .setDisplaySize(compass.radius * 2, compass.radius * 2).setAngle(-11).setName('map-compass-art');
-  for (const index of [0, 1] as const) {
-    const key = `preparation-${index === 0 ? 'needle_teal' : 'needle_violet'}`;
-    if (!scene.textures.exists(key)) continue;
-    const pivot = index === 0 ? 0.68 : 0.69;
-    const needle = scene.add.image(compass.x, compass.y, key).setOrigin(0.5, pivot)
-      .setAngle(index === 0 ? -11 : 61).setName(`map-needle-${index}`);
-    needle.setScale(compass.radius * (index === 0 ? 0.6 : 0.54) / (needle.height * pivot));
-  }
-  const hands = scene.add.graphics().setPosition(compass.x, compass.y).setName('map-compass-hands');
-  hands.fillStyle(0xcda25d).fillCircle(0, 0, 3);
+  const { journal } = mapInstruments(w, h);
   const badgeX = w - (portrait ? 78 : 113), badgeY = portrait ? 101 : 72;
   const tray = scene.add.graphics().setName('energy-ticket');
   tray.fillStyle(0xb49766, 0.09).fillRoundedRect(badgeX - 64, badgeY - 25, 128, 71, 6);
@@ -204,23 +213,12 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
   const hint = progress.awakenedMycelia ? copy.freeWish : unlocked.includes('cimes_eternelles') ? copy.bellWish : copy.snowWish;
   mapText(scene, w / 2, portrait ? 168 : short ? 117 : 124, hint, portrait || short ? 12 : 14,
     portrait ? w - 55 : w - 305, '#7d6c53').setFontFamily('Georgia, serif').setFontStyle('italic').setName('adventure-wish');
-  const top = portrait ? 223 : short ? 151 : 195;
-  const span = Math.max(portrait ? 150 : 85, h - (portrait ? 130 : short ? 110 : 160) - top);
-  const left = portrait ? 50 : 113, areaW = w - left * 2;
-  const anchors = portrait
-    ? [[0.02, 0.03], [0.50, 0.12], [0.98, 0.02], [0.96, 0.36], [0.48, 0.46], [0.02, 0.36], [0.04, 0.72], [0.50, 0.83], [0.96, 0.72], [0.27, 0.99]]
-    : [[0.05, 0.12], [0.34, 0.02], [0.65, 0.13], [0.94, 0.01], [0.96, 0.58], [0.65, 0.68], [0.34, 0.51], [0.02, 0.66], [0.24, 1.11], [0.48, 1.13]];
-  const points = anchors.slice(0, count).map(([x = 0, y = 0]) => ({ x: left + x * areaW, y: top + y * span }));
-  // Let the map breathe at the first stop, then fit the growing itinerary on small paper.
-  const size = portrait
-    ? Math.min(79, (w - 64) / 3, count <= 3 ? 79 : span * 0.15)
-    : Math.min(short ? 66 : 119, w * 0.13, count <= 4 ? 119 : span * (short ? 0.32 : 0.40));
+  const { points, size } = mapRouteLayout(w, h, session);
   // Paths sit behind every world, and bend between steps like a pen-drawn itinerary.
   const captions: { x: number; y: number; text: string; index: number }[] = [];
   const reserved: MapRect[] = points.map((point, index) => route[index] === undefined
     ? { x: point.x - (portrait ? 52 : 77), y: point.y - 32, width: portrait ? 104 : 154, height: 90 }
     : { x: point.x - size / 2, y: point.y - size / 2, width: size, height: size });
-  reserved.push({ x: suitcase.x - suitcase.width / 2, y: suitcase.top, width: suitcase.width, height: suitcase.height });
   reserved.push({ x: journal.x - journal.width / 2 - 5, y: journal.y - journal.height / 2 - 5,
     width: journal.width + 10, height: journal.height + 30 });
   points.forEach((point, index) => {
@@ -248,15 +246,13 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
   points.forEach((point, index) => {
     const id = route[index];
     if (id === undefined) {
-      const ring = scene.add.graphics().setPosition(point.x, point.y).setName('next-world-ring');
-      ring.fillStyle(0xfff8e7).fillCircle(0, 0, 24).lineStyle(1, 0x9c8157, 0.7).strokeCircle(0, 0, 24);
-      ring.lineStyle(1, 0xc7a874, 0.4).strokeCircle(0, 0, 29);
-      mapText(scene, point.x, point.y - 1, '?', 31, 60, '#8b6943').setFontFamily('Georgia, serif').setName('next-question');
-      mapText(scene, point.x, point.y + 41, route.length ? copy.nextStep : copy.firstStep,
+      const departure = mapDeparture(w, h, session);
+      drawClosedSuitcase(scene, point.x, point.y - departure.height / 2, departure.width, departure.height);
+      scene.children.getByName('suitcase-closed-art')?.setName('next-suitcase-art');
+      mapText(scene, point.x, point.y + departure.height / 2 + 15, route.length ? copy.nextStep : copy.firstStep,
         portrait || short ? 10 : 12, portrait ? 100 : 150, '#8a7251').setName('next-step-label');
-      if (motion) scene.tweens.add({ targets: ring, alpha: 0.6, scaleX: 1.05, scaleY: 1.05,
-        duration: 1300, yoyo: true, repeat: -1 });
-      controls?.add('next-world', point.x, point.y, portrait ? 48 : 58, portrait ? 48 : 58, () => onDepart?.());
+      controls?.add('next-world', point.x, point.y, Math.max(48, departure.width),
+        Math.max(48, departure.height), () => onDepart?.(), false);
       return;
     }
     if (id === null) {
@@ -309,8 +305,6 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
     label.setPosition(position.x + 4, position.y + 2);
     scene.children.bringToTop(label);
   }
-  drawClosedSuitcase(scene, suitcase.x, suitcase.top, suitcase.width, suitcase.height);
-  scene.children.getByName('suitcase-closed-art')?.setName('map-suitcase-art');
   if (scene.textures.exists('journal-closed')) scene.add.image(journal.x, journal.y, 'journal-closed')
     .setDisplaySize(journal.width, journal.height).setAngle(-7).setName('map-journal-art');
   mapText(scene, journal.x, journal.y + journal.height / 2 + 11,

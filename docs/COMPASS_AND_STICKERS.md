@@ -1,5 +1,15 @@
 # Extension de gameplay — Boussole à aiguilles et autocollants
 
+## État actuel — 13 novembre 2026
+
+**Nouvelle présentation intégrée, à essayer :** [valise-boussole](SUITCASE_COMPASS.md). La mini-valise remplace le « ? » sur le trajet ; le cadran occupe son couvercle et deux manifestations magiques apparaissent en bas. Les aiguilles et règles sont conservées. Le départ animé selon les éléments est intégré ; charges métalliques dans la doublure, mode liste retiré et fond de carte flouté. Cette nouvelle passe reste à essayer.
+
+Voir [PROJECT_STATUS.md](PROJECT_STATUS.md) pour le bilan consolidé. Les 30 destinations ont leur illustration, histoire FR/EN, souvenir et activité implémentés. La carte, le carnet et le tutoriel sont intégrés. Les validations particulières, dont les derniers essais Faille et Observatoire, sont consignées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md) ; elles ne valent pas validation globale de l’équilibrage ou de tous les textes. La phase C n’est pas commencée et demande validation préalable. Les Escales enchantées restent une proposition distincte à arbitrer, pas une suite automatiquement autorisée.
+
+**Lecture des notes historiques :** les essais et vérifications ci-dessous conservent leurs limites d’origine. Une version explicitement validée plus récemment remplace le statut « essai attendu » de sa note initiale. Les mentions de deux/trois pilotes, de contenus à créer ou d’activités restantes décrivent les étapes antérieures, pas le périmètre actuellement implémenté.
+
+## Historique des versions et décisions
+
 > **Prototype autorisé le 4 novembre 2026 :** [carte d’aventure](ADVENTURE_MAP.md). Les aiguilles sont conservées ; les charges deviennent dix badges ronds. Les nouveaux souvenirs demandent une exploration. Un premier usage narratif de la clochette est proposé à Mycélia sans consommation de l’autocollant. Ces évolutions priment pour ce prototype sur le déblocage automatique et le rôle uniquement cosmétique ci-dessous. La décoration du couvercle reste distincte.
 
 > **Collection complète intégrée :** les 30 destinations disposent de leur illustration, de leur histoire FR/EN et de leur autocollant souvenir. Les trois pilotes validés sont conservés ; les 27 ajouts sont des propositions à relire en jeu. Voir [le catalogue illustré et les sources](DESTINATION_COLLECTION.md). La décoration de la valise (phase C) et les Escales enchantées restent à développer. Les mentions de trois pilotes ou de placeholders ci-dessous décrivent les étapes antérieures.
@@ -66,6 +76,11 @@ Pour éviter une refonte inutile, **réutiliser la logique de sélection déjà 
 La jauge d'énergie reste **10 charges initiales, −1 pour une destination valide, −2 pour le Néant**, paramètres à équilibrer lors des playtests.
 
 ## 3. Autocollants de voyage
+
+**Règle actuelle du prototype autorisé :** les 30 souvenirs sont intégrés, mais un nouveau souvenir n’est révélé qu’après résolution de son activité. La découverte du monde, inscrite au carnet dès l’arrivée, et la collecte du souvenir sont distinctes. Les anciens souvenirs sont conservés. L’offrande Cimes → Mycélia ne consomme rien et n’accorde aucun bonus de charge. La phase C reste séparée, non commencée et soumise à validation.
+
+Les intentions et règles de déblocage automatique des sous-sections suivantes décrivent la proposition initiale, remplacée sur ces points par le prototype autorisé.
+
 
 ### 3.1 Intention
 
@@ -168,7 +183,7 @@ type StickerDecoration = {
 - Sauvegarder et restaurer la disposition.
 - Afficher la décoration pendant la fermeture si l'animation existante le permet.
 
-## 7. Critères d'acceptation
+## 7. Critères de la proposition initiale — à lire avec le prototype actuel
 
 - [ ] Deux aiguilles permettent de sélectionner n'importe quelle paire de deux éléments **distincts** parmi les dix.
 - [ ] Les 30 recettes et les 15 associations menant au Néant restent inchangées.

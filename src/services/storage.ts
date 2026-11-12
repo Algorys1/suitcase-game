@@ -20,6 +20,7 @@ export type Progress = {
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
   sanctuaryPuzzle?: SanctuaryPuzzle;
+  vestigesLayout?: 2;
 };
 type StorageAccess = () => Pick<Storage, 'getItem' | 'setItem'> & Partial<Pick<Storage, 'removeItem'>>;
 const knownIds = new Set(destinations.map(({ id }) => id));
@@ -46,7 +47,13 @@ export function decodeProgress(serialized: string | null): Progress {
     if ('pilotSteps' in value && typeof value.pilotSteps === 'object' && value.pilotSteps !== null) {
       for (const id of Object.keys(pilotTargetCounts) as PilotId[]) {
         if (!discoveredDestinationIds.includes(id)) continue;
-        const steps = validSteps(id, Reflect.get(value.pilotSteps, id));
+        const raw = Reflect.get(value.pilotSteps, id);
+        const legacyVestiges = id === 'vestiges_celestes' && !('vestigesLayout' in value && value.vestigesLayout === 2)
+          && Array.isArray(raw) ? [...new Set(raw.filter((step: unknown): step is number =>
+            typeof step === 'number' && Number.isInteger(step) && step >= 0 && step < 4))] : undefined;
+        // Three new stones replace four old slabs: retain the number already placed.
+        const steps = legacyVestiges ? Array.from({ length: Math.min(3, legacyVestiges.length) }, (_, i) => i)
+          : validSteps(id, raw);
         if (steps.length) pilotSteps[id] = steps;
         if (explorationComplete(id, steps)) {
           const index = pending.indexOf(id);
@@ -59,6 +66,7 @@ export function decodeProgress(serialized: string | null): Progress {
     const sanctuaryPuzzle = discoveredDestinationIds.includes('sanctuaire_des_spores') && 'sanctuaryPuzzle' in value
       ? decodeSanctuaryPuzzle(value.sanctuaryPuzzle) : undefined;
     return { schemaVersion: 1, language,
+      ...(discoveredDestinationIds.includes('vestiges_celestes') ? { vestigesLayout: 2 as const } : {}),
       ...(sanctuaryPuzzle ? { sanctuaryPuzzle } : {}),
       ...(tutorialSeen.length ? { tutorialSeen } : {}),
       ...(Object.keys(pilotSteps).length ? { pilotSteps } : {}),
@@ -146,8 +154,8 @@ export class ProgressStore {
   explorationSteps(id: PilotId): number[] {
     const progress = this.read();
     const stored = progress.pilotSteps?.[id];
-    // Previously earned desert souvenirs used three dunes; keep them earned.
-    if (id === 'desert_de_cristal' && this.unlockedSouvenirIds().includes(id)
+    // Older desert and Vestiges activities used different targets; keep earned souvenirs.
+    if ((id === 'desert_de_cristal' || id === 'vestiges_celestes') && this.unlockedSouvenirIds().includes(id)
       && stored?.length !== pilotTargetCounts[id]) {
       return Array.from({ length: pilotTargetCounts[id] }, (_, index) => index);
     }
@@ -171,6 +179,7 @@ export class ProgressStore {
       const pending = (progress.pendingSouvenirIds ?? []).filter(entry => entry !== id || !collected);
       delete progress.pendingSouvenirIds;
       this.save({ ...progress, pilotSteps: { ...progress.pilotSteps, [id]: steps },
+        ...(id === 'vestiges_celestes' ? { vestigesLayout: 2 as const } : {}),
         ...(pending.length ? { pendingSouvenirIds: pending } : {}) });
     }
     return { activated, complete, collected };

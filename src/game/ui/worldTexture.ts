@@ -9,8 +9,10 @@ import { necropoleBase } from './necropoleLamps';
 import { ashPostcard } from './ashVolcano';
 import { grottoPostcard } from './grottoSpores';
 import { canopyPostcard } from './canopyDew';
+import { stairsPostcard } from './vestigesStairs';
 
 export function worldTexture(scene: Phaser.Scene, id: string): string {
+  if (id === 'vestiges_celestes') return stairsPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'atoll_boreal') return atollPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'tempete_ecarlate') return stormPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'royaume_des_spores_celestes') return kingdomBase(scene);

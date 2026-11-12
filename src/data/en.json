@@ -294,6 +294,10 @@
     }
   },
   "adventure": {
+    "stairsMood": "The wind passes between the arches, high above the clouds.",
+    "stairsAwakening": "A passage opens above the clouds…",
+    "stairsComplete": "Beyond the door, a garden was still waiting for travellers.",
+    "replayStairs": "See the passage again",
     "title": "The paths of my journey",
     "energy": "Compass energy",
     "suitcase": "My travelling suitcase",

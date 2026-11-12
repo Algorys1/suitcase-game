@@ -294,6 +294,10 @@
     }
   },
   "adventure": {
+    "stairsMood": "Le vent passe entre les arches, au-dessus des nuages.",
+    "stairsAwakening": "Un passage s’ouvre au-dessus des nuages…",
+    "stairsComplete": "Derrière la porte, un jardin attendait encore les voyageurs.",
+    "replayStairs": "Revoir le passage",
     "title": "Les chemins de mon voyage",
     "energy": "Élan de la boussole",
     "suitcase": "Ma valise de voyage",

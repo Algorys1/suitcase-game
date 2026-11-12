@@ -17,6 +17,7 @@ import { addZenithWatering } from './zenithWatering';
 import { progressStore } from '../../services/storage';
 import { drawAtollAurora } from './atollAurora';
 import { drawStormBottle } from './stormLightning';
+import { drawVestigesMist } from './vestigesMist';
 
 /** Shared framing keeps the landscape in place when the player chooses to explore. */
 export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: SessionState,
@@ -97,6 +98,9 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
     objects.push(...drawAtollAurora(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('atoll_boreal').length === 2));
   const corners = scene.add.graphics().setName('arrival-photo-corners');
+  if (id === 'vestiges_celestes' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawVestigesMist(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('vestiges_celestes').length === 3));
   corners.fillStyle(0xc7aa72, 0.65).fillTriangle(artLeft - 12, artUpper - 12, artLeft + 15, artUpper - 12, artLeft - 12, artUpper + 15);
   corners.fillTriangle(artLeft + artW + 12, artUpper + artH + 16,
     artLeft + artW - 15, artUpper + artH + 16, artLeft + artW + 12, artUpper + artH - 11);

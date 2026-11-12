@@ -294,6 +294,12 @@
     }
   },
   "adventure": {
+    "jungleMood": "Beneath the foliage, the air holds the day’s warmth.",
+    "jungleComplete": "A gentle ember breathes in the shade of the leaves.",
+    "replayJungle": "Rekindle the fruit",
+    "globeMood": "The cold holds the shore’s last breath.",
+    "globeComplete": "Behind the glass, winter begins to move again.",
+    "replayGlobe": "Compose the globe again",
     "stairsMood": "The wind passes between the arches, high above the clouds.",
     "stairsAwakening": "A passage opens above the clouds…",
     "stairsComplete": "Beyond the door, a garden was still waiting for travellers.",

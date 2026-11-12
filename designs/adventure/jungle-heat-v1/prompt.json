@@ -1,0 +1,5 @@
+{
+  "tool": "image_gen (built-in)",
+  "reference": "public/assets/destinations/jungle_incandescente.webp",
+  "prompt": "Precise object edit of this painted fantasy game landscape. Change ONLY the single LARGE lantern fruit at the left foreground, bounds approximately x10%-33% and y44%-69% of image. Make this ONE fruit unlit and dormant: matte muted russet/ochre-brown skin, softly shaded ridges, no inner yellow light, no glow, no bright white/yellow shiny spots. Still a beautiful recognisable organic lantern fruit with exact same shape, size, pointed bottom, stalk and overlapping green leaves. Preserve the entire rest of this original painting exactly, including all red hot vines, orange flowers, smaller glowing fruits, green leaves, stones, path, waterfalls, cliffs, blue sky. Do not darken the landscape. No new objects, no text. Match original illustrated brushwork and linework. Same full 4:3 composition."
+}

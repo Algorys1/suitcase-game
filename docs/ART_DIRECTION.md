@@ -1,5 +1,12 @@
 # Direction artistique — Le monde tient dans une valise
 
+**Jungle — pulsation accentuée après essai :** amplitude du voile de peau éteinte portée de 22 % à 58 %, pour une variation plus lisible entre braise et lumière pleine. Cycle lent de six secondes conservé, uniquement après résolution, partagé entre exploration, arrivée et carnet.
+
+**Jungle incandescente — essai :** retouche du gros fruit éteint avec peau mate rousse, puis mélange progressif avec sa peinture lumineuse d’origine. La composition ne modifie que son corps, en conservant feuilles et décor originaux. Après résolution, modulation douce de la lumière peinte sur un cycle de six secondes ; silhouette et paysage immobiles. Même effet en arrivée, exploration et carnet, sans tween en mouvement réduit. [Source et prompt](../designs/adventure/jungle-heat-v1/prompt.json).
+
+**Mer figée — essai :** le globe vide se compose par dépôts de neige, glace puis étoiles. Retouche limitée à l’intérieur du verre ; le paysage original reste intact. Après résolution seulement, une neige fine et lente tombe dans le globe, partagée par arrivée, exploration et carnet ; flocons fixes en mouvement réduit. [Source et prompt imagegen](../designs/adventure/mer-globe-v1/prompt.json). Rendu à valider par le joueur.
+
+
 > **Carton kraft et souvenirs — lisibilité :** étiquette plus haute dans les résultats et explorations, avec une vraie place pour l'illustration. Les marges transparentes des trente autocollants sont cadrées au chargement, puis la peinture utilise le filtrage mipmap existant. Le halo blanc et l'ombre de filtre, qui brouillaient les petits détails, sont retirés : les images possèdent déjà leur bord papier. Le scotch du carton est remplacé par une petite punaise à tête brun rouge, fichée dans l'œillet renforcé. Nom en Alegreya et statut secondaire, disposition adaptée au carnet et aux petits formats ; enveloppe anonyme et envol commun préservés. Le carton et la punaise restent dans le composant de dessin natif `souvenir.ts`.
 
 > **Assets dédiés quand nécessaires :** le joueur refuse de détourner un pictogramme pour économiser la création d’un visuel. Réutiliser les composants de mise en page validés, mais créer les assets adaptés au paysage et à l’effet demandé. Pour les Cimes, trois voiles propres à la scène remplacent le nuage de la boussole : texture peinte, palette lavande/rosée, contours diffus et proportions naturelles, sans étirement. [Sources et prompts](ADVENTURE_ASSETS.md).

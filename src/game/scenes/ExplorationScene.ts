@@ -1,3 +1,5 @@
+import { addJungleHeat } from '../ui/jungleHeat';
+import { addFrozenGlobe } from '../ui/frozenGlobe';
 import Phaser from 'phaser';
 import type { SessionState } from '../../domain/session';
 import { destinationById } from '../../domain/recipes';
@@ -134,7 +136,7 @@ export class ExplorationScene extends Phaser.Scene {
     const progress = progressStore.read();
     const earned = progressStore.unlockedSouvenirIds().includes(this.id);
     const awake = this.id === 'mycelia' && !!progress.awakenedMycelia;
-    const steps = (this.id === 'archipel_azur' || this.id === 'desert_de_cristal' || this.id === 'vestiges_celestes')
+    const steps = (this.id === 'archipel_azur' || this.id === 'desert_de_cristal' || this.id === 'vestiges_celestes' || this.id === 'mer_figee' || this.id === 'jungle_incandescente')
       && this.reflectionReplay !== undefined ? this.reflectionReplay
       : isPilot(this.id) ? progressStore.explorationSteps(this.id) : [];
     const complete = isPilot(this.id) ? explorationComplete(this.id, steps) : earned;
@@ -154,7 +156,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.celebrate = false;
     this.lastTouched = undefined;
     this.lastActivated = false;
-    const instruction = this.souvenirInFlight ? this.id === 'vestiges_celestes' ? copy.stairsAwakening
+    const instruction = this.souvenirInFlight ? this.id === 'jungle_incandescente' ? copy.jungleComplete : this.id === 'mer_figee' ? copy.globeComplete : this.id === 'vestiges_celestes' ? copy.stairsAwakening
       : this.id === 'atoll_boreal' ? copy.atollAwakening
       : this.id === 'tempete_ecarlate' ? copy.stormAwakening
       : this.id === 'royaume_des_spores_celestes' ? copy.kingdomAwakening
@@ -171,6 +173,8 @@ export class ExplorationScene extends Phaser.Scene {
       : this.id === 'temple_oublie' ? copy.templeAwakening
       : this.id === 'palais_de_givre' ? copy.frostAwakening
       : this.id === 'desert_de_cristal' ? copy.desertAwakening : copy.souvenirForming
+      : this.id === 'jungle_incandescente' ? complete ? copy.jungleComplete : copy.jungleMood
+      : this.id === 'mer_figee' ? complete ? copy.globeComplete : copy.globeMood
       : this.id === 'vestiges_celestes' ? complete ? copy.stairsComplete : copy.stairsMood
       : this.id === 'atoll_boreal' ? complete ? copy.atollWoven : copy.atollMood
       : this.id === 'tempete_ecarlate' ? complete ? copy.stormCalm : steps.includes(0) ? copy.stormReturn : copy.stormMood
@@ -267,6 +271,34 @@ export class ExplorationScene extends Phaser.Scene {
       index => progressStore.touchExploration('atoll_boreal', index),
       () => { this.justFound = true; this.souvenirArrival = true; this.render(); }, this.souvenirInFlight);
 
+    if (this.id === 'jungle_incandescente') this.stopBridge = addJungleHeat(this, this.controls, stage.art,
+      steps, index => {
+        if (this.reflectionReplay !== undefined) {
+          const before = this.reflectionReplay.length;
+          this.reflectionReplay = activateTarget('jungle_incandescente', this.reflectionReplay, index);
+          return { activated: before !== this.reflectionReplay.length,
+            collected: explorationComplete('jungle_incandescente', this.reflectionReplay) };
+        }
+        return progressStore.touchExploration('jungle_incandescente', index);
+      }, collected => {
+        this.justFound ||= collected && this.reflectionReplay === undefined;
+        this.souvenirArrival = collected; this.render();
+      }, this.souvenirInFlight);
+
+    if (this.id === 'mer_figee') this.stopBridge = addFrozenGlobe(this, this.controls, stage.art,
+      steps, index => {
+        if (this.reflectionReplay !== undefined) {
+          const before = this.reflectionReplay.length;
+          this.reflectionReplay = activateTarget('mer_figee', this.reflectionReplay, index);
+          return { activated: before !== this.reflectionReplay.length,
+            collected: explorationComplete('mer_figee', this.reflectionReplay) };
+        }
+        return progressStore.touchExploration('mer_figee', index);
+      }, collected => {
+        this.justFound ||= collected && this.reflectionReplay === undefined;
+        this.souvenirArrival = collected; this.render();
+      }, this.souvenirInFlight);
+
     if (this.id === 'vestiges_celestes') this.stopBridge = addVestigesStairs(this, this.controls, stage.art,
       steps, index => {
         if (this.reflectionReplay !== undefined) {
@@ -322,9 +354,9 @@ export class ExplorationScene extends Phaser.Scene {
       this.controls.add('offer-bell', panelX + panelW / 2, panelY + 23, panelW, 46,
         () => { this.offering = !this.offering; this.render(); });
     }
-    if (earned && (this.id === 'archipel_azur' || this.id === 'desert_de_cristal' || this.id === 'vestiges_celestes') && !this.souvenirInFlight) {
-      this.controls.button(this.id === 'vestiges_celestes' ? 'replay-stairs' : this.id === 'desert_de_cristal' ? 'replay-crystals' : 'replay-reflections',
-        this.id === 'vestiges_celestes' ? copy.replayStairs : this.id === 'desert_de_cristal' ? copy.replayCrystals : copy.replayReflections, sideX,
+    if (earned && (this.id === 'archipel_azur' || this.id === 'desert_de_cristal' || this.id === 'vestiges_celestes' || this.id === 'mer_figee' || this.id === 'jungle_incandescente') && !this.souvenirInFlight) {
+      this.controls.button(this.id === 'jungle_incandescente' ? 'replay-jungle' : this.id === 'mer_figee' ? 'replay-globe' : this.id === 'vestiges_celestes' ? 'replay-stairs' : this.id === 'desert_de_cristal' ? 'replay-crystals' : 'replay-reflections',
+        this.id === 'jungle_incandescente' ? copy.replayJungle : this.id === 'mer_figee' ? copy.replayGlobe : this.id === 'vestiges_celestes' ? copy.replayStairs : this.id === 'desert_de_cristal' ? copy.replayCrystals : copy.replayReflections, sideX,
         tagY - (portrait ? 58 : 66), sideW - 12, () => {
           if (this.souvenirInFlight) return;
           this.reflectionReplay = []; this.justFound = false; this.render();
@@ -340,6 +372,10 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.souvenirInFlight) {
       if (this.id === 'archipel_azur') {
         gatherArchipelagoLight(this, stage.art, (x, y) => this.collectSouvenir(x, y, () => this.render(), true));
+      } else if (this.id === 'jungle_incandescente') {
+        this.collectSouvenir(left + artW * 0.214, top + artH * 0.566, () => this.render(), true);
+      } else if (this.id === 'mer_figee') {
+        this.collectSouvenir(left + artW * 0.242, top + artH * 0.661, () => this.render(), true);
       } else if (this.id === 'vestiges_celestes') {
         this.tweens.addCounter({ from: 0, to: 1, duration: 750, onComplete: () =>
           this.collectSouvenir(left + artW * 0.770, top + artH * 0.380, () => this.render(), true) });

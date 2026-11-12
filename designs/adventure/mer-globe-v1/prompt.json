@@ -1,0 +1,5 @@
+{
+  "tool": "image_gen (built-in)",
+  "reference": "designs/destinations/collection-v1/mer_figee.png",
+  "prompt": "Edit this exact painted game illustration. Precise object edit ONLY inside the small snow globe at lower left (glass sphere approximately x14%-34%, y53%-77%). Remove its miniature turquoise wave, all little floating snowflakes and all little stars from INSIDE the globe. Leave the globe completely empty, clear slightly blue transparent glass showing soft reflections of the warm surrounding landscape through it, and a plain empty shallow inner bottom. Preserve EXACT original globe silhouette, bright ivory specular highlights, golden rim and brown gold base. Preserve the ENTIRE exterior illustration and its composition unchanged: giant frozen wave, snowy foreground, berries, sky constellation, sunset, rocks, water. Same painterly brushwork, crisp outlines and colors. No writing, no new objects. Exact same 4:3 full image composition. This is the empty starting-state asset; never erase any part of the exterior landscape."
+}

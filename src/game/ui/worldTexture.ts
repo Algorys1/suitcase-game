@@ -1,3 +1,4 @@
+import { junglePostcard } from './jungleHeat';
 import type Phaser from 'phaser';
 import { explorationComplete, isPilot } from '../../domain/pilotExploration';
 import { progressStore } from '../../services/storage';
@@ -9,9 +10,12 @@ import { necropoleBase } from './necropoleLamps';
 import { ashPostcard } from './ashVolcano';
 import { grottoPostcard } from './grottoSpores';
 import { canopyPostcard } from './canopyDew';
+import { globePostcard } from './frozenGlobe';
 import { stairsPostcard } from './vestigesStairs';
 
 export function worldTexture(scene: Phaser.Scene, id: string): string {
+  if (id === 'jungle_incandescente') return junglePostcard(scene, progressStore.explorationSteps(id));
+  if (id === 'mer_figee') return globePostcard(scene, progressStore.explorationSteps(id));
   if (id === 'vestiges_celestes') return stairsPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'atoll_boreal') return atollPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'tempete_ecarlate') return stormPostcard(scene, progressStore.explorationSteps(id));

@@ -90,7 +90,7 @@ export function mapInstruments(w: number, h: number) {
 /** Soft vignettes use the existing illustration, without altering its source file. */
 function vignette(scene: Phaser.Scene, id: string): string | undefined {
   const sourceKey = worldTexture(scene, id);
-  const state = id === 'vestiges_celestes' ? `-${progressStore.explorationSteps(id).join('-')}` : '';
+  const state = (id === 'vestiges_celestes' || id === 'mer_figee' || id === 'jungle_incandescente') ? `-${progressStore.explorationSteps(id).join('-')}` : '';
   const key = `map-vignette-${id}-${sourceKey}${state}`;
   if (scene.textures.exists(key)) return key;
   if (!scene.textures.exists(sourceKey)) return undefined;

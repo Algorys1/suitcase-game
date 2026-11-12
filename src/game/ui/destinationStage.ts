@@ -1,3 +1,5 @@
+import { drawFruitPulse } from './jungleHeat';
+import { drawGlobeSnow } from './frozenGlobe';
 import Phaser from 'phaser';
 import type { SessionState } from '../../domain/session';
 import { getDestinationTexts, getTexts } from '../../services/i18n';
@@ -97,6 +99,12 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   if (id === 'atoll_boreal' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawAtollAurora(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('atoll_boreal').length === 2));
+  if (id === 'jungle_incandescente' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawFruitPulse(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('jungle_incandescente').length === 2));
+  if (id === 'mer_figee' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawGlobeSnow(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('mer_figee').length === 3));
   const corners = scene.add.graphics().setName('arrival-photo-corners');
   if (id === 'vestiges_celestes' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawVestigesMist(scene, { left: artLeft, top: artUpper, width: artW, height: artH },

@@ -1,5 +1,10 @@
 # Le monde tient dans une valise
 
+> **Jungle incandescente — nouvel essai :** Arbre + Feu. Tirer la chaleur d’une liane rouge et d’une fleur vers le fruit éteint, dans l’ordre libre. Après résolution, sa lumière pulse doucement comme une braise. Progression sauvegardée, FR/EN, clavier, souris/toucher et mouvement réduit. [Activité et statut](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.
+
+> **Mer figée — nouvel essai :** composer le globe vide en tirant neige → glace → étoiles depuis le paysage. Après résolution, la neige tombe dans le verre ; grande vague immobile. Progression sauvegardée, anciennes collections conservées, FR/EN, souris/toucher, clavier et mouvement réduit. [Détails](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.
+
+
 > **Vestiges célestes — activité retenue :** Nuage + Ruines. Trois pierres de grès rétablissent le passage vers une porte isolée, qui s’ouvre sur un jardin. Le joueur valide cette boucle après correction du pied de l’escalier. Une brume animée apparaît désormais uniquement après résolution, au ras des marches immobiles, et revient à la revisite et dans le carnet ; voile fixe avec le mouvement réduit. Texte d’ambiance sans solution, progression sauvegardée et anciens souvenirs conservés ; « Revoir le passage » permet un nouvel essai sans effacer le carnet. [Activité et statut](docs/DESTINATION_ACTIVITIES.md), [assets et prompts](designs/adventure/vestiges-door-v1/prompts.json). Rendu de la brume validé par le joueur.
 
 > **Atoll boréal — nouvel essai :** Palmier + Neige. Glisser les deux reflets vert et violet du lagon vers le bracelet ; ses brins retrouvent leurs couleurs dans un ordre libre, puis le souvenir rejoint son étiquette. Progression sauvegardée, aucune charge sur place, FR/EN, clavier et mouvement réduit pris en charge. [Activité](docs/DESTINATION_ACTIVITIES.md), [asset et prompt](designs/adventure/atoll-v1/prompts.json). Essai du joueur attendu.

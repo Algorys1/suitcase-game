@@ -155,7 +155,7 @@ export class ProgressStore {
     const progress = this.read();
     const stored = progress.pilotSteps?.[id];
     // Older desert and Vestiges activities used different targets; keep earned souvenirs.
-    if ((id === 'desert_de_cristal' || id === 'vestiges_celestes') && this.unlockedSouvenirIds().includes(id)
+    if ((id === 'desert_de_cristal' || id === 'vestiges_celestes' || id === 'mer_figee') && this.unlockedSouvenirIds().includes(id)
       && stored?.length !== pilotTargetCounts[id]) {
       return Array.from({ length: pilotTargetCounts[id] }, (_, index) => index);
     }

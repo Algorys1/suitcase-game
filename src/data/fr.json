@@ -294,6 +294,12 @@
     }
   },
   "adventure": {
+    "jungleMood": "Sous les feuillages, l’air garde la chaleur du jour.",
+    "jungleComplete": "Une douce braise respire à l’ombre des feuilles.",
+    "replayJungle": "Raviver le fruit",
+    "globeMood": "Le froid retient le dernier souffle du rivage.",
+    "globeComplete": "Derrière le verre, l’hiver retrouve son mouvement.",
+    "replayGlobe": "Recomposer le globe",
     "stairsMood": "Le vent passe entre les arches, au-dessus des nuages.",
     "stairsAwakening": "Un passage s’ouvre au-dessus des nuages…",
     "stairsComplete": "Derrière la porte, un jardin attendait encore les voyageurs.",

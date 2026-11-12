@@ -1,5 +1,9 @@
 # Le monde tient dans une valise
 
+> **Observatoire des étoiles — nouvel essai :** Nuage + Cristal. Déplacer la lentille vide devant le ciel pour capturer les étoiles, puis la reposer sur son support, sans indice gravé. Après résolution, les étoiles scintillent dans le verre. Capture et retour sauvegardés séparément, FR/EN, souris/toucher, clavier, anciennes collections et mouvement réduit. [Activité et statut](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.
+
+> **Faille des contraires — nouvel essai :** Feu + Neige. Amener du froid sur la lave, puis déplacer la dalle formée dans la brèche du pont. Après résolution, une légère vapeur monte de la pierre. Deux étapes sauvegardées, FR/EN, souris/toucher, clavier, anciennes collections et mouvement réduit. [Activité et statut](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.
+
 > **Empire des sables — nouvel essai :** Palmier + Ruines. Frotter la lampe pour envoyer sa fumée vers la grande porte et révéler un jardin d’oasis. Après résolution, un mince filet de fumée reste animé au bec. Progression sauvegardée, FR/EN, souris/toucher, clavier et mouvement réduit. [Activité et statut](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.
 
 > **Jardins de gemmes — nouvel essai :** Champignon + Cristal. Amener la lumière de la lune au grand champignon, puis son reflet aux clochettes pour ouvrir la fleur. Après résolution, des reflets lunaires parcourent ses facettes. Deux étapes sauvegardées, FR/EN, souris/toucher, clavier, anciennes collections et mouvement réduit. [Activité et statut](docs/DESTINATION_ACTIVITIES.md). Essai du joueur attendu.

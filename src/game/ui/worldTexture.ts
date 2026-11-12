@@ -1,3 +1,5 @@
+import { observatoryPostcard } from './observatoryLens';
+import { riftPostcard } from './riftBasalt';
 import { empirePostcard } from './empireLamp';
 import { gardenPostcard } from './gemGarden';
 import { junglePostcard } from './jungleHeat';
@@ -16,6 +18,8 @@ import { globePostcard } from './frozenGlobe';
 import { stairsPostcard } from './vestigesStairs';
 
 export function worldTexture(scene: Phaser.Scene, id: string): string {
+  if (id === 'observatoire_des_etoiles') return observatoryPostcard(scene, progressStore.explorationSteps(id));
+  if (id === 'faille_des_contraires') return riftPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'empire_des_sables') return empirePostcard(scene, progressStore.explorationSteps(id).length === 1);
   if (id === 'jardins_de_gemmes') return gardenPostcard(scene, progressStore.explorationSteps(id));
   if (id === 'jungle_incandescente') return junglePostcard(scene, progressStore.explorationSteps(id));

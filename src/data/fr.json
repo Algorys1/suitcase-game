@@ -294,6 +294,12 @@
     }
   },
   "adventure": {
+    "observatoryMood": "Le silence s’étend au-delà des derniers nuages.",
+    "observatoryComplete": "Un morceau de nuit veille désormais tout près.",
+    "replayObservatory": "Revoir le ciel",
+    "riftMood": "Deux souffles se rencontrent au-dessus du vide.",
+    "riftComplete": "Entre la braise et le givre, la pierre garde sa tiédeur.",
+    "replayRift": "Revoir le passage",
     "empireMood": "Le vent laisse son empreinte au pied des murailles.",
     "empireComplete": "Une fraîcheur secrète traverse les pierres chaudes.",
     "replayLamp": "Revoir l’oasis",

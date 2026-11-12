@@ -1,3 +1,5 @@
+import { drawLensTwinkle } from './observatoryLens';
+import { drawRiftSteam } from './riftBasalt';
 import { drawEmpireSmoke } from './empireLamp';
 import { drawGardenLight } from './gemGarden';
 import { drawFruitPulse } from './jungleHeat';
@@ -101,6 +103,12 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   if (id === 'atoll_boreal' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawAtollAurora(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('atoll_boreal').length === 2));
+  if (id === 'observatoire_des_etoiles' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawLensTwinkle(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('observatoire_des_etoiles').length === 2));
+  if (id === 'faille_des_contraires' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawRiftSteam(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
+      progressStore.explorationSteps('faille_des_contraires').length === 2));
   if (id === 'empire_des_sables' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawEmpireSmoke(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('empire_des_sables').length === 1));

@@ -1,4 +1,4 @@
-export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, marais_des_lucioles: 3, iles_suspendues: 5, desert_de_cristal: 6, palais_de_givre: 3, temple_oublie: 3, ile_des_cendres: 3, grottes_sporiferes: 3, canopee_des_brumes: 3, recif_de_verre: 3, jardins_du_zenith: 3, cite_immobile: 3, sylve_prismatique: 5, necropole_ardente: 4, foret_du_silence: 3, sanctuaire_des_spores: 1, royaume_des_spores_celestes: 3, tempete_ecarlate: 2, atoll_boreal: 2, vestiges_celestes: 3, mer_figee: 3, jungle_incandescente: 2, jardins_de_gemmes: 2, empire_des_sables: 1 } as const;
+export const pilotTargetCounts = { cimes_eternelles: 3, mycelia: 5, archipel_azur: 6, ruines_englouties: 2, coeur_de_braise: 3, marais_des_lucioles: 3, iles_suspendues: 5, desert_de_cristal: 6, palais_de_givre: 3, temple_oublie: 3, ile_des_cendres: 3, grottes_sporiferes: 3, canopee_des_brumes: 3, recif_de_verre: 3, jardins_du_zenith: 3, cite_immobile: 3, sylve_prismatique: 5, necropole_ardente: 4, foret_du_silence: 3, sanctuaire_des_spores: 1, royaume_des_spores_celestes: 3, tempete_ecarlate: 2, atoll_boreal: 2, vestiges_celestes: 3, mer_figee: 3, jungle_incandescente: 2, jardins_de_gemmes: 2, empire_des_sables: 1, faille_des_contraires: 2, observatoire_des_etoiles: 2 } as const;
 export const pilotTargets = {
   necropole_ardente: [{ x: 0.430, y: 0.239 }, { x: 0.572, y: 0.113 }, { x: 0.671, y: 0.188 }, { x: 0.706, y: 0.276 }],
   sylve_prismatique: [{ x: 0.555, y: 0.933 }, { x: 0.568, y: 0.875 }, { x: 0.493, y: 0.794 }, { x: 0.580, y: 0.754 }, { x: 0.597, y: 0.711 }],
@@ -42,7 +42,7 @@ export function validSteps(id: PilotId, value: unknown): number[] {
   if (!Array.isArray(value)) return [];
   const steps = [...new Set(value.filter((index: unknown): index is number => typeof index === 'number'
     && Number.isInteger(index) && index >= 0 && index < pilotTargetCounts[id]))];
-  if (id === 'ile_des_cendres' || id === 'foret_du_silence' || id === 'tempete_ecarlate' || id === 'mer_figee' || id === 'jardins_de_gemmes') {
+  if (id === 'ile_des_cendres' || id === 'foret_du_silence' || id === 'tempete_ecarlate' || id === 'mer_figee' || id === 'jardins_de_gemmes' || id === 'faille_des_contraires' || id === 'observatoire_des_etoiles') {
     // Successive gestures (volcano, snow strokes, or capture then bottle), rather than independent targets.
     let count = 0;
     while (steps.includes(count)) count++;
@@ -57,6 +57,6 @@ export function explorationComplete(id: PilotId, steps: readonly number[]): bool
 }
 
 export function activateTarget(id: PilotId, steps: readonly number[], index: number): number[] {
-  if ((id === 'mer_figee' || id === 'jardins_de_gemmes') && index !== validSteps(id, steps).length) return validSteps(id, steps);
+  if ((id === 'mer_figee' || id === 'jardins_de_gemmes' || id === 'faille_des_contraires' || id === 'observatoire_des_etoiles') && index !== validSteps(id, steps).length) return validSteps(id, steps);
   return validSteps(id, [...steps, index]);
 }

@@ -294,6 +294,12 @@
     }
   },
   "adventure": {
+    "observatoryMood": "Silence stretches beyond the last clouds.",
+    "observatoryComplete": "A little piece of night now keeps watch nearby.",
+    "replayObservatory": "See the sky again",
+    "riftMood": "Two breaths meet above the chasm.",
+    "riftComplete": "Between ember and frost, the stone holds its warmth.",
+    "replayRift": "See the crossing again",
     "empireMood": "The wind leaves its mark beneath the city walls.",
     "empireComplete": "A secret coolness drifts through the warm stones.",
     "replayLamp": "See the oasis again",

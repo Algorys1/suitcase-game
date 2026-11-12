@@ -57,6 +57,24 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
       else prepared?.get().setSize(width, height, 0, 0);
     } else prepared?.get().setSize(width, height, 0, 0);
   }
+  // Both dedicated lens states share one alpha frame, so the rim stays aligned
+  // throughout the progressive reveal. Read the full backing on revisits too.
+  const lensKeys = ['adventure-observatory-lens-empty', 'adventure-observatory-lens-full'];
+  if (lensKeys.every(key => scene.textures.exists(key))) {
+    const textures = lensKeys.map(key => scene.textures.get(key) as Phaser.Textures.CanvasTexture);
+    const width = textures[0]!.canvas.width, height = textures[0]!.canvas.height;
+    let left = width, top = height, right = -1, bottom = -1;
+    for (const texture of textures) {
+      const pixels = texture.getContext().getImageData(0, 0, width, height).data;
+      for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+        if (pixels[(y * width + x) * 4 + 3]! < 16) continue;
+        left = Math.min(left, x); top = Math.min(top, y);
+        right = Math.max(right, x); bottom = Math.max(bottom, y);
+      }
+    }
+    if (right >= left && bottom >= top) for (const texture of textures)
+      texture.get().setSize(right - left + 1, bottom - top + 1, left, top);
+  }
   prepareRuinsPostcard(scene);
   prepareBraisePostcard(scene);
   prepareIslesPostcard(scene);

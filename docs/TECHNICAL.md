@@ -275,7 +275,7 @@ Page du projet fournie par le développeur : [The world in a suitcase](https://a
 1. Initialiser le projet avec les versions stables réellement disponibles, puis **verrouiller le lockfile**.
 2. Scripts attendus : `dev`, `build`, `preview`, `test` (les commandes exactes sont définies dans `package.json` lors de l'initialisation).
 3. Vérifier `npm run build`, puis servir le dossier `dist/` localement avec `npm run preview`.
-4. Créer une archive ZIP du **contenu** de `dist/`, avec `index.html` directement à la racine du ZIP (et non un dossier `dist/` parent).
+4. Sous Windows, lancer `npm run package:itch` : build puis archive du **contenu** de `dist/`, avec `index.html` à la racine et chemins ZIP en `/`. Le script `scripts/package-itch.ps1` vérifie ces contraintes et refuse d’écraser une archive existante. Résultat : `.tmp/releases/the-world-in-a-suitcase-html5.zip` ; déplacer/renommer la précédente avant un nouvel export. Ne pas utiliser `ZipFile.CreateFromDirectory` sous Windows PowerShell : les entrées en `assets\…` ne sont pas des chemins Web valides.
 5. Sur itch.io, choisir le type de projet HTML / jouable dans le navigateur et téléverser le ZIP.
 6. Configurer la taille d'intégration à **960 × 540 px** et tester la page publiée en navigation réelle, y compris sauvegarde, traductions, son et assets.
 7. Vérifier les règles actualisées de la Game Jam avant publication, notamment les éventuelles obligations de déclaration des outils utilisés.

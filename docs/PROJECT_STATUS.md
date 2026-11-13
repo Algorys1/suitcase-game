@@ -4,6 +4,8 @@ Ce bilan décrit le prototype présent dans le dépôt. Il distingue l’implém
 
 ## Prototype implémenté
 
+**Export itch.io corrigé :** l’archive `c3c5b70` contenait 171 chemins avec antislashs Windows. `npm run package:itch` crée désormais des entrées avec `/`, vérifie `index.html` à la racine et refuse l’écrasement d’une archive existante. Build réussi et 172 entrées vérifiées ; archive décompressée servie sous `/jam/` dans Chrome : intro → accueil → carte, sans erreur JavaScript ou HTTP, capture inspectée. Le démarrage sur la page publiée reste à confirmer : son URL connue renvoie 404 lors du contrôle.
+
 **Départ animé depuis l’accueil — essai :** après le commit `5acd2af` du son et de l’intro, valise qui se soulève, papier qui se déplie et pose sur le trajet pour Commencer/Reprendre. Transition de 680 ms hors chargement, interrompable par Échap/resize/mouvement réduit, sans débit et avec reprise préservée. Build et parcours Chrome FR/EN en quatre formats vérifiés ; rendu à essayer. Voir [SUITCASE_COMPASS.md](SUITCASE_COMPASS.md#départ-depuis-laccueil--13-novembre-2026).
 
 **Son et intro — première passe :** musique « Springly Sprigs » de troubadour (OpenGameArt, CC0), petits sons locaux pour les gestes/voyages/souvenirs et coupure permanente sur languette papier. Musique demandée après le premier geste seulement. Intro BD en trois cases FR/EN, passable dès la première et relisible depuis l’accueil ; elle ne s’interpose pas à une reprise d’expédition. Build, 166 tests dans 42 fichiers et parcours Chrome FR/EN en quatre formats vérifiés ; choix musical et présentation à essayer. Voir [AUDIO_AND_INTRO.md](AUDIO_AND_INTRO.md).
@@ -50,10 +52,14 @@ Les fonctions et champs nommés `pilot` dans le code couvrent désormais les 30 
 5. Vérifications navigateur finales : Firefox, tactile réel, petits formats, clavier, mouvement réduit, sauvegarde et reprise ; puis iframe itch.io en 960 × 540 et redimensionnement.
 6. Préparer l’archive du contenu de `dist/` avec `index.html` à sa racine ; vérifier assets relatifs, crédits et déclarations requises par la jam, puis tester le build effectivement publié.
 
+## Prochaine étape demandée
+
+- **Autocollants qui débloquent d’autres choses :** prochaine étape souhaitée par le joueur après les essais itch.io. Définir ensemble les correspondances entre souvenirs et lieux, les conditions et ce qu’elles débloquent, puis implémenter les effets validés. S’appuyer sur Cimes → Mycélia déjà intégré ; les nouvelles correspondances restent à valider. Cette demande de TODO ne lance pas l’implémentation ni la décoration de phase C.
+
 ## Extensions ouvertes, sans lancement implicite
 
 - **Phase C — décoration de la valise :** non commencée. Six positions fixes proposées, distinctes des deux emplacements d’éléments ; poser, remplacer, retirer et sauvegarder la disposition. Validation préalable avant implémentation ; position du bouton et nombre final de places encore ouverts.
-- **Autres correspondances :** pistes à discuter dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md), aucune nouvelle consommation ni récompense décidée.
+- **Autres correspondances :** retenues comme prochaine étape à concevoir ci-dessus ; pistes dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md), aucune nouvelle consommation ni récompense décidée.
 - **Réactions décoratives supplémentaires :** facultatives ; certaines existent déjà, elles ne justifient pas une nouvelle série de fonctionnalités obligatoire.
 - **Escales enchantées et Souvenirs voyageurs :** propositions historiques. Leurs systèmes complets ne sont pas implémentés ; la carte, les activités locales et Cimes → Mycélia en concrétisent une partie autrement. Leur remplacement, complément ou abandon reste à arbitrer ; ne pas ajouter automatiquement trente mini-jeux à tampons.
 

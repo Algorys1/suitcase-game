@@ -4,6 +4,8 @@ Ce bilan décrit le prototype présent dans le dépôt. Il distingue l’implém
 
 ## Prototype implémenté
 
+**Départ animé depuis l’accueil — essai :** après le commit `5acd2af` du son et de l’intro, valise qui se soulève, papier qui se déplie et pose sur le trajet pour Commencer/Reprendre. Transition de 680 ms hors chargement, interrompable par Échap/resize/mouvement réduit, sans débit et avec reprise préservée. Build et parcours Chrome FR/EN en quatre formats vérifiés ; rendu à essayer. Voir [SUITCASE_COMPASS.md](SUITCASE_COMPASS.md#départ-depuis-laccueil--13-novembre-2026).
+
 **Son et intro — première passe :** musique « Springly Sprigs » de troubadour (OpenGameArt, CC0), petits sons locaux pour les gestes/voyages/souvenirs et coupure permanente sur languette papier. Musique demandée après le premier geste seulement. Intro BD en trois cases FR/EN, passable dès la première et relisible depuis l’accueil ; elle ne s’interpose pas à une reprise d’expédition. Build, 166 tests dans 42 fichiers et parcours Chrome FR/EN en quatre formats vérifiés ; choix musical et présentation à essayer. Voir [AUDIO_AND_INTRO.md](AUDIO_AND_INTRO.md).
 
 **Néant — nouvel essai :** [entre deux mondes](VOID_BETWEEN_WORLDS.md), avec la valise-boussole intégrée, dissolution des éléments, brume sensible aux gestes, lumières et fragments de papier à la dérive. Nouveau fond peint et feuillet de retour ; coût, absence de souvenir et reprise sans nouveau débit conservés. Build et 162 tests réussis, parcours Chrome FR/EN en quatre formats vérifiés. Vignette de la valise dans le Néant ajoutée à la carte et vérifiée après reprise à froid. Le joueur apprécie la présentation et demande le commit ; playtest global toujours ouvert.

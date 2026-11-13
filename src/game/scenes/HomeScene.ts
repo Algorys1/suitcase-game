@@ -5,7 +5,8 @@ import { createMenu } from '../ui/menu';
 import { createSession } from '../../domain/session';
 import { progressStore } from '../../services/storage';
 import { destinations } from '../../domain/recipes';
-import { approachJournal } from '../ui/notebookMotion';
+import { approachJournal, bookBusy } from '../ui/notebookMotion';
+import { departFromHome } from '../ui/homeDeparture';
 
 export class HomeScene extends Phaser.Scene {
   constructor() {
@@ -37,8 +38,11 @@ export class HomeScene extends Phaser.Scene {
       buttons: [
         { name: 'start', label: expedition ? texts.resume : texts.start,
           action: () => {
+            if (bookBusy(this)) return;
             const session = progressStore.read().expedition ?? createSession();
-            this.scene.start(session.phase === 'result' ? 'result' : 'adventure', { session });
+            progressStore.saveSession(session);
+            departFromHome(this, session, fromHome =>
+              this.scene.start(session.phase === 'result' ? 'result' : 'adventure', { session, fromHome }));
           }, primary: true },
         { name: 'journal', label: texts.journal,
           action: () => approachJournal(this, opening => this.scene.start('journal', { page: 0, opening })) },

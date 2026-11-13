@@ -19,7 +19,7 @@ export class AdventureScene extends Phaser.Scene {
     queueWorldAssets(this, sceneWorldIds(this), true);
   }
 
-  create({ session }: { session?: SessionState } = {}): void {
+  create({ session, fromHome = false }: { session?: SessionState; fromHome?: boolean } = {}): void {
     if (!finishSceneLoading(this)) return;
     this.session = session ?? progressStore.read().expedition ?? createSession();
     if (this.session.phase === 'result' || this.session.phase === 'travelling') {
@@ -32,7 +32,7 @@ export class AdventureScene extends Phaser.Scene {
     this.newStampIds = alreadyShown ? collected.filter(id => !alreadyShown.includes(id)) : [];
     this.registry.set('map-stamped-souvenir-ids', collected);
     this.game.canvas.setAttribute('aria-label', getTexts().adventure.title);
-    this.render(true);
+    this.render(!fromHome);
     this.scale.on('resize', this.render, this);
     this.events.once('shutdown', () => this.scale.off('resize', this.render, this));
   }

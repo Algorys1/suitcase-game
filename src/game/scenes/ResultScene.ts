@@ -11,6 +11,7 @@ import { AdventureControls, mapText } from '../ui/adventureMap';
 import { drawDestinationStage } from '../ui/destinationStage';
 import { destinationTravelTip, needsTravelTip } from '../ui/travelTutorial';
 import { drawSouvenir } from '../ui/souvenir';
+import { drawTravelSpyglass, preloadTravelSpyglass } from '../ui/travelSpyglass';
 
 export class ResultScene extends Phaser.Scene {
   constructor() { super('result'); }
@@ -18,6 +19,7 @@ export class ResultScene extends Phaser.Scene {
   preload(): void {
     beginSceneLoading(this);
     queueWorldAssets(this, sceneWorldIds(this), true);
+    preloadTravelSpyglass(this);
     const session = (this.sys.settings.data as { session?: SessionState } | undefined)?.session
       ?? progressStore.read().expedition;
     if (session?.lastTrip?.destinationId === null) queueVoidAssets(this);
@@ -62,6 +64,7 @@ export class ResultScene extends Phaser.Scene {
       this.tweens.killAll();
       this.children.getAll().forEach(child => child.destroy());
       controls.clear();
+      const entering = first;
       const stage = drawDestinationStage(this, id, session, first, 'arrival');
       first = false;
       const texts = getTexts();
@@ -79,11 +82,14 @@ export class ResultScene extends Phaser.Scene {
       const locked = !progressStore.unlockedSouvenirIds().includes(id);
       if (souvenir) drawSouvenir(this, souvenir, x, stickerY - tagHeight / 2, w, tagHeight,
         session.lastTrip?.isNewDiscovery ?? false, locked).forEach(part => part.setData('souvenir-part', true));
-      const paired = portrait || short;
-      const buttonWidth = paired ? (w - 8) / 2 : Math.min(215, w - 18);
-      controls.button('explore', texts.adventure.exploreShort, paired ? x - (buttonWidth + 8) / 2 : x,
-        stage.primaryY, buttonWidth, () => leave(true), true);
-      controls.button('continue', short ? texts.adventure.mapShort : texts.adventure.continueMap, paired ? x + (buttonWidth + 8) / 2 : x,
+      const toolSize = portrait || short ? 72 : 98;
+      const buttonWidth = Math.min(215, w - 18);
+      drawTravelSpyglass(this, stage.art.left + stage.art.width - toolSize * 0.35,
+        stage.art.top + stage.art.height - toolSize * 0.43, toolSize, () => leave(true), {
+          animate: entering,
+          register: (tx, ty, tw, th, action) => controls.add('explore', tx, ty, tw, th, action, false),
+        });
+      controls.button('continue', short ? texts.adventure.mapShort : texts.adventure.continueMap, x,
         stage.secondaryY, buttonWidth, () => leave(false));
       destinationTravelTip(this, controls, 'arrival', stage, render);
       this.game.canvas.setAttribute('aria-label', getDestinationTexts(id)?.title ?? texts.title);

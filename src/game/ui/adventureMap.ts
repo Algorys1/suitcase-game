@@ -10,6 +10,7 @@ import { createButton } from './menu';
 import { drawChargeBadge } from './adventureAssets';
 import { placeMapLabel } from './mapLabels';
 import type { MapRect } from './mapLabels';
+import { exploredStamp, impressStamp } from './exploredStamp';
 import { worldTexture } from './worldTexture';
 
 export const reducedMotion = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -76,9 +77,11 @@ export function mapText(scene: Phaser.Scene, x: number, y: number, value: string
 }
 
 /** Shared anchors let the instruments travel from their actual resting places. */
-export function mapInstruments(w: number, h: number) {
+export function mapInstruments(w: number, h: number, session?: SessionState) {
+  const compact = (w < 600 || h < 450) && session && sessionRoute(session).length + (session.charges > 0 ? 1 : 0) >= 7;
+  const endNote = compact && w < 600 && session.charges === 0 && !progressStore.read().tutorialSeen?.includes('exhausted');
   return {
-    journal: { x: w < 600 ? 46 : h < 450 ? 45 : 100, y: h - 122,
+    journal: { x: w < 600 ? 46 : h < 450 ? 45 : 100, y: compact ? (w < 600 ? endNote ? 165 : 115 : 76) : h - 122,
       width: w < 600 || h < 450 ? 52 : 72, height: w < 600 || h < 450 ? 70 : 88 },
   };
 }
@@ -88,6 +91,17 @@ export function mapRouteLayout(w: number, h: number, session: SessionState) {
   const portrait = w < 600, short = h < 450;
   const route = sessionRoute(session);
   const count = route.length + (session.charges > 0 ? 1 : 0);
+  if (portrait && count >= 7) {
+    // Two winding columns leave room beside every miniature for its name and stamp.
+    const rows = Math.ceil(count / 2), size = 28;
+    const endNote = session.charges === 0 && !progressStore.read().tutorialSeen?.includes('exhausted');
+    const firstY = endNote ? 225 : 205, lastY = h - 100;
+    const points = Array.from({ length: count }, (_, index) => {
+      const row = Math.floor(index / 2), column = row % 2 ? 1 - index % 2 : index % 2;
+      return { x: 32 + column * (w / 2 - 18), y: firstY + row * (lastY - firstY) / Math.max(1, rows - 1) };
+    });
+    return { points, size };
+  }
   const endNote = session.charges === 0 && !progressStore.read().tutorialSeen?.includes('exhausted');
   const top = endNote ? (portrait ? 292 : short ? 216 : 260) : portrait ? 223 : short ? 151 : 195;
   const span = Math.max(endNote ? (portrait ? 115 : 50) : portrait ? 150 : 85,
@@ -134,7 +148,7 @@ function vignette(scene: Phaser.Scene, id: string): string | undefined {
 
 export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
   controls?: AdventureControls, onVisit?: (id: string) => void, onDepart?: () => void,
-  animate = false): void {
+  animate = false, newStampIds: readonly string[] = []): void {
   const { width: w, height: h } = scene.scale;
   const copy = getTexts().adventure;
   const portrait = w < 600, short = h < 450;
@@ -203,8 +217,9 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
   mapText(scene, w / 2, portrait ? 31 : short ? 32 : 48, copy.eyebrow, 9, w - 70, '#a08052').setLetterSpacing(2);
   mapText(scene, w / 2, portrait ? 53 : short ? 59 : 74, copy.title, portrait ? 19 : short ? 21 : 27, portrait ? w - 35 : w - 350)
     .setFontFamily('"Travel Serif", Georgia, serif').setName('adventure-title');
-  const { journal } = mapInstruments(w, h);
-  const badgeX = w - (portrait ? 78 : 113), badgeY = portrait ? 101 : 72;
+  const { journal } = mapInstruments(w, h, session);
+  const compactEndNote = portrait && count >= 7 && session.charges === 0 && !progress.tutorialSeen?.includes('exhausted');
+  const badgeX = compactEndNote ? w * 0.71 : w - (portrait ? 78 : 113), badgeY = compactEndNote ? 158 : portrait ? 101 : 72;
   const tray = scene.add.graphics().setName('energy-ticket');
   tray.fillStyle(0xb49766, 0.09).fillRoundedRect(badgeX - 64, badgeY - 25, 128, 71, 6);
   mapText(scene, badgeX, badgeY - 14, copy.energy, 10, 135, '#876b46');
@@ -213,8 +228,9 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
     drawChargeBadge(scene, x, y, 8, i < session.charges, `charge-badge-${i}`);
   }
   const hint = progress.awakenedMycelia ? copy.freeWish : unlocked.includes('cimes_eternelles') ? copy.bellWish : copy.snowWish;
-  mapText(scene, w / 2, portrait ? 168 : short ? 117 : 124, hint, portrait || short ? 12 : 14,
-    portrait ? w - 55 : w - 305, '#7d6c53').setFontFamily('Georgia, serif').setFontStyle('italic').setName('adventure-wish');
+  const compactHeader = portrait && count >= 7;
+  mapText(scene, compactHeader ? w * 0.64 : w / 2, portrait ? 168 : short ? 117 : 124, hint, portrait || short ? 12 : 14,
+    portrait ? w - (compactHeader ? 120 : 55) : w - 305, '#7d6c53').setFontFamily('Georgia, serif').setFontStyle('italic').setName('adventure-wish');
   const { points, size } = mapRouteLayout(w, h, session);
   // Paths sit behind every world, and bend between steps like a pen-drawn itinerary.
   const captions: { x: number; y: number; text: string; index: number }[] = [];
@@ -278,23 +294,27 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
     }
     const caption = getDestinationTexts(id)?.title ?? '?';
     captions.push({ x: point.x, y: point.y, text: caption, index });
-    const pin = scene.add.graphics().setName(`world-pin-${index}`);
-    pin.fillStyle(unlocked.includes(id) ? 0x6e9480 : 0xc29b58).fillCircle(point.x, point.y + size * 0.22, 3);
     if (id === 'mycelia' && progress.awakenedMycelia)
       mapText(scene, point.x + size * 0.29, point.y - size * 0.22, '✦', 20, 30, '#b88b39');
     controls?.add(`visit-${index}-${id}`, point.x, point.y, Math.max(48, size * 0.65), Math.max(48, size * 0.65), () => onVisit?.(id));
   });
   // Captions occupy reserved paper, never a landscape, even in a ten-stop itinerary.
   for (const caption of captions) {
-    const label = mapText(scene, 0, 0, caption.text, short || (portrait && count >= 8) ? 10 : portrait ? 11 : 12,
-      portrait ? 92 : short ? 82 : 135, '#4e3825').setFontStyle('600').setOrigin(0, 0)
+    const id = route[caption.index];
+    const stamp = id && unlocked.includes(id) ? exploredStamp(scene, copy.exploredStamp, portrait || short)
+      .setName(`map-explored-stamp-${caption.index}`) : undefined;
+    const compactRoute = portrait && count >= 7;
+    const label = mapText(scene, 0, 0, caption.text, compactRoute || (short && count >= 7) ? 9 : short ? 10 : portrait ? 11 : 12,
+      compactRoute ? 80 : portrait ? 92 : short ? 82 : 135, '#4e3825').setFontStyle('600').setOrigin(0, 0)
       .setName(`map-label-${caption.index}`);
-    const preferred = { x: caption.x - label.width / 2 - 4, y: caption.y + size / 2 + 2,
-      width: label.width + 8, height: label.height + 4 };
+    const labelWidth = Math.max(label.width + 8, stamp ? stamp.width + 14 : 0);
+    const preferred = { x: compactRoute ? caption.x + size / 2 + 4 : caption.x - labelWidth / 2,
+      y: compactRoute ? caption.y - (label.height + 28) / 2 : caption.y + size / 2 + 2,
+      width: labelWidth, height: label.height + 4 + (stamp ? portrait || short ? 20 : 24 : 0) };
     const bounds = { x: margin + 7, y: portrait ? 190 : short ? 133 : 153,
       width: w - margin * 2 - 14, height: h - (portrait ? 65 : short ? 70 : 100) - (portrait ? 190 : short ? 133 : 153) };
     const position = placeMapLabel(preferred, bounds, reserved);
-    if (!position) { label.destroy(); continue; }
+    if (!position) { label.destroy(); stamp?.destroy(); continue; }
     reserved.push(position);
     const plate = scene.add.graphics().setName(`map-label-paper-${caption.index}`);
     if (Math.abs(position.x - preferred.x) > 10 || Math.abs(position.y - preferred.y) > 10) {
@@ -306,9 +326,15 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
       .strokeRoundedRect(position.x, position.y, position.width, position.height, 2);
     label.setPosition(position.x + 4, position.y + 2);
     scene.children.bringToTop(label);
+    if (stamp) {
+      stamp.setPosition(position.x + position.width - stamp.width / 2 - 7,
+        position.y + position.height - (portrait || short ? 11 : 13));
+      scene.children.bringToTop(stamp);
+      if (id && newStampIds.includes(id)) impressStamp(scene, stamp);
+    }
   }
   if (scene.textures.exists('journal-closed')) scene.add.image(journal.x, journal.y, 'journal-closed')
     .setDisplaySize(journal.width, journal.height).setAngle(-7).setName('map-journal-art');
-  mapText(scene, journal.x, journal.y + journal.height / 2 + 11,
+  if (!compactEndNote) mapText(scene, journal.x, journal.y + journal.height / 2 + 11,
     getTexts().tutorial.mapBook, portrait || short ? 10 : 12, 90).setName('map-journal-label');
 }

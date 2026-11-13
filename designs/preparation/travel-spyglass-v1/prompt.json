@@ -1,0 +1,6 @@
+{
+  "tool": "image_gen built-in",
+  "prompt": "Use case: illustration-story. Asset type: single transparent game inventory sprite for a whimsical illustrated travel game, 'Le monde tient dans une valise'. Paint one beautiful small traveller's collapsible spyglass, antique honey brass with warm brown leather grip and tiny engraved decorative rings. Hand-painted cartoon storybook illustration, rich warm gouache shading, strong rounded readable silhouette, soft dark brown contour, matching an illustrated leather suitcase and magical compass. Three-quarter top-down view of an object lying on a table, but no table visible. Telescope runs diagonally from lower left (small eyepiece) to upper right (large round objective); objective lens visible as a subtle blue turquoise glass ellipse. Only the spyglass, no extra objects, no paper label, no text, no logo, no sticker border, no stand, no hand, no stars, no background or ground shadow beyond a very soft small contact shadow. Entire object fully in frame with 10% transparent margins. True transparent background. Square composition, sprite must remain legible displayed at 100 pixels wide.",
+  "source": "source.png",
+  "export": "public/assets/adventure/travel-spyglass.webp"
+}

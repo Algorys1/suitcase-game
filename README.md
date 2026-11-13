@@ -74,7 +74,7 @@ Les catalogues `src/data/elements.json`, `src/data/destinations.json` et `src/da
 
 - Essayer la valise-boussole et sa nouvelle animation au clic sur Voyager.
 
-- Essayer le [premier voyage accompagné](docs/TUTORIAL.md), puis définir la loupe ou longue-vue illustrée remplaçant le bouton « Explorer ».
+- Essayer la [longue-vue de voyage](docs/TRAVEL_SPYGLASS.md), qui remplace le bouton « Explorer » sur les arrivées et les fiches du carnet. La présentation du [tutoriel](docs/TUTORIAL.md) est retenue ; le playtest global reste ouvert.
 - Playtest d’ensemble, relecture FR/EN et mesure de l’équilibrage 10 / 1 / 2 ; validation du bilan illustré encore à consigner.
 - Habillage sonore et commande de coupure.
 - Vérifications sur Firefox, appareil tactile réel et iframe itch.io ; préparation et contrôle de la publication finale.

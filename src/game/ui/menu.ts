@@ -8,8 +8,10 @@ import { drawPreparationDesk } from './preparationArt';
 import { bookBusy, turnJournalPage } from './notebookMotion';
 import type { PageDirection } from './notebookMotion';
 import { drawVoid } from './void';
+import { drawTravelSpyglass } from './travelSpyglass';
 
 export type MenuButton = {
+  spyglass?: boolean;
   label: string;
   action: () => void;
   primary?: boolean;
@@ -260,8 +262,9 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   }
   const buttonHeight = 44;
   const buttonGap = 10;
-  const pairedButtons = (!landscape || short) && content.buttons.length === 2;
-  const buttonRows = pairedButtons ? 1 : content.buttons.length;
+  const paperButtons = content.buttons.filter(button => !button.spyglass);
+  const pairedButtons = (!landscape || short) && paperButtons.length === 2;
+  const buttonRows = pairedButtons ? 1 : paperButtons.length;
   const footerSpace = content.footer ? 28 : 0;
   const buttonsTop = top + panelHeight - padding - footerSpace
     - buttonRows * (buttonHeight + buttonGap) + buttonGap;
@@ -309,9 +312,17 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   const souvenir = content.souvenir ? drawSouvenir(scene, content.souvenir, textX,
     description.y + description.height + gap, textWidth, souvenirHeight, content.reveal === 'new', content.souvenirLocked) : [];
   content.buttons.forEach((button, index) => {
+    if (button.spyglass) {
+      const size = landscape && !short ? 98 : 68;
+      drawTravelSpyglass(scene, artX + fittedWidth / 2 - size * 0.35,
+        artY + artHeight - size * 0.43, size, () => { if (!bookBusy(scene)) button.action(); },
+        { focused: index === focusIndex });
+      return;
+    }
+    const paperIndex = paperButtons.indexOf(button);
     const buttonWidth = pairedButtons ? (textWidth - buttonGap) / 2 : Math.min(textWidth, 240);
-    createButton(scene, pairedButtons ? textX + (index === 0 ? -1 : 1) * (buttonWidth + buttonGap) / 2 : textX,
-      buttonsTop + buttonHeight / 2 + (pairedButtons ? 0 : index * (buttonHeight + buttonGap)), buttonWidth, buttonHeight,
+    createButton(scene, pairedButtons ? textX + (paperIndex === 0 ? -1 : 1) * (buttonWidth + buttonGap) / 2 : textX,
+      buttonsTop + buttonHeight / 2 + (pairedButtons ? 0 : paperIndex * (buttonHeight + buttonGap)), buttonWidth, buttonHeight,
       { ...button, focused: index === focusIndex, fontSize: pairedButtons ? 12 : short ? 16 : 18, stationery: true });
   });
   if (content.footer) {
@@ -554,7 +565,11 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
       render();
     } else if (event.key === 'Enter' || event.key === ' ') {
       const button = controls[focusIndex];
-      if (button && !button.disabled) { event.preventDefault(); button.action(); }
+      if (button && !button.disabled) {
+        event.preventDefault();
+        const activate = button.spyglass ? scene.children.getByName('explore')?.getData('activate-spyglass') as (() => void) | undefined : undefined;
+        if (activate) activate(); else button.action();
+      }
     } else if (content.bookNavigation && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
       const button = event.key === 'ArrowLeft' ? content.bookNavigation.previous : content.bookNavigation.next;
       if (!button.disabled) { event.preventDefault(); button.action(); }

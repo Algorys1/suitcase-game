@@ -11,6 +11,7 @@ import { drawTravelNote, needsTravelTip } from '../ui/travelTutorial';
 export class AdventureScene extends Phaser.Scene {
   private session: SessionState = createSession();
   private controls!: AdventureControls;
+  private newStampIds: string[] = [];
   constructor() { super('adventure'); }
 
   preload(): void {
@@ -26,6 +27,10 @@ export class AdventureScene extends Phaser.Scene {
     }
     progressStore.saveSession(this.session);
     this.controls = new AdventureControls(this);
+    const collected = progressStore.unlockedSouvenirIds();
+    const alreadyShown = this.registry.get('map-stamped-souvenir-ids') as string[] | undefined;
+    this.newStampIds = alreadyShown ? collected.filter(id => !alreadyShown.includes(id)) : [];
+    this.registry.set('map-stamped-souvenir-ids', collected);
     this.game.canvas.setAttribute('aria-label', getTexts().adventure.title);
     this.render(true);
     this.scale.on('resize', this.render, this);
@@ -43,8 +48,9 @@ export class AdventureScene extends Phaser.Scene {
       if (this.session.charges > 0) this.scene.start('preparation', { session: this.session });
     };
     drawAdventureMap(this, this.session, this.controls,
-      id => this.scene.start('exploration', { id, session: this.session }), depart, animate === true);
-    const { journal } = mapInstruments(width, height);
+      id => this.scene.start('exploration', { id, session: this.session }), depart, animate === true,
+      animate === true ? this.newStampIds : []);
+    const { journal } = mapInstruments(width, height, this.session);
     this.controls.add('map-journal', journal.x, journal.y, Math.max(48, journal.width + 12), journal.height + 14,
       () => approachJournal(this, opening => this.scene.start('journal', { opening, returnTo: 'adventure' })));
     if (width >= 600 && (height >= 450 || this.session.visitedDestinationIds.length + this.session.voidTrips <= 6)) {
@@ -63,12 +69,13 @@ export class AdventureScene extends Phaser.Scene {
     if (needsTravelTip(step)) {
       this.children.getByName('adventure-wish')?.destroy();
       const portrait = width < 600, short = height < 450;
+      const compactEndNote = portrait && step === 'exhausted' && this.session.visitedDestinationIds.length + this.session.voidTrips >= 7;
       drawTravelNote(this, step, () => this.render(), {
         x: portrait || step === 'exhausted' ? width / 2 : width * 0.66,
-        top: step === 'exhausted' ? (portrait ? 148 : short ? 86 : 102)
+        top: compactEndNote ? 24 : step === 'exhausted' ? (portrait ? 148 : short ? 86 : 102)
           : portrait ? Math.min(300, height - 245) : short ? 158 : 194,
         width: portrait ? width - 36 : Math.min(step === 'exhausted' && short ? 280 : 360, width - 300),
-        height: portrait ? 124 : 116,
+        height: compactEndNote ? 104 : portrait ? 124 : 116,
         button: (...args) => this.controls.button(...args),
       });
       const suitcase = this.children.getByName('next-suitcase-art') as Phaser.GameObjects.Image | null;

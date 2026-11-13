@@ -93,7 +93,7 @@ Le départ verrouille les interactions, résout et débite une seule fois, sauve
 - Le nouveau souvenir reste anonyme dans toutes les vues jusqu’à résolution. Les étapes sont sauvegardées avant les animations ; la collecte est unique. Les anciens souvenirs restent acquis, la relecture locale ne réécrit pas la collection.
 - La clochette des Cimes peut être offerte à Mycélia sans consommation ; cette correspondance est indépendante de son activité locale. Aucune autre correspondance n’est implémentée.
 
-Les interactions, versions retenues et validations particulières sont détaillées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md). Le [premier voyage accompagné](TUTORIAL.md) est intégré : notes contextuelles animées FR/EN, aide aux gestes et guide relisible depuis le carnet. Son agrément reste à valider par le joueur. L’accès « Explorer » doit encore être remplacé par un objet illustré, loupe ou longue-vue à définir.
+Les interactions, versions retenues et validations particulières sont détaillées dans [DESTINATION_ACTIVITIES.md](DESTINATION_ACTIVITIES.md). Le [premier voyage accompagné](TUTORIAL.md) est intégré : notes contextuelles animées FR/EN, aide aux gestes et guide relisible depuis le carnet. Son agrément reste à valider par le joueur. L’accès à l’exploration utilise désormais une [longue-vue illustrée](TRAVEL_SPYGLASS.md), sur l’arrivée et dans le carnet ; rendu à essayer par le joueur.
 
 ### 3.4 Fin d’expédition
 

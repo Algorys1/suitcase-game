@@ -23,6 +23,8 @@ Les données implémentées dans `src/data/elements.json` et `src/data/destinati
 
 **Présentation autorisée le 13 novembre 2026 :** voir `docs/SUITCASE_COMPASS.md`. La valise-boussole fusionne les deux instruments : mini-valise à la prochaine étape, ouverture au-dessus de la carte, cadran dans le couvercle et deux manifestations sans socles dans la doublure. Conserver les deux aiguilles et les règles communes. La première réalisation doit être essayée ; la nouvelle séquence au clic sur Voyager est intégrée : énergie des éléments, fermeture, tremblement, libération et arrivée. Les charges métalliques sans chiffre sont au fond de la valise et la carte est floutée derrière elle. Cette fusion ne lance pas la décoration de phase C.
 
+**Chargement et icônes mobiles :** conserver le chargement à la demande des mondes, souvenirs et calques. Ne pas réintroduire leur préchargement global dans l’accueil. Le papier d’attente doit être visible avant le moteur, avec textes FR/EN externalisés. Les nouveaux signes cartoon remplacent les glyphes fins ; sources dans `designs/preparation/cartoon-elements-v2/`. Voir la section dédiée de `docs/TECHNICAL.md`.
+
 ## Stack et contraintes
 
 - **Cartes et exploration : curseur normal sur le paysage**, y compris les objets à glisser-déposer. Ne pas utiliser de main, de `pointer`, de `grab` ni d’autre curseur spécial pour révéler une cible interactive. Cette consigne de découverte figure dans `docs/DESTINATION_ACTIVITIES.md` ; elle s’applique à chaque nouvelle activité.

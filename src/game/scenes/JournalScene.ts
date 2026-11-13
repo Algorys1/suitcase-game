@@ -93,7 +93,7 @@ export class JournalScene extends Phaser.Scene {
     const short = this.scale.height < 450;
     drawNotebook(this, b.left, b.top, b.width, b.height, b.landscape ? this.scale.width / 2 : undefined);
     const text = (x: number, y: number, value: string, size: number, width: number, bold = false) =>
-      this.add.text(x, y, value, {
+      this.add.text(x, y, value, { resolution: 2,
         fontFamily: bold ? 'Georgia, "Times New Roman", serif' : '"Trebuchet MS", Arial, sans-serif',
         fontSize: size, color: '#65452e', fontStyle: bold ? 'bold' : 'normal', align: 'center',
         wordWrap: { width, useAdvancedWrap: true },

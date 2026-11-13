@@ -1,3 +1,4 @@
+import { beginSceneLoading, finishSceneLoading, queueWorldAssets, sceneWorldIds } from '../ui/assetLoading';
 import Phaser from 'phaser';
 import { createSession } from '../../domain/session';
 import type { SessionState } from '../../domain/session';
@@ -12,7 +13,13 @@ export class AdventureScene extends Phaser.Scene {
   private controls!: AdventureControls;
   constructor() { super('adventure'); }
 
+  preload(): void {
+    beginSceneLoading(this);
+    queueWorldAssets(this, sceneWorldIds(this), true);
+  }
+
   create({ session }: { session?: SessionState } = {}): void {
+    if (!finishSceneLoading(this)) return;
     this.session = session ?? progressStore.read().expedition ?? createSession();
     if (this.session.phase === 'result' || this.session.phase === 'travelling') {
       this.scene.start('result', { session: this.session }); return;

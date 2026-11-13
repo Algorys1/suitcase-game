@@ -1,3 +1,4 @@
+import { beginSceneLoading, finishSceneLoading, queueWorldAssets, sceneWorldIds } from '../ui/assetLoading';
 import Phaser from 'phaser';
 import { getTexts, getDestinationTexts } from '../../services/i18n';
 import { destinations } from '../../domain/recipes';
@@ -11,9 +12,15 @@ import type { PageDirection } from '../ui/notebookMotion';
 export class JournalEntryScene extends Phaser.Scene {
   constructor() { super('journal-entry'); }
 
+  preload(): void {
+    beginSceneLoading(this);
+    queueWorldAssets(this, sceneWorldIds(this), false);
+  }
+
   create({ id, page = 0, turn, returnTo }: {
     id?: string; page?: number; turn?: PageDirection; returnTo?: 'adventure';
   } = {}): void {
+    if (!finishSceneLoading(this)) return;
     const texts = getTexts();
     const entry = id === undefined ? undefined : getDestinationTexts(id);
     if (id === undefined || !entry || !progressStore.read().discoveredDestinationIds.includes(id)) {

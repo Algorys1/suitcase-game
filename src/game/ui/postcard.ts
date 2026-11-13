@@ -21,9 +21,10 @@ import { drawVestigesMist } from './vestigesMist';
 
 const textureKey = (id: string): string => `destination-${id}`;
 
-/** Load the complete collection from the catalogue's asset paths. */
-export function preloadPostcards(scene: Phaser.Scene): void {
+/** Load only the requested places from the catalogue's asset paths. */
+export function preloadPostcards(scene: Phaser.Scene, ids: readonly string[]): void {
   for (const destination of destinations) {
+    if (!ids.includes(destination.id)) continue;
     if (!scene.textures.exists(textureKey(destination.id))) {
       scene.load.image(textureKey(destination.id), import.meta.env.BASE_URL + destination.image);
     }

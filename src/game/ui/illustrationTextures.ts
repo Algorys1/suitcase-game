@@ -60,7 +60,8 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
   // Both dedicated lens states share one alpha frame, so the rim stays aligned
   // throughout the progressive reveal. Read the full backing on revisits too.
   const lensKeys = ['adventure-observatory-lens-empty', 'adventure-observatory-lens-full'];
-  if (lensKeys.every(key => scene.textures.exists(key))) {
+  if (lensKeys.every(key => scene.textures.exists(key)) && !lensKeys.every(key =>
+    (scene.textures.get(key) as Phaser.Textures.CanvasTexture).canvas.dataset.sharedLensFrames)) {
     const textures = lensKeys.map(key => scene.textures.get(key) as Phaser.Textures.CanvasTexture);
     const width = textures[0]!.canvas.width, height = textures[0]!.canvas.height;
     let left = width, top = height, right = -1, bottom = -1;
@@ -72,8 +73,10 @@ export function prepareIllustrationTextures(scene: Phaser.Scene): void {
         right = Math.max(right, x); bottom = Math.max(bottom, y);
       }
     }
-    if (right >= left && bottom >= top) for (const texture of textures)
+    if (right >= left && bottom >= top) for (const texture of textures) {
       texture.get().setSize(right - left + 1, bottom - top + 1, left, top);
+      texture.canvas.dataset.sharedLensFrames = 'true';
+    }
   }
   prepareRuinsPostcard(scene);
   prepareBraisePostcard(scene);

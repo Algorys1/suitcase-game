@@ -1,15 +1,11 @@
+import { beginSceneLoading, finishSceneLoading } from '../ui/assetLoading';
 import Phaser from 'phaser';
 import { getTexts } from '../../services/i18n';
 import { createMenu } from '../ui/menu';
 import { createSession } from '../../domain/session';
 import { progressStore } from '../../services/storage';
 import { destinations } from '../../domain/recipes';
-import { preloadPostcards } from '../ui/postcard';
-import { preloadSouvenirs } from '../ui/souvenir';
-import { prepareIllustrationTextures } from '../ui/illustrationTextures';
-import { preloadPreparationArt } from '../ui/preparationArt';
 import { approachJournal } from '../ui/notebookMotion';
-import { preloadAdventureArt } from '../ui/adventureAssets';
 
 export class HomeScene extends Phaser.Scene {
   constructor() {
@@ -17,23 +13,18 @@ export class HomeScene extends Phaser.Scene {
   }
 
   preload(): void {
-    if (!this.textures.exists('void-space')) {
-      this.load.image('void-space', `${import.meta.env.BASE_URL}assets/void/space.webp`);
+    beginSceneLoading(this);
+    for (const [key, path] of [
+      ['preparation-travel_desk', 'preparation/travel_desk.webp'],
+      ['preparation-suitcase_closed', 'preparation/suitcase_closed.webp'],
+      ['journal-closed', 'journal/closed.webp'], ['home-departure', 'home/departure.webp'],
+    ]) {
+      if (key && path && !this.textures.exists(key)) this.load.image(key, `${import.meta.env.BASE_URL}assets/${path}`);
     }
-    if (!this.textures.exists('journal-closed')) {
-      this.load.image('journal-closed', `${import.meta.env.BASE_URL}assets/journal/closed.webp`);
-    }
-    if (!this.textures.exists('home-departure')) {
-      this.load.image('home-departure', `${import.meta.env.BASE_URL}assets/home/departure.webp`);
-    }
-    preloadPostcards(this);
-    preloadSouvenirs(this);
-    preloadPreparationArt(this);
-    preloadAdventureArt(this);
   }
 
   create(): void {
-    prepareIllustrationTextures(this);
+    if (!finishSceneLoading(this)) return;
     const texts = getTexts();
     const expedition = progressStore.read().expedition;
 

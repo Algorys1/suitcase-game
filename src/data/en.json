@@ -402,5 +402,12 @@
     "pending": "Souvenir to discover",
     "collected": "Souvenir found",
     "wish": "A wish to travel"
+  },
+  "loading": {
+    "title": "Packing a little magic…",
+    "detail": "A little paper, a pinch of wonder…",
+    "retry": "Try again",
+    "error": "The journey is waiting…",
+    "errorDetail": "An illustration could not arrive. Let’s try again."
   }
 }

@@ -1,3 +1,4 @@
+import { beginSceneLoading, finishSceneLoading, queueWorldAssets, sceneWorldIds } from '../ui/assetLoading';
 import Phaser from 'phaser';
 import { getTexts, getDestinationTexts } from '../../services/i18n';
 import type { SessionState } from '../../domain/session';
@@ -17,7 +18,13 @@ export class SummaryScene extends Phaser.Scene {
 
   constructor() { super('summary'); }
 
+  preload(): void {
+    beginSceneLoading(this);
+    queueWorldAssets(this, sceneWorldIds(this), false);
+  }
+
   create({ session }: { session?: SessionState } = {}): void {
+    if (!finishSceneLoading(this)) return;
     if (!session || session.phase !== 'ended') { this.scene.start('home'); return; }
     this.session = session;
     this.offset = 0;
@@ -80,7 +87,7 @@ export class SummaryScene extends Phaser.Scene {
     const center = this.scale.width / 2;
     drawNotebook(this, b.left, b.top, b.width, b.height, b.landscape ? center : undefined);
     const text = (x: number, y: number, value: string, size: number, width: number, name: string, heading = false) => {
-      const label = this.add.text(x, y, value, {
+      const label = this.add.text(x, y, value, { resolution: 2,
         fontFamily: heading ? 'Georgia, "Times New Roman", serif' : '"Trebuchet MS", Arial, sans-serif',
         fontSize: size, color: '#65452e', fontStyle: heading ? 'bold' : 'normal', align: 'center',
         wordWrap: { width, useAdvancedWrap: true },

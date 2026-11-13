@@ -46,6 +46,8 @@ Pour repartir de zéro : **Paramètres → Reset · effacer la sauvegarde**, pui
 
 ## Technique et publication
 
+L’accueil charge désormais environ **1 Mio d’images**, hors moteur et police ; les mondes et leurs activités arrivent à la demande. Une valise et une étiquette FR/EN indiquent la progression dès le chargement de la page. Les icônes cartoon du cadran sont conçues pour rester lisibles sur mobile. En cas d’image manquante, Réessayer recharge le jeu et conserve le voyage déjà payé. Détails et vérifications dans [la documentation technique](docs/TECHNICAL.md#chargement-progressif-et-démarrage-illustré--13-novembre-2026).
+
 Phaser **4.2.1**, TypeScript strict, Vite et Vitest, versions verrouillées par `package-lock.json`. Jeu entièrement client-side, assets locaux, données et logique métier indépendantes des scènes Phaser. Textes externalisés dans `src/data/fr.json` et `src/data/en.json`.
 
 Vite utilise `base: './'`. Pour itch.io, archiver le **contenu** de `dist/`, avec `index.html` à la racine du ZIP. Tester ensuite le build publié dans l’iframe, la sauvegarde et les assets relatifs ; un build local réussi ne suffit pas. L’audio est actuellement désactivé et reste à réaliser.

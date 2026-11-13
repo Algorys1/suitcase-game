@@ -1,3 +1,4 @@
+import { beginSceneLoading, finishSceneLoading, queueWorldAssets, sceneWorldIds, queuePreparationAssets } from '../ui/assetLoading';
 import Phaser from 'phaser';
 import { getTexts } from '../../services/i18n';
 import { isReady, selectElement } from '../../domain/preparation';
@@ -38,7 +39,14 @@ export class PreparationScene extends Phaser.Scene {
 
   constructor() { super('preparation'); }
 
+  preload(): void {
+    beginSceneLoading(this);
+    queueWorldAssets(this, sceneWorldIds(this), true);
+    queuePreparationAssets(this);
+  }
+
   create({ session }: { session?: SessionState } = {}): void {
+    if (!finishSceneLoading(this)) return;
     this.session = session ?? progressStore.read().expedition ?? createSession();
     if (this.session.phase !== 'preparation' || this.session.charges <= 0) {
       this.scene.start('home');
@@ -223,7 +231,7 @@ export class PreparationScene extends Phaser.Scene {
   };
 
   private text(x: number, y: number, value: string, size: number, width: number, bold = false) {
-    return this.add.text(x, y, value, {
+    return this.add.text(x, y, value, { resolution: 2,
       fontFamily: '"Trebuchet MS", Arial, sans-serif', fontSize: size,
       fontStyle: bold ? 'bold' : 'normal', color: '#493626', align: 'center',
       wordWrap: { width, useAdvancedWrap: true },

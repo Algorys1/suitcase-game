@@ -75,7 +75,7 @@ function renderPreferencesMenu(scene: Phaser.Scene, content: MenuContent, focusI
     paper.fillStyle(0xb58b4c).fillRoundedRect(-16, -sheetHeight * 0.47, 32, 22, 4);
   }
   const words = (y: number, value: string, size: number, name: string, color = '#65452e') =>
-    scene.add.text(center, y, value, { fontFamily, fontSize: size, color, align: 'center',
+    scene.add.text(center, y, value, { resolution: 2, fontFamily, fontSize: size, color, align: 'center',
       wordWrap: { width: textWidth, useAdvancedWrap: true } }).setOrigin(0.5, 0).setPadding(2).setName(name);
   // A small compass sketch leaves the painted sheet free of language-specific art.
   const compassY = top + sheetHeight * (portrait ? 0.14 : 0.15);
@@ -126,7 +126,7 @@ function renderPreferencesMenu(scene: Phaser.Scene, content: MenuContent, focusI
     print.lineStyle(0.7, 0x794663, 0.65).strokeRoundedRect(-stampWidth / 2 + 3, -11, stampWidth - 6, 22, 3);
     print.lineStyle(2, 0x794663).beginPath().moveTo(-stampWidth / 2 + 10, 0)
       .lineTo(-stampWidth / 2 + 14, 4).lineTo(-stampWidth / 2 + 21, -5).strokePath();
-    const label = scene.add.text(9, 0, texts.preferences.selected, {
+    const label = scene.add.text(9, 0, texts.preferences.selected, { resolution: 2,
       fontFamily, fontSize: portrait ? 10 : 12, fontStyle: 'bold', color: '#794663',
     }).setOrigin(0.5).setPadding(2);
     const stamp = scene.add.container(x, ticketY + ticketHeight * 0.21, [print, label])
@@ -164,14 +164,14 @@ function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: n
 
   const ornament = scene.add.graphics();
   ornament.lineStyle(1, 0x9a7041, 0.35).strokeRoundedRect(10, 10, width - 20, height - 20, 8);
-  const words = (y: number, value: string, size: number, color = '#65452e') => scene.add.text(center, y, value, {
+  const words = (y: number, value: string, size: number, color = '#65452e') => scene.add.text(center, y, value, { resolution: 2,
     fontFamily, fontSize: size, color, align: 'center',
     wordWrap: { width: columnWidth - 8, useAdvancedWrap: true },
   }).setOrigin(0.5, 0).setPadding(2);
   words(landscape ? height * 0.10 : 22, getTexts().eyebrow, short || !landscape ? 10 : 11)
     .setName('home-eyebrow');
   const titleY = landscape ? height * 0.19 : 50;
-  const title = scene.add.text(center, titleY, getTexts().homeTitle, {
+  const title = scene.add.text(center, titleY, getTexts().homeTitle, { resolution: 2,
     fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'bold',
     fontSize: landscape ? Math.min(short ? 31 : 48, columnWidth / 8.3) : width < 360 ? 29 : 34,
     color: '#513322', align: 'center', lineSpacing: 1,
@@ -232,7 +232,7 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
   drawNotebook(scene, left, top, panelWidth, panelHeight,
     landscape ? left + panelWidth / 2 : undefined);
   const words: Array<Phaser.GameObjects.Text | Phaser.GameObjects.Graphics> = [];
-  const text = (y: number, value: string, size: number, bold = false) => scene.add.text(textX, y, value, {
+  const text = (y: number, value: string, size: number, bold = false) => scene.add.text(textX, y, value, { resolution: 2,
     fontFamily, fontSize: size, fontStyle: bold ? 'bold' : 'normal', color: '#302a37',
     align: 'center', wordWrap: { width: textWidth - 4, useAdvancedWrap: true },
   }).setOrigin(0.5, 0).setPadding(2);
@@ -336,7 +336,7 @@ export function createButton(
   button: MenuButton,
 ): void {
   const background = scene.add.graphics();
-  const label = scene.add.text(x, y + (button.labelOffsetY ?? 0), button.label, {
+  const label = scene.add.text(x, y + (button.labelOffsetY ?? 0), button.label, { resolution: 2,
     fontFamily,
     fontSize: button.fontSize ?? (width < 300 ? 18 : 21),
     fontStyle: 'bold',
@@ -368,8 +368,9 @@ export function createButton(
         // Only the localized engraving and interaction feedback are rendered here.
         background.setPosition(x, y).setAngle(button.plateAngle ?? 0);
         label.setWordWrapWidth(0).setAngle(button.plateAngle ?? 0);
-        label.setScale(Math.min(1, (width - 6) / label.width), 0.9);
-        label.setShadow(0, 1, '#edbb87', 0, false, true);
+        // Fit by font size, keeping the raster and letter proportions intact.
+        let size = button.fontSize ?? (width < 300 ? 18 : 21);
+        while (label.width > width - 6 && size > 9) label.setFontSize(--size);
         if (button.selected || button.focused || hover) {
           const half = Math.min(16, width * 0.18);
           background.lineStyle(button.focused ? 2 : 1, button.plateColor, button.disabled ? 0.3 : 0.85)
@@ -501,7 +502,7 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
       const top = height * (portrait ? 0.52 : 0.16);
       const small = height < 450 || width < 400;
       const words = (y: number, text: string, size: number, name: string, color = '#fff4df') =>
-        scene.add.text(center, y, text, { fontFamily, fontSize: size, color, align: 'center',
+        scene.add.text(center, y, text, { resolution: 2, fontFamily, fontSize: size, color, align: 'center',
           wordWrap: { width: textWidth, useAdvancedWrap: true } }).setOrigin(0.5, 0).setPadding(2).setName(name);
       const title = words(top, content.title, small ? 28 : 40, 'menu-title');
       title.setFontFamily('Georgia, serif');

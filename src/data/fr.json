@@ -402,5 +402,12 @@
     "pending": "Souvenir à découvrir",
     "collected": "Souvenir trouvé",
     "wish": "Une envie d’ailleurs"
+  },
+  "loading": {
+    "title": "La valise se prépare…",
+    "detail": "Un peu de papier, une pincée de magie…",
+    "retry": "Réessayer",
+    "error": "Le voyage attend encore…",
+    "errorDetail": "Une image n’a pas pu arriver. Réessayons."
   }
 }

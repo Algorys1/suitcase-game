@@ -3,12 +3,13 @@ import { getTexts, applyLanguageToDocument } from '../../services/i18n';
 import { progressStore } from '../../services/storage';
 import type { Language } from '../../services/storage';
 import { createMenu } from '../ui/menu';
-import { prepareIllustrationTextures } from '../ui/illustrationTextures';
+import { beginSceneLoading, finishSceneLoading } from '../ui/assetLoading';
 
 export class SettingsScene extends Phaser.Scene {
   constructor() { super('settings'); }
 
   preload(): void {
+    beginSceneLoading(this);
     for (const layout of ['landscape', 'portrait']) {
       const key = `settings-${layout}`;
       if (!this.textures.exists(key)) this.load.image(key, `${import.meta.env.BASE_URL}assets/settings/${layout}.webp`);
@@ -18,7 +19,7 @@ export class SettingsScene extends Phaser.Scene {
   create({ stamp = false, confirmReset = false, resetUnavailable = false }: {
     stamp?: boolean; confirmReset?: boolean; resetUnavailable?: boolean;
   } = {}): void {
-    prepareIllustrationTextures(this);
+    if (!finishSceneLoading(this)) return;
     // Scene data survives later visits in Phaser; consume this one-shot effect.
     this.sys.settings.data = { stamp: false };
     const texts = getTexts();

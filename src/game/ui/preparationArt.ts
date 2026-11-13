@@ -10,16 +10,22 @@ export function preloadPreparationArt(scene: Phaser.Scene): void {
       `${import.meta.env.BASE_URL}assets/preparation/charge-${state}.svg`, { width: 96, height: 96 });
   }
   for (const element of elements) {
-    const key = `preparation-element-${element.id}`;
-    if (!scene.textures.exists(key)) scene.load.image(key, `${import.meta.env.BASE_URL}${element.image}`);
     const glyph = `preparation-glyph-${element.id}`;
     if (!scene.textures.exists(glyph)) scene.load.image(glyph,
       `${import.meta.env.BASE_URL}assets/preparation/glyphs/${element.id}.webp`);
   }
-  for (const id of ['compass_dial', 'suitcase_closed', 'needle_teal', 'needle_violet', 'travel_desk',
-    'vial_full', 'vial_empty', 'suitcase_compass']) {
+  for (const id of ['suitcase_closed', 'needle_teal', 'needle_violet', 'travel_desk',
+    'suitcase_compass']) {
     const key = `preparation-${id}`;
     if (!scene.textures.exists(key)) scene.load.image(key, `${import.meta.env.BASE_URL}assets/preparation/${id}.webp`);
+  }
+}
+
+export function preloadElementArt(scene: Phaser.Scene, ids?: readonly string[]): void {
+  for (const element of elements) {
+    if (ids && !ids.includes(element.id)) continue;
+    const key = `preparation-element-${element.id}`;
+    if (!scene.textures.exists(key)) scene.load.image(key, `${import.meta.env.BASE_URL}${element.image}`);
   }
 }
 

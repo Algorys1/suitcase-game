@@ -1,0 +1,12 @@
+{
+  "tool": "image_gen (built-in)",
+  "date": "2026-11-13",
+  "source": "sheet.png",
+  "layout": "5 columns × 2 rows; tree, mushroom, water, fire, rock / palm, snow, cloud, ruins, crystal",
+  "exports": "public/assets/preparation/glyphs/*.webp, alpha preserved, max 128px per icon",
+  "references": [
+    "public/assets/elements/fire.webp",
+    "public/assets/elements/mushroom.webp"
+  ],
+  "prompt": "Production mobile game sprite sheet. EXACTLY TEN simple colorful CARTOON element icons in a precise 5 column by 2 row grid, landscape sheet. Transparent background. Each isolated icon centered in equal square cells with generous empty spacing and no touching. Row1 left to right: TREE with rounded green canopy brown trunk; MUSHROOM with purple cap three cream spots beige stem; WATER one bright blue teardrop; FIRE one orange flame with yellow center; ROCK one slate gray angular stone. Row2 left to right: PALM one curved brown trunk with green fronds; SNOW one thick six arm pale blue snowflake; CLOUD one soft white cloud with blue shadow; RUINS two broken sandy beige columns and lintel; CRYSTAL one chunky purple faceted crystal with turquoise side. Hand painted cartoon storybook style matching warm leather fantasy travel game references. Every icon has a THICK CONTINUOUS DARK BROWN OUTLINE, very strong silhouette, broad areas of clear saturated color and at most two simple soft painted shading tones. Must be immediately recognizable at 28 pixels. Bright green, blue, orange and purple distinct from cream parchment. NO fine decorative lines, no gold filigree, no ornate swirls, no floating sparkles, NO pale golden shapes, NO glow halos, no background haze, no circles, no plinths or ground, no labels, no numbers, no text, no white sticker border. These are simple friendly game icons, not realistic miniatures and not ornate magical sigils. Use references only for the game's warm painterly cartoon material and colors, SIMPLIFY them heavily."
+}

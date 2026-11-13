@@ -134,11 +134,11 @@ export function drawCompass(
       engravings.fillStyle(0xfff3b5, alpha).fillCircle(x, y, radius * scale);
     }
   }
-  const iconSize = Math.max(24, Math.min(48, radius * 0.26));
+  const iconSize = Math.max(28, Math.min(48, radius * 0.32));
   compassElements.forEach(id => {
     const angle = Phaser.Math.DegToRad(compassAngle(id) - 90);
-    const sx = x + Math.cos(angle) * radius * 0.73;
-    const sy = y + Math.sin(angle) * radius * 0.73;
+    const sx = x + Math.cos(angle) * radius * 0.76;
+    const sy = y + Math.sin(angle) * radius * 0.76;
     // Offset the two soft lights slightly when both needles share a symbol.
     const duplicate = slots[0] === id && slots[1] === id;
     for (const index of [0, 1] as const) {
@@ -154,7 +154,7 @@ export function drawCompass(
     const target = scene.add.zone(sx, sy, hitSize, hitSize).setName(`dial-element-${id}`)
       .setData('elementName', names[id].name);
     if (!interaction.disabled) {
-      // Narrow sectors never overlap; the larger fallback buttons remain available.
+      // The keyboard and labelled needle controls complement these small sectors.
       target.setInteractive({ useHandCursor: true });
       let pressed = false;
       target.on('pointerdown', () => { pressed = true; });

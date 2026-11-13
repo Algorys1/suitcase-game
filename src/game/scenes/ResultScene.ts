@@ -1,3 +1,4 @@
+import { beginSceneLoading, finishSceneLoading, queueWorldAssets, sceneWorldIds, queueVoidAssets } from '../ui/assetLoading';
 import Phaser from 'phaser';
 import { getTexts, getDestinationTexts } from '../../services/i18n';
 import { BALANCE } from '../../domain/compass';
@@ -13,7 +14,16 @@ import { drawSouvenir } from '../ui/souvenir';
 export class ResultScene extends Phaser.Scene {
   constructor() { super('result'); }
 
+  preload(): void {
+    beginSceneLoading(this);
+    queueWorldAssets(this, sceneWorldIds(this), true);
+    const session = (this.sys.settings.data as { session?: SessionState } | undefined)?.session
+      ?? progressStore.read().expedition;
+    if (session?.lastTrip?.destinationId === null) queueVoidAssets(this);
+  }
+
   create({ session }: { session?: SessionState } = {}): void {
+    if (!finishSceneLoading(this)) return;
     const texts = getTexts();
     const trip = session?.lastTrip;
     if (!session || session.phase !== 'result' || !trip) { this.scene.start('home'); return; }

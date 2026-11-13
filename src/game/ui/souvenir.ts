@@ -5,8 +5,9 @@ import { getTexts, translate } from '../../services/i18n';
 
 const textureKey = (id: string): string => `souvenir-${id}`;
 
-export function preloadSouvenirs(scene: Phaser.Scene): void {
+export function preloadSouvenirs(scene: Phaser.Scene, ids: readonly string[]): void {
   for (const souvenir of souvenirs) {
+    if (!ids.includes(souvenir.destinationId)) continue;
     if (!scene.textures.exists(textureKey(souvenir.destinationId))) {
       scene.load.image(textureKey(souvenir.destinationId), import.meta.env.BASE_URL + souvenir.image);
     }
@@ -76,7 +77,7 @@ export function drawSouvenir(scene: Phaser.Scene, souvenir: Souvenir, x: number,
       .strokeRoundedRect(imageX - size * 0.36, cy - size * 0.38, size * 0.72, size * 0.76, 3);
     cover.lineStyle(1, 0xb69769).lineBetween(imageX - size * 0.34, cy - size * 0.34, imageX, cy - size * 0.03)
       .lineBetween(imageX, cy - size * 0.03, imageX + size * 0.34, cy - size * 0.34);
-    const seal = scene.add.text(imageX, cy + size * 0.12, '?', { fontFamily: 'Georgia, serif', fontSize: Math.max(13, size * 0.43), color: '#866642' })
+    const seal = scene.add.text(imageX, cy + size * 0.12, '?', { resolution: 2, fontFamily: 'Georgia, serif', fontSize: Math.max(13, size * 0.43), color: '#866642' })
       .setOrigin(0.5).setName('souvenir-unknown-seal');
     objects.push(cover, seal);
   } else if (scene.textures.exists(key)) {
@@ -89,7 +90,7 @@ export function drawSouvenir(scene: Phaser.Scene, souvenir: Souvenir, x: number,
   const textLeft = imageX + halfExtent + 8;
   const textWidth = left + tagWidth - 28 - textLeft;
   const textX = textLeft + textWidth / 2;
-  const text = (value: string, fontSize: number, color: string) => scene.add.text(textX, 0, value, {
+  const text = (value: string, fontSize: number, color: string) => scene.add.text(textX, 0, value, { resolution: 2,
     fontFamily: 'Alegreya, Georgia, serif', fontSize, color, align: 'center',
     wordWrap: { width: textWidth - 4, useAdvancedWrap: true },
   }).setOrigin(0.5, 0).setPadding(2);

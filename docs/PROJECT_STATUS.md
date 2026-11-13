@@ -4,6 +4,8 @@ Ce bilan décrit le prototype présent dans le dépôt. Il distingue l’implém
 
 ## Prototype implémenté
 
+**Dernière optimisation :** accueil limité à quatre images (environ 1 Mio, hors moteur et police), mondes et souvenirs chargés à la demande, texte et progression illustrés visibles avant Phaser. Les dix signes du cadran sont remplacés par des icônes cartoon plus lisibles (62,3 Kio contre environ 915 Kio). PNG lourds convertis en WebP et sources conservées hors build. Build, 9 tests ciblés et parcours de chargement/voyage/reprise/carnet vérifiés ; nouvelle présentation à essayer. Voir [TECHNICAL.md](TECHNICAL.md#chargement-progressif-et-démarrage-illustré--13-novembre-2026).
+
 **Dernière intégration :** [la valise-boussole](SUITCASE_COMPASS.md), direction approuvée par le joueur. La mini-valise remplace le point d’interrogation de la prochaine étape ; elle vient au premier plan avec le cadran intégré au couvercle et deux manifestations lumineuses dans sa doublure. Instruments séparés et socles retirés. Dernière passe à essayer : ficelle tressée, charges métalliques sans chiffre dans la doublure, mode liste retiré, carte floutée et animation de départ liée aux éléments.
 
 
@@ -28,11 +30,11 @@ Les fonctions et champs nommés `pilot` dans le code couvrent désormais les 30 
 - Vérification exécutée le 12 novembre 2026 : `npm.cmd test` — **161 tests réussis dans 41 fichiers** ; `npm.cmd run build` — TypeScript strict et Vite réussis. Avertissement de taille du bundle Phaser, non bloquant.
 - Des parcours Chrome sur build servi sous `/jam/`, FR/EN, clavier, souris et toucher simulé sont documentés par activité. Ces preuves concernent les versions testées ; aucun nouveau parcours navigateur n’a été exécuté pour cette mise à jour documentaire.
 - Vérification de la valise-boussole du 13 novembre 2026 : **161 tests dans 41 fichiers**, TypeScript strict et build réussis. Chrome sous `/jam/`, FR/EN, souris et toucher simulé : cinq formats de 320 × 568 à 1280 × 720 ; dernière présentation revue en 960 × 540, 320 × 568 et 640 × 360. Glissers, Échap, redimensionnement, clavier, palette, aller-retour, reprise, dernier départ et bilan à zéro contrôlés sans erreur JavaScript/HTTP. Captures inspectées ; voir [SUITCASE_COMPASS.md](SUITCASE_COMPASS.md).
-- Aucun essai final sur appareil tactile physique, Firefox ou dans l’iframe itch.io n’est établi par les dernières notes. L’existence de la page itch.io ne prouve pas que le build actuel y a été vérifié.
+- Le joueur a publié une première version sur itch.io et l’a essayée sur PC et mobile. Il a signalé la valise comprimée au deuxième voyage : correctif `__BASE` intégré et vérifié en local sur deux voyages consécutifs. Les nouvelles icônes, le chargement allégé et la netteté des textes sont intégrés depuis ; leur publication n’est pas encore confirmée. Firefox reste à vérifier ; distinguer les essais réels du joueur des contrôles automatisés sous Chrome.
 
 ## Travaux avant publication finale
 
-1. Essayer la valise-boussole et sa nouvelle animation au clic sur Voyager. Reprendre le tutoriel, dans son contenu et sa présentation, conformément au retour du joueur ; les trois conseils actuels restent intégrés mais ne sont pas finalisés. Remplacer le bouton texte « Explorer », jugé générique, par une loupe ou une longue-vue en haut de la carte : objet, position et animation restent à définir. La validation visuelle du bilan illustré reste également à consigner.
+1. Mettre à jour le ZIP itch.io avec le correctif du deuxième voyage, les icônes cartoon, le chargement progressif et les textes plus nets ; faire un court essai de deux voyages. Ensuite, reprendre le tutoriel dans son contenu et sa présentation : les trois conseils actuels ne sont pas finalisés. Remplacer le bouton texte « Explorer », jugé générique, par une loupe ou une longue-vue en haut de la carte : objet, position et animation restent à définir. La validation visuelle du bilan illustré reste également à consigner.
 2. Playtest d’ensemble : compréhension de la carte, aiguilles, tutoriel, carnet, découverte des interactions sans solution écrite, rythme et envie de repartir. Relecture éditoriale FR/EN ; ne pas assimiler validation d’un geste et validation de tous les textes.
 3. Mesurer l’équilibrage 10 / 1 / 2 et ajuster seulement après retour. Ne pas ajouter de recharge ou de ressource supplémentaire.
 4. Habillage sonore et commande de coupure : l’audio est actuellement désactivé (`audio.noAudio` dans `src/game/config.ts`), aucun asset sonore n’est distribué.

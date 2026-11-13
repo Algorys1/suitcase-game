@@ -70,7 +70,7 @@ export class AdventureControls {
 
 export function mapText(scene: Phaser.Scene, x: number, y: number, value: string, size: number,
   width: number, color = '#624a37'): Phaser.GameObjects.Text {
-  return scene.add.text(x, y, value, { fontFamily: '"Travel Serif", Georgia, serif',
+  return scene.add.text(x, y, value, { resolution: 2, fontFamily: '"Travel Serif", Georgia, serif',
     fontSize: size, color, align: 'center', wordWrap: { width, useAdvancedWrap: true } })
     .setOrigin(0.5).setPadding(3);
 }

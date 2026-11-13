@@ -1,3 +1,4 @@
+import { beginSceneLoading, finishSceneLoading, queueWorldAssets, sceneWorldIds } from '../ui/assetLoading';
 import { addObservatoryLens } from '../ui/observatoryLens';
 import { addRiftBasalt } from '../ui/riftBasalt';
 import { addEmpireLamp } from '../ui/empireLamp';
@@ -61,9 +62,15 @@ export class ExplorationScene extends Phaser.Scene {
   private stopBridge = () => {};
   constructor() { super('exploration'); }
 
+  preload(): void {
+    beginSceneLoading(this);
+    queueWorldAssets(this, sceneWorldIds(this, true), true);
+  }
+
   create({ id, session, fromResult = false, journalPage = 0, returnTo }: {
     id?: string; session?: SessionState; fromResult?: boolean; journalPage?: number; returnTo?: 'adventure';
   } = {}): void {
+    if (!finishSceneLoading(this)) return;
     if (!id || !destinationById(id) || !progressStore.read().discoveredDestinationIds.includes(id)) {
       this.scene.start('home'); return;
     }

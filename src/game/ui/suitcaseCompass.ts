@@ -4,7 +4,9 @@ import { drawElementGlyph } from './preparationArt';
 
 /** Anchors measured on the new painting, after the shared alpha crop. */
 export function drawSuitcaseCompass(scene: Phaser.Scene, x: number, top: number, maxWidth: number, maxHeight: number) {
-  const art = scene.add.image(x, top, 'preparation-suitcase_compass')
+  // Adding the departure frames changes Phaser's default frame to the lid.
+  // Always request the complete painting when opening another preparation.
+  const art = scene.add.image(x, top, 'preparation-suitcase_compass', '__BASE')
     .setOrigin(0.5, 0).setName('suitcase-compass-art');
   art.setScale(Math.min(maxWidth / art.width, maxHeight / art.height));
   const w = art.displayWidth, h = art.displayHeight;
@@ -41,7 +43,7 @@ export function drawSuitcaseInstruction(scene: Phaser.Scene, art: ReturnType<typ
   const { width, height } = scene.scale;
   const landscape = width >= 760 || (width >= 600 && height < 450);
   const paperWidth = landscape ? Math.min(240, (width - art.width) / 2 - 24) : Math.min(280, width - 28);
-  const text = scene.add.text(0, 0, instruction, {
+  const text = scene.add.text(0, 0, instruction, { resolution: 2,
     fontFamily: '"Travel Serif", Georgia, serif', fontSize: landscape ? 16 : 15,
     fontStyle: '600', color: '#493322', align: 'center',
     wordWrap: { width: paperWidth - 42, useAdvancedWrap: true },

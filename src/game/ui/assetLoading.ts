@@ -1,0 +1,74 @@
+import type Phaser from 'phaser';
+import { getTexts } from '../../services/i18n';
+import { progressStore } from '../../services/storage';
+import type { SessionState } from '../../domain/session';
+import { destinationById } from '../../domain/recipes';
+import { preloadPostcards } from './postcard';
+import { preloadSouvenirs } from './souvenir';
+import { preloadAdventureArt } from './adventureAssets';
+import { preloadElementArt, preloadPreparationArt } from './preparationArt';
+import { prepareIllustrationTextures } from './illustrationTextures';
+
+const overlay = () => document.getElementById('loading-screen');
+
+/** Shared illustrated loading paper, visible before Phaser and between uncached places. */
+export function beginSceneLoading(scene: Phaser.Scene): void {
+  scene.data.set('asset-load-failed', false);
+  const ui = overlay();
+  const text = document.getElementById('loading-copy');
+  const detail = document.getElementById('loading-detail');
+  const bar = document.getElementById('loading-progress');
+  const retry = document.getElementById('loading-retry') as HTMLButtonElement | null;
+  if (text) text.textContent = getTexts().loading.title;
+  bar?.setAttribute('aria-label', getTexts().loading.title);
+  if (detail) detail.textContent = getTexts().loading.detail;
+  if (retry) { retry.hidden = true; retry.textContent = getTexts().loading.retry; retry.onclick = () => location.reload(); }
+  if (ui) ui.hidden = false;
+  const progress = (value: number) => {
+    bar?.setAttribute('aria-valuenow', String(Math.round(value * 100)));
+    (bar?.firstElementChild as HTMLElement | null)?.style.setProperty('width', `${Math.round(value * 100)}%`);
+  };
+  const failed = () => {
+    scene.data.set('asset-load-failed', true);
+    if (text) text.textContent = getTexts().loading.error;
+    if (detail) detail.textContent = getTexts().loading.errorDetail;
+    if (retry) retry.hidden = false;
+  };
+  progress(0);
+  scene.load.on('progress', progress);
+  scene.load.on('loaderror', failed);
+  scene.events.once('shutdown', () => {
+    scene.load.off('progress', progress);
+    scene.load.off('loaderror', failed);
+  });
+}
+
+export function finishSceneLoading(scene: Phaser.Scene): boolean {
+  if (scene.data.get('asset-load-failed')) return false;
+  prepareIllustrationTextures(scene);
+  const ui = overlay();
+  if (ui) ui.hidden = true;
+  return true;
+}
+
+export function queueWorldAssets(scene: Phaser.Scene, ids: readonly string[], map = false): void {
+  preloadPostcards(scene, ids);
+  preloadSouvenirs(scene, ids);
+  preloadAdventureArt(scene, ids, map);
+  if (map && ids.length) preloadElementArt(scene,
+    [...new Set(ids.flatMap(id => destinationById(id)?.elements ?? []))]);
+}
+
+export function queuePreparationAssets(scene: Phaser.Scene): void { preloadPreparationArt(scene); }
+
+export function sceneWorldIds(scene: Phaser.Scene, includeRoute = false): readonly string[] {
+  const data = (scene.sys.settings.data ?? {}) as { id?: string; session?: SessionState };
+  const visited = (data.session ?? progressStore.read().expedition)?.visitedDestinationIds ?? [];
+  return data.id ? includeRoute ? [...new Set([data.id, ...visited])] : [data.id] : visited;
+}
+
+export function queueVoidAssets(scene: Phaser.Scene): void {
+  if (!scene.textures.exists('void-space')) scene.load.image('void-space', `${import.meta.env.BASE_URL}assets/void/space.webp`);
+  if (!scene.textures.exists('preparation-compass_dial')) scene.load.image('preparation-compass_dial',
+    `${import.meta.env.BASE_URL}assets/preparation/compass_dial.webp`);
+}

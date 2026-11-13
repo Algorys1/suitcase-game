@@ -1,0 +1,6 @@
+{
+  "tool": "image_gen built-in",
+  "prompt": "Use case: illustration-story. Asset: painted full-screen background for a magical travel game, landscape 3:2. The gentle mysterious space BETWEEN fantasy worlds: immense deep indigo blue void, softly painted violet and turquoise mist curling loosely at the outer edges, a few tiny warm gold distant stars. Whimsical hand-painted gouache cartoon storybook style, subtle paper-brush texture, soft rounded shapes. Calm, curious, a little mischievous, never scary. Leave the central left and the entire right half largely open dark blue with ample negative space for an illustrated suitcase and a paper note to be composited by the game. Atmospheric layers, very sparse drifting pinprick stars. NO suitcase, NO compass, NO rock, NO island, NO planet, NO moon, NO character, NO large starburst, NO lettering, NO UI panels, NO text. Do not depict objects; only space and painted mist. Avoid photorealistic galaxies, excessive tiny noise and black holes. Opaque illustrated background.",
+  "source": "source.png",
+  "export": "public/assets/void/space.webp"
+}

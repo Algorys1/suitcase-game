@@ -164,7 +164,8 @@
     "summaryMemories": "Journey memories",
     "summaryPlaces": "{count} unique places visited",
     "summaryDiscoveries": "{count} new discoveries",
-    "summaryVoid": "{count} visit(s) to the Void"
+    "summaryVoid": "{count} visit(s) to the Void",
+    "voidEyebrow": "BETWEEN TWO WORLDS"
   },
   "destinations": {
     "archipel_azur": {

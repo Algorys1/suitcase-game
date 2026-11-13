@@ -1,4 +1,9 @@
 import Phaser from 'phaser';
+import { drawSuitcaseCompass, drawManifestation, drawSuitcaseCharges } from './suitcaseCompass';
+import { drawCompass } from './compass';
+import { isElementId } from '../../domain/preparation';
+import type { ElementId, Slots } from '../../domain/preparation';
+import { getTexts } from '../../services/i18n';
 
 /** Soft procedural light, rather than outlined circles around the instrument. */
 function prepareEnergy(scene: Phaser.Scene): void {
@@ -37,147 +42,121 @@ function prepareEnergy(scene: Phaser.Scene): void {
   scene.textures.addCanvas('void-dust', dust);
 }
 
-/** Presentation only: the trip and its energy cost have already been resolved. */
-export function drawVoid(scene: Phaser.Scene, animate: boolean, reveal = true): (() => void) | undefined {
-  const { width, height } = scene.scale;
-  const portrait = width < 600 && height > width;
-  if (scene.textures.exists('void-space')) {
-    const sky = scene.add.image(0, height / 2, 'void-space').setOrigin(0, 0.5).setName('void-space');
-    sky.setScale(Math.max(width / sky.width, height / sky.height));
-  }
-  const shade = scene.add.graphics();
-  shade.fillStyle(0x10132c, 0.24).fillRect(0, 0, width, height);
-  if (portrait) shade.fillStyle(0x10132c, 0.86).fillRoundedRect(12, height * 0.49, width - 24, height * 0.49, 20);
-  else shade.fillStyle(0x10132c, 0.86).fillRoundedRect(width * 0.57, height * 0.1, width * 0.4, height * 0.8, 22);
-
-  const x = width * (portrait ? 0.62 : 0.37);
-  const y = height * (portrait ? 0.26 : 0.37);
-  const size = Math.min(width * (portrait ? 0.53 : 0.32), height * (portrait ? 0.31 : 0.58), 320);
+/** The suitcase is the only stable object in the space between worlds. */
+export function drawVoid(scene: Phaser.Scene, animate: boolean, reveal = true): () => void {
+  const { width: w, height: h } = scene.scale;
+  const portrait = w < 600 && h > w;
+  const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const sky = scene.add.image(w / 2, h / 2, 'void-space').setName('void-space');
+  sky.setScale(Math.max(w / sky.width, h / sky.height));
+  scene.add.rectangle(w / 2, h / 2, w, h, 0x10132c, 0.12);
   prepareEnergy(scene);
-  const arrival: Phaser.GameObjects.Image[] = [];
-  if (scene.textures.exists('void-dust')) {
-    // Broad, diffuse light behind the instrument, swallowed by a dark core.
-    arrival.push(scene.add.image(x, y, 'void-dust').setName('void-arrival-glow')
-      .setTint(0x9456ff).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0));
-    arrival.push(scene.add.image(x, y, 'void-dust').setName('void-arrival-shadow')
-      .setTint(0x090717).setAlpha(0));
+  const stageX = w * (portrait ? 0.5 : 0.30);
+  const caseTop = portrait ? 20 : Math.max(16, h * 0.10);
+  const caseHeight = portrait ? Math.min(h * 0.43, 310) : h * 0.76;
+  const start = scene.children.length;
+  const art = drawSuitcaseCompass(scene, stageX, caseTop, w * (portrait ? 0.82 : 0.53), caseHeight);
+  const raw: unknown = scene.data.get('void-elements');
+  const elements: Slots | undefined = Array.isArray(raw) && raw.length === 2 && raw.every(isElementId)
+    ? [raw[0] as ElementId, raw[1] as ElementId] : undefined;
+  const slots: Slots = elements ?? ['tree', 'mushroom'];
+  drawCompass(scene, art.dial.x, art.dial.y, art.dial.radius, slots, 0, getTexts().elements,
+    { embedded: true, decorative: true, disabled: true, charged: false, dragAngle: null, grab: () => {}, select: () => {} });
+  drawSuitcaseCharges(scene, art, (scene.data.get('void-charges') as number | undefined) ?? 0);
+  const needles = [0, 1].map(i => scene.children.getByName(`needle-hand-${i}`) as Phaser.GameObjects.Image);
+  const selections = scene.children.getAll().filter(o => o.name.startsWith('selection-light-')) as Phaser.GameObjects.Image[];
+  const manifestations: Phaser.GameObjects.Container[] = [];
+  if (elements && reveal) for (const i of [0, 1] as const) {
+    const before = scene.children.length;
+    const slot = art.slots[i]!;
+    drawManifestation(scene, elements[i]!, slot.x, slot.y, slot.size, i);
+    const parts = scene.children.getAll().slice(before) as (Phaser.GameObjects.Image | Phaser.GameObjects.Graphics)[];
+    parts.forEach(part => part.setPosition(part.x - slot.x, part.y - slot.y));
+    manifestations.push(scene.add.container(slot.x, slot.y, parts).setName(`void-element-${i}`).setData('origin-y', slot.y));
   }
-  const veils: Phaser.GameObjects.Image[] = [];
-  if (scene.textures.exists('void-veil')) {
-    for (let i = 0; i < 4; i++) {
-      veils.push(scene.add.image(x, y, 'void-veil').setName(`void-veil-${i}`)
-        .setDisplaySize(size * 1.8, size * 0.65).setTint(i % 2 ? 0xbda0ff : 0x80e8e4)
-        .setBlendMode(Phaser.BlendModes.ADD));
-    }
-  }
-  const compass = scene.add.container(x, y).setAngle(-12).setName('void-compass');
-  if (scene.textures.exists('preparation-compass_dial')) {
-    compass.add(scene.add.image(0, 0, 'preparation-compass_dial').setDisplaySize(size, size));
-  } else {
-    compass.add(scene.add.graphics().fillStyle(0xba995d).fillCircle(0, 0, size / 2)
-      .fillStyle(0xf8e6c6).fillCircle(0, 0, size * 0.43));
-  }
-  const needles: Phaser.GameObjects.Image[] = [];
-  for (const [index, id] of ['teal', 'violet'].entries()) {
-    const key = `preparation-needle_${id}`;
-    if (!scene.textures.exists(key)) continue;
-    const pivot = index === 0 ? 0.68 : 0.69;
-    const needle = scene.add.image(0, 0, key).setOrigin(0.5, pivot).setAngle(index === 0 ? -35 : 85);
-    needle.setScale(size * (index === 0 ? 0.30 : 0.27) / (needle.height * pivot));
-    compass.add(needle);
-    needles.push(needle);
-  }
-  compass.add(scene.add.graphics().fillStyle(0xf6d69c).fillCircle(0, 0, size * 0.026));
-  const wisps: Phaser.GameObjects.Image[] = [];
-  if (scene.textures.exists('void-veil')) {
-    for (let i = 0; i < 2; i++) {
-      wisps.push(scene.add.image(x, y, 'void-veil').setName(`void-wisp-${i}`)
-        .setDisplaySize(size * 1.65, size * 0.34).setTint(i ? 0xc8a5ff : 0x88fff1)
-        .setBlendMode(Phaser.BlendModes.ADD));
-    }
-  }
-  // Small drifting lights also pass in front of the brass, like energy brushing it.
-  const dust: Phaser.GameObjects.Image[] = [];
-  if (scene.textures.exists('void-dust')) {
-    for (let i = 0; i < 36; i++) {
-      dust.push(scene.add.image(x, y, 'void-dust').setName(`void-dust-${i}`)
-        .setTint(i % 3 === 0 ? 0xf6d9a0 : i % 2 ? 0xbda0ff : 0x9bf7ed)
-        .setDisplaySize(i % 5 === 0 ? 11 : 5, i % 5 === 0 ? 11 : 5)
-        .setBlendMode(Phaser.BlendModes.ADD));
-    }
-  }
-  const reflection = scene.add.graphics().setName('void-reflection');
-  const drawReflection = (t: number): void => {
-    reflection.clear();
-    // Open, soft highlights follow short portions of the rim; never a full ring.
-    for (let layer = 6; layer > 0; layer--) {
-      reflection.lineStyle(layer * 1.3, 0x98eee9, 0.025);
-      reflection.beginPath();
-      reflection.arc(compass.x, compass.y, size * 0.475,
-        -1.25 + Math.sin(t * 0.4) * 0.15, -0.72 + Math.sin(t * 0.4) * 0.15);
-      reflection.strokePath();
-    }
+  const caseParts = scene.children.getAll().slice(start);
+  const suitcase = scene.add.container(0, 0, caseParts).setName('void-suitcase');
+  const viewWidth = portrait ? w : w * 0.58;
+  const viewHeight = portrait ? h * 0.49 : h;
+  const mist = Array.from({ length: 7 }, (_, i) => scene.add.image(0, 0, 'void-veil')
+    .setTint(i % 2 ? 0xbda0ff : 0x80e8e4).setBlendMode(Phaser.BlendModes.ADD)
+    .setDisplaySize(viewWidth * (0.65 + i % 3 * 0.16), Math.max(48, viewHeight * 0.20))
+    .setName(`void-mist-${i}`));
+  const dust = Array.from({ length: 38 }, (_, i) => scene.add.image(0, 0, 'void-dust')
+    .setTint(i % 3 ? 0xa7e8e2 : 0xffdf9a).setBlendMode(Phaser.BlendModes.ADD)
+    .setDisplaySize(i % 7 ? 4 : 7, i % 7 ? 4 : 7).setName(`void-dust-${i}`));
+  const trail = Array.from({ length: 10 }, (_, i) => scene.add.image(0, 0, 'void-dust')
+    .setDisplaySize(i % 3 ? 5 : 8, i % 3 ? 5 : 8).setTint(i % 2 ? 0xc7b8f7 : 0xf6dba4)
+    .setBlendMode(Phaser.BlendModes.ADD).setAlpha(0).setName(`void-trail-${i}`));
+  // Small paper fragments drift as though gravity has forgotten its direction.
+  const scraps = Array.from({ length: 3 }, (_, i) => {
+    const g = scene.add.graphics().fillStyle(0xe8d2ab, 0.7).beginPath()
+      .moveTo(-5, -7).lineTo(6, -6).lineTo(4, 8).lineTo(-6, 6).closePath().fillPath();
+    g.lineStyle(0.7, 0x9e835f, 0.6).lineBetween(-3, -2, 3, -2).lineBetween(-3, 1, 1, 1);
+    return g.setName(`void-paper-${i}`);
+  });
+  const pointer = { x: 0, y: 0, at: -10000 };
+  const respond = (p: Phaser.Input.Pointer) => {
+    if (query.matches || p.x >= viewWidth || p.y >= viewHeight) return;
+    pointer.x = p.x; pointer.y = p.y; pointer.at = scene.time.now;
   };
-  // A newly started scene's clock is populated on its first update, after create().
-  let start: number | undefined;
-  const paint = (t: number): void => {
-    const progress = animate && reveal ? Phaser.Math.Clamp(t / 1.6, 0, 1) : 1;
-    const surge = progress < 1 ? Math.sin(progress * Math.PI) ** 2 : 0;
-    const pull = (1 - progress) ** 3;
-    arrival[0]?.setDisplaySize(size * (3.8 - progress * 1.6), size * (2.8 - progress))
-      .setAlpha(surge * 0.85);
-    arrival[1]?.setDisplaySize(size * (0.4 + progress * 2.5), size * (0.4 + progress * 2.2))
-      .setAlpha(surge * 0.82);
-    const breath = 0.5 + 0.5 * Math.sin(t * 0.8);
-    compass.setPosition(x, y + Math.sin(t * 0.9) * 3);
-    compass.setAngle(-12);
-    needles.forEach((needle, index) => needle.setAngle((index === 0 ? -35 : 85)
-      + Math.sin(t * (index === 0 ? 1.7 : -1.3)) * 5 + Math.sin(t * 19 + index) * 0.6
-      + pull * (index === 0 ? 320 : -260)));
-    veils.forEach((veil, i) => {
-      veil.setPosition(x + Math.sin(t * 0.23 + i * 1.8) * size * 0.18,
-        y + (i - 1.5) * size * 0.36 + Math.sin(t * 0.38 + i) * size * 0.10)
-        .setAngle(-28 + i * 17 + Math.sin(t * 0.25 + i) * 8 + pull * (i % 2 ? -55 : 55))
-        .setDisplaySize(size * (1.8 + surge * 0.8), size * (0.65 + surge * 0.24))
-        .setAlpha(0.48 + 0.20 * Math.sin(t * 0.65 + i * 1.7) + surge * 0.3);
+  scene.input.on('pointermove', respond);
+  scene.input.on('pointerdown', respond);
+  const forget = () => { pointer.at = -10000; };
+  scene.input.on('gameout', forget);
+  let elapsed = 0;
+  let stopped = false;
+  const paint = (now: number) => {
+    const moving = animate && !query.matches;
+    const t = moving ? elapsed : 0;
+    const arrival = moving && reveal ? Phaser.Math.Clamp(t / 1.25, 0, 1) : 1;
+    suitcase.setY(moving ? Math.sin(t * 0.75) * 3 : 0).setAlpha(0.7 + arrival * 0.3);
+    needles.forEach((needle, i) => needle.setAngle((i ? 72 : -28)
+      + (moving ? Math.sin(t * (i ? -1.1 : 1.4)) * 26 + Math.sin(t * 0.37) * 48 : 0)));
+    manifestations.forEach((object, i) => object.setY((object.getData('origin-y') as number) - arrival * 22 - i * arrival * 4)
+      .setAlpha((1 - arrival) ** 1.1).setScale(1 - arrival * 0.35));
+    selections.forEach(o => o.setAlpha(0.4 * (1 - arrival)));
+    const response = moving ? Math.max(0, 1 - (now - pointer.at) / 1500) : 0;
+    mist.forEach((veil, i) => {
+      const bx = viewWidth * (0.10 + i % 3 * 0.35) + Math.sin(t * 0.14 + i) * viewWidth * 0.07;
+      const by = viewHeight * (0.10 + i * 0.13) + Math.sin(t * 0.24 + i * 1.7) * 13;
+      const dx = bx - pointer.x, dy = by - pointer.y;
+      const near = Math.max(0, 1 - Math.hypot(dx, dy) / (viewWidth * 0.42)) * response;
+      const distance = Math.max(1, Math.hypot(dx, dy));
+      veil.setPosition(bx + dx / distance * near * 58, by + dy / distance * near * 42)
+        .setAngle(-28 + i * 13 + Math.sin(t * 0.19 + i) * 8)
+        .setAlpha((0.12 + Math.sin(t * 0.5 + i) * 0.035) * (1 - near * 0.65));
     });
-    wisps.forEach((wisp, i) => wisp.setPosition(x + Math.sin(t * 0.3 + i * 2) * size * 0.16,
-      y + (i ? -0.32 : 0.32) * size + Math.sin(t * 0.5 + i) * size * 0.12)
-      .setAngle(i ? 23 + Math.sin(t * 0.35) * 9 : -19 + Math.cos(t * 0.3) * 8)
-      .setAlpha(0.26 + Math.sin(t * 0.7 + i * 2) * 0.12 + surge * 0.48));
     dust.forEach((mote, i) => {
-      const phase = (i * 0.6180339 + t * (0.028 + (i % 4) * 0.006)) % 1;
-      const lane = Math.sin(i * 7.13);
-      mote.setPosition(x + (phase - 0.5) * size * 1.5,
-        y + lane * size * 0.62 - Math.sin(phase * Math.PI) * size * 0.22)
-        .setAlpha(Math.sin(phase * Math.PI) ** 2 * (0.35 + 0.35 * Math.sin(t * 1.2 + i) ** 2));
-      if (progress < 1) {
-        const angle = i * 2.39996 + progress * 4.5;
-        const radius = size * (0.12 + (i % 7) * 0.12) * (1 - progress * 0.85);
-        const orbitX = x + Math.cos(angle) * radius;
-        const orbitY = y + Math.sin(angle) * radius * 0.7;
-        mote.setPosition(Phaser.Math.Linear(mote.x, orbitX, surge), Phaser.Math.Linear(mote.y, orbitY, surge))
-          .setAlpha(Math.max(mote.alpha, surge * (i % 4 === 0 ? 1 : 0.75)))
-          .setDisplaySize((i % 5 === 0 ? 11 : 5) * (1 + surge), (i % 5 === 0 ? 11 : 5) * (1 + surge));
-      } else mote.setDisplaySize(i % 5 === 0 ? 11 : 5, i % 5 === 0 ? 11 : 5);
+      const phase = (i * 0.618 + t * (0.014 + i % 3 * 0.004)) % 1;
+      const x = viewWidth * (0.07 + (i * 0.37) % 0.84);
+      const y = viewHeight * (1.05 - phase * 1.1);
+      const dissolving = i < 16 && elements && arrival < 1;
+      const slot = art.slots[i % 2]!;
+      mote.setPosition(dissolving ? slot.x + Math.sin(i * 2.4) * arrival * 60 : x + Math.sin(t * 0.6 + i) * 8,
+        dissolving ? slot.y - arrival * 85 + Math.cos(i * 2.4) * arrival * 22 : y)
+        .setAlpha(dissolving ? Math.sin(arrival * Math.PI) * 0.8 : Math.sin(phase * Math.PI) ** 2 * 0.55);
     });
-    drawReflection(t);
-    reflection.setAlpha(0.5 + breath * 0.5);
+    trail.forEach((mote, i) => mote.setPosition(pointer.x + Math.sin(t * 1.6 + i * 1.8) * (12 + i * 3),
+      pointer.y - i * 4 - (1 - response) * 18).setAlpha(response * (0.5 - i * 0.035)));
+    scraps.forEach((g, i) => {
+      const phase = (i * 0.31 + t * 0.022) % 1;
+      g.setPosition(viewWidth * (0.14 + i * 0.31) + Math.sin(t * 0.21 + i) * 17,
+        viewHeight * (1.12 - phase * 1.3)).setAngle(-18 + Math.sin(t * 0.34 + i) * 24)
+        .setAlpha(Math.sin(phase * Math.PI) ** 2 * 0.55);
+    });
   };
-  paint(0);
-  if (!animate) {
-    compass.setPosition(x, y).setAngle(-12);
-    needles.forEach((needle, index) => needle.setAngle(index === 0 ? -35 : 85));
-    return undefined;
-  }
-  const update = (): void => {
-    start ??= scene.time.now;
-    paint((scene.time.now - start) / 1000);
-  };
-  scene.events.on(Phaser.Scenes.Events.UPDATE, update);
-  return () => {
+  const update = (_time: number, delta: number) => { elapsed += Math.min(delta, 100) / 1000; paint(scene.time.now); };
+  const onPreference = () => { forget(); paint(scene.time.now); };
+  if (animate) scene.events.on(Phaser.Scenes.Events.UPDATE, update);
+  query.addEventListener('change', onPreference);
+  paint(scene.time.now);
+  const dispose = () => {
+    if (stopped) return; stopped = true;
     scene.events.off(Phaser.Scenes.Events.UPDATE, update);
-    compass.setPosition(x, y).setAngle(-12);
-    needles.forEach((needle, index) => needle.setAngle(index === 0 ? -35 : 85));
+    scene.input.off('pointermove', respond); scene.input.off('pointerdown', respond); scene.input.off('gameout', forget);
+    query.removeEventListener('change', onPreference); scene.events.off('shutdown', dispose);
   };
+  scene.events.once('shutdown', dispose);
+  return dispose;
 }

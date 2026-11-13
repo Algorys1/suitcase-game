@@ -125,8 +125,8 @@ export function mapDeparture(w: number, h: number, session: SessionState) {
 }
 
 /** Soft vignettes use the existing illustration, without altering its source file. */
-function vignette(scene: Phaser.Scene, id: string): string | undefined {
-  const sourceKey = worldTexture(scene, id);
+function vignette(scene: Phaser.Scene, id: string | null): string | undefined {
+  const sourceKey = id === null ? 'void-space' : worldTexture(scene, id);
   const state = (id === 'vestiges_celestes' || id === 'mer_figee' || id === 'jungle_incandescente' || id === 'jardins_de_gemmes' || id === 'empire_des_sables' || id === 'faille_des_contraires' || id === 'observatoire_des_etoiles') ? `-${progressStore.explorationSteps(id).join('-')}` : '';
   const key = `map-vignette-${id}-${sourceKey}${state}`;
   if (scene.textures.exists(key)) return key;
@@ -138,6 +138,17 @@ function vignette(scene: Phaser.Scene, id: string): string | undefined {
   if (!context) return undefined;
   context.drawImage(frame.source.image as CanvasImageSource, frame.cutX, frame.cutY,
     frame.cutWidth, frame.cutHeight, 0, 22, 256, 206);
+  if (id === null && scene.textures.exists('preparation-suitcase_compass')) {
+    const suitcase = scene.textures.getFrame('preparation-suitcase_compass', '__BASE');
+    const width = 112, height = width * suitcase.cutHeight / suitcase.cutWidth;
+    context.drawImage(suitcase.source.image as CanvasImageSource, suitcase.cutX, suitcase.cutY,
+      suitcase.cutWidth, suitcase.cutHeight, 128 - width / 2, 128 - height / 2, width, height);
+    context.strokeStyle = '#f8dfab'; context.lineWidth = 1.6;
+    for (const [x, y] of [[56, 83], [193, 147], [169, 58]]) {
+      context.beginPath(); context.moveTo(x! - 3, y!); context.lineTo(x! + 3, y!);
+      context.moveTo(x!, y! - 4); context.lineTo(x!, y! + 4); context.stroke();
+    }
+  }
   context.globalCompositeOperation = 'destination-in';
   const mist = context.createRadialGradient(128, 128, 65, 128, 128, 127);
   mist.addColorStop(0, '#fff'); mist.addColorStop(0.56, '#fff'); mist.addColorStop(1, '#fff0');
@@ -274,11 +285,13 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
       return;
     }
     if (id === null) {
-      const fog = scene.add.graphics().fillStyle(0x8f859d, 0.09);
-      for (let i = 3; i > 0; i--) fog.fillEllipse(point.x, point.y, size * i * 0.32, size * i * 0.16);
-      mapText(scene, point.x, point.y, '∅', 26, size, '#918399');
-      mapText(scene, point.x, point.y + size * (portrait ? 0.22 : 0.38), portrait ? copy.voidShort : copy.void,
-        portrait || short ? 9 : 11, size + 13);
+      const key = vignette(scene, null);
+      if (key) {
+        const art = scene.add.image(point.x, point.y, key).setDisplaySize(size, size).setName(`map-void-art-${index}`);
+        if (motion && index === route.length - 1) scene.tweens.add({ targets: art,
+          alpha: { from: 0, to: 1 }, duration: 450 });
+      }
+      captions.push({ x: point.x, y: point.y, text: copy.voidShort, index });
       return;
     }
     const elements = destinationById(id)?.elements;

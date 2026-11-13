@@ -195,7 +195,7 @@ export class PreparationScene extends Phaser.Scene {
     }
     const showResult = () => {
       this.departure = null;
-      this.scene.start('result', { session: revealResult(this.session) });
+      this.scene.start('result', { session: revealResult(this.session), voidElements: this.slots });
     };
     if (reducedMotion()) { showResult(); return; }
     this.departure = playSuitcaseDeparture(this, this.suitcaseLayout, this.caseParts, this.lidParts,

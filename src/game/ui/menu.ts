@@ -508,24 +508,44 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
       stopReveal = drawVoid(scene, !motion.matches, firstRender);
       const { width, height } = scene.scale;
       const portrait = width < 600 && height > width;
-      const center = width * (portrait ? 0.5 : 0.77);
-      const textWidth = portrait ? width - 56 : width * 0.34;
-      const top = height * (portrait ? 0.52 : 0.16);
+      const left = portrait ? 16 : width * 0.61;
+      const noteTop = portrait ? height * 0.51 : Math.max(16, height * 0.10);
+      const noteWidth = portrait ? width - 32 : width * 0.36;
+      const noteHeight = height - noteTop - (portrait ? 18 : noteTop);
+      const center = left + noteWidth / 2, textWidth = noteWidth - 32;
+      const paper = scene.add.graphics().setName('void-travel-note');
+      const path = (dy: number) => {
+        paper.beginPath().moveTo(left + 4, noteTop + dy);
+        for (let i = 1; i <= 24; i++) paper.lineTo(left + noteWidth * i / 24,
+          noteTop + dy + Math.sin(i * 3.7) * 1.7);
+        paper.lineTo(left + noteWidth - 2, noteTop + noteHeight + dy);
+        for (let i = 24; i >= 0; i--) paper.lineTo(left + noteWidth * i / 24,
+          noteTop + noteHeight + dy + Math.cos(i * 4.1) * 1.9);
+        paper.closePath();
+      };
+      paper.fillStyle(0x080d23, 0.3); path(6); paper.fillPath();
+      paper.fillStyle(0xf6e7c9).lineStyle(1, 0xb09568, 0.75); path(0); paper.fillPath().strokePath();
+      for (let i = 0; i < 110; i++) paper.fillStyle(0x927147, 0.10)
+        .fillCircle(left + 8 + i * 43 % (noteWidth - 16), noteTop + 8 + i * 29 % (noteHeight - 16), 0.6);
+      paper.fillStyle(0xd6bd8d, 0.6).fillTriangle(left + noteWidth - 23, noteTop + noteHeight,
+        left + noteWidth, noteTop + noteHeight - 22, left + noteWidth, noteTop + noteHeight);
       const small = height < 450 || width < 400;
-      const words = (y: number, text: string, size: number, name: string, color = '#fff4df') =>
-        scene.add.text(center, y, text, { resolution: 2, fontFamily, fontSize: size, color, align: 'center',
+      const words = (y: number, text: string, size: number, name: string, color = '#63472f') =>
+        scene.add.text(center, y, text, { resolution: 2, fontFamily: '"Travel Serif", Georgia, serif', fontSize: size, color, align: 'center',
           wordWrap: { width: textWidth, useAdvancedWrap: true } }).setOrigin(0.5, 0).setPadding(2).setName(name);
-      const title = words(top, content.title, small ? 28 : 40, 'menu-title');
-      title.setFontFamily('Georgia, serif');
-      const story = words(title.y + title.height + (small ? 10 : 20), content.description,
+      words(noteTop + 16, getTexts().journey.voidEyebrow, small ? 9 : 10, 'void-eyebrow', '#9b784a').setLetterSpacing(1.3);
+      const title = words(noteTop + (small ? 36 : 53), content.title, small ? 30 : 42, 'menu-title');
+      const story = words(title.y + title.height + (small ? 12 : 24), content.description,
         small ? 15 : 19, 'menu-description');
-      const cost = words(story.y + story.height + (small ? 12 : 24), content.detail ?? '',
-        small ? 13 : 16, 'void-cost', '#bde8e8');
+      const buttonY = noteTop + noteHeight - 35;
+      let storySize = small ? 15 : 19;
+      while (story.y + story.height + 53 > buttonY - 23 && storySize > 12) story.setFontSize(--storySize);
+      words(story.y + story.height + (small ? 12 : 20), content.detail ?? '',
+        small ? 13 : 15, 'void-cost', '#896339');
       const button = content.buttons[0];
-      if (button) createButton(scene, center, Math.max(cost.y + cost.height + 32,
-        height * (portrait ? 0.89 : 0.76)), Math.min(textWidth, 300), 46,
-        { ...button, focused: focusIndex === 0, stationery: true, fontSize: small ? 16 : 18 });
-      if (content.footer) words(height - 26, content.footer, 11, 'void-footer');
+      if (button) createButton(scene, center, buttonY, Math.min(textWidth, 280), 44,
+        { ...button, focused: focusIndex === 0, stationery: true, fontSize: small ? 14 : 16 });
+      if (content.footer) words(height - 26, content.footer, 11, 'void-footer', '#fff4df');
       firstRender = false;
       return;
     }

@@ -75,6 +75,7 @@ export function drawCompass(
   slots: Slots, active: SlotIndex, names: Record<ElementId, { name: string }>,
   interaction: {
     embedded?: boolean;
+    decorative?: boolean;
     disabled: boolean;
     charged: boolean;
     dragAngle: number | null;
@@ -134,7 +135,7 @@ export function drawCompass(
       engravings.fillStyle(0xfff3b5, alpha).fillCircle(x, y, radius * scale);
     }
   }
-  const iconSize = Math.max(28, Math.min(48, radius * 0.32));
+  const iconSize = interaction.decorative ? Math.min(48, radius * 0.32) : Math.max(28, Math.min(48, radius * 0.32));
   compassElements.forEach(id => {
     const angle = Phaser.Math.DegToRad(compassAngle(id) - 90);
     const sx = x + Math.cos(angle) * radius * 0.76;

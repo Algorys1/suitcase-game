@@ -72,6 +72,8 @@ Les catalogues `src/data/elements.json`, `src/data/destinations.json` et `src/da
 
 ## Prochaines étapes
 
+- Essayer le [Néant entre deux mondes](docs/VOID_BETWEEN_WORLDS.md), sa brume réactive et la valise-boussole suspendue.
+
 - Essayer la valise-boussole et sa nouvelle animation au clic sur Voyager.
 
 - Essayer la [longue-vue de voyage](docs/TRAVEL_SPYGLASS.md), qui remplace le bouton « Explorer » sur les arrivées et les fiches du carnet. La présentation du [tutoriel](docs/TUTORIAL.md) est retenue ; le playtest global reste ouvert.

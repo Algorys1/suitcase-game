@@ -164,7 +164,8 @@
     "summaryMemories": "Souvenirs de voyage",
     "summaryPlaces": "{count} lieux uniques visités",
     "summaryDiscoveries": "{count} nouvelles découvertes",
-    "summaryVoid": "{count} passage(s) dans le Néant"
+    "summaryVoid": "{count} passage(s) dans le Néant",
+    "voidEyebrow": "ENTRE DEUX MONDES"
   },
   "destinations": {
     "archipel_azur": {

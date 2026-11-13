@@ -12,6 +12,7 @@ import { drawDestinationStage } from '../ui/destinationStage';
 import { destinationTravelTip, needsTravelTip } from '../ui/travelTutorial';
 import { drawSouvenir } from '../ui/souvenir';
 import { drawTravelSpyglass, preloadTravelSpyglass } from '../ui/travelSpyglass';
+import type { Slots } from '../../domain/preparation';
 
 export class ResultScene extends Phaser.Scene {
   constructor() { super('result'); }
@@ -25,13 +26,15 @@ export class ResultScene extends Phaser.Scene {
     if (session?.lastTrip?.destinationId === null) queueVoidAssets(this);
   }
 
-  create({ session }: { session?: SessionState } = {}): void {
+  create({ session, voidElements }: { session?: SessionState; voidElements?: Slots } = {}): void {
     if (!finishSceneLoading(this)) return;
     const texts = getTexts();
     const trip = session?.lastTrip;
     if (!session || session.phase !== 'result' || !trip) { this.scene.start('home'); return; }
     progressStore.saveSession(session);
     if (trip.destinationId) { this.showDestination(session, trip.destinationId); return; }
+    this.data.set('void-elements', voidElements);
+    this.data.set('void-charges', session.charges);
     const cost = texts.journey.cost.replace('{cost}', String(trip.cost))
       .replace('{charges}', String(session.charges)).replace('{max}', String(BALANCE.initialCharges));
     this.cameras.main.setBackgroundColor('#24243e');

@@ -55,6 +55,14 @@ export function queueWorldAssets(scene: Phaser.Scene, ids: readonly string[], ma
   preloadPostcards(scene, ids);
   preloadSouvenirs(scene, ids);
   preloadAdventureArt(scene, ids, map);
+  if (map) {
+    const session = (scene.sys.settings.data as { session?: SessionState } | undefined)?.session
+      ?? progressStore.read().expedition;
+    if (session?.voidTrips && !scene.textures.exists('void-space')) scene.load.image('void-space',
+      `${import.meta.env.BASE_URL}assets/void/space.webp`);
+    if (session?.voidTrips && !scene.textures.exists('preparation-suitcase_compass')) scene.load.image('preparation-suitcase_compass',
+      `${import.meta.env.BASE_URL}assets/preparation/suitcase_compass.webp`);
+  }
   if (map && ids.length) preloadElementArt(scene,
     [...new Set(ids.flatMap(id => destinationById(id)?.elements ?? []))]);
 }
@@ -69,6 +77,5 @@ export function sceneWorldIds(scene: Phaser.Scene, includeRoute = false): readon
 
 export function queueVoidAssets(scene: Phaser.Scene): void {
   if (!scene.textures.exists('void-space')) scene.load.image('void-space', `${import.meta.env.BASE_URL}assets/void/space.webp`);
-  if (!scene.textures.exists('preparation-compass_dial')) scene.load.image('preparation-compass_dial',
-    `${import.meta.env.BASE_URL}assets/preparation/compass_dial.webp`);
+  preloadPreparationArt(scene);
 }

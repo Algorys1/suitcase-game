@@ -14,6 +14,7 @@ import { progressStore } from '../../services/storage';
 import { drawManifestation, drawSuitcaseCompass, drawSuitcaseInstruction, drawSuitcaseCharges } from '../ui/suitcaseCompass';
 import { drawAdventureMap, mapDeparture, reducedMotion } from '../ui/adventureMap';
 import { arriveObjects } from '../ui/travelMotion';
+import { drawTravelNote, needsTravelTip } from '../ui/travelTutorial';
 import { playSuitcaseDeparture } from '../ui/suitcaseDeparture';
 
 type Control = { name: string; action: () => void };
@@ -22,6 +23,8 @@ export class PreparationScene extends Phaser.Scene {
   private slots: Slots = initialCompassSelection();
   private activeNeedle: SlotIndex = 0;
   private message = '';
+  private gestureHelp = false;
+  private lastTip = '';
   private focusName: string | null = null;
   private controls: Control[] = [];
   private session: SessionState = createSession();
@@ -56,6 +59,8 @@ export class PreparationScene extends Phaser.Scene {
     this.slots = initialCompassSelection();
     this.activeNeedle = 0;
     this.message = '';
+    this.gestureHelp = false;
+    this.lastTip = '';
     this.mapBackground = null;
     this.departure = null;
     this.focusName = null;
@@ -177,6 +182,8 @@ export class PreparationScene extends Phaser.Scene {
     const before = this.session.charges;
     const next = beginTravel(this.session, this.slots, progressStore.read().discoveredDestinationIds);
     if (next === this.session) return;
+    progressStore.acknowledgeTutorial('needles');
+    progressStore.acknowledgeTutorial('energy');
     this.session = next;
     progressStore.saveSession(next);
     this.input.enabled = false;
@@ -262,6 +269,7 @@ export class PreparationScene extends Phaser.Scene {
     const landscape = width >= 760 || (width >= 600 && height < 450);
     const short = height < 450;
     const ready = isReady(this.slots);
+    if (ready && !this.drag && needsTravelTip('needles')) progressStore.acknowledgeTutorial('needles');
     const status = this.message || (ready ? copy.ready : compassCopy.duplicate);
     if (this.mapBackground && this.mapBackground.getData('viewport') !== `${width}x${height}`) {
       this.mapBackground.destroy();
@@ -289,7 +297,7 @@ export class PreparationScene extends Phaser.Scene {
     this.add.rectangle(width / 2, height / 2, width, height, 0x30281f, 0.14).setName('preparation-scrim');
 
     const caseTop = 12;
-    const maxHeight = height - (landscape ? 76 : 200);
+    const maxHeight = height - (landscape ? 76 : 216);
     const suitcaseStart = this.children.length;
     const art = drawSuitcaseCompass(this, width / 2, caseTop, width - 36, maxHeight);
     this.suitcaseLayout = art;
@@ -315,8 +323,20 @@ export class PreparationScene extends Phaser.Scene {
       });
     }
     drawSuitcaseCharges(this, art, this.session.charges);
-    drawSuitcaseInstruction(this, art, compassCopy.instructions);
-    this.caseParts = this.children.getAll().slice(suitcaseStart);
+    const tip = this.gestureHelp ? 'gestures' : ready ? 'energy' : 'needles';
+    const showTip = this.gestureHelp || needsTravelTip(tip as 'energy' | 'needles');
+    if (showTip) {
+      const noteWidth = landscape ? Math.max(130, Math.min(240, (width - art.width) / 2 - 24)) : Math.min(360, width - 28);
+      const noteX = landscape ? (width - art.width) / 4 : width / 2;
+      const noteTop = landscape ? Math.max(24, height * 0.34 - 45) : art.top + art.height + 8;
+      drawTravelNote(this, tip, () => { this.gestureHelp = false; this.render(); }, {
+        x: noteX, top: noteTop, width: noteWidth, height: landscape ? Math.min(222, height - noteTop - 64) : height - noteTop - 94,
+        animate: this.lastTip !== tip && !this.drag,
+        button: (name, label, x, y, w, action) => this.button(x, y, w, { name, label, action, textOnly: true, fontSize: w < 110 ? 10 : 12 }),
+      });
+      this.lastTip = tip;
+    } else drawSuitcaseInstruction(this, art, compassCopy.instructions);
+    this.caseParts = this.children.getAll().slice(suitcaseStart).filter(child => !child.getData('travel-note'));
 
     const sideWidth = Math.max(110, Math.min(220, (width - art.width) / 2 - 28));
     const statusX = landscape ? width - (width - art.width) / 4 : width / 2;
@@ -333,11 +353,15 @@ export class PreparationScene extends Phaser.Scene {
       name: 'travel', label: copy.travel, fontSize: landscape ? 18 : 16, primary: true, disabled: !ready,
       action: () => this.depart(),
     });
+    this.button(landscape ? statusX : width / 2, landscape ? statusY + 74 : height - 65, landscape ? sideWidth : 170, {
+      name: 'gesture-help', label: texts.tutorial.commands, textOnly: true, fontSize: 12,
+      action: () => { this.gestureHelp = !this.gestureHelp; this.render(); },
+    });
     const charges = texts.journey.charges.replace('{charges}', String(this.session.charges))
       .replace('{max}', String(BALANCE.initialCharges));
     this.game.canvas.setAttribute('aria-description', [charges, ...this.slots.map((id, index) =>
       compassCopy.needle.replace('{number}', String(index + 1)) + ': ' + (id ? texts.elements[id].name : copy.empty)),
-      status, compassCopy.keyboard].join('. '));
+      status, compassCopy.keyboard, ...(showTip ? [texts.tutorial[tip]] : [])].join('. '));
   }
 
   private animateInstruments(reverse: boolean): void {

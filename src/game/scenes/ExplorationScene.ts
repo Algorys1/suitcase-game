@@ -17,7 +17,7 @@ import { AdventureControls, mapText, reducedMotion } from '../ui/adventureMap';
 import { drawDestinationStage } from '../ui/destinationStage';
 import { drawSouvenir } from '../ui/souvenir';
 import { drawCimesSunrise, drawMyceliaLife } from '../ui/pilotWorlds';
-import { travelTutorial } from '../ui/travelTutorial';
+import { destinationTravelTip } from '../ui/travelTutorial';
 import { addArchipelagoReflections, gatherArchipelagoLight } from '../ui/archipelagoReflections';
 import { addRuinsFish } from '../ui/ruinsFish';
 import { addBraiseColumns } from '../ui/braiseColumns';
@@ -127,8 +127,12 @@ export class ExplorationScene extends Phaser.Scene {
     this.souvenirArrival = (id === 'archipel_azur' || id === 'cimes_eternelles'
       || id === 'ruines_englouties' || id === 'coeur_de_braise' || id === 'iles_suspendues'
       || id === 'marais_des_lucioles' || id === 'desert_de_cristal' || id === 'palais_de_givre' || id === 'temple_oublie' || id === 'ile_des_cendres' || id === 'grottes_sporiferes' || id === 'canopee_des_brumes' || id === 'recif_de_verre' || id === 'jardins_du_zenith' || id === 'cite_immobile' || id === 'sylve_prismatique' || id === 'necropole_ardente' || id === 'foret_du_silence') && result.collected;
+    if (result.collected && id === 'mycelia') this.justFound = false;
     this.render();
-    if (result.collected && id === 'mycelia') this.collectSouvenir(x, y);
+    if (result.collected && id === 'mycelia') this.collectSouvenir(x, y, () => {
+      this.justFound = true;
+      this.render();
+    });
     if (id === 'mycelia' && !result.activated && !reducedMotion()) {
       const window = this.children.getByName(`mycelia-window-${index}`) as Phaser.GameObjects.Image | null;
       if (window) this.tweens.add({ targets: window, alpha: { from: 0.45, to: 1 }, duration: 240 });
@@ -154,7 +158,8 @@ export class ExplorationScene extends Phaser.Scene {
     const found = earned && (this.reflectionReplay === undefined || complete);
     const souvenir = souvenirs.find(entry => entry.destinationId === this.id);
     const stage = drawDestinationStage(this, this.id, this.session,
-      this.enter && !isPilot(this.id) && this.id !== 'archipel_azur' && this.id !== 'ruines_englouties');
+      this.enter && !isPilot(this.id) && this.id !== 'archipel_azur' && this.id !== 'ruines_englouties',
+      !found ? 'exploration' : this.justFound && !souvenirArrival ? 'souvenir' : undefined);
     this.enter = false;
     const { left, top, width: artW, height: artH } = stage.art;
     const { sideX, sideW, stickerY: tagY, portrait, short } = stage;
@@ -410,6 +415,7 @@ export class ExplorationScene extends Phaser.Scene {
       const parts = drawSouvenir(this, souvenir, sideX, tagY - tagHeight / 2, sideW, tagHeight,
         this.justFound, !found || this.souvenirInFlight);
       parts.find(object => object.name === `souvenir-${this.id}`)?.setName('exploration-sticker');
+      parts.forEach(part => part.setData('souvenir-part', true));
       parts.find(object => object.name === 'souvenir-name')?.setName('exploration-souvenir-name');
     }
     if (canOffer) {
@@ -524,8 +530,8 @@ export class ExplorationScene extends Phaser.Scene {
           this.collectSouvenir(left + artW * 0.13, top + artH * 0.25, () => this.render()) });
       }
     } else if (this.reflectionReplay === undefined) {
-      if (!found) travelTutorial(this, this.controls, 'exploration', () => this.render());
-      else if (this.justFound) travelTutorial(this, this.controls, 'souvenir', () => this.render());
+      if (!found) destinationTravelTip(this, this.controls, 'exploration', stage, () => this.render());
+      else if (this.justFound) destinationTravelTip(this, this.controls, 'souvenir', stage, () => this.render());
     }
   }
 

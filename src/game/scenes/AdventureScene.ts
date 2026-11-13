@@ -6,7 +6,7 @@ import { progressStore } from '../../services/storage';
 import { getTexts } from '../../services/i18n';
 import { AdventureControls, drawAdventureMap, mapText, mapInstruments } from '../ui/adventureMap';
 import { approachJournal } from '../ui/notebookMotion';
-import { travelTutorial } from '../ui/travelTutorial';
+import { drawTravelNote, needsTravelTip } from '../ui/travelTutorial';
 
 export class AdventureScene extends Phaser.Scene {
   private session: SessionState = createSession();
@@ -39,6 +39,7 @@ export class AdventureScene extends Phaser.Scene {
     const copy = getTexts().adventure;
     const { width, height } = this.scale;
     const depart = () => {
+      progressStore.acknowledgeTutorial('departure');
       if (this.session.charges > 0) this.scene.start('preparation', { session: this.session });
     };
     drawAdventureMap(this, this.session, this.controls,
@@ -58,9 +59,29 @@ export class AdventureScene extends Phaser.Scene {
       () => this.scene.start('summary', { session: this.session }));
     if (!progressStore.persistent) mapText(this, width / 2, width < 600 ? 194 : height - 58,
       getTexts().notebook.unavailable, 10, width - 36).setName('storage-warning');
-    const progress = progressStore.read();
-    if (progress.tutorialSeen?.includes('exploration') && progressStore.unlockedSouvenirIds().length)
-      travelTutorial(this, this.controls, 'souvenir', () => this.render());
-    else if (this.session.charges > 0) travelTutorial(this, this.controls, 'departure', () => this.render());
+    const step = this.session.charges === 0 ? 'exhausted' : 'departure';
+    if (needsTravelTip(step)) {
+      this.children.getByName('adventure-wish')?.destroy();
+      const portrait = width < 600, short = height < 450;
+      drawTravelNote(this, step, () => this.render(), {
+        x: portrait || step === 'exhausted' ? width / 2 : width * 0.66,
+        top: step === 'exhausted' ? (portrait ? 148 : short ? 86 : 102)
+          : portrait ? Math.min(300, height - 245) : short ? 158 : 194,
+        width: portrait ? width - 36 : Math.min(step === 'exhausted' && short ? 280 : 360, width - 300),
+        height: portrait ? 124 : 116,
+        button: (...args) => this.controls.button(...args),
+      });
+      const suitcase = this.children.getByName('next-suitcase-art') as Phaser.GameObjects.Image | null;
+      if (suitcase) {
+        const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const y = suitcase.y;
+        const motion = query.matches ? undefined : this.tweens.add({ targets: suitcase,
+          y: y - 2, angle: { from: -0.8, to: 0.8 }, duration: 1600,
+          yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+        const stop = () => { motion?.stop(); suitcase.setY(y).setAngle(0); };
+        query.addEventListener('change', stop);
+        suitcase.once('destroy', () => { motion?.stop(); query.removeEventListener('change', stop); });
+      }
+    }
   }
 }

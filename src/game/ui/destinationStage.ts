@@ -1,3 +1,5 @@
+import { needsTravelTip } from './travelTutorial';
+import type { TutorialStep } from '../../services/storage';
 import { drawLensTwinkle } from './observatoryLens';
 import { drawRiftSteam } from './riftBasalt';
 import { drawEmpireSmoke } from './empireLamp';
@@ -27,7 +29,7 @@ import { drawVestigesMist } from './vestigesMist';
 
 /** Shared framing keeps the landscape in place when the player chooses to explore. */
 export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: SessionState,
-  enter = false) {
+  enter = false, tip?: TutorialStep) {
   const { width: w, height: h } = scene.scale;
   const portrait = w < 600, short = h < 450;
   if (session) drawAdventureMap(scene, session);
@@ -52,7 +54,10 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
     .setFontFamily('Georgia, serif').setName('menu-title');
   const artTop = portrait ? Math.max(104, title.y + title.height / 2 + 15) : short ? 38 : 60;
   const artAreaW = portrait ? w - 44 : w * 0.615 - 28;
-  const artAreaH = portrait ? Math.max(80, h - artTop - 264) : h - artTop - (short ? 38 : 53);
+  const hasNote = tip !== undefined && needsTravelTip(tip);
+  const noteSpace = hasNote ? (portrait ? 65 : 150) : 0;
+  const artAreaH = portrait ? Math.max(55, h - artTop - 264 - noteSpace)
+    : h - artTop - (short ? 38 : 53) - noteSpace;
   const key = worldTexture(scene, id);
   let artW = artAreaW, artH = Math.min(artAreaH, artW * 0.75);
   if (scene.textures.exists(key)) {
@@ -61,7 +66,7 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
     artW = frame.width * scale; artH = frame.height * scale;
   }
   const artX = portrait ? w / 2 - 2 : w * 0.315;
-  const artY = portrait ? artTop + artH / 2 : h / 2;
+  const artY = portrait ? artTop + artH / 2 : (h - noteSpace) / 2;
   const artLeft = artX - artW / 2, artUpper = artY - artH / 2;
   const frame = scene.add.graphics().setName('arrival-photo-paper');
   frame.fillStyle(0x382e28, 0.17).fillRoundedRect(artLeft - 8, artUpper - 3, artW + 20, artH + 22, 4);

@@ -8,7 +8,7 @@ import type { SanctuaryPuzzle } from '../domain/sanctuaryPuzzle';
 
 export const PROGRESS_KEY = 'suitcase-game.progress.v1';
 export type Language = 'fr' | 'en';
-export const tutorialSteps = ['departure', 'exploration', 'souvenir'] as const;
+export const tutorialSteps = ['departure', 'needles', 'energy', 'arrival', 'exploration', 'souvenir', 'exhausted'] as const;
 export type TutorialStep = typeof tutorialSteps[number];
 export type Progress = {
   schemaVersion: 1;

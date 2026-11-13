@@ -16,12 +16,14 @@ Ce bilan décrit le prototype présent dans le dépôt. Il distingue l’implém
 - 30 illustrations, 30 histoires FR/EN et 30 autocollants souvenirs intégrés ; une activité locale implémentée pour chacune des 30 destinations.
 - Découverte du monde dès l’arrivée, puis collecte du nouveau souvenir à la résolution de son activité. Exploration facultative, sans coût supplémentaire ; étapes partielles sauvegardées, anciens souvenirs conservés. Avant collecte, le souvenir et son nom restent masqués, y compris dans le carnet.
 - Première correspondance Cimes → Mycélia : offrir la clochette réveille le lieu sans consommer le souvenir, sans remplacer l’activité locale ni modifier charges ou recettes.
-- Carnet permanent accessible depuis l’accueil et la carte ; trois conseils contextuels FR/EN passables, acquittés en sauvegarde et relisibles depuis le carnet.
+- Carnet permanent accessible depuis l’accueil et la carte ; premier voyage accompagné FR/EN : notes contextuelles animées, aide aux aiguilles et guide à quatre onglets dans le carnet. Les conseils restent passables et mémorisés ; voir [TUTORIAL.md](TUTORIAL.md).
 - Paramètres FR/EN, reset avec confirmation, repli en mémoire lorsque le stockage est indisponible, prise en compte du mouvement réduit.
 
 Les fonctions et champs nommés `pilot` dans le code couvrent désormais les 30 activités ; ce nom technique ne signifie plus que seuls deux ou trois lieux sont jouables.
 
 ## Validations et preuves disponibles
+
+- Tutoriel accompagné : notes non modales, mini-valise et croquis animés, aide aux aiguilles et guide à quatre onglets intégrés. TypeScript/build et 162 tests réussis ; parcours Chrome FR/EN en quatre formats, toucher simulé, clavier, premier souvenir, mouvement réduit, relecture, reprise et zéro charge vérifiés sans erreur JavaScript/HTTP. Captures inspectées ; voir [TUTORIAL.md](TUTORIAL.md). Après essai, le joueur valide la présentation finale des feuillets : titre brun tamponné, attache en laiton et marge haute corrigée. Le playtest global reste ouvert.
 
 - Dernière passe valise-boussole : corde tressée, cellules métalliques dans la doublure, retrait de la liste, flou du fond et départ de 1,9 seconde intégrés. 161 tests, TypeScript et build réussis. Chrome sous `/jam/` en quatre formats FR/EN, souris/toucher simulé : séquence, clavier, débit unique, interruptions, mouvement réduit et dernier voyage à zéro contrôlés ; captures inspectées, aucune erreur JavaScript/HTTP. Voir [la dernière vérification](SUITCASE_COMPASS.md#dernière-passe--corde-métal-flou-et-départ). Le rendu reste à essayer par le joueur.
 
@@ -34,7 +36,7 @@ Les fonctions et champs nommés `pilot` dans le code couvrent désormais les 30 
 
 ## Travaux avant publication finale
 
-1. Mettre à jour le ZIP itch.io avec le correctif du deuxième voyage, les icônes cartoon, le chargement progressif et les textes plus nets ; faire un court essai de deux voyages. Ensuite, reprendre le tutoriel dans son contenu et sa présentation : les trois conseils actuels ne sont pas finalisés. Remplacer le bouton texte « Explorer », jugé générique, par une loupe ou une longue-vue en haut de la carte : objet, position et animation restent à définir. La validation visuelle du bilan illustré reste également à consigner.
+1. Mettre à jour le ZIP itch.io avec le correctif du deuxième voyage, les icônes cartoon, le chargement progressif et les textes plus nets ; faire un court essai de deux voyages. La refonte du tutoriel est intégrée et reste à essayer par le joueur : notes de voyage contextuelles, gestes, charges et guide relisible ; voir [TUTORIAL.md](TUTORIAL.md). Remplacer le bouton texte « Explorer », jugé générique, par une loupe ou une longue-vue en haut de la carte : objet, position et animation restent à définir. La validation visuelle du bilan illustré reste également à consigner.
 2. Playtest d’ensemble : compréhension de la carte, aiguilles, tutoriel, carnet, découverte des interactions sans solution écrite, rythme et envie de repartir. Relecture éditoriale FR/EN ; ne pas assimiler validation d’un geste et validation de tous les textes.
 3. Mesurer l’équilibrage 10 / 1 / 2 et ajuster seulement après retour. Ne pas ajouter de recharge ou de ressource supplémentaire.
 4. Habillage sonore et commande de coupure : l’audio est actuellement désactivé (`audio.noAudio` dans `src/game/config.ts`), aucun asset sonore n’est distribué.

@@ -9,6 +9,7 @@ import { progressStore } from '../../services/storage';
 import { souvenirForDestination } from '../../domain/souvenirs';
 import { AdventureControls, mapText } from '../ui/adventureMap';
 import { drawDestinationStage } from '../ui/destinationStage';
+import { destinationTravelTip, needsTravelTip } from '../ui/travelTutorial';
 import { drawSouvenir } from '../ui/souvenir';
 
 export class ResultScene extends Phaser.Scene {
@@ -61,7 +62,7 @@ export class ResultScene extends Phaser.Scene {
       this.tweens.killAll();
       this.children.getAll().forEach(child => child.destroy());
       controls.clear();
-      const stage = drawDestinationStage(this, id, session, first);
+      const stage = drawDestinationStage(this, id, session, first, 'arrival');
       first = false;
       const texts = getTexts();
       const { sideX: x, sideW: w, bodyY, stickerY, portrait, short } = stage;
@@ -72,17 +73,19 @@ export class ResultScene extends Phaser.Scene {
       if (short) story.setLineSpacing(-1);
       let size = portrait || short ? 13 : 15;
       const tagHeight = portrait ? 92 : short ? 84 : 104;
-      while (story.height > stickerY - tagHeight / 2 - 12 - story.y && size > 10) story.setFontSize(--size);
+      const storyBottom = portrait && needsTravelTip('arrival') ? this.scale.height - 195 : stickerY - tagHeight / 2 - 12;
+      while (story.height > storyBottom - story.y && size > 10) story.setFontSize(--size);
       const souvenir = souvenirForDestination(id, progressStore.read().discoveredDestinationIds);
       const locked = !progressStore.unlockedSouvenirIds().includes(id);
       if (souvenir) drawSouvenir(this, souvenir, x, stickerY - tagHeight / 2, w, tagHeight,
-        session.lastTrip?.isNewDiscovery ?? false, locked);
+        session.lastTrip?.isNewDiscovery ?? false, locked).forEach(part => part.setData('souvenir-part', true));
       const paired = portrait || short;
       const buttonWidth = paired ? (w - 8) / 2 : Math.min(215, w - 18);
       controls.button('explore', texts.adventure.exploreShort, paired ? x - (buttonWidth + 8) / 2 : x,
         stage.primaryY, buttonWidth, () => leave(true), true);
       controls.button('continue', short ? texts.adventure.mapShort : texts.adventure.continueMap, paired ? x + (buttonWidth + 8) / 2 : x,
         stage.secondaryY, buttonWidth, () => leave(false));
+      destinationTravelTip(this, controls, 'arrival', stage, render);
       this.game.canvas.setAttribute('aria-label', getDestinationTexts(id)?.title ?? texts.title);
       if (!progressStore.persistent) mapText(this, this.scale.width / 2, this.scale.height - 16,
         texts.notebook.unavailable, 9, this.scale.width - 30);

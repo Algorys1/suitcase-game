@@ -88,8 +88,10 @@ export function mapRouteLayout(w: number, h: number, session: SessionState) {
   const portrait = w < 600, short = h < 450;
   const route = sessionRoute(session);
   const count = route.length + (session.charges > 0 ? 1 : 0);
-  const top = portrait ? 223 : short ? 151 : 195;
-  const span = Math.max(portrait ? 150 : 85, h - (portrait ? 130 : short ? 110 : 160) - top);
+  const endNote = session.charges === 0 && !progressStore.read().tutorialSeen?.includes('exhausted');
+  const top = endNote ? (portrait ? 292 : short ? 216 : 260) : portrait ? 223 : short ? 151 : 195;
+  const span = Math.max(endNote ? (portrait ? 115 : 50) : portrait ? 150 : 85,
+    h - (portrait ? 130 : short ? 110 : 160) - top);
   const left = portrait ? 50 : 113, areaW = w - left * 2;
   const anchors = portrait
     ? [[0.02, 0.03], [0.50, 0.12], [0.98, 0.02], [0.96, 0.36], [0.48, 0.46], [0.02, 0.36], [0.04, 0.72], [0.50, 0.83], [0.96, 0.72], [0.27, 0.99]]

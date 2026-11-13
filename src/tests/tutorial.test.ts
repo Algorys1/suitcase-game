@@ -26,7 +26,7 @@ describe('conseils de voyage persistants', () => {
     const after = new ProgressStore(() => storage).read();
     expect(after).toEqual({ ...before, tutorialSeen: [...tutorialSteps] });
     after.tutorialSeen?.pop();
-    expect(store.read().tutorialSeen).toHaveLength(3);
+    expect(store.read().tutorialSeen).toHaveLength(tutorialSteps.length);
   });
 
   it('conserve les conseils en mémoire si le navigateur bloque le stockage', () => {
@@ -34,5 +34,19 @@ describe('conseils de voyage persistants', () => {
     store.acknowledgeTutorial('exploration');
     expect(store.read().tutorialSeen).toEqual(['exploration']);
     expect(store.persistent).toBe(false);
+  });
+
+  it('conserve les anciens conseils et mémorise les nouvelles étapes indépendamment', () => {
+    let value = JSON.stringify({ schemaVersion: 1, language: 'fr', discoveredDestinationIds: ['mycelia'],
+      tutorialSeen: ['departure', 'exploration', 'souvenir'] });
+    const storage = { getItem: () => value, setItem: (_key: string, next: string) => { value = next; } };
+    const store = new ProgressStore(() => storage);
+    store.acknowledgeTutorial('needles');
+    store.acknowledgeTutorial('energy');
+    const restored = new ProgressStore(() => storage).read();
+    expect(restored.tutorialSeen).toEqual(['departure', 'needles', 'energy', 'exploration', 'souvenir']);
+    expect(restored.discoveredDestinationIds).toEqual(['mycelia']);
+    expect(restored.language).toBe('fr');
+    expect(restored.tutorialSeen).not.toContain('arrival');
   });
 });

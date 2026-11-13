@@ -38,7 +38,7 @@ Vérification du 13 novembre 2026 : **161 tests réussis dans 41 fichiers**, Typ
 7. À zéro charge, aucun nouveau départ : les lieux restent consultables depuis la carte et le bilan est accessible. Revenir à l’accueil depuis le bilan clôt l’expédition ; la suivante repart à 10 charges, carnet conservé.
 8. Pause et rechargement conservent l’expédition si le stockage est disponible. Un départ déjà accepté ne coûte pas une seconde fois à la reprise. La langue FR/EN se règle dans les paramètres.
 
-Au clavier : **1 / 2** sélectionne une aiguille, **← / →** la règle, **Tab / Maj+Tab** parcourt les commandes et **Entrée / Espace** les active. Les activités disposent d’alternatives clavier ; les trois conseils contextuels peuvent être passés et relus depuis le carnet. Le jeu prend en compte le mouvement réduit.
+Au clavier : **1 / 2** sélectionne une aiguille, **← / →** la règle, **Tab / Maj+Tab** parcourt les commandes et **Entrée / Espace** les active. Les activités disposent d’alternatives clavier ; les notes contextuelles peuvent être passées et le guide à quatre onglets se relit depuis le carnet. Le jeu prend en compte le mouvement réduit.
 
 La progression est conservée **dans ce navigateur**, sans compte ni cloud. Effacer les données du site la supprime. Si le stockage est bloqué, le jeu continue en mémoire avec un avertissement ; un rechargement perd alors cet état.
 
@@ -74,7 +74,7 @@ Les catalogues `src/data/elements.json`, `src/data/destinations.json` et `src/da
 
 - Essayer la valise-boussole et sa nouvelle animation au clic sur Voyager.
 
-- Reprendre le tutoriel (contenu et présentation) et définir la loupe ou longue-vue illustrée remplaçant le bouton « Explorer », selon les demandes déjà consignées.
+- Essayer le [premier voyage accompagné](docs/TUTORIAL.md), puis définir la loupe ou longue-vue illustrée remplaçant le bouton « Explorer ».
 - Playtest d’ensemble, relecture FR/EN et mesure de l’équilibrage 10 / 1 / 2 ; validation du bilan illustré encore à consigner.
 - Habillage sonore et commande de coupure.
 - Vérifications sur Firefox, appareil tactile réel et iframe itch.io ; préparation et contrôle de la publication finale.

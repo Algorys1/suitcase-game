@@ -13,6 +13,7 @@ import { destinationTravelTip, needsTravelTip } from '../ui/travelTutorial';
 import { drawSouvenir } from '../ui/souvenir';
 import { drawTravelSpyglass, preloadTravelSpyglass } from '../ui/travelSpyglass';
 import type { Slots } from '../../domain/preparation';
+import { playSound } from '../../services/audio';
 
 export class ResultScene extends Phaser.Scene {
   constructor() { super('result'); }
@@ -32,7 +33,8 @@ export class ResultScene extends Phaser.Scene {
     const trip = session?.lastTrip;
     if (!session || session.phase !== 'result' || !trip) { this.scene.start('home'); return; }
     progressStore.saveSession(session);
-    if (trip.destinationId) { this.showDestination(session, trip.destinationId); return; }
+    if (trip.destinationId) { playSound('arrival'); this.showDestination(session, trip.destinationId); return; }
+    playSound('void');
     this.data.set('void-elements', voidElements);
     this.data.set('void-charges', session.charges);
     const cost = texts.journey.cost.replace('{cost}', String(trip.cost))

@@ -43,6 +43,7 @@ export class HomeScene extends Phaser.Scene {
         { name: 'journal', label: texts.journal,
           action: () => approachJournal(this, opening => this.scene.start('journal', { page: 0, opening })) },
         { name: 'settings', label: texts.settings, action: () => this.scene.start('settings') },
+        { name: 'replay-intro', label: texts.intro.replay, action: () => this.scene.start('intro', { replay: true }) },
       ],
     });
   }

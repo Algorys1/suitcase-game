@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen built-in",
+  "editPrompt": "Precise local object removal. Remove ONLY the unfolded flat parchment map lying in the LOWER RIGHT foreground on the wooden table. Fill that area naturally with uninterrupted wooden tabletop boards, matching their perspective, warm sunlight, gouache texture and shadows. Keep the separate ROLLED parchment behind it exactly where it is. Preserve EVERYTHING ELSE unchanged: suitcase, compass if present, attic, window, miniature worlds if present, floating papers if present, framing, dimensions, colours and cartoon paint. No new objects, no additional paper, no writing. The only paper remaining on the tabletop should be the existing rolled parchment.",
+  "inputs": "../comic-v1/panel-{1,2,3}.png",
+  "outputs": "panel-{1,2,3}.png",
+  "exports": "public/assets/intro/panel-{1,2,3}.webp"
+}

@@ -8,6 +8,7 @@ import { JournalScene } from './scenes/JournalScene';
 import { JournalEntryScene } from './scenes/JournalEntryScene';
 import { AdventureScene } from './scenes/AdventureScene';
 import { ExplorationScene } from './scenes/ExplorationScene';
+import { IntroScene } from './scenes/IntroScene';
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -19,6 +20,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     width: '100%',
     height: '100%',
   },
+  // One native HTMLAudio/Web Audio coordinator handles music, mute and short effects.
   audio: { noAudio: true },
-  scene: [HomeScene, AdventureScene, ExplorationScene, PreparationScene, ResultScene, SummaryScene, JournalScene, JournalEntryScene, SettingsScene],
+  scene: [IntroScene, HomeScene, AdventureScene, ExplorationScene, PreparationScene, ResultScene, SummaryScene, JournalScene, JournalEntryScene, SettingsScene],
 };

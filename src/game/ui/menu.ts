@@ -205,10 +205,11 @@ function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: n
   }
 
   content.buttons.forEach((button, index) => createButton(scene,
-    landscape && index === 2 ? width - 110 : center, positions[index] ?? settingsY,
-    index === 2 ? Math.min(buttonWidth, 170) : buttonWidth, buttonHeight,
+    index >= 2 ? landscape ? (index === 2 ? width - 110 : 110) : width * (index === 2 ? 0.25 : 0.75) : center,
+    positions[index] ?? settingsY,
+    index >= 2 ? Math.min(buttonWidth, landscape ? 170 : width / 2 - 16) : buttonWidth, buttonHeight,
     { ...button, focused: index === focusIndex, stationery: index === 0, textOnly: index !== 0,
-      fontSize: index === 2 ? 14 : short ? 16 : 18 }));
+      fontSize: index >= 2 ? 13 : short ? 16 : 18 }));
   if (content.footer) {
     words(journalY + buttonHeight / 2 + 1, content.footer, short || width < 360 ? 11 : 12)
       .setName('home-progress');

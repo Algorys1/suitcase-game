@@ -16,6 +16,7 @@ import { drawAdventureMap, mapDeparture, reducedMotion } from '../ui/adventureMa
 import { arriveObjects } from '../ui/travelMotion';
 import { drawTravelNote, needsTravelTip } from '../ui/travelTutorial';
 import { playSuitcaseDeparture } from '../ui/suitcaseDeparture';
+import { playSound } from '../../services/audio';
 
 type Control = { name: string; action: () => void };
 
@@ -165,6 +166,7 @@ export class PreparationScene extends Phaser.Scene {
   private rotate(direction: -1 | 1, needle: SlotIndex = this.activeNeedle): void {
     if (this.session.phase !== 'preparation') return;
     this.activeNeedle = needle;
+    playSound('tick');
     this.slots = rotateSelection(this.slots, needle, direction);
     this.message = '';
     this.render();
@@ -172,6 +174,7 @@ export class PreparationScene extends Phaser.Scene {
 
   private chooseElement(element: ElementId): void {
     if (this.drag || this.session.phase !== 'preparation') return;
+    playSound('tick');
     this.slots = selectElement(this.slots, this.activeNeedle, element);
     this.message = '';
     this.render();
@@ -182,6 +185,7 @@ export class PreparationScene extends Phaser.Scene {
     const before = this.session.charges;
     const next = beginTravel(this.session, this.slots, progressStore.read().discoveredDestinationIds);
     if (next === this.session) return;
+    playSound('travel');
     progressStore.acknowledgeTutorial('needles');
     progressStore.acknowledgeTutorial('energy');
     this.session = next;

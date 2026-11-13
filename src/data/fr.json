@@ -19,7 +19,7 @@
     "saved": "Choix enregistré dans ce navigateur.",
     "reset": "Reset · effacer la sauvegarde",
     "resetTitle": "Effacer la sauvegarde ?",
-    "resetDescription": "Les découvertes, les autocollants, le voyage en cours, les conseils et la langue seront remis à zéro dans ce navigateur.",
+    "resetDescription": "Les découvertes, les autocollants, le voyage en cours, les conseils, l’intro, le son et la langue seront remis à zéro dans ce navigateur.",
     "resetConfirm": "Oui, tout recommencer",
     "resetCancel": "Annuler",
     "resetUnavailable": "Le navigateur bloque l’effacement de la sauvegarde. Le jeu est remis à zéro en mémoire pour cette session, mais les anciennes données peuvent revenir après rechargement."
@@ -427,5 +427,25 @@
     "retry": "Réessayer",
     "error": "Le voyage attend encore…",
     "errorDetail": "Une image n’a pas pu arriver. Réessayons."
+  },
+  "intro": {
+    "title": "Un bagage un peu particulier",
+    "panels": [
+      "Cette valise semblait tout à fait ordinaire.",
+      "Jusqu’au jour où son couvercle s’est ouvert sur l’impossible.",
+      "Depuis, chaque départ commence par une question : où ai-je envie d’aller ?"
+    ],
+    "next": "La suite",
+    "previous": "Case précédente",
+    "skip": "Passer l’intro",
+    "finish": "Entrer",
+    "replay": "Revoir l’intro",
+    "page": "Case {page} / 3"
+  },
+  "audio": {
+    "on": "Couper le son",
+    "off": "Activer le son",
+    "credit": "Musique : Springly Sprigs — troubadour (CC0)",
+    "unavailable": "Musique indisponible"
   }
 }

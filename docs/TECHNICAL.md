@@ -64,7 +64,7 @@ Pas de React, moteur physique, serveur, framework d'état ou système de rendu 3
 - `src/data/` : éléments, destinations, souvenirs et textes FR/EN. Les données implémentées font foi.
 - `public/assets/` : ressources locales distribuées ; `designs/` : sources et prompts hors build.
 - `package.json` et `package-lock.json` : versions exactes, dont Phaser 4.2.1 ; `vite.config.ts` : chemins relatifs `base: './'`.
-- L’audio est désactivé (`audio: { noAudio: true }`) et aucun asset sonore n’est actuellement distribué.
+- Le son passe par `services/audio.ts` : une musique HTMLAudio locale et de courts effets Web Audio. Le gestionnaire audio Phaser reste volontairement désactivé (`noAudio: true`) pour conserver un seul coordinateur ; ce réglage ne coupe pas le son natif. Déverrouillage au geste, silence mémorisé et suspension en arrière-plan. Voir [AUDIO_AND_INTRO.md](AUDIO_AND_INTRO.md).
 
 Garder des modules explicites ; ne pas créer de fichiers vides pour reproduire une ancienne arborescence de préproduction.
 
@@ -174,7 +174,7 @@ export const BALANCE = {
 
 ### Sauvegarde
 
-**Schéma implémenté :** clé `suitcase-game.progress.v1`, `schemaVersion: 1`, `discoveredDestinationIds`, `language`, et champs optionnels `expedition` (dont `route`), `pendingSouvenirIds`, `awakenedMycelia`, `pilotSteps`, `tutorialSeen`, `sanctuaryPuzzle`, `vestigesLayout`. Les références typées et validations sont dans `src/services/storage.ts` et `src/domain/session.ts`. Aucun champ de disposition décorative n’existe encore.
+**Schéma implémenté :** clé `suitcase-game.progress.v1`, `schemaVersion: 1`, `discoveredDestinationIds`, `language`, et champs optionnels `expedition` (dont `route`), `pendingSouvenirIds`, `awakenedMycelia`, `pilotSteps`, `tutorialSeen`, `sanctuaryPuzzle`, `vestigesLayout`, `introSeen`, `muted`. Les références typées et validations sont dans `src/services/storage.ts` et `src/domain/session.ts`. Aucun champ de disposition décorative n’existe encore.
 
 `pendingSouvenirIds` distingue les mondes découverts des souvenirs encore masqués. La résolution retire le souvenir en attente et conserve les étapes avant l’animation ; les anciennes collections sans attente restent acquises. Les noms techniques `pilotSteps` et `pilotTargetCounts` couvrent les 30 activités. Les données optionnelles invalides sont filtrées ; le carnet et la langue sont préservés lorsque seule l’expédition est invalide.
 

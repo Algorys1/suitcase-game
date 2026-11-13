@@ -35,3 +35,25 @@ canvas {
   display: block;
   touch-action: none;
 }
+
+#audio-toggle {
+  position: fixed;
+  top: 3px;
+  right: 3px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  padding: 7px;
+  border: 1px solid #aa8755;
+  border-radius: 2px 5px 3px 6px;
+  background: #f7e6c4;
+  color: #69492e;
+  box-shadow: 1px 3px 3px #38271840;
+  transform: rotate(3deg);
+  cursor: default;
+}
+#audio-toggle svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#audio-toggle svg path:first-child { fill: #b69a70; }
+#audio-toggle .sound-off, #audio-toggle[data-muted="true"] .sound-waves { display: none; }
+#audio-toggle[data-muted="true"] .sound-off { display: block; }
+#audio-toggle:focus-visible { outline: 2px solid #79543f; outline-offset: 2px; }

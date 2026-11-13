@@ -19,7 +19,7 @@
     "saved": "Choice saved in this browser.",
     "reset": "Reset · clear saved progress",
     "resetTitle": "Clear saved progress?",
-    "resetDescription": "Discoveries, stickers, the current journey, travel tips and language will all be reset in this browser.",
+    "resetDescription": "Discoveries, stickers, the current expedition, tips, intro, audio and language will be reset in this browser.",
     "resetConfirm": "Yes, start fresh",
     "resetCancel": "Cancel",
     "resetUnavailable": "The browser blocked clearing the save. Progress has been reset in memory for this session, but old data may return after reloading."
@@ -427,5 +427,25 @@
     "retry": "Try again",
     "error": "The journey is waiting…",
     "errorDetail": "An illustration could not arrive. Let’s try again."
+  },
+  "intro": {
+    "title": "A rather unusual suitcase",
+    "panels": [
+      "This suitcase seemed perfectly ordinary.",
+      "Until the day its lid opened onto the impossible.",
+      "Ever since, every journey begins with a question: where would I like to go?"
+    ],
+    "next": "Next panel",
+    "previous": "Previous panel",
+    "skip": "Skip intro",
+    "finish": "Enter",
+    "replay": "Replay intro",
+    "page": "Panel {page} / 3"
+  },
+  "audio": {
+    "on": "Mute audio",
+    "off": "Enable audio",
+    "credit": "Music: Springly Sprigs — troubadour (CC0)",
+    "unavailable": "Music unavailable"
   }
 }

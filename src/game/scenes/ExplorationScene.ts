@@ -18,6 +18,7 @@ import { drawDestinationStage } from '../ui/destinationStage';
 import { drawSouvenir } from '../ui/souvenir';
 import { drawCimesSunrise, drawMyceliaLife } from '../ui/pilotWorlds';
 import { destinationTravelTip } from '../ui/travelTutorial';
+import { playSound } from '../../services/audio';
 import { addArchipelagoReflections, gatherArchipelagoLight } from '../ui/archipelagoReflections';
 import { addRuinsFish } from '../ui/ruinsFish';
 import { addBraiseColumns } from '../ui/braiseColumns';
@@ -536,6 +537,7 @@ export class ExplorationScene extends Phaser.Scene {
   }
 
   private collectSouvenir(x: number, y: number, complete?: () => void, forming = false): void {
+    playSound('collect');
     if (reducedMotion() || this.children.getByName('tutorial-paper')) { complete?.(); return; }
     const target = this.children.getByName('exploration-sticker') as Phaser.GameObjects.Image | null;
     const slot = this.children.getByName('souvenir-tag')?.getData('souvenir-slot') as

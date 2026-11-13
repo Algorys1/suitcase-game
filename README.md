@@ -50,7 +50,7 @@ L’accueil charge désormais environ **1 Mio d’images**, hors moteur et polic
 
 Phaser **4.2.1**, TypeScript strict, Vite et Vitest, versions verrouillées par `package-lock.json`. Jeu entièrement client-side, assets locaux, données et logique métier indépendantes des scènes Phaser. Textes externalisés dans `src/data/fr.json` et `src/data/en.json`.
 
-Vite utilise `base: './'`. Pour itch.io, archiver le **contenu** de `dist/`, avec `index.html` à la racine du ZIP. Tester ensuite le build publié dans l’iframe, la sauvegarde et les assets relatifs ; un build local réussi ne suffit pas. L’audio est actuellement désactivé et reste à réaliser.
+Vite utilise `base: './'`. Pour itch.io, archiver le **contenu** de `dist/`, avec `index.html` à la racine du ZIP. Tester ensuite le build publié dans l’iframe, la sauvegarde et les assets relatifs ; un build local réussi ne suffit pas. Une première passe sonore est intégrée : musique locale « Springly Sprigs » de troubadour (CC0), petits effets et bouton de coupure en haut à droite. Le son démarre après un premier geste. Voir [son et intro](docs/AUDIO_AND_INTRO.md).
 
 ## Documentation
 
@@ -78,7 +78,7 @@ Les catalogues `src/data/elements.json`, `src/data/destinations.json` et `src/da
 
 - Essayer la [longue-vue de voyage](docs/TRAVEL_SPYGLASS.md), qui remplace le bouton « Explorer » sur les arrivées et les fiches du carnet. La présentation du [tutoriel](docs/TUTORIAL.md) est retenue ; le playtest global reste ouvert.
 - Playtest d’ensemble, relecture FR/EN et mesure de l’équilibrage 10 / 1 / 2 ; validation du bilan illustré encore à consigner.
-- Habillage sonore et commande de coupure.
+- Essayer la musique, le mixage et l’intro BD passable ; bouton de son en haut à droite et relecture de l’intro depuis l’accueil.
 - Vérifications sur Firefox, appareil tactile réel et iframe itch.io ; préparation et contrôle de la publication finale.
 - Après validation distincte : éventuelle décoration de la valise, autres correspondances ou réactions décoratives.
 

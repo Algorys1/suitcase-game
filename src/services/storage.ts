@@ -14,6 +14,8 @@ export type Progress = {
   schemaVersion: 1;
   discoveredDestinationIds: string[];
   language: Language;
+  introSeen?: boolean;
+  muted?: boolean;
   expedition?: SessionState;
   pendingSouvenirIds?: string[];
   awakenedMycelia?: boolean;
@@ -66,6 +68,8 @@ export function decodeProgress(serialized: string | null): Progress {
     const sanctuaryPuzzle = discoveredDestinationIds.includes('sanctuaire_des_spores') && 'sanctuaryPuzzle' in value
       ? decodeSanctuaryPuzzle(value.sanctuaryPuzzle) : undefined;
     return { schemaVersion: 1, language,
+      ...('introSeen' in value && value.introSeen === true ? { introSeen: true } : {}),
+      ...('muted' in value && value.muted === true ? { muted: true } : {}),
       ...(discoveredDestinationIds.includes('vestiges_celestes') ? { vestigesLayout: 2 as const } : {}),
       ...(sanctuaryPuzzle ? { sanctuaryPuzzle } : {}),
       ...(tutorialSeen.length ? { tutorialSeen } : {}),
@@ -117,6 +121,10 @@ export class ProgressStore {
   setLanguage(language: Language): void {
     this.save({ ...this.read(), language });
   }
+
+  acknowledgeIntro(): void { this.save({ ...this.read(), introSeen: true }); }
+
+  setMuted(muted: boolean): void { this.save({ ...this.read(), muted }); }
 
   acknowledgeTutorial(step?: TutorialStep): void {
     const progress = this.read();

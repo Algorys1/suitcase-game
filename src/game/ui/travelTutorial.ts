@@ -123,6 +123,9 @@ export function destinationTravelTip(scene: Phaser.Scene, controls: AdventureCon
   drawTravelNote(scene, step, dismiss, { x: stage.portrait ? stage.sideX : stage.art.left + stage.art.width / 2,
     top, width: stage.portrait ? stage.sideW - 4 : Math.min(420, scene.scale.width * 0.615 - 34), height,
     button: (...args) => controls.button(...args) });
+  // Leaving the scene without folding the note should not repeat an introduction.
+  // Keep the current note visible until dismissal or the next scene render.
+  progressStore.acknowledgeTutorial(step);
 }
 
 /** The journal guide is the only modal: four short, keyboard-accessible chapters. */

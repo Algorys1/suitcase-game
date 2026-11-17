@@ -433,14 +433,7 @@ export class ExplorationScene extends Phaser.Scene {
       this.controls.add('offer-bell', panelX + panelW / 2, panelY + 23, panelW, 46,
         () => { this.offering = !this.offering; this.render(); });
     }
-    if (earned && (this.id === 'archipel_azur' || this.id === 'desert_de_cristal' || this.id === 'vestiges_celestes' || this.id === 'mer_figee' || this.id === 'jungle_incandescente' || this.id === 'jardins_de_gemmes' || this.id === 'empire_des_sables' || this.id === 'faille_des_contraires' || this.id === 'observatoire_des_etoiles') && !this.souvenirInFlight) {
-      this.controls.button(this.id === 'observatoire_des_etoiles' ? 'replay-observatory' : this.id === 'faille_des_contraires' ? 'replay-rift' : this.id === 'empire_des_sables' ? 'replay-lamp' : this.id === 'jardins_de_gemmes' ? 'replay-garden' : this.id === 'jungle_incandescente' ? 'replay-jungle' : this.id === 'mer_figee' ? 'replay-globe' : this.id === 'vestiges_celestes' ? 'replay-stairs' : this.id === 'desert_de_cristal' ? 'replay-crystals' : 'replay-reflections',
-        this.id === 'observatoire_des_etoiles' ? copy.replayObservatory : this.id === 'faille_des_contraires' ? copy.replayRift : this.id === 'empire_des_sables' ? copy.replayLamp : this.id === 'jardins_de_gemmes' ? copy.replayGarden : this.id === 'jungle_incandescente' ? copy.replayJungle : this.id === 'mer_figee' ? copy.replayGlobe : this.id === 'vestiges_celestes' ? copy.replayStairs : this.id === 'desert_de_cristal' ? copy.replayCrystals : copy.replayReflections, sideX,
-        tagY - (portrait ? 58 : 66), sideW - 12, () => {
-          if (this.souvenirInFlight) return;
-          this.reflectionReplay = []; this.justFound = false; this.render();
-        });
-    } else if (!canOffer) {
+    if (!canOffer) {
       const hint = found && this.id === 'cimes_eternelles' && !progress.awakenedMycelia ? copy.bellWish
         : this.justFound ? copy.found : copy.takeTime;
       mapText(this, sideX, tagY - (portrait ? 58 : 66), hint, portrait || short ? 11 : 12, sideW - 12, '#a07f4b')

@@ -22,19 +22,33 @@ export function drawCimesSunrise(scene: Phaser.Scene, art: WorldFrame, complete:
     if (!visited.includes(index)) return;
     const key = `adventure-cimes-mist-${mistKeys[index]}`;
     if (!scene.textures.exists(key)) return;
-    const x = art.left + art.width * peak.x, y = art.top + art.height * (peak.y + 0.025);
-    const restingX = x + art.width * (index === 2 ? 0.025 : -0.035);
-    const cloud = scene.add.image(x, y, key).setAlpha(0.8).setName(`cimes-peak-cloud-${index}`);
-    cloud.setScale(art.width * (index === 0 ? 0.20 : 0.17) / cloud.width);
+    // Keep the left veil beyond the bell's silhouette and the right veil inside the painting.
+    const centerX = index === 1 ? 0.385 : index === 2 ? 0.875 : peak.x;
+    const x = art.left + art.width * centerX, y = art.top + art.height * (peak.y + 0.025);
+    const restingX = x + art.width * (index === 1 ? 0.015 : -0.015);
+    const cloud = scene.add.image(x, y, key).setAlpha(0.95).setName(`cimes-peak-cloud-${index}`);
+    cloud.setScale(art.width * (index === 0 ? 0.23 : 0.20) / cloud.width);
+    const drift = () => {
+      if (reducedMotion() || !cloud.active) return;
+      const motion = scene.tweens.add({ targets: cloud,
+        x: cloud.x + art.width * (index === 2 ? -0.012 : 0.012),
+        y: y - art.height * 0.009, duration: 2300 + index * 450,
+        ease: 'Sine.InOut', yoyo: true, repeat: -1 });
+      const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const stop = () => { if (preference.matches) { motion.stop(); cloud.setY(y); } };
+      preference.addEventListener('change', stop);
+      cloud.once('destroy', () => { motion.stop(); preference.removeEventListener('change', stop); });
+    };
     if (complete && transition && !reducedMotion()) {
       scene.tweens.add({ targets: cloud, x: restingX,
-        alpha: 0.72, delay: 120, duration: 1100, ease: 'Sine.InOut' });
+        alpha: 0.88, delay: 120, duration: 1100, ease: 'Sine.InOut', onComplete: drift });
     } else if (complete) {
-      cloud.setX(restingX).setAlpha(0.72);
+      cloud.setX(restingX).setAlpha(0.88);
+      drift();
     } else if (index === touched && newlyTouched && !reducedMotion()) {
       cloud.setAlpha(0).setY(y + 3);
-      scene.tweens.add({ targets: cloud, alpha: 0.8, y, duration: 380, ease: 'Sine.Out' });
-    }
+      scene.tweens.add({ targets: cloud, alpha: 0.95, y, duration: 380, ease: 'Sine.Out', onComplete: drift });
+    } else drift();
   });
 }
 

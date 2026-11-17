@@ -6,7 +6,7 @@ export function intersects(a: MapRect, b: MapRect, gap = 1): boolean {
 }
 
 /** Find nearby blank paper, reserving both the illustrations and earlier captions. */
-export function placeMapLabel(preferred: MapRect, bounds: MapRect, occupied: readonly MapRect[]): MapRect | undefined {
+export function placeMapLabel(preferred: MapRect, bounds: MapRect, occupied: readonly MapRect[], anchor?: MapRect): MapRect | undefined {
   const check = (x: number, y: number): MapRect | undefined => {
     const candidate = { ...preferred, x: preferred.x + x, y: preferred.y + y };
     if (candidate.x < bounds.x || candidate.y < bounds.y
@@ -17,6 +17,25 @@ export function placeMapLabel(preferred: MapRect, bounds: MapRect, occupied: rea
   };
   const original = check(0, 0);
   if (original) return original;
+  // A tall stamped caption may not fit between two rows. Try the same world's
+  // immediate sides before searching farther down the sheet.
+  if (anchor) {
+    const centerX = anchor.x + anchor.width / 2, centerY = anchor.y + anchor.height / 2;
+    const adjacent = [
+      { x: centerX - preferred.width / 2, y: anchor.y - preferred.height - 4 },
+      { x: anchor.x - preferred.width - 4, y: centerY - preferred.height / 2 },
+      { x: anchor.x + anchor.width + 4, y: centerY - preferred.height / 2 },
+    ];
+    for (const [index, point] of adjacent.entries()) {
+      for (let distance = 0; distance <= preferred.height; distance += 4) {
+        for (const offset of distance ? [-distance, distance] : [0]) {
+          const nearby = check(point.x - preferred.x + (index === 0 ? offset : 0),
+            point.y - preferred.y + (index === 0 ? 0 : offset));
+          if (nearby) return nearby;
+        }
+      }
+    }
+  }
   for (let radius = 4; radius <= Math.max(bounds.width, bounds.height); radius += 4) {
     for (let x = -radius; x <= radius; x += 4) {
       const bottom = check(x, radius), top = check(x, -radius);

@@ -326,7 +326,8 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
       width: labelWidth, height: label.height + 4 + (stamp ? portrait || short ? 20 : 24 : 0) };
     const bounds = { x: margin + 7, y: portrait ? 190 : short ? 133 : 153,
       width: w - margin * 2 - 14, height: h - (portrait ? 65 : short ? 70 : 100) - (portrait ? 190 : short ? 133 : 153) };
-    const position = placeMapLabel(preferred, bounds, reserved);
+    const position = placeMapLabel(preferred, bounds, reserved,
+      { x: caption.x - size / 2, y: caption.y - size / 2, width: size, height: size });
     if (!position) { label.destroy(); stamp?.destroy(); continue; }
     reserved.push(position);
     const plate = scene.add.graphics().setName(`map-label-paper-${caption.index}`);

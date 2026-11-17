@@ -27,6 +27,8 @@ Les données implémentées dans `src/data/elements.json` et `src/data/destinati
 
 ## Stack et contraintes
 
+**Correspondances autorisées le 17 novembre 2026 :** la pochette du carnet permet de sélectionner un souvenir collecté puis de toucher une illustration découverte, sans refaire les recettes ni dépenser de charge. Cimes → Mycélia est accessible depuis le carnet ; Mycélia → Forêt du silence apporte la lanterne et fait apparaître une petite créature des neiges dans la DA du champignon. Les souvenirs ne sont pas consommés, les activités locales restent indépendantes. Après chaque offrande réussie, la pochette disparaît sur la fiche concernée. Les deux habitants rencontrés peuvent se promener doucement sur l’accueil, sans gêner ses commandes, et restent immobiles en mouvement réduit. Aucun indice de correspondance dans les textes, aucun filtrage de compatibilité dans la pochette. Les autres liens et la décoration de phase C restent à valider.
+
 - **Cartes et exploration : curseur normal sur le paysage**, y compris les objets à glisser-déposer. Ne pas utiliser de main, de `pointer`, de `grab` ni d’autre curseur spécial pour révéler une cible interactive. Cette consigne de découverte figure dans `docs/DESTINATION_ACTIVITIES.md` ; elle s’applique à chaque nouvelle activité.
 
 - **Découverte sans texte de solution :** avant résolution, les textes d’exploration restent des phrases d’ambiance. Ne pas désigner les cibles, leur nombre, le geste à effectuer, la solution ni la nature du souvenir. Ne pas ajouter de contours ou de repères visuels qui signalent artificiellement les éléments manipulables. Le joueur découvre l’interaction en observant et en essayant le paysage.

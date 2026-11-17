@@ -1,0 +1,5 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "reference": "public/assets/adventure/forest-empty.webp",
+  "transparent_background": false
+}

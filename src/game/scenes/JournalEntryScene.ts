@@ -22,10 +22,11 @@ export class JournalEntryScene extends Phaser.Scene {
     preloadSouvenirs(this, progressStore.unlockedSouvenirIds());
   }
 
-  create({ id, page = 0, turn, returnTo }: {
-    id?: string; page?: number; turn?: PageDirection; returnTo?: 'adventure';
+  create({ id, page = 0, turn, returnTo, welcome = false }: {
+    id?: string; page?: number; turn?: PageDirection; returnTo?: 'adventure'; welcome?: boolean;
   } = {}): void {
     if (!finishSceneLoading(this)) return;
+    this.data.set('forest-visitor-arriving', welcome);
     const texts = getTexts();
     const entry = id === undefined ? undefined : getDestinationTexts(id);
     if (id === undefined || !entry || !progressStore.read().discoveredDestinationIds.includes(id)) {
@@ -50,7 +51,8 @@ export class JournalEntryScene extends Phaser.Scene {
       postcard,
       souvenir: souvenirForDestination(id, progressStore.read().discoveredDestinationIds),
       souvenirLocked: !progressStore.unlockedSouvenirIds().includes(id),
-      decoratePostcard: () => journalPouch(this, id, () => this.scene.restart({ id, page, returnTo })),
+      decoratePostcard: () => journalPouch(this, id, () => this.scene.restart({ id, page, returnTo,
+        welcome: id === 'foret_du_silence' })),
       buttons: [{ name: 'explore', label: texts.adventure.explore, spyglass: true,
         action: () => this.scene.start('exploration', { id, journalPage: page, returnTo }) },
       { name: 'back-to-journal', label: texts.notebook.backToContents, primary: true,

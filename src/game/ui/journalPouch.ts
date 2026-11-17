@@ -14,6 +14,7 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
   const copy = getTexts().pouch;
   const bounds = picture.getBounds();
   const frame = { left: bounds.x, top: bounds.y, width: bounds.width, height: bounds.height };
+  if (destination === 'foret_du_silence' && progressStore.read().welcomedForestVisitor) return;
   if (destination === 'mycelia' && progressStore.read().awakenedMycelia) {
     drawMyceliaLife(scene, frame, true, false, progressStore.explorationSteps('mycelia'));
     const bx = bounds.x + bounds.width * 0.68, hook = bounds.y + bounds.height * 0.53;
@@ -37,7 +38,8 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
     .setName('journal-sticker-target');
   target.on('pointerdown', () => {
     if (!selected || bookBusy(scene) || overlay.length) return;
-    const accepted = destination === 'mycelia' && selected === 'cimes_eternelles' && progressStore.offerBell();
+    const accepted = destination === 'mycelia' && selected === 'cimes_eternelles' ? progressStore.offerBell()
+      : destination === 'foret_du_silence' && selected === 'mycelia' ? progressStore.offerSporeLantern() : false;
     selected = undefined;
     target.disableInteractive();
     if (accepted) refresh();

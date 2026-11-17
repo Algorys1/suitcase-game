@@ -2,12 +2,13 @@ export type SnowPoint = { x: number; y: number };
 
 // A generous boundary around the snowy path, excluding stump, rocks and trees.
 const path: readonly SnowPoint[] = [
-  { x: 0.72, y: 0.57 }, { x: 0.79, y: 0.59 }, { x: 0.76, y: 0.63 },
-  { x: 0.64, y: 0.69 }, { x: 0.60, y: 0.72 }, { x: 0.61, y: 0.75 },
-  { x: 0.74, y: 0.79 }, { x: 0.88, y: 0.88 }, { x: 0.88, y: 1 },
-  { x: 0.57, y: 1 }, { x: 0.65, y: 0.90 }, { x: 0.64, y: 0.86 },
-  { x: 0.54, y: 0.83 }, { x: 0.47, y: 0.77 }, { x: 0.48, y: 0.70 },
-  { x: 0.61, y: 0.65 },
+  { x: 0.74, y: 0.56 }, { x: 0.77, y: 0.59 }, { x: 0.73, y: 0.64 },
+  { x: 0.65, y: 0.69 }, { x: 0.60, y: 0.72 }, { x: 0.65, y: 0.76 },
+  { x: 0.77, y: 0.82 }, { x: 0.82, y: 0.87 }, { x: 0.79, y: 0.92 },
+  { x: 0.73, y: 1 }, { x: 0.60, y: 1 }, { x: 0.66, y: 0.91 },
+  { x: 0.67, y: 0.87 }, { x: 0.61, y: 0.83 }, { x: 0.52, y: 0.78 },
+  { x: 0.48, y: 0.72 }, { x: 0.52, y: 0.68 }, { x: 0.63, y: 0.63 },
+  { x: 0.69, y: 0.59 },
 ];
 
 // Provisional: three short free strokes; no shape, order or timing requirement.

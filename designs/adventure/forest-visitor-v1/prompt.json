@@ -1,0 +1,9 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "reference": "public/assets/adventure/mycelia-resident.webp",
+  "transparent_background": true,
+  "prompt": "Create one new transparent game character sprite, a snow-forest creature, using the supplied mushroom resident ONLY as the exact visual style reference. Same handmade gouache children's storybook paint, softly irregular dark plum contour, warm cream face, two tiny plum dot eyes, small smiling mouth, peach cheeks, simple round squat body and tiny rounded feet, no glossy 3D, no realistic fur. New character: small rounded ivory snow creature with two long softly bent rabbitlike ears, pale lavender ear interiors, simple muted teal knitted scarf. Friendly, curious and cozy. Full body standing three-quarter/front view, one little paw raised in greeting, isolated with generous transparent margin, no lantern or props, no scenery, no text, no ground shadow. Match the mushroom's naive proportions and painterly texture, not a detailed animal illustration. This will stand beside a small lantern in a snowy illustrated forest and wander gently on the game's home desk. Save a production image for the game.",
+  "source": "resident.png",
+  "export": "public/assets/adventure/forest-resident.webp",
+  "conversion": "RGBA, contain 512x512, WebP quality 90"
+}

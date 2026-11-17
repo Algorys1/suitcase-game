@@ -5,6 +5,7 @@ import { drawGardenLight } from './gemGarden';
 import { drawFruitPulse } from './jungleHeat';
 import { drawGlobeSnow } from './frozenGlobe';
 import Phaser from 'phaser';
+import { drawForestVisitor } from './souvenirVisitors';
 import { destinations } from '../../domain/recipes';
 import { drawKingdomWaterfalls } from './kingdomWaterfalls';
 import { drawSanctuarySpores } from './sanctuarySpores';
@@ -112,6 +113,9 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight },
       progressStore.explorationSteps('vestiges_celestes').length === 3));
+    if (destination.id === 'foret_du_silence') objects.push(...drawForestVisitor(scene,
+      { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+        width: picture.displayWidth, height: picture.displayHeight }));
     if (mounted) {
       // Frame corners stay in front of the landscape.
       // The photo corners remain above the painted overlays.

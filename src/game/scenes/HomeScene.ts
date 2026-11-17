@@ -7,6 +7,7 @@ import { progressStore } from '../../services/storage';
 import { destinations } from '../../domain/recipes';
 import { approachJournal, bookBusy } from '../ui/notebookMotion';
 import { departFromHome } from '../ui/homeDeparture';
+import { preloadHomeVisitors } from '../ui/souvenirVisitors';
 
 export class HomeScene extends Phaser.Scene {
   constructor() {
@@ -15,6 +16,7 @@ export class HomeScene extends Phaser.Scene {
 
   preload(): void {
     beginSceneLoading(this);
+    preloadHomeVisitors(this);
     for (const [key, path] of [
       ['preparation-travel_desk', 'preparation/travel_desk.webp'],
       ['preparation-suitcase_closed', 'preparation/suitcase_closed.webp'],

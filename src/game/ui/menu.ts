@@ -9,6 +9,7 @@ import { bookBusy, turnJournalPage } from './notebookMotion';
 import type { PageDirection } from './notebookMotion';
 import { drawVoid } from './void';
 import { drawTravelSpyglass } from './travelSpyglass';
+import { drawHomeVisitors } from './souvenirVisitors';
 
 export type MenuButton = {
   spyglass?: boolean;
@@ -205,6 +206,7 @@ function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: n
     art.setScale(Math.min(artWidth / art.width, Math.max(0, artBottom - artTop) / art.height));
   }
 
+  drawHomeVisitors(scene);
   content.buttons.forEach((button, index) => createButton(scene,
     index >= 2 ? landscape ? left + innerWidth * (index === 2 ? 0.61 : 0.85) : width * (index === 2 ? 0.25 : 0.75) : center,
     positions[index] ?? settingsY,

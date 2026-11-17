@@ -70,6 +70,12 @@ Garder des modules explicites ; ne pas créer de fichiers vides pour reproduire 
 
 ## 4. Modèle de données
 
+### Habitants et correspondances du carnet — 17 novembre 2026
+
+La forêt utilise aussi `adventure-forest-tracks`, export WebP du fond à empreintes peintes validé. `drawForestSnow()` superpose seulement la zone du chemin au paysage initial et révèle ce calque du premier plan vers le fond, via un recadrage Phaser. `addForestDrawing()` pilote le dévoilement provisoire pendant le geste ; un geste annulé revient au niveau acquis, les trois étapes restent sauvegardées par la logique commune. Les anciens marqueurs d’empreintes en Graphics sont retirés. Sources et prompt : `designs/adventure/forest-trail-painted-v1/`.
+
+`Progress.welcomedForestVisitor` complète `awakenedMycelia` sans changer le schéma v1. `offerSporeLantern()` exige la lanterne collectée et la forêt découverte, refuse les répétitions et sauvegarde uniquement la rencontre. Le décodeur ignore un flag incohérent ; les anciennes sauvegardes sans champ restent valides. `souvenirVisitors.ts` partage le personnage et la lanterne entre les vues de la forêt, et les deux visiteurs conditionnels de l’accueil. Les sources transparentes restent hors build ; `forest-resident.webp` est chargé avec le lieu ou, après rencontre, à l’accueil. Aucun préchargement des mondes ajouté. Les animations ne décident pas des offrandes et se nettoient à la destruction ; préférence de mouvement réduit suivie pendant l’affichage.
+
 ### Éléments
 
 Chaque élément a un identifiant technique stable (anglais, `snake_case`), une clé de traduction et une référence d'asset.

@@ -26,6 +26,7 @@ import { progressStore } from '../../services/storage';
 import { drawAtollAurora } from './atollAurora';
 import { drawStormBottle } from './stormLightning';
 import { drawVestigesMist } from './vestigesMist';
+import { drawForestVisitor } from './souvenirVisitors';
 
 /** Shared framing keeps the landscape in place when the player chooses to explore. */
 export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: SessionState,
@@ -126,6 +127,8 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   if (id === 'mer_figee' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawGlobeSnow(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('mer_figee').length === 3));
+  if (id === 'foret_du_silence' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawForestVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   const corners = scene.add.graphics().setName('arrival-photo-corners');
   if (id === 'vestiges_celestes' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawVestigesMist(scene, { left: artLeft, top: artUpper, width: artW, height: artH },

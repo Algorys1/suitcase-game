@@ -14,7 +14,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game',
   backgroundColor: '#fff4df',
-  render: { antialias: true, pixelArt: false, mipmapFilter: 'LINEAR_MIPMAP_LINEAR' },
+  render: { antialias: true, roundPixels: true, pixelArt: false, mipmapFilter: 'LINEAR_MIPMAP_LINEAR' },
   scale: {
     mode: Phaser.Scale.RESIZE,
     width: '100%',

@@ -187,10 +187,10 @@ function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: n
   const description = words(ruleY + (short ? 9 : 14), content.description, short || !landscape ? 14 : 17)
     .setName('menu-description');
 
-  const startY = landscape ? height * 0.69 : height - 166;
+  const startY = landscape ? Math.min(height * 0.69, height - 158) : height - 166;
   const buttonWidth = Math.min(columnWidth - 12, 282);
   const buttonHeight = short ? 44 : 48;
-  const journalY = startY + (short ? 49 : 57);
+  const journalY = startY + (short ? 44 : 57);
   const settingsY = height - 33;
   const positions = [startY, journalY, settingsY];
 
@@ -205,7 +205,7 @@ function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: n
   }
 
   content.buttons.forEach((button, index) => createButton(scene,
-    index >= 2 ? landscape ? (index === 2 ? width - 110 : 110) : width * (index === 2 ? 0.25 : 0.75) : center,
+    index >= 2 ? landscape ? left + innerWidth * (index === 2 ? 0.61 : 0.85) : width * (index === 2 ? 0.25 : 0.75) : center,
     positions[index] ?? settingsY,
     index >= 2 ? Math.min(buttonWidth, landscape ? 170 : width / 2 - 16) : buttonWidth, buttonHeight,
     { ...button, focused: index === focusIndex, stationery: index === 0, textOnly: index !== 0,

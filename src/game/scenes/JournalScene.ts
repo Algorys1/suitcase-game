@@ -101,9 +101,9 @@ export class JournalScene extends Phaser.Scene {
     const center = this.scale.width / 2;
     text(center, b.top + 18, texts.journal, Math.min(short || !b.landscape ? 22 : 28, (b.width - 110) / 10),
       b.width - 110, true).setName('menu-title');
-    text(center, b.top + 60, texts.notebook.contents, 16, b.width - 40).setName('journal-contents');
-    const rowsTop = b.top + 99;
-    const rows = Math.max(1, Math.min(8, Math.floor((b.height - 221) / 44)));
+    if (!short) text(center, b.top + 60, texts.notebook.contents, 16, b.width - 40).setName('journal-contents');
+    const rowsTop = b.top + (short ? 54 : 99);
+    const rows = Math.max(1, Math.min(8, Math.floor((b.height - (short ? 176 : 221)) / 44)));
     const columns = b.landscape ? 2 : 1;
     const pageSize = rows * columns;
     const pageNumber = Math.floor(this.page / pageSize);
@@ -151,7 +151,7 @@ export class JournalScene extends Phaser.Scene {
       name: 'previous-page', label: texts.notebook.previous, pageCorner: 'previous', disabled: pageNumber === 0,
       action: () => turnPage(start - pageSize, 'previous'),
     });
-    this.button(b.left + b.width - 24, b.top + 24, 44, 44, {
+    this.button(b.left + b.width - 66, b.top + 24, 44, 44, {
       name: 'next-page', label: texts.notebook.next, pageCorner: 'next', disabled: pageNumber === pages - 1,
       action: () => turnPage(start + pageSize, 'next'),
     });

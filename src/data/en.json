@@ -393,7 +393,7 @@
   "tutorial": {
     "title": "The traveller’s guide",
     "departure": "It all begins in this suitcase. Open it to prepare your journey.",
-    "exploration": "You can visit the landscapes. Take your time: you can return later without spending a charge.",
+    "exploration": "Tap or click in the landscape to try to solve its mystery. Watch how it responds: experimenting is free.",
     "souvenir": "A souvenir to keep. Find it in your journal, even after this expedition.",
     "continue": "Fold away",
     "skip": "Travel without tips",
@@ -406,7 +406,7 @@
     "wish": "A wish to travel",
     "needles": "Turn the needles towards two different symbols. Together, they will decide your journey.",
     "energy": "Turning the needles is free. Travel costs one charge… two if you meet the Void.",
-    "arrival": "This world joins your journal. Stay a while to explore, or continue your journey.",
+    "arrival": "Your first landscape! Tap or click the spyglass to explore it and look for its souvenir.",
     "exhausted": "The suitcase is resting. Your stops remain open; your journal will join you on your next journey.",
     "commands": "The gestures",
     "gestures": "Drag a needle’s tip or counterweight. You can also choose a needle, then touch a symbol.",
@@ -417,7 +417,7 @@
     "keepTab": "Keep",
     "prepareGuide": "Two needles, two different elements. Drag a tip or counterweight; or choose a needle, then touch a symbol. The order of the elements does not change the journey.",
     "travelGuide": "The same elements always lead to the same place. Turning needles is free. Start with 10 charges: a world costs 1, even on a repeat trip; the Void costs 2. At zero, departures stop.",
-    "exploreGuide": "Every world hides a souvenir. Take time to observe and experiment. Exploring is free and optional. Return through the map or journal: your actions are saved.",
+    "exploreGuide": "Tap or click the spyglass to explore a world. Then tap or click in the landscape: watch how it responds and try to solve its mystery to find a souvenir. Exploring is free and optional. Return through the map or journal: your actions are saved.",
     "keepGuide": "A world joins your journal on arrival; its souvenir stays unknown until you discover it. Your collection stays in this browser between expeditions. At zero charges, your stops remain open before the summary.",
     "tipLabel": "TRAVEL TIP"
   },

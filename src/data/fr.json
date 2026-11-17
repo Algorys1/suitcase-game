@@ -393,7 +393,7 @@
   "tutorial": {
     "title": "Le guide du voyageur",
     "departure": "Tout commence dans cette valise. Ouvrez-la pour préparer votre départ.",
-    "exploration": "Vous pourrez visiter les paysages. Prenez votre temps : vous pourrez revenir plus tard, sans dépenser de charge.",
+    "exploration": "Touchez ou cliquez dans le paysage pour essayer de résoudre son mystère. Observez ses réactions : vos essais sont gratuits.",
     "souvenir": "Un souvenir à garder. Retrouvez-le dans votre carnet, même après cette expédition.",
     "continue": "Replier",
     "skip": "Voyager sans conseils",
@@ -406,7 +406,7 @@
     "wish": "Une envie d’ailleurs",
     "needles": "Faites tourner les aiguilles vers deux symboles différents. Leur rencontre décidera du voyage.",
     "energy": "Régler les aiguilles est gratuit. Partir coûte une charge… deux si vous rencontrez le Néant.",
-    "arrival": "Ce monde rejoint votre carnet. Restez un peu pour explorer, ou poursuivez votre route.",
+    "arrival": "Votre premier paysage ! Touchez ou cliquez sur la longue-vue pour l’explorer et chercher son souvenir.",
     "exhausted": "La valise se repose. Vos escales restent accessibles ; votre carnet vous accompagnera au prochain départ.",
     "commands": "Les gestes",
     "gestures": "Glissez la pointe ou le contrepoids. Vous pouvez aussi choisir une aiguille, puis toucher un symbole.",
@@ -417,7 +417,7 @@
     "keepTab": "Conserver",
     "prepareGuide": "Deux aiguilles, deux éléments différents. Glissez la pointe ou le contrepoids ; ou choisissez une aiguille puis touchez un symbole. L’ordre des éléments ne change pas le voyage.",
     "travelGuide": "Les mêmes éléments mènent toujours au même endroit. Régler les aiguilles est gratuit. Vous partez avec 10 charges : un monde en coûte 1, même en revisite ; le Néant en coûte 2. À zéro, les départs s’arrêtent.",
-    "exploreGuide": "Chaque monde cache un souvenir. Prenez le temps d’observer et d’essayer. Explorer est gratuit et facultatif. Revenez par la carte ou le carnet : vos gestes sont conservés.",
+    "exploreGuide": "Touchez ou cliquez sur la longue-vue pour explorer un monde. Puis touchez ou cliquez dans le paysage : observez ses réactions et essayez de résoudre son mystère pour trouver un souvenir. Explorer est gratuit et facultatif. Revenez par la carte ou le carnet : vos gestes sont conservés.",
     "keepGuide": "Le monde rejoint le carnet dès l’arrivée ; son souvenir reste inconnu jusqu’à sa découverte. Votre collection est conservée dans ce navigateur entre les expéditions. À zéro charge, vos escales restent accessibles avant le bilan.",
     "tipLabel": "CONSEIL DE VOYAGE"
   },

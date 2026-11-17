@@ -394,7 +394,7 @@
     "title": "The traveller’s guide",
     "departure": "It all begins in this suitcase. Open it to prepare your journey.",
     "exploration": "Tap or click in the landscape to try to solve its mystery. Watch how it responds: experimenting is free.",
-    "souvenir": "You can bring some souvenirs to other worlds and try using them there. They stay in your collection.",
+    "souvenir": "Find your souvenirs in the journal. You can try using some of them in other worlds there. They stay in your collection.",
     "continue": "Fold away",
     "skip": "Travel without tips",
     "close": "Close the guide",
@@ -418,8 +418,15 @@
     "prepareGuide": "Two needles, two different elements. Drag a tip or counterweight; or choose a needle, then touch a symbol. The order of the elements does not change the journey.",
     "travelGuide": "The same elements always lead to the same place. Turning needles is free. Start with 10 charges: a world costs 1, even on a repeat trip; the Void costs 2. At zero, departures stop.",
     "exploreGuide": "Tap or click the spyglass to explore a world. Then tap or click in the landscape: watch how it responds and try to solve its mystery to find a souvenir. Exploring is free and optional. Return through the map or journal: your actions are saved.",
-    "keepGuide": "A world joins your journal on arrival; its souvenir stays unknown until you discover it. Your collection stays in this browser between expeditions. At zero charges, your stops remain open before the summary.",
+    "keepGuide": "A world joins your journal on arrival; its souvenir stays unknown until you discover it. On an entry, open the Souvenirs pouch, choose a sticker, then touch the illustration to try it. It stays in your collection. Keyboard: P opens the pouch, 1 to 6 selects a souvenir, arrows turn its pages, Enter tries it and Escape cancels. Your collection stays in this browser.",
     "tipLabel": "TRAVEL TIP"
+  },
+  "pouch": {
+      "title": "Souvenirs",
+      "empty": "Your pouch is waiting for its first souvenirs.",
+      "try": "Touch the landscape to try. Cancel: Escape or reopen the pouch.",
+      "returned": "The souvenir returns to the pouch.",
+      "close": "Close"
   },
   "loading": {
     "title": "Packing a little magic…",

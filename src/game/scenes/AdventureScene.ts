@@ -51,6 +51,22 @@ export class AdventureScene extends Phaser.Scene {
       id => this.scene.start('exploration', { id, session: this.session }), depart, animate === true,
       animate === true ? this.newStampIds : []);
     const { journal } = mapInstruments(width, height, this.session);
+    if (animate === true) this.newStampIds.forEach((id, index) => {
+      const route = this.session.route ?? this.session.visitedDestinationIds;
+      const source = this.children.getByName(`map-art-${route.lastIndexOf(id)}`) as Phaser.GameObjects.Image | null;
+      if (!source || !this.textures.exists(`souvenir-${id}`)) return;
+      const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (preference.matches) return;
+      const sticker = this.add.image(source.x, source.y, `souvenir-${id}`).setName(`souvenir-to-journal-${id}`);
+      const scale = 58 / Math.max(sticker.width, sticker.height);
+      sticker.setScale(scale).setAngle(-8);
+      const flight = this.tweens.add({ targets: sticker, x: journal.x, y: journal.y,
+        scale: scale * 0.3, angle: 8, alpha: 0, delay: 180 + index * 120,
+        duration: 850, ease: 'Sine.InOut', onComplete: () => sticker.destroy() });
+      const stop = () => { if (preference.matches) sticker.destroy(); };
+      preference.addEventListener('change', stop);
+      sticker.once('destroy', () => { flight.stop(); preference.removeEventListener('change', stop); });
+    });
     this.controls.add('map-journal', journal.x, journal.y, Math.max(48, journal.width + 12), journal.height + 14,
       () => approachJournal(this, opening => this.scene.start('journal', { opening, returnTo: 'adventure' })));
     if (width >= 600 && (height >= 450 || this.session.visitedDestinationIds.length + this.session.voidTrips <= 6)) {

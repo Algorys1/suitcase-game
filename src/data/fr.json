@@ -394,7 +394,7 @@
     "title": "Le guide du voyageur",
     "departure": "Tout commence dans cette valise. Ouvrez-la pour préparer votre départ.",
     "exploration": "Touchez ou cliquez dans le paysage pour essayer de résoudre son mystère. Observez ses réactions : vos essais sont gratuits.",
-    "souvenir": "Vous pouvez apporter certains souvenirs dans d’autres mondes et essayer de les y utiliser. Ils restent dans votre collection.",
+    "souvenir": "Retrouvez vos souvenirs dans le carnet. Vous pouvez y essayer certains souvenirs dans d’autres mondes. Ils restent dans votre collection.",
     "continue": "Replier",
     "skip": "Voyager sans conseils",
     "close": "Refermer le guide",
@@ -418,8 +418,15 @@
     "prepareGuide": "Deux aiguilles, deux éléments différents. Glissez la pointe ou le contrepoids ; ou choisissez une aiguille puis touchez un symbole. L’ordre des éléments ne change pas le voyage.",
     "travelGuide": "Les mêmes éléments mènent toujours au même endroit. Régler les aiguilles est gratuit. Vous partez avec 10 charges : un monde en coûte 1, même en revisite ; le Néant en coûte 2. À zéro, les départs s’arrêtent.",
     "exploreGuide": "Touchez ou cliquez sur la longue-vue pour explorer un monde. Puis touchez ou cliquez dans le paysage : observez ses réactions et essayez de résoudre son mystère pour trouver un souvenir. Explorer est gratuit et facultatif. Revenez par la carte ou le carnet : vos gestes sont conservés.",
-    "keepGuide": "Le monde rejoint le carnet dès l’arrivée ; son souvenir reste inconnu jusqu’à sa découverte. Votre collection est conservée dans ce navigateur entre les expéditions. À zéro charge, vos escales restent accessibles avant le bilan.",
+    "keepGuide": "Le monde rejoint le carnet dès l’arrivée ; son souvenir reste inconnu jusqu’à sa découverte. Dans une fiche, ouvrez la pochette Souvenirs, choisissez un autocollant puis touchez l’illustration pour l’essayer. Il reste dans votre collection. Au clavier : P ouvre la pochette, 1 à 6 choisit un souvenir, les flèches changent sa page, Entrée essaie et Échap annule. Votre collection reste dans ce navigateur.",
     "tipLabel": "CONSEIL DE VOYAGE"
+  },
+  "pouch": {
+      "title": "Souvenirs",
+      "empty": "Votre pochette attend ses premiers souvenirs.",
+      "try": "Touchez le paysage pour essayer. Annuler : ?chap ou rouvrir la pochette.",
+      "returned": "Le souvenir retrouve sa place dans la pochette.",
+      "close": "Fermer"
   },
   "loading": {
     "title": "La valise se prépare…",

@@ -223,7 +223,7 @@ export class ProgressStore {
   offerBell(): boolean {
     const progress = this.read();
     if (progress.awakenedMycelia || !this.unlockedSouvenirIds().includes('cimes_eternelles')
-      || !progress.expedition?.visitedDestinationIds.includes('mycelia')) return false;
+      || !progress.discoveredDestinationIds.includes('mycelia')) return false;
     this.save({ ...progress, awakenedMycelia: true });
     return true;
   }

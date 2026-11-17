@@ -42,6 +42,7 @@ type MenuContent = {
   postcard?: number;
   souvenir?: Souvenir;
   souvenirLocked?: boolean;
+  decoratePostcard?: () => void;
   buttons: MenuButton[];
   bookNavigation?: { previous: MenuButton; next: MenuButton; turn?: PageDirection };
 };
@@ -564,6 +565,7 @@ export function createMenu(scene: Phaser.Scene, content: MenuContent): () => voi
     if (content.postcard !== undefined) {
       stopReveal = renderPostcardMenu(scene, content, content.postcard, focusIndex,
         firstRender && content.reveal !== undefined && !motion.matches);
+      content.decoratePostcard?.();
       if (firstRender && content.bookNavigation?.turn) stopTurn = turnJournalPage(scene, content.bookNavigation.turn);
       firstRender = false;
       return;

@@ -9,6 +9,8 @@ import { souvenirForDestination } from '../../domain/souvenirs';
 import { bookBusy, captureJournal } from '../ui/notebookMotion';
 import type { PageDirection } from '../ui/notebookMotion';
 import { preloadTravelSpyglass } from '../ui/travelSpyglass';
+import { preloadSouvenirs } from '../ui/souvenir';
+import { journalPouch } from '../ui/journalPouch';
 
 export class JournalEntryScene extends Phaser.Scene {
   constructor() { super('journal-entry'); }
@@ -17,6 +19,7 @@ export class JournalEntryScene extends Phaser.Scene {
     beginSceneLoading(this);
     queueWorldAssets(this, sceneWorldIds(this), false);
     preloadTravelSpyglass(this);
+    preloadSouvenirs(this, progressStore.unlockedSouvenirIds());
   }
 
   create({ id, page = 0, turn, returnTo }: {
@@ -47,6 +50,7 @@ export class JournalEntryScene extends Phaser.Scene {
       postcard,
       souvenir: souvenirForDestination(id, progressStore.read().discoveredDestinationIds),
       souvenirLocked: !progressStore.unlockedSouvenirIds().includes(id),
+      decoratePostcard: () => journalPouch(this, id, () => this.scene.restart({ id, page, returnTo })),
       buttons: [{ name: 'explore', label: texts.adventure.explore, spyglass: true,
         action: () => this.scene.start('exploration', { id, journalPage: page, returnTo }) },
       { name: 'back-to-journal', label: texts.notebook.backToContents, primary: true,

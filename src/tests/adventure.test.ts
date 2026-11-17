@@ -15,6 +15,19 @@ function collectCimes(store: ProgressStore): boolean {
 }
 
 describe('carte d’aventure et exploration', () => {
+  it('offre la clochette depuis le carnet sans expédition et préserve la collection', () => {
+    const storage = memory();
+    const store = new ProgressStore(() => storage);
+    store.discover('cimes_eternelles');
+    expect(store.offerBell()).toBe(false);
+    store.discover('mycelia');
+    expect(store.offerBell()).toBe(true);
+    expect(store.offerBell()).toBe(false);
+    const restored = new ProgressStore(() => storage);
+    expect(restored.read().awakenedMycelia).toBe(true);
+    expect(restored.unlockedSouvenirIds()).toContain('cimes_eternelles');
+    expect(restored.read().expedition).toBeUndefined();
+  });
   it('conserve l’ordre des escales, du Néant et des revisites au rechargement', () => {
     let session = continueSession(revealResult(beginTravel(createSession(), ['rock', 'snow'])));
     session = continueSession(revealResult(beginTravel(session, ['tree', 'water'])));

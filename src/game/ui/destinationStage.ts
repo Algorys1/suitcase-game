@@ -26,7 +26,7 @@ import { progressStore } from '../../services/storage';
 import { drawAtollAurora } from './atollAurora';
 import { drawStormBottle } from './stormLightning';
 import { drawVestigesMist } from './vestigesMist';
-import { drawForestVisitor } from './souvenirVisitors';
+import { drawForestVisitor, drawCityVisitor } from './souvenirVisitors';
 
 /** Shared framing keeps the landscape in place when the player chooses to explore. */
 export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: SessionState,
@@ -94,6 +94,8 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   if (id === 'necropole_ardente' && scene.sys.settings.key !== 'exploration')
     objects.push(...addNecropoleLamps(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('necropole_ardente')));
+  if (id === 'cite_immobile' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawCityVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'foret_du_silence' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawForestSnow(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('foret_du_silence')).objects);

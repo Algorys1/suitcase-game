@@ -66,24 +66,94 @@ export function drawForestVisitor(scene: Phaser.Scene, frame: WorldFrame): Array
   return [cord, glow, lantern, creature, spores];
 }
 
+/** A warm meeting on the town's paving; the snow, fountain and clocks stay intact. */
+export function drawCityVisitor(scene: Phaser.Scene, frame: WorldFrame): Array<Phaser.GameObjects.Image | Phaser.GameObjects.Graphics> {
+  if (!progressStore.read().welcomedCityVisitor || !scene.textures.exists('adventure-city-resident')
+    || !scene.textures.exists('souvenir-coeur_de_braise')) return [];
+  const { left, top, width, height } = frame;
+  const vialX = left + width * 0.679, vialY = top + height * 0.285;
+  const warm = scene.add.graphics().fillStyle(0xffba66, 0.13)
+    .fillEllipse(vialX, vialY, width * 0.08, height * 0.12)
+    .setName('city-ember-warmth');
+  const vial = scene.add.image(vialX, vialY, 'souvenir-coeur_de_braise').setOrigin(0.5)
+    .setName('city-offered-ember');
+  vial.setScale(height * 0.085 / vial.height);
+  const sparks = scene.add.graphics().setName('city-clock-embers');
+  const drawSparks = (phase: number) => {
+    sparks.clear();
+    for (let i = 0; i < 9; i++) {
+      const life = (phase + i * 0.37) % 1;
+      const angle = i * 2.4;
+      const radius = width * (0.016 + life * 0.035);
+      const sx = vialX + Math.cos(angle) * radius;
+      const sy = vialY + Math.sin(angle) * radius * 0.75 - height * life * 0.025;
+      const alpha = Math.sin(life * Math.PI) * 0.9;
+      const size = Math.max(1.1, width * 0.0035) * (1 - life * 0.3);
+      sparks.lineStyle(Math.max(0.9, width * 0.0018), 0xffa34d, alpha)
+        .lineBetween(sx, sy, sx - Math.cos(angle) * size * 2, sy + size * 2)
+        .fillStyle(0xffedbb, alpha).fillCircle(sx, sy, size);
+    }
+  };
+  const foxX = left + width * 0.70, foxY = top + height * 0.84;
+  const shadow = scene.add.graphics().fillStyle(0x60494d, 0.15)
+    .fillEllipse(foxX, foxY - height * 0.006, width * 0.11, height * 0.018);
+  const fox = scene.add.image(foxX, foxY, 'adventure-city-resident').setOrigin(0.5, 1)
+    .setName('city-visitor');
+  fox.setScale(height * 0.20 / fox.height);
+  const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let emberMotion: Phaser.Tweens.Tween | undefined;
+  const animateEmbers = () => {
+    emberMotion?.stop(); emberMotion = undefined;
+    drawSparks(0.2);
+    if (!preference.matches) emberMotion = scene.tweens.addCounter({ from: 0, to: 1,
+      duration: 1800, repeat: -1, onUpdate: tween => drawSparks(tween.getValue() ?? 0) });
+  };
+  animateEmbers(); preference.addEventListener('change', animateEmbers);
+  sparks.once('destroy', () => { emberMotion?.stop(); preference.removeEventListener('change', animateEmbers); });
+  let greeting: Phaser.Tweens.Tween | undefined;
+  const rest = () => { greeting?.stop(); greeting = undefined; fox.setY(foxY).setAngle(0).setAlpha(1); };
+  if (scene.data.get('city-visitor-arriving')) {
+    scene.data.set('city-visitor-arriving', false);
+    if (!preference.matches) {
+      fox.setY(foxY - height * 0.03).setAlpha(0);
+      greeting = scene.tweens.add({ targets: fox, y: foxY, alpha: 1, duration: 420,
+        ease: 'Bounce.Out', onComplete: () => { greeting = undefined; } });
+    }
+  }
+  fox.setInteractive().on('pointerdown', () => {
+    if (preference.matches || greeting) return;
+    greeting = scene.tweens.add({ targets: fox, angle: { from: -5, to: 5 }, y: foxY - height * 0.009,
+      duration: 190, yoyo: true, repeat: 2, onComplete: rest });
+  });
+  preference.addEventListener('change', rest);
+  fox.once('destroy', () => { greeting?.stop(); preference.removeEventListener('change', rest); });
+  sway(scene, warm, { alpha: { from: 0.65, to: 1 }, duration: 2300,
+    ease: 'Sine.InOut', yoyo: true, repeat: -1 });
+  return [warm, vial, sparks, shadow, fox];
+}
+
 export function preloadHomeVisitors(scene: Phaser.Scene): void {
   const progress = progressStore.read();
   for (const id of [progress.awakenedMycelia ? 'mycelia-resident' : '',
-    progress.welcomedForestVisitor ? 'forest-resident' : ''].filter(Boolean)) {
+    progress.welcomedForestVisitor ? 'forest-resident' : '',
+    progress.welcomedCityVisitor ? 'city-resident' : ''].filter(Boolean)) {
     if (!scene.textures.exists(`adventure-${id}`)) scene.load.image(`adventure-${id}`,
       `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
   }
 }
 
-/** Two small visitors keep clear of the menu's text column and bottom commands. */
+/** Small visitors keep clear of the menu's text column and bottom commands. */
 export function drawHomeVisitors(scene: Phaser.Scene): void {
   const progress = progressStore.read(), { width, height } = scene.scale;
   const landscape = width >= 600;
   const ids = [progress.awakenedMycelia ? 'mycelia-resident' : '',
-    progress.welcomedForestVisitor ? 'forest-resident' : ''].filter(Boolean);
+    progress.welcomedForestVisitor ? 'forest-resident' : '',
+    progress.welcomedCityVisitor ? 'city-resident' : ''].filter(Boolean);
   ids.forEach((id, index) => {
     if (!scene.textures.exists(`adventure-${id}`)) return;
-    const x = width * (landscape ? 0.62 + index * 0.21 : 0.22 + index * 0.54);
+    const x = width * (ids.length === 3
+      ? landscape ? [0.58, 0.74, 0.90][index]! : [0.20, 0.50, 0.80][index]!
+      : landscape ? 0.62 + index * 0.21 : 0.22 + index * 0.54);
     const y = landscape ? height * 0.77 : height - 230;
     const shadow = scene.add.graphics({ x, y: y - 2 }).fillStyle(0x5b3d2b, 0.16)
       .fillEllipse(0, 0, Math.min(28, height * 0.065), 4).setName(`home-visitor-shadow-${id}`);
@@ -92,8 +162,8 @@ export function drawHomeVisitors(scene: Phaser.Scene): void {
     const baseScale = visitor.scaleX;
     let restingX = x;
     let direction = index ? -1 : 1;
-    const stride = Math.min(16, width * 0.025);
-    const roam = Math.min(32, width * 0.05);
+    const stride = Math.min(ids.length === 3 ? 12 : 16, width * 0.025);
+    const roam = Math.min(ids.length === 3 ? 18 : 32, width * 0.05);
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     let sequence: Phaser.Tweens.TweenChain | undefined;
     let pause: Phaser.Time.TimerEvent | undefined;

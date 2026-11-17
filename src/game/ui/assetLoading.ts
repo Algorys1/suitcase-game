@@ -56,6 +56,8 @@ export function queueWorldAssets(scene: Phaser.Scene, ids: readonly string[], ma
   preloadSouvenirs(scene, ids);
   if (ids.includes('foret_du_silence') && progressStore.read().welcomedForestVisitor)
     preloadSouvenirs(scene, ['mycelia']);
+  if (ids.includes('cite_immobile') && progressStore.read().welcomedCityVisitor)
+    preloadSouvenirs(scene, ['coeur_de_braise']);
   preloadAdventureArt(scene, ids, map);
   if (map) {
     const session = (scene.sys.settings.data as { session?: SessionState } | undefined)?.session

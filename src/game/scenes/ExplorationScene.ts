@@ -19,7 +19,7 @@ import { drawSouvenir } from '../ui/souvenir';
 import { drawCimesSunrise, drawMyceliaLife } from '../ui/pilotWorlds';
 import { destinationTravelTip } from '../ui/travelTutorial';
 import { playSound } from '../../services/audio';
-import { drawForestVisitor } from '../ui/souvenirVisitors';
+import { drawForestVisitor, drawCityVisitor } from '../ui/souvenirVisitors';
 import { addArchipelagoReflections, gatherArchipelagoLight } from '../ui/archipelagoReflections';
 import { addRuinsFish } from '../ui/ruinsFish';
 import { addBraiseColumns } from '../ui/braiseColumns';
@@ -393,6 +393,7 @@ export class ExplorationScene extends Phaser.Scene {
       }, this.souvenirInFlight);
 
     if (this.id === 'foret_du_silence') drawForestVisitor(this, stage.art);
+    if (this.id === 'cite_immobile') drawCityVisitor(this, stage.art);
     const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
       && !awake && this.session?.visitedDestinationIds.includes('mycelia');
     if ((canOffer && this.offering) || awake) {

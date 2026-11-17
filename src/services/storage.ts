@@ -20,6 +20,7 @@ export type Progress = {
   pendingSouvenirIds?: string[];
   awakenedMycelia?: boolean;
   welcomedForestVisitor?: boolean;
+  welcomedCityVisitor?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
   sanctuaryPuzzle?: SanctuaryPuzzle;
@@ -76,6 +77,9 @@ export function decodeProgress(serialized: string | null): Progress {
       ...(tutorialSeen.length ? { tutorialSeen } : {}),
       ...(Object.keys(pilotSteps).length ? { pilotSteps } : {}),
       ...(pending.length ? { pendingSouvenirIds: pending } : {}),
+      ...('welcomedCityVisitor' in value && value.welcomedCityVisitor === true
+        && discoveredDestinationIds.includes('cite_immobile') && discoveredDestinationIds.includes('coeur_de_braise')
+        && !pending.includes('coeur_de_braise') ? { welcomedCityVisitor: true } : {}),
       ...('welcomedForestVisitor' in value && value.welcomedForestVisitor === true
         && discoveredDestinationIds.includes('foret_du_silence') && discoveredDestinationIds.includes('mycelia')
         && !pending.includes('mycelia') ? { welcomedForestVisitor: true } : {}),
@@ -237,6 +241,14 @@ export class ProgressStore {
     if (progress.welcomedForestVisitor || !this.unlockedSouvenirIds().includes('mycelia')
       || !progress.discoveredDestinationIds.includes('foret_du_silence')) return false;
     this.save({ ...progress, welcomedForestVisitor: true });
+    return true;
+  }
+
+  offerEmber(): boolean {
+    const progress = this.read();
+    if (progress.welcomedCityVisitor || !this.unlockedSouvenirIds().includes('coeur_de_braise')
+      || !progress.discoveredDestinationIds.includes('cite_immobile')) return false;
+    this.save({ ...progress, welcomedCityVisitor: true });
     return true;
   }
 

@@ -15,6 +15,7 @@ export const activityAssets: Readonly<Record<string, readonly string[]>> = {
   sylve_prismatique: ['sylve-ground', 'sylve-stream'],
   necropole_ardente: ['necropole-unlit'],
   foret_du_silence: ['forest-empty', 'forest-feather', 'forest-resident', 'forest-tracks'],
+  cite_immobile: ['city-resident'],
   royaume_des_spores_celestes: ['kingdom-dormant', 'kingdom-cloud', 'kingdom-umbrella'],
   tempete_ecarlate: ['storm-empty', 'storm-cork'],
   atoll_boreal: ['atoll-dormant'],

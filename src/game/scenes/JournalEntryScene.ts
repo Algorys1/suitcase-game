@@ -26,6 +26,8 @@ export class JournalEntryScene extends Phaser.Scene {
     id?: string; page?: number; turn?: PageDirection; returnTo?: 'adventure'; welcome?: boolean;
   } = {}): void {
     if (!finishSceneLoading(this)) return;
+    this.data.set('octopus-arriving', welcome && id === 'recif_de_verre');
+    this.data.set('fennec-arriving', welcome && id === 'empire_des_sables');
     this.data.set('forest-visitor-arriving', welcome && id === 'foret_du_silence');
     this.data.set('city-visitor-arriving', welcome && id === 'cite_immobile');
     this.data.set('sea-visitor-arriving', welcome && id === 'mer_figee');
@@ -52,7 +54,7 @@ export class JournalEntryScene extends Phaser.Scene {
       souvenir: souvenirForDestination(id, progressStore.read().discoveredDestinationIds),
       souvenirLocked: !progressStore.unlockedSouvenirIds().includes(id),
       decoratePostcard: () => journalPouch(this, id, () => this.scene.restart({ id, page, returnTo,
-        welcome: id === 'foret_du_silence' || id === 'cite_immobile' || id === 'mer_figee' })),
+        welcome: id === 'foret_du_silence' || id === 'cite_immobile' || id === 'mer_figee' || id === 'empire_des_sables' || id === 'recif_de_verre' })),
       buttons: [{ name: 'explore', label: texts.adventure.explore, spyglass: true,
         action: () => this.scene.start('exploration', { id, journalPage: page, returnTo }) },
       { name: 'back-to-journal', label: texts.notebook.backToContents, primary: true,

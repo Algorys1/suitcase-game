@@ -21,7 +21,7 @@ export const activityAssets: Readonly<Record<string, readonly string[]>> = {
   atoll_boreal: ['atoll-dormant'],
   vestiges_celestes: ['vestiges-tile', 'vestiges-complete'],
   mer_figee: ['mer-empty', 'sea-resident', 'sea-resident-clap'], jungle_incandescente: ['jungle-dormant'],
-  jardins_de_gemmes: ['gem-closed', 'gem-bells-clean'], empire_des_sables: ['empire-closed', 'empire-open'],
+  jardins_de_gemmes: ['gem-closed', 'gem-bells-clean'], empire_des_sables: ['empire-closed', 'empire-open', 'fennec-resident'],
   faille_des_contraires: ['rift-broken', 'rift-complete'],
   observatoire_des_etoiles: ['owl-resident', 'owl-resident-wings', 'observatory-empty', 'observatory-lifted', 'observatory-lens-empty', 'observatory-lens-full'],
 };

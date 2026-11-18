@@ -1,6 +1,8 @@
 ﻿import Phaser from 'phaser';
 import { progressStore } from '../../services/storage';
 import type { WorldFrame } from './pilotWorlds';
+import { animateOctopus } from './octopusVisitor';
+import { animateFennec } from './fennecVisitor';
 import { animateOwl } from './owlVisitor';
 import { animateSeal } from './seaVisitor';
 
@@ -139,6 +141,8 @@ export function preloadHomeVisitors(scene: Phaser.Scene): void {
   for (const id of [progress.awakenedMycelia ? 'mycelia-resident' : '',
     progress.welcomedForestVisitor ? 'forest-resident' : '',
     progress.welcomedCityVisitor ? 'city-resident' : '',
+    progress.welcomedReefVisitor ? 'octopus-resident' : '',
+    progress.welcomedEmpireVisitor ? 'fennec-resident' : '',
     ...(progress.welcomedObservatoryVisitor ? ['owl-resident', 'owl-resident-wings'] : []),
     ...(progress.welcomedSeaVisitor ? ['sea-resident', 'sea-resident-clap'] : [])].filter(Boolean)) {
     if (!scene.textures.exists(`adventure-${id}`)) scene.load.image(`adventure-${id}`,
@@ -154,7 +158,9 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     progress.welcomedForestVisitor ? 'forest-resident' : '',
     progress.welcomedCityVisitor ? 'city-resident' : '',
     progress.welcomedSeaVisitor ? 'sea-resident' : '',
-    progress.welcomedObservatoryVisitor ? 'owl-resident' : ''].filter(Boolean);
+    progress.welcomedObservatoryVisitor ? 'owl-resident' : '',
+    progress.welcomedEmpireVisitor ? 'fennec-resident' : '',
+    progress.welcomedReefVisitor ? 'octopus-resident' : ''].filter(Boolean);
   if (!art.width || !art.height) return;
   type Stop = readonly [x: number, y: number, gesture?: 'slide' | 'pause'];
   const routes: Record<string, { stops: readonly Stop[]; duration: number; hop: number }> = {
@@ -166,6 +172,10 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       [0.18, 0.45], [0.39, 0.51], [0.62, 0.42], [0.70, 0.26]], duration: 17400, hop: 0.09 },
     'sea-resident': { stops: [[0.11, 0.91], [0.33, 0.87, 'pause'], [0.33, 0.87],
       [0.25, 0.70], [0.18, 0.62, 'slide']], duration: 14500, hop: 0 },
+    'octopus-resident': { stops: [[0.41, 0.91], [0.55, 0.87], [0.71, 0.88], [0.76, 0.95, 'pause'],
+      [0.76, 0.95], [0.56, 0.97]], duration: 11300, hop: 0 },
+    'fennec-resident': { stops: [[0.62, 0.94], [0.81, 0.95], [0.92, 0.78, 'pause'],
+      [0.92, 0.78], [0.76, 0.73], [0.52, 0.82]], duration: 10200, hop: 0.11 },
     'owl-resident': { stops: [[0.86, 0.20], [0.67, 0.08], [0.43, 0.16, 'pause'],
       [0.43, 0.16], [0.63, 0.29]], duration: 13300, hop: 0.035 },
   };
@@ -211,6 +221,8 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       });
     };
     change();
+    if (id === 'octopus-resident') animateOctopus(scene, visitor);
+    if (id === 'fennec-resident') animateFennec(scene, visitor);
     if (id === 'owl-resident') animateOwl(scene, visitor);
     if (id === 'sea-resident') animateSeal(scene, visitor, true);
     motion.addEventListener('change', change);

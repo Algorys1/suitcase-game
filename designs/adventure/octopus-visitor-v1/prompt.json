@@ -1,0 +1,9 @@
+﻿{
+  "tool": "image_gen",
+  "prompt": "One single tiny lilac octopus mascot, matching exactly the provided mushroom, seal and owl game sprites: simple round silhouette, warm plum painted outline, flat dark dot eyes, small smile, peach blush, subtle gouache grain, softly shaded solid lavender color. Round oversized head, short rounded curled arms arranged around base. Children's book style and same readable proportions at 45px. No realistic anatomy, no accessories, no bubbles, no additional poses, no shadows, transparent alpha background.",
+  "references": [
+    "public/assets/adventure/mycelia-resident.webp",
+    "public/assets/adventure/sea-resident.webp",
+    "public/assets/adventure/owl-resident.webp"
+  ]
+}

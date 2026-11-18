@@ -1,3 +1,5 @@
+import { drawOctopusVisitor } from './octopusVisitor';
+import { drawFennecVisitor } from './fennecVisitor';
 import { drawCollectedAtmosphere } from './collectedAtmosphere';
 import { drawOwlVisitor } from './owlVisitor';
 import { drawLensTwinkle } from './observatoryLens';
@@ -97,6 +99,14 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
     if (destination.id === 'observatoire_des_etoiles') objects.push(...drawLensTwinkle(scene,
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('observatoire_des_etoiles').length === 2));
+    if (destination.id === 'recif_de_verre') objects.push(...drawOctopusVisitor(scene, {
+      left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+      width: picture.displayWidth, height: picture.displayHeight,
+    }));
+    if (destination.id === 'empire_des_sables') objects.push(...drawFennecVisitor(scene, {
+      left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+      width: picture.displayWidth, height: picture.displayHeight,
+    }));
     if (destination.id === 'observatoire_des_etoiles') objects.push(...drawOwlVisitor(scene, {
       left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
       width: picture.displayWidth, height: picture.displayHeight,

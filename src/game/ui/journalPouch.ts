@@ -22,6 +22,8 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
   }
   if (destination === 'foret_du_silence' && progressStore.read().welcomedForestVisitor) return;
   if (destination === 'cite_immobile' && progressStore.read().welcomedCityVisitor) return;
+  if (destination === 'recif_de_verre' && progressStore.read().welcomedReefVisitor) return;
+  if (destination === 'empire_des_sables' && progressStore.read().welcomedEmpireVisitor) return;
   if (destination === 'observatoire_des_etoiles' && progressStore.read().welcomedObservatoryVisitor) return;
   if (destination === 'mer_figee' && progressStore.read().welcomedSeaVisitor) return;
   if (destination === 'mycelia' && progressStore.read().awakenedMycelia) {
@@ -53,7 +55,9 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
       : destination === 'foret_du_silence' && selected === 'mycelia' ? progressStore.offerSporeLantern()
       : destination === 'cite_immobile' && selected === 'coeur_de_braise' ? progressStore.offerEmber()
       : destination === 'mer_figee' && selected === 'archipel_azur' ? progressStore.offerSeashell()
-      : destination === 'observatoire_des_etoiles' && selected === 'iles_suspendues' ? progressStore.offerWeightlessPebble() : false;
+      : destination === 'observatoire_des_etoiles' && selected === 'iles_suspendues' ? progressStore.offerWeightlessPebble()
+      : destination === 'empire_des_sables' && selected === 'temple_oublie' ? progressStore.offerRootAmulet()
+      : destination === 'recif_de_verre' && selected === 'grottes_sporiferes' ? progressStore.offerLuminousGeode() : false;
     selected = undefined;
     target.disableInteractive();
     if (accepted) refresh();

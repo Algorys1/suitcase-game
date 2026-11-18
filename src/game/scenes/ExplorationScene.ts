@@ -1,3 +1,5 @@
+import { drawOctopusVisitor } from '../ui/octopusVisitor';
+import { drawFennecVisitor } from '../ui/fennecVisitor';
 import { drawCollectedAtmosphere } from '../ui/collectedAtmosphere';
 import { drawOwlVisitor } from '../ui/owlVisitor';
 import { beginSceneLoading, finishSceneLoading, queueWorldAssets, sceneWorldIds } from '../ui/assetLoading';
@@ -393,6 +395,8 @@ export class ExplorationScene extends Phaser.Scene {
     drawCollectedAtmosphere(this, this.id, stage.art, found && !this.souvenirInFlight);
     if (this.id === 'foret_du_silence') drawForestVisitor(this, stage.art);
     if (this.id === 'cite_immobile') drawCityVisitor(this, stage.art);
+    if (this.id === 'recif_de_verre') drawOctopusVisitor(this, stage.art);
+    if (this.id === 'empire_des_sables') drawFennecVisitor(this, stage.art);
     if (this.id === 'observatoire_des_etoiles') drawOwlVisitor(this, stage.art);
     if (this.id === 'mer_figee') drawSeaVisitor(this, stage.art);
     if (awake) {

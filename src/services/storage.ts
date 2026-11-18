@@ -23,6 +23,8 @@ export type Progress = {
   welcomedCityVisitor?: boolean;
   welcomedSeaVisitor?: boolean;
   welcomedObservatoryVisitor?: boolean;
+  welcomedEmpireVisitor?: boolean;
+  welcomedReefVisitor?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
   sanctuaryPuzzle?: SanctuaryPuzzle;
@@ -79,6 +81,12 @@ export function decodeProgress(serialized: string | null): Progress {
       ...(tutorialSeen.length ? { tutorialSeen } : {}),
       ...(Object.keys(pilotSteps).length ? { pilotSteps } : {}),
       ...(pending.length ? { pendingSouvenirIds: pending } : {}),
+      ...('welcomedReefVisitor' in value && value.welcomedReefVisitor === true
+        && discoveredDestinationIds.includes('recif_de_verre') && discoveredDestinationIds.includes('grottes_sporiferes')
+        && !pending.includes('grottes_sporiferes') ? { welcomedReefVisitor: true } : {}),
+      ...('welcomedEmpireVisitor' in value && value.welcomedEmpireVisitor === true
+        && discoveredDestinationIds.includes('empire_des_sables') && discoveredDestinationIds.includes('temple_oublie')
+        && !pending.includes('temple_oublie') ? { welcomedEmpireVisitor: true } : {}),
       ...('welcomedObservatoryVisitor' in value && value.welcomedObservatoryVisitor === true
         && discoveredDestinationIds.includes('observatoire_des_etoiles') && discoveredDestinationIds.includes('iles_suspendues')
         && !pending.includes('iles_suspendues') ? { welcomedObservatoryVisitor: true } : {}),
@@ -273,6 +281,22 @@ export class ProgressStore {
     if (progress.welcomedObservatoryVisitor || !this.unlockedSouvenirIds().includes('iles_suspendues')
       || !progress.discoveredDestinationIds.includes('observatoire_des_etoiles')) return false;
     this.save({ ...progress, welcomedObservatoryVisitor: true });
+    return true;
+  }
+
+  offerRootAmulet(): boolean {
+    const progress = this.read();
+    if (progress.welcomedEmpireVisitor || !this.unlockedSouvenirIds().includes('temple_oublie')
+      || !progress.discoveredDestinationIds.includes('empire_des_sables')) return false;
+    this.save({ ...progress, welcomedEmpireVisitor: true });
+    return true;
+  }
+
+  offerLuminousGeode(): boolean {
+    const progress = this.read();
+    if (progress.welcomedReefVisitor || !this.unlockedSouvenirIds().includes('grottes_sporiferes')
+      || !progress.discoveredDestinationIds.includes('recif_de_verre')) return false;
+    this.save({ ...progress, welcomedReefVisitor: true });
     return true;
   }
 

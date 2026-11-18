@@ -1,3 +1,5 @@
+import { drawOctopusVisitor } from './octopusVisitor';
+import { drawFennecVisitor } from './fennecVisitor';
 import { drawCollectedAtmosphere } from './collectedAtmosphere';
 import { drawOwlVisitor } from './owlVisitor';
 import { needsTravelTip } from './travelTutorial';
@@ -119,6 +121,10 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
       progressStore.explorationSteps('observatoire_des_etoiles').length === 2));
   if (id === 'observatoire_des_etoiles' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawOwlVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
+  if (id === 'recif_de_verre' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawOctopusVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
+  if (id === 'empire_des_sables' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawFennecVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'faille_des_contraires' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawRiftSteam(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('faille_des_contraires').length === 2));

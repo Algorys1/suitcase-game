@@ -62,6 +62,13 @@ export function queueWorldAssets(scene: Phaser.Scene, ids: readonly string[], ma
     preloadSouvenirs(scene, ['archipel_azur']);
   if (ids.includes('observatoire_des_etoiles') && progressStore.read().welcomedObservatoryVisitor)
     preloadSouvenirs(scene, ['iles_suspendues']);
+  if (ids.includes('empire_des_sables') && progressStore.read().welcomedEmpireVisitor)
+    preloadSouvenirs(scene, ['temple_oublie']);
+  if (ids.includes('recif_de_verre')) {
+    if (!scene.textures.exists('adventure-octopus-resident'))
+      scene.load.image('adventure-octopus-resident', import.meta.env.BASE_URL + 'assets/adventure/octopus-resident.webp');
+    if (progressStore.read().welcomedReefVisitor) preloadSouvenirs(scene, ['grottes_sporiferes']);
+  }
   preloadAdventureArt(scene, ids, map);
   if (map) {
     const session = (scene.sys.settings.data as { session?: SessionState } | undefined)?.session

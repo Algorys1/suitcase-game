@@ -1,0 +1,9 @@
+﻿{
+  "tool": "image_gen",
+  "prompt": "Create ONE single new character sprite for the EXACT SAME illustrated game cast as the provided three style references: mushroom, seal, owl. Match their compact upright pear body, enormous ROUND face, extremely simple flat plum dot eyes, small smiling curved mouth, round peach blush, stubby front paws, little round feet, thick muted plum painted outline, same flat gouache shapes with subtle paper grain and soft brush highlights. Make a baby fennec in the SAME stylized front-facing upright mascot proportions as the seal and owl. Two tall oversized rounded fennec ears, held up with a gentle outward tilt, rosy inside. Round biscuit-sand head and pear-shaped body, cream oval cheeks and belly, tiny plum button nose flush against face, short sandy tail to side with a muted brown tip. Strictly no prominent muzzle, no realistic four-legged animal anatomy, no rendering individual hairs, no orange fur, no scarf or props. It should look like the fourth sprite on the same character sheet. One pose only, front view slight tilt, complete silhouette, transparent alpha, no shadow, no text.",
+  "references": [
+    "public/assets/adventure/mycelia-resident.webp",
+    "public/assets/adventure/sea-resident.webp",
+    "public/assets/adventure/owl-resident.webp"
+  ]
+}

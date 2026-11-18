@@ -54,8 +54,9 @@ export function drawLensTwinkle(scene: Phaser.Scene, art: WorldFrame, complete: 
     light.clear();
     stars.forEach(([u, v, size], i) => {
       const glow = (1 + Math.cos((state.phase + i * 0.37) * Math.PI * 2)) / 2;
-      const x = art.left + u! * art.width, y = art.top + v! * art.height, r = Math.max(1, size! * art.width);
-      for (let j = 3; j >= 1; j--) light.fillStyle(0xffe8a2, glow * 0.055)
+      const x = art.left + u! * art.width, y = art.top + v! * art.height;
+      const r = Math.max(1.5, size! * art.width * 1.6) * (0.65 + glow * 0.55);
+      for (let j = 3; j >= 1; j--) light.fillStyle(0xffe8a2, glow * 0.13)
         .fillEllipse(x, y, r * j * 2.1, r * j * 2.1);
       light.fillStyle(0xfff3c5, 0.15 + glow * 0.80);
       light.beginPath().moveTo(x, y - r).lineTo(x + r * 0.22, y - r * 0.22)
@@ -66,7 +67,7 @@ export function drawLensTwinkle(scene: Phaser.Scene, art: WorldFrame, complete: 
   };
   paint();
   if (!reducedMotion()) {
-    const tween = scene.tweens.add({ targets: state, phase: 1, duration: 7000, repeat: -1, onUpdate: paint });
+    const tween = scene.tweens.add({ targets: state, phase: 1, duration: 3800, repeat: -1, onUpdate: paint });
     light.once('destroy', () => tween.remove());
   }
   return [light];

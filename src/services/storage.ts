@@ -22,6 +22,7 @@ export type Progress = {
   welcomedForestVisitor?: boolean;
   welcomedCityVisitor?: boolean;
   welcomedSeaVisitor?: boolean;
+  welcomedObservatoryVisitor?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
   sanctuaryPuzzle?: SanctuaryPuzzle;
@@ -78,6 +79,9 @@ export function decodeProgress(serialized: string | null): Progress {
       ...(tutorialSeen.length ? { tutorialSeen } : {}),
       ...(Object.keys(pilotSteps).length ? { pilotSteps } : {}),
       ...(pending.length ? { pendingSouvenirIds: pending } : {}),
+      ...('welcomedObservatoryVisitor' in value && value.welcomedObservatoryVisitor === true
+        && discoveredDestinationIds.includes('observatoire_des_etoiles') && discoveredDestinationIds.includes('iles_suspendues')
+        && !pending.includes('iles_suspendues') ? { welcomedObservatoryVisitor: true } : {}),
       ...('welcomedSeaVisitor' in value && value.welcomedSeaVisitor === true
         && discoveredDestinationIds.includes('mer_figee') && discoveredDestinationIds.includes('archipel_azur')
         && !pending.includes('archipel_azur') ? { welcomedSeaVisitor: true } : {}),
@@ -261,6 +265,14 @@ export class ProgressStore {
     if (progress.welcomedSeaVisitor || !this.unlockedSouvenirIds().includes('archipel_azur')
       || !progress.discoveredDestinationIds.includes('mer_figee')) return false;
     this.save({ ...progress, welcomedSeaVisitor: true });
+    return true;
+  }
+
+  offerWeightlessPebble(): boolean {
+    const progress = this.read();
+    if (progress.welcomedObservatoryVisitor || !this.unlockedSouvenirIds().includes('iles_suspendues')
+      || !progress.discoveredDestinationIds.includes('observatoire_des_etoiles')) return false;
+    this.save({ ...progress, welcomedObservatoryVisitor: true });
     return true;
   }
 

@@ -5,10 +5,9 @@ import type { WorldFrame } from './pilotWorlds';
 /** Two painted poses keep the flippers legible even on the small home visitors. */
 export function animateSeal(scene: Phaser.Scene, seal: Phaser.GameObjects.Image, ambient = false): void {
   const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const restY = seal.y;
   let clap: Phaser.Time.TimerEvent | undefined;
   let pause: Phaser.Time.TimerEvent | undefined;
-  const rest = () => { seal.setTexture('adventure-sea-resident').setY(restY); };
+  const rest = () => { seal.setTexture('adventure-sea-resident'); };
   const schedule = () => {
     if (ambient && !preference.matches && seal.active)
       pause = scene.time.delayedCall(Phaser.Math.Between(1800, 3200), greet);
@@ -17,12 +16,11 @@ export function animateSeal(scene: Phaser.Scene, seal: Phaser.GameObjects.Image,
     if (preference.matches || clap || !seal.active) return;
     pause?.remove(); pause = undefined;
     let beat = 0;
-    seal.setTexture('adventure-sea-resident-clap').setY(restY - 1);
+    seal.setTexture('adventure-sea-resident-clap');
     clap = scene.time.addEvent({ delay: 180, repeat: 4, callback: () => {
       beat++;
       if (beat === 5) { clap = undefined; rest(); schedule(); return; }
-      seal.setTexture(beat % 2 ? 'adventure-sea-resident' : 'adventure-sea-resident-clap')
-        .setY(restY - (beat % 2 ? 0 : 1));
+      seal.setTexture(beat % 2 ? 'adventure-sea-resident' : 'adventure-sea-resident-clap');
     } });
   };
   const change = () => {

@@ -1,6 +1,7 @@
 ﻿import Phaser from 'phaser';
 import { progressStore } from '../../services/storage';
 import type { WorldFrame } from './pilotWorlds';
+import { animateOwl } from './owlVisitor';
 import { animateSeal } from './seaVisitor';
 
 /** All ambient movement belongs to its display object and respects live motion preferences. */
@@ -138,92 +139,81 @@ export function preloadHomeVisitors(scene: Phaser.Scene): void {
   for (const id of [progress.awakenedMycelia ? 'mycelia-resident' : '',
     progress.welcomedForestVisitor ? 'forest-resident' : '',
     progress.welcomedCityVisitor ? 'city-resident' : '',
+    ...(progress.welcomedObservatoryVisitor ? ['owl-resident', 'owl-resident-wings'] : []),
     ...(progress.welcomedSeaVisitor ? ['sea-resident', 'sea-resident-clap'] : [])].filter(Boolean)) {
     if (!scene.textures.exists(`adventure-${id}`)) scene.load.image(`adventure-${id}`,
       `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
   }
 }
 
-/** Small visitors keep clear of the menu's text column and bottom commands. */
-export function drawHomeVisitors(scene: Phaser.Scene): void {
+/** Visitors follow the painted luggage, above the portrait menu and beside the landscape menu. */
+export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle): void {
   const progress = progressStore.read(), { width, height } = scene.scale;
   const landscape = width >= 600;
   const ids = [progress.awakenedMycelia ? 'mycelia-resident' : '',
     progress.welcomedForestVisitor ? 'forest-resident' : '',
     progress.welcomedCityVisitor ? 'city-resident' : '',
-    progress.welcomedSeaVisitor ? 'sea-resident' : ''].filter(Boolean);
+    progress.welcomedSeaVisitor ? 'sea-resident' : '',
+    progress.welcomedObservatoryVisitor ? 'owl-resident' : ''].filter(Boolean);
+  if (!art.width || !art.height) return;
+  type Stop = readonly [x: number, y: number, gesture?: 'slide' | 'pause'];
+  const routes: Record<string, { stops: readonly Stop[]; duration: number; hop: number }> = {
+    'mycelia-resident': { stops: [[0.15, 0.91], [0.50, 0.91], [0.82, 0.86, 'pause'],
+      [0.82, 0.86], [0.51, 0.87], [0.18, 0.82]], duration: 16000, hop: 0.05 },
+    'forest-resident': { stops: [[0.78, 0.87], [0.92, 0.67], [0.80, 0.38],
+      [0.65, 0.32], [0.80, 0.60], [0.89, 0.86]], duration: 12700, hop: 0.17 },
+    'city-resident': { stops: [[0.52, 0.20], [0.26, 0.24], [landscape ? -0.17 : 0.19, 0.22],
+      [0.18, 0.45], [0.39, 0.51], [0.62, 0.42], [0.70, 0.26]], duration: 17400, hop: 0.09 },
+    'sea-resident': { stops: [[0.11, 0.91], [0.33, 0.87, 'pause'], [0.33, 0.87],
+      [0.25, 0.70], [0.18, 0.62, 'slide']], duration: 14500, hop: 0 },
+    'owl-resident': { stops: [[0.86, 0.20], [0.67, 0.08], [0.43, 0.16, 'pause'],
+      [0.43, 0.16], [0.63, 0.29]], duration: 13300, hop: 0.035 },
+  };
   ids.forEach((id, index) => {
-    if (!scene.textures.exists(`adventure-${id}`)) return;
-    const x = width * (ids.length === 4
-      ? landscape ? 0.56 + index * 0.12 : 0.14 + index * 0.24
-      : ids.length === 3
-      ? landscape ? [0.58, 0.74, 0.90][index]! : [0.20, 0.50, 0.80][index]!
-      : landscape ? 0.62 + index * 0.21 : 0.22 + index * 0.54);
-    const y = landscape ? height * 0.77 : height - 230;
-    const shadow = scene.add.graphics({ x, y: y - 2 }).fillStyle(0x5b3d2b, 0.16)
-      .fillEllipse(0, 0, Math.min(28, height * 0.065), 4).setName(`home-visitor-shadow-${id}`);
-    const visitor = scene.add.image(x, y, `adventure-${id}`).setOrigin(0.5, 1).setName(`home-visitor-${id}`);
-    visitor.setScale(Math.min(landscape ? 64 : 54, height * 0.16) / visitor.height);
-    if (id === 'sea-resident') { animateSeal(scene, visitor, true); return; }
-    const baseScale = visitor.scaleX;
-    let restingX = x;
-    let direction = index ? -1 : 1;
-    const stride = Math.min(ids.length >= 3 ? 12 : 16, width * 0.025);
-    const roam = Math.min(ids.length === 4 ? 10 : ids.length === 3 ? 18 : 32, width * 0.05);
-    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let sequence: Phaser.Tweens.TweenChain | undefined;
-    let pause: Phaser.Time.TimerEvent | undefined;
-    const reset = () => {
-      pause?.remove(); pause = undefined;
-      sequence?.stop(); sequence = undefined;
-      visitor.setPosition(restingX, y).setAngle(0).setScale(baseScale);
-      shadow.setX(restingX);
-      shadow.setScale(1).setAlpha(1);
+    const key = `adventure-${id}`;
+    const path = routes[id];
+    if (!path || !scene.textures.exists(key)) return;
+    const route = path.stops;
+    const visitor = scene.add.image(0, 0, key).setOrigin(0.5, 1).setName(`home-visitor-${id}`);
+    const sizeFactor = id === 'sea-resident' || id === 'owl-resident' ? 0.92 : 1;
+    visitor.setScale(sizeFactor * Math.min(landscape ? 58 : 48, height * 0.15, art.height * 0.29) / visitor.height);
+    const size = visitor.displayHeight;
+    const restX = art.left + art.width * (0.15 + (ids.length === 1 ? 0.48 : index * 0.73 / (ids.length - 1)));
+    const restY = art.top + art.height * 0.91;
+    visitor.setPosition(restX, restY);
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let roam: Phaser.Tweens.Tween | undefined;
+    let start: Phaser.Time.TimerEvent | undefined;
+    const place = (phase: number) => {
+      const segment = Math.min(route.length - 1, Math.floor(phase));
+      const t = phase - segment;
+      const [u, v, gesture] = route[segment]!;
+      const [nextU, nextV] = route[(segment + 1) % route.length]!;
+      const sliding = gesture === 'slide';
+      const paused = gesture === 'pause';
+      const blend = sliding ? t * t : (1 - Math.cos(t * Math.PI)) / 2;
+      const hop = sliding || paused ? 0 : Math.abs(Math.sin(t * Math.PI * 4)) * size * path.hop;
+      const x = art.left + art.width * Phaser.Math.Linear(u, nextU, blend);
+      const y = art.top + art.height * Phaser.Math.Linear(v, nextV, blend) - hop;
+      visitor.setPosition(x, y);
+      if (id !== 'owl-resident') visitor.setAngle(sliding ? -14 * Math.sin(Math.PI * t)
+        : paused ? 0 : Math.sin(t * Math.PI * 8) * (id === 'sea-resident' ? 2 : 4));
     };
-    const schedule = () => {
-      if (!preference.matches && visitor.active)
-        pause = scene.time.delayedCall(Phaser.Math.Between(700, 1500), react);
-    };
-    const react = () => {
-      if (preference.matches || sequence || !visitor.active) return;
-      pause?.remove(); pause = undefined;
-      const hop = id === 'forest-resident';
-      const height = Math.min(12, scene.scale.height * 0.027);
-      if (restingX + direction * stride > x + roam || restingX + direction * stride < x - roam)
-        direction *= -1;
-      const nextX = restingX + direction * stride;
-      const middleX = (restingX + nextX) / 2;
-      const updateShadow = () => {
-        const airborne = Math.max(0, Math.min(1, (y - visitor.y) / height));
-        shadow.setX(visitor.x).setScale(1 - airborne * 0.3).setAlpha(1 - airborne * 0.4);
-      };
-      sequence = scene.tweens.chain({ targets: visitor,
-        tweens: hop ? [
-          { scaleX: baseScale * 1.07, scaleY: baseScale * 0.92, duration: 75, ease: 'Sine.In' },
-          { x: middleX, y: y - height, scaleX: baseScale * 0.97, scaleY: baseScale * 1.03,
-            duration: 140, ease: 'Quad.Out', onUpdate: updateShadow },
-          { x: nextX, y, scaleX: baseScale * 1.06, scaleY: baseScale * 0.94,
-            duration: 145, ease: 'Quad.In', onUpdate: updateShadow },
-          { scaleX: baseScale, scaleY: baseScale, duration: 100, ease: 'Sine.Out' },
-        ] : [
-          { angle: -direction * 5, duration: 90, ease: 'Sine.InOut' },
-          { x: middleX, y: y - 3, angle: direction * 5, duration: 140,
-            ease: 'Sine.InOut', onUpdate: updateShadow },
-          { x: nextX, y, angle: -direction * 3, duration: 140,
-            ease: 'Sine.InOut', onUpdate: updateShadow },
-          { angle: 0, duration: 90, ease: 'Sine.Out' },
-        ],
-        onComplete: () => { sequence = undefined; restingX = nextX;
-          visitor.setScale(baseScale).setAngle(0).setPosition(restingX, y);
-          shadow.setX(restingX).setScale(1).setAlpha(1); schedule(); },
+    const change = () => {
+      start?.remove(); roam?.stop();
+      visitor.setPosition(restX, restY).setAngle(0);
+      if (motion.matches) return;
+      const offset = index * route.length / ids.length;
+      place(offset);
+      start = scene.time.delayedCall(450 + index * 650, () => {
+        roam = scene.tweens.addCounter({ from: 0, to: route.length, duration: path.duration,
+          repeat: -1, onUpdate: tween => place(((tween.getValue() ?? 0) + offset) % route.length) });
       });
     };
-    const change = () => { reset(); schedule(); };
-    schedule();
-    visitor.setInteractive().on('pointerdown', react);
-    preference.addEventListener('change', change);
-    visitor.once('destroy', () => {
-      pause?.remove(); sequence?.stop(); preference.removeEventListener('change', change);
-    });
+    change();
+    if (id === 'owl-resident') animateOwl(scene, visitor);
+    if (id === 'sea-resident') animateSeal(scene, visitor, true);
+    motion.addEventListener('change', change);
+    visitor.once('destroy', () => { start?.remove(); roam?.stop(); motion.removeEventListener('change', change); });
   });
 }

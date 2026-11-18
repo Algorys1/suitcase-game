@@ -1,3 +1,5 @@
+import { drawCollectedAtmosphere } from '../ui/collectedAtmosphere';
+import { drawOwlVisitor } from '../ui/owlVisitor';
 import { beginSceneLoading, finishSceneLoading, queueWorldAssets, sceneWorldIds } from '../ui/assetLoading';
 import { addObservatoryLens } from '../ui/observatoryLens';
 import { addRiftBasalt } from '../ui/riftBasalt';
@@ -388,8 +390,10 @@ export class ExplorationScene extends Phaser.Scene {
         this.souvenirArrival = collected; this.render();
       }, this.souvenirInFlight);
 
+    drawCollectedAtmosphere(this, this.id, stage.art, found && !this.souvenirInFlight);
     if (this.id === 'foret_du_silence') drawForestVisitor(this, stage.art);
     if (this.id === 'cite_immobile') drawCityVisitor(this, stage.art);
+    if (this.id === 'observatoire_des_etoiles') drawOwlVisitor(this, stage.art);
     if (this.id === 'mer_figee') drawSeaVisitor(this, stage.art);
     if (awake) {
       const bx = left + artW * 0.68, hook = top + artH * 0.53;

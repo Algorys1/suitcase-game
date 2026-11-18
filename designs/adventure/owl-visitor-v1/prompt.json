@@ -1,0 +1,5 @@
+﻿{
+  "tool": "image_gen",
+  "prompt": "Transparent 2:1 spritesheet, two equal square cells horizontally. Same adorable little round midnight blue owl with cream face and belly, tiny golden beak, painted gouache grain, dark plum outlines, dot eyes, same style as provided mushroom reference. Left perched facing forward, right tilts head slightly and spreads both wings joyfully. Same head size, same feet alignment, entire silhouette inside each cell. No background, no shadows, no text. Transparent alpha.",
+  "reference": "public/assets/adventure/mycelia-resident.webp"
+}

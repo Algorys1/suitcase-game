@@ -231,7 +231,9 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
   title.setScale(Math.min(1, titleWidth / title.width));
   const { journal } = mapInstruments(w, h, session);
   const compactEndNote = portrait && count >= 7 && session.charges === 0 && !progress.tutorialSeen?.includes('exhausted');
-  const badgeX = compactEndNote ? w * 0.71 : w - (portrait ? 78 : 113), badgeY = compactEndNote ? 158 : portrait ? 101 : 72;
+  const exhausted = session.charges === 0;
+  const badgeX = compactEndNote ? w * 0.71 : w - (portrait ? 78 : 113);
+  const badgeY = compactEndNote ? 158 : portrait ? (exhausted ? 127 : 101) : 72;
   const tray = scene.add.graphics().setName('energy-ticket');
   tray.fillStyle(0xb49766, 0.09).fillRoundedRect(badgeX - 64, badgeY - 25, 128, 71, 6);
   mapText(scene, badgeX, badgeY - 14, copy.energy, 10, 135, '#876b46');
@@ -239,8 +241,9 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
     const x = badgeX + (i % 5 - 2) * 22, y = badgeY + 5 + Math.floor(i / 5) * 21;
     drawChargeBadge(scene, x, y, 8, i < session.charges, `charge-badge-${i}`);
   }
-  mapText(scene, title.x, title.getBottomCenter().y + 12, copy.freeWish, portrait || short ? 12 : 14,
+  const subtitle = mapText(scene, title.x, 0, exhausted ? copy.exhausted : copy.freeWish, portrait || short ? 12 : 14,
     portrait ? w - 105 : w - 350, '#7d6c53').setFontFamily('Georgia, serif').setFontStyle('italic').setName('adventure-wish');
+  subtitle.setY(title.getBottomCenter().y + subtitle.height / 2 + 3);
   const { points, size } = mapRouteLayout(w, h, session);
   // Paths sit behind every world, and bend between steps like a pen-drawn itinerary.
   const captions: { x: number; y: number; text: string; index: number }[] = [];
@@ -330,10 +333,6 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
     if (!position) { label.destroy(); stamp?.destroy(); continue; }
     reserved.push(position);
     const plate = scene.add.graphics().setName(`map-label-paper-${caption.index}`);
-    if (Math.abs(position.x - preferred.x) > 10 || Math.abs(position.y - preferred.y) > 10) {
-      plate.lineStyle(0.8, 0x8e724e, 0.45).lineBetween(caption.x, caption.y + size * 0.32,
-        position.x + position.width / 2, position.y + position.height / 2);
-    }
     plate.fillStyle(0xf9edcf, 0.97).lineStyle(0.7, 0xb79b69, 0.4)
       .fillRoundedRect(position.x, position.y, position.width, position.height, 2)
       .strokeRoundedRect(position.x, position.y, position.width, position.height, 2);

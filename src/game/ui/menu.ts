@@ -206,7 +206,9 @@ function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: n
     art.setScale(Math.min(artWidth / art.width, Math.max(0, artBottom - artTop) / art.height));
   }
 
-  drawHomeVisitors(scene);
+  const departureArt = scene.children.getByName('home-departure') as Phaser.GameObjects.Image | null;
+  if (departureArt) drawHomeVisitors(scene, departureArt.getBounds());
+  title.setDepth(1);
   content.buttons.forEach((button, index) => createButton(scene,
     index >= 2 ? landscape ? left + innerWidth * (index === 2 ? 0.61 : 0.85) : width * (index === 2 ? 0.25 : 0.75) : center,
     positions[index] ?? settingsY,

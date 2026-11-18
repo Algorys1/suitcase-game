@@ -54,7 +54,8 @@ export function drawTravelSpyglass(scene: Phaser.Scene, x: number, y: number, si
   let pulse: Phaser.Tweens.Tween | undefined;
   const startPulse = () => {
     if (!query.matches && !busy) pulse = scene.tweens.add({ targets: image,
-      alpha: 0.77, delay: 800, duration: 650, yoyo: true, repeat: -1, repeatDelay: 1600, ease: 'Sine.InOut' });
+      scale: { from: scale, to: scale * 1.09 }, delay: 800, duration: 480,
+      yoyo: true, repeat: -1, repeatDelay: 1600, ease: 'Sine.InOut' });
   };
   const complete = () => { if (!pending) return; pending = false; action(); };
   const activate = () => {

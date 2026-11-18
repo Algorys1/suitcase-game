@@ -397,7 +397,7 @@
     "needles": "Faites tourner les aiguilles vers deux symboles différents. Leur rencontre décidera du voyage.",
     "energy": "Régler les aiguilles est gratuit. Partir coûte une charge… deux si vous rencontrez le Néant.",
     "arrival": "Votre premier paysage ! Touchez ou cliquez sur la longue-vue pour l’explorer et chercher son souvenir.",
-    "exhausted": "La valise se repose. Vos escales restent accessibles ; votre carnet vous accompagnera au prochain départ.",
+    "exhausted": "La valise n'a plus de charges. Vos escales restent accessibles ; votre carnet vous accompagnera au prochain départ.",
     "commands": "Les gestes",
     "gestures": "Glissez la pointe ou le contrepoids. Vous pouvez aussi choisir une aiguille, puis toucher un symbole.",
     "keyboard": "Au clavier : 1 / 2 choisit une aiguille, ← / → la fait tourner. Tab parcourt les commandes ; Entrée ou Espace les active.",

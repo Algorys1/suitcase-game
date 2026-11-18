@@ -69,16 +69,17 @@ export class AdventureScene extends Phaser.Scene {
     });
     this.controls.add('map-journal', journal.x, journal.y, Math.max(48, journal.width + 12), journal.height + 14,
       () => approachJournal(this, opening => this.scene.start('journal', { opening, returnTo: 'adventure' })));
-    if (width >= 600 && (height >= 450 || this.session.visitedDestinationIds.length + this.session.voidTrips <= 6)) {
+    if (this.session.charges > 0 && width >= 600
+      && (height >= 450 || this.session.visitedDestinationIds.length + this.session.voidTrips <= 6)) {
       mapText(this, width / 2, height - 70,
-        this.session.charges > 0 ? copy.mapHelp : copy.exhausted, height < 450 ? 13 : 15,
+        copy.mapHelp, height < 450 ? 13 : 15,
         width - 270, '#65452e').setFontStyle('bold').setName('map-help');
     }
     this.controls.button('pause-adventure', copy.home, width < 600 ? 62 : 100,
       height - 35, width < 600 ? 94 : 150, () => this.scene.start('home'), true);
     if (this.session.charges === 0) this.controls.button('view-summary', getTexts().journey.finish,
       width / 2, height - 35, width < 600 ? 96 : 180,
-      () => this.scene.start('summary', { session: this.session }));
+      () => this.scene.start('summary', { session: this.session }), true);
     if (!progressStore.persistent) mapText(this, width / 2, width < 600 ? 194 : height - 58,
       getTexts().notebook.unavailable, 10, width - 36).setName('storage-warning');
     const step = this.session.charges === 0 ? 'exhausted' : 'departure';

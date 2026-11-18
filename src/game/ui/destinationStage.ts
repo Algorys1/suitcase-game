@@ -1,3 +1,5 @@
+import { drawCollectedAtmosphere } from './collectedAtmosphere';
+import { drawOwlVisitor } from './owlVisitor';
 import { needsTravelTip } from './travelTutorial';
 import type { TutorialStep } from '../../services/storage';
 import { drawLensTwinkle } from './observatoryLens';
@@ -115,6 +117,8 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   if (id === 'observatoire_des_etoiles' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawLensTwinkle(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('observatoire_des_etoiles').length === 2));
+  if (id === 'observatoire_des_etoiles' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawOwlVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'faille_des_contraires' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawRiftSteam(scene, { left: artLeft, top: artUpper, width: artW, height: artH },
       progressStore.explorationSteps('faille_des_contraires').length === 2));
@@ -132,6 +136,10 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
       progressStore.explorationSteps('mer_figee').length === 3));
   if (id === 'foret_du_silence' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawForestVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
+  if (scene.sys.settings.key !== 'exploration')
+    objects.push(...drawCollectedAtmosphere(scene, id, {
+      left: artLeft, top: artUpper, width: artW, height: artH,
+    }, progressStore.unlockedSouvenirIds().includes(id)));
   const corners = scene.add.graphics().setName('arrival-photo-corners');
   if (id === 'vestiges_celestes' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawVestigesMist(scene, { left: artLeft, top: artUpper, width: artW, height: artH },

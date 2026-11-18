@@ -1,3 +1,5 @@
+import { drawCollectedAtmosphere } from './collectedAtmosphere';
+import { drawOwlVisitor } from './owlVisitor';
 import { drawLensTwinkle } from './observatoryLens';
 import { drawRiftSteam } from './riftBasalt';
 import { drawEmpireSmoke } from './empireLamp';
@@ -95,6 +97,10 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
     if (destination.id === 'observatoire_des_etoiles') objects.push(...drawLensTwinkle(scene,
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('observatoire_des_etoiles').length === 2));
+    if (destination.id === 'observatoire_des_etoiles') objects.push(...drawOwlVisitor(scene, {
+      left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+      width: picture.displayWidth, height: picture.displayHeight,
+    }));
     if (destination.id === 'faille_des_contraires') objects.push(...drawRiftSteam(scene,
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('faille_des_contraires').length === 2));
@@ -123,6 +129,10 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
     if (destination.id === 'foret_du_silence') objects.push(...drawForestVisitor(scene,
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight }));
+    objects.push(...drawCollectedAtmosphere(scene, destination.id, {
+      left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+      width: picture.displayWidth, height: picture.displayHeight,
+    }, progressStore.unlockedSouvenirIds().includes(destination.id)));
     if (mounted) {
       // Frame corners stay in front of the landscape.
       // The photo corners remain above the painted overlays.

@@ -6,6 +6,7 @@ import { drawFruitPulse } from './jungleHeat';
 import { drawGlobeSnow } from './frozenGlobe';
 import Phaser from 'phaser';
 import { drawForestVisitor, drawCityVisitor } from './souvenirVisitors';
+import { drawSeaVisitor } from './seaVisitor';
 import { destinations } from '../../domain/recipes';
 import { drawKingdomWaterfalls } from './kingdomWaterfalls';
 import { drawSanctuarySpores } from './sanctuarySpores';
@@ -113,6 +114,9 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight },
       progressStore.explorationSteps('vestiges_celestes').length === 3));
+    if (destination.id === 'mer_figee') objects.push(...drawSeaVisitor(scene,
+      { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+        width: picture.displayWidth, height: picture.displayHeight }));
     if (destination.id === 'cite_immobile') objects.push(...drawCityVisitor(scene,
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight }));

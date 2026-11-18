@@ -92,7 +92,8 @@ export class ResultScene extends Phaser.Scene {
       drawTravelSpyglass(this, stage.art.left + stage.art.width - toolSize * 0.35,
         stage.art.top + stage.art.height - toolSize * 0.43, toolSize, () => leave(true), {
           animate: entering,
-          register: (tx, ty, tw, th, action) => controls.add('explore', tx, ty, tw, th, action, false),
+          explored: !locked,
+          register: (tx, ty, tw, th, action) => controls.add('explore', tx, ty, tw, th, action, true),
         });
       controls.button('continue', short ? texts.adventure.mapShort : texts.adventure.continueMap, x,
         stage.secondaryY, buttonWidth, () => leave(false));

@@ -1,6 +1,7 @@
 ﻿import Phaser from 'phaser';
 import { progressStore } from '../../services/storage';
 import type { WorldFrame } from './pilotWorlds';
+import { animateSeal } from './seaVisitor';
 
 /** All ambient movement belongs to its display object and respects live motion preferences. */
 function sway(scene: Phaser.Scene, object: Phaser.GameObjects.Image | Phaser.GameObjects.Graphics,
@@ -136,7 +137,8 @@ export function preloadHomeVisitors(scene: Phaser.Scene): void {
   const progress = progressStore.read();
   for (const id of [progress.awakenedMycelia ? 'mycelia-resident' : '',
     progress.welcomedForestVisitor ? 'forest-resident' : '',
-    progress.welcomedCityVisitor ? 'city-resident' : ''].filter(Boolean)) {
+    progress.welcomedCityVisitor ? 'city-resident' : '',
+    ...(progress.welcomedSeaVisitor ? ['sea-resident', 'sea-resident-clap'] : [])].filter(Boolean)) {
     if (!scene.textures.exists(`adventure-${id}`)) scene.load.image(`adventure-${id}`,
       `${import.meta.env.BASE_URL}assets/adventure/${id}.webp`);
   }
@@ -148,10 +150,13 @@ export function drawHomeVisitors(scene: Phaser.Scene): void {
   const landscape = width >= 600;
   const ids = [progress.awakenedMycelia ? 'mycelia-resident' : '',
     progress.welcomedForestVisitor ? 'forest-resident' : '',
-    progress.welcomedCityVisitor ? 'city-resident' : ''].filter(Boolean);
+    progress.welcomedCityVisitor ? 'city-resident' : '',
+    progress.welcomedSeaVisitor ? 'sea-resident' : ''].filter(Boolean);
   ids.forEach((id, index) => {
     if (!scene.textures.exists(`adventure-${id}`)) return;
-    const x = width * (ids.length === 3
+    const x = width * (ids.length === 4
+      ? landscape ? 0.56 + index * 0.12 : 0.14 + index * 0.24
+      : ids.length === 3
       ? landscape ? [0.58, 0.74, 0.90][index]! : [0.20, 0.50, 0.80][index]!
       : landscape ? 0.62 + index * 0.21 : 0.22 + index * 0.54);
     const y = landscape ? height * 0.77 : height - 230;
@@ -159,11 +164,12 @@ export function drawHomeVisitors(scene: Phaser.Scene): void {
       .fillEllipse(0, 0, Math.min(28, height * 0.065), 4).setName(`home-visitor-shadow-${id}`);
     const visitor = scene.add.image(x, y, `adventure-${id}`).setOrigin(0.5, 1).setName(`home-visitor-${id}`);
     visitor.setScale(Math.min(landscape ? 64 : 54, height * 0.16) / visitor.height);
+    if (id === 'sea-resident') { animateSeal(scene, visitor, true); return; }
     const baseScale = visitor.scaleX;
     let restingX = x;
     let direction = index ? -1 : 1;
-    const stride = Math.min(ids.length === 3 ? 12 : 16, width * 0.025);
-    const roam = Math.min(ids.length === 3 ? 18 : 32, width * 0.05);
+    const stride = Math.min(ids.length >= 3 ? 12 : 16, width * 0.025);
+    const roam = Math.min(ids.length === 4 ? 10 : ids.length === 3 ? 18 : 32, width * 0.05);
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     let sequence: Phaser.Tweens.TweenChain | undefined;
     let pause: Phaser.Time.TimerEvent | undefined;

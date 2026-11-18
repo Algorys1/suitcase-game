@@ -28,19 +28,20 @@ import { drawStormBottle } from './stormLightning';
 import { drawVestigesMist } from './vestigesMist';
 import { drawForestVisitor, drawCityVisitor } from './souvenirVisitors';
 
-/** Shared framing keeps the landscape in place when the player chooses to explore. */
+/** Keep the postcard intact and give it more room during landscape exploration. */
 export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: SessionState,
   enter = false, tip?: TutorialStep) {
   const { width: w, height: h } = scene.scale;
   const portrait = w < 600, short = h < 450;
+  const wideExploration = !portrait && scene.sys.settings.key === 'exploration';
   if (session) drawAdventureMap(scene, session);
   else drawPreparationDesk(scene, w, h);
   // The map becomes a quiet tabletop beneath the postcard, without duplicate headings.
   scene.children.getAll().filter(child => child.type === 'Text').forEach(child => child.destroy());
   scene.add.rectangle(w / 2, h / 2, w, h, 0x382e28, 0.47).setName('destination-scrim');
   const paper = scene.add.graphics();
-  const sideX = portrait ? w / 2 : w * 0.815;
-  const sideW = portrait ? w - 38 : w * (short ? 0.335 : 0.31);
+  const sideX = portrait ? w / 2 : w * (wideExploration ? 0.84 : 0.815);
+  const sideW = portrait ? w - 38 : w * (wideExploration ? 0.28 : short ? 0.335 : 0.31);
   if (portrait) paper.fillStyle(0x57412b, 0.2).fillRoundedRect(15, 20, w - 24, h - 30, 6)
     .fillStyle(0xfcf3df).fillRoundedRect(10, 15, w - 24, h - 30, 6);
   else {
@@ -53,12 +54,12 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
   const title = mapText(scene, sideX, portrait ? 61 : short ? 90 : 116,
     getDestinationTexts(id)?.title ?? '', portrait ? 23 : short ? 21 : 29, sideW - 18, '#5b4030')
     .setFontFamily('Georgia, serif').setName('menu-title');
-  const artTop = portrait ? Math.max(104, title.y + title.height / 2 + 15) : short ? 38 : 60;
-  const artAreaW = portrait ? w - 44 : w * 0.615 - 28;
+  const artTop = portrait ? Math.max(104, title.y + title.height / 2 + 15) : wideExploration ? 14 : short ? 38 : 60;
+  const artAreaW = portrait ? w - 44 : wideExploration ? w * 0.70 - 30 : w * 0.615 - 28;
   const hasNote = tip !== undefined && needsTravelTip(tip);
   const noteSpace = hasNote ? (portrait ? 65 : 150) : 0;
   const artAreaH = portrait ? Math.max(55, h - artTop - 264 - noteSpace)
-    : h - artTop - (short ? 38 : 53) - noteSpace;
+    : h - artTop - (wideExploration ? 20 : short ? 38 : 53) - noteSpace;
   const key = worldTexture(scene, id);
   let artW = artAreaW, artH = Math.min(artAreaH, artW * 0.75);
   if (scene.textures.exists(key)) {
@@ -66,7 +67,7 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
     const scale = Math.min(artAreaW / frame.width, artAreaH / frame.height);
     artW = frame.width * scale; artH = frame.height * scale;
   }
-  const artX = portrait ? w / 2 - 2 : w * 0.315;
+  const artX = portrait ? w / 2 - 2 : w * (wideExploration ? 0.35 : 0.315);
   const artY = portrait ? artTop + artH / 2 : (h - noteSpace) / 2;
   const artLeft = artX - artW / 2, artUpper = artY - artH / 2;
   const frame = scene.add.graphics().setName('arrival-photo-paper');

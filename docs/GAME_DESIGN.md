@@ -2,6 +2,10 @@
 
 ## État actuel — 13 novembre 2026
 
+**Quatrième correspondance autorisée le 18 novembre :** le Coquillage des horizons de l’Archipel d’Azur, apporté depuis la pochette à la Mer figée, accueille un petit phoque. Le coquillage reste acquis, aucun coût ni bonus ; l’activité du globe reste indépendante. Coquillage et ondes sur la glace, applaudissements au clic et visite de l’accueil intégrés, à essayer. Voir `PROJECT_STATUS.md` pour les vérifications.
+
+**Correction du 18 novembre :** les quatre habitants réagissent au clic dans le carnet. L’ancien panneau d’offrande spécifique à Mycélia et les rappels de la clochette sont retirés ; les quatre correspondances passent par la pochette, sans indication de compatibilité. La clochette déjà accueillie reste suspendue et réactive dans l’exploration.
+
 **Complément autorisé le 17 novembre :** trois correspondances sont intégrées via la pochette du carnet : clochette des Cimes → Mycélia, lanterne de Mycélia → Forêt du silence, braise du Cœur de braise → Cité immobile. Chaque offrande conserve le souvenir et accueille un habitant, indépendant de l’activité locale, sans coût ni bonus. Les habitants acquis peuvent visiter l’accueil. Aucun texte ne donne la destination d’un souvenir. Les mentions antérieures de Cimes → Mycélia comme seul lien implémenté décrivent les versions précédentes ; voir `PROJECT_STATUS.md` pour les essais et validations.
 
 **Nouvelle présentation intégrée, à essayer :** [valise-boussole](SUITCASE_COMPASS.md). La mini-valise remplace le « ? » sur le trajet ; le cadran occupe son couvercle et deux manifestations magiques apparaissent en bas. Les aiguilles et règles sont conservées. Le départ animé selon les éléments est intégré ; charges métalliques dans la doublure, mode liste retiré et fond de carte flouté. Cette nouvelle passe reste à essayer.

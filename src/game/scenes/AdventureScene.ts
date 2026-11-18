@@ -70,9 +70,9 @@ export class AdventureScene extends Phaser.Scene {
     this.controls.add('map-journal', journal.x, journal.y, Math.max(48, journal.width + 12), journal.height + 14,
       () => approachJournal(this, opening => this.scene.start('journal', { opening, returnTo: 'adventure' })));
     if (width >= 600 && (height >= 450 || this.session.visitedDestinationIds.length + this.session.voidTrips <= 6)) {
-      mapText(this, width < 600 ? (width - 110) / 2 + 8 : width / 2, height - (width < 600 ? 100 : 70),
-        this.session.charges > 0 ? copy.mapHelp : copy.exhausted, width < 600 ? 10 : 12,
-        width < 600 ? width - 145 : width - 430, '#8d785b').setName('map-help');
+      mapText(this, width / 2, height - 70,
+        this.session.charges > 0 ? copy.mapHelp : copy.exhausted, height < 450 ? 13 : 15,
+        width - 270, '#65452e').setFontStyle('bold').setName('map-help');
     }
     this.controls.button('pause-adventure', copy.home, width < 600 ? 62 : 100,
       height - 35, width < 600 ? 94 : 150, () => this.scene.start('home'), true);

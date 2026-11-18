@@ -225,9 +225,10 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
     for (let j = 1; j <= 18; j++) grain.lineTo(x - 9 + j, y + Math.sin(j / 18 * Math.PI * 2) * 1.7);
     grain.strokePath();
   }
-  mapText(scene, w / 2, portrait ? 31 : short ? 32 : 48, copy.eyebrow, 9, w - 70, '#a08052').setLetterSpacing(2);
-  mapText(scene, w / 2, portrait ? 53 : short ? 59 : 74, copy.title, portrait ? 19 : short ? 21 : 27, portrait ? w - 35 : w - 350)
-    .setFontFamily('"Travel Serif", Georgia, serif').setName('adventure-title');
+  const title = mapText(scene, w / 2, portrait ? 46 : short ? 50 : 62, copy.title,
+    portrait ? 23 : short ? 25 : 30, 0).setFontStyle('bold').setName('adventure-title');
+  const titleWidth = portrait ? w - 35 : w - 350;
+  title.setScale(Math.min(1, titleWidth / title.width));
   const { journal } = mapInstruments(w, h, session);
   const compactEndNote = portrait && count >= 7 && session.charges === 0 && !progress.tutorialSeen?.includes('exhausted');
   const badgeX = compactEndNote ? w * 0.71 : w - (portrait ? 78 : 113), badgeY = compactEndNote ? 158 : portrait ? 101 : 72;
@@ -238,10 +239,8 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
     const x = badgeX + (i % 5 - 2) * 22, y = badgeY + 5 + Math.floor(i / 5) * 21;
     drawChargeBadge(scene, x, y, 8, i < session.charges, `charge-badge-${i}`);
   }
-  const hint = progress.awakenedMycelia ? copy.freeWish : unlocked.includes('cimes_eternelles') ? copy.bellWish : copy.snowWish;
-  const compactHeader = portrait && count >= 7;
-  mapText(scene, compactHeader ? w * 0.64 : w / 2, portrait ? 168 : short ? 117 : 124, hint, portrait || short ? 12 : 14,
-    portrait ? w - (compactHeader ? 120 : 55) : w - 305, '#7d6c53').setFontFamily('Georgia, serif').setFontStyle('italic').setName('adventure-wish');
+  mapText(scene, title.x, title.getBottomCenter().y + 12, copy.freeWish, portrait || short ? 12 : 14,
+    portrait ? w - 105 : w - 350, '#7d6c53').setFontFamily('Georgia, serif').setFontStyle('italic').setName('adventure-wish');
   const { points, size } = mapRouteLayout(w, h, session);
   // Paths sit behind every world, and bend between steps like a pen-drawn itinerary.
   const captions: { x: number; y: number; text: string; index: number }[] = [];
@@ -281,7 +280,7 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
       mapText(scene, point.x, point.y + departure.height / 2 + 15, route.length ? copy.nextStep : copy.firstStep,
         portrait || short ? 10 : 12, portrait ? 100 : 150, '#8a7251').setName('next-step-label');
       controls?.add('next-world', point.x, point.y, Math.max(48, departure.width),
-        Math.max(48, departure.height), () => onDepart?.(), false);
+        Math.max(48, departure.height), () => onDepart?.(), true);
       return;
     }
     if (id === null) {

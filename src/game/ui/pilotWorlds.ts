@@ -87,6 +87,19 @@ export function drawMyceliaLife(scene: Phaser.Scene, art: WorldFrame, awake: boo
   const resident = scene.textures.exists('adventure-mycelia-resident')
     ? scene.add.image(cx, bottom, 'adventure-mycelia-resident').setOrigin(0.5, 1).setName('mycelia-resident') : null;
   resident?.setScale(art.height * 0.135 / resident.height);
+  const sparks = new Set<Phaser.GameObjects.Arc>();
+  const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const stopGreeting = () => {
+    if (resident) { scene.tweens.killTweensOf(resident); resident.setY(bottom).setAngle(0).setAlpha(1); }
+    scene.tweens.killTweensOf(doorway); doorway.setAlpha(1);
+    for (const spark of sparks) { scene.tweens.killTweensOf(spark); spark.destroy(); }
+    sparks.clear();
+  };
+  const change = () => { if (preference.matches) stopGreeting(); };
+  preference.addEventListener('change', change);
+  doorway.once('destroy', () => {
+    stopGreeting(); preference.removeEventListener('change', change);
+  });
   const hello = () => {
     if (resident && resident.alpha < 0.95) return;
     if (resident && !reducedMotion()) {
@@ -97,9 +110,10 @@ export function drawMyceliaLife(scene: Phaser.Scene, art: WorldFrame, awake: boo
     }
     if (!reducedMotion()) for (let i = 0; i < 16; i++) {
       const spark = scene.add.circle(cx, bottom - art.height * 0.1, 1 + i % 3, 0xffe1a0, 0.8).setName('awakened-spore');
+      sparks.add(spark);
       scene.tweens.add({ targets: spark, x: cx + Math.sin(i * 2.4) * art.width * 0.27,
         y: art.top + art.height * (0.3 + (i % 4) * 0.06), alpha: 0, duration: 900 + i * 35,
-        onComplete: () => spark.destroy() });
+        onComplete: () => { sparks.delete(spark); spark.destroy(); } });
     }
   };
   if (waking && !reduced) {

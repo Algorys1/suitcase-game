@@ -136,8 +136,7 @@ export class JournalScene extends Phaser.Scene {
       });
       if (unlocked) {
         const collected = progressStore.unlockedSouvenirIds().includes(destination.id);
-        const wish = destination.id === 'cimes_eternelles' && collected && !progress.awakenedMycelia;
-        text(x, y + 8, wish ? texts.tutorial.wish : collected ? texts.tutorial.collected : texts.tutorial.pending,
+        text(x, y + 8, collected ? texts.tutorial.collected : texts.tutorial.pending,
           10, columnWidth - 50).setPadding(0).setName(`entry-status-${destination.id}`);
       }
     });

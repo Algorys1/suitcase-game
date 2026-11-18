@@ -21,6 +21,7 @@ export type Progress = {
   awakenedMycelia?: boolean;
   welcomedForestVisitor?: boolean;
   welcomedCityVisitor?: boolean;
+  welcomedSeaVisitor?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
   sanctuaryPuzzle?: SanctuaryPuzzle;
@@ -77,6 +78,9 @@ export function decodeProgress(serialized: string | null): Progress {
       ...(tutorialSeen.length ? { tutorialSeen } : {}),
       ...(Object.keys(pilotSteps).length ? { pilotSteps } : {}),
       ...(pending.length ? { pendingSouvenirIds: pending } : {}),
+      ...('welcomedSeaVisitor' in value && value.welcomedSeaVisitor === true
+        && discoveredDestinationIds.includes('mer_figee') && discoveredDestinationIds.includes('archipel_azur')
+        && !pending.includes('archipel_azur') ? { welcomedSeaVisitor: true } : {}),
       ...('welcomedCityVisitor' in value && value.welcomedCityVisitor === true
         && discoveredDestinationIds.includes('cite_immobile') && discoveredDestinationIds.includes('coeur_de_braise')
         && !pending.includes('coeur_de_braise') ? { welcomedCityVisitor: true } : {}),
@@ -249,6 +253,14 @@ export class ProgressStore {
     if (progress.welcomedCityVisitor || !this.unlockedSouvenirIds().includes('coeur_de_braise')
       || !progress.discoveredDestinationIds.includes('cite_immobile')) return false;
     this.save({ ...progress, welcomedCityVisitor: true });
+    return true;
+  }
+
+  offerSeashell(): boolean {
+    const progress = this.read();
+    if (progress.welcomedSeaVisitor || !this.unlockedSouvenirIds().includes('archipel_azur')
+      || !progress.discoveredDestinationIds.includes('mer_figee')) return false;
+    this.save({ ...progress, welcomedSeaVisitor: true });
     return true;
   }
 

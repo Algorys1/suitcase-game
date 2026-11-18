@@ -14,10 +14,19 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
   const copy = getTexts().pouch;
   const bounds = picture.getBounds();
   const frame = { left: bounds.x, top: bounds.y, width: bounds.width, height: bounds.height };
+  // The spyglass has a generous rectangular target, including empty space above its shaft.
+  // Residents painted in that space must receive the click before the instrument does.
+  for (const name of ['forest-visitor', 'city-visitor', 'sea-visitor']) {
+    const resident = scene.children.getByName(name);
+    if (resident) scene.children.bringToTop(resident);
+  }
   if (destination === 'foret_du_silence' && progressStore.read().welcomedForestVisitor) return;
   if (destination === 'cite_immobile' && progressStore.read().welcomedCityVisitor) return;
+  if (destination === 'mer_figee' && progressStore.read().welcomedSeaVisitor) return;
   if (destination === 'mycelia' && progressStore.read().awakenedMycelia) {
-    drawMyceliaLife(scene, frame, true, false, progressStore.explorationSteps('mycelia'));
+    const greet = drawMyceliaLife(scene, frame, true, false, progressStore.explorationSteps('mycelia'));
+    const resident = scene.children.getByName('mycelia-resident') as Phaser.GameObjects.Image | null;
+    resident?.setInteractive().on('pointerdown', () => { if (!bookBusy(scene)) greet(); });
     const bx = bounds.x + bounds.width * 0.68, hook = bounds.y + bounds.height * 0.53;
     scene.add.graphics().lineStyle(Math.max(1, bounds.width * 0.0025), 0x735136)
       .beginPath().moveTo(bounds.x + bounds.width * 0.705, bounds.y + bounds.height * 0.505)
@@ -41,7 +50,8 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
     if (!selected || bookBusy(scene) || overlay.length) return;
     const accepted = destination === 'mycelia' && selected === 'cimes_eternelles' ? progressStore.offerBell()
       : destination === 'foret_du_silence' && selected === 'mycelia' ? progressStore.offerSporeLantern()
-      : destination === 'cite_immobile' && selected === 'coeur_de_braise' ? progressStore.offerEmber() : false;
+      : destination === 'cite_immobile' && selected === 'coeur_de_braise' ? progressStore.offerEmber()
+      : destination === 'mer_figee' && selected === 'archipel_azur' ? progressStore.offerSeashell() : false;
     selected = undefined;
     target.disableInteractive();
     if (accepted) refresh();

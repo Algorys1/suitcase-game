@@ -20,6 +20,7 @@ import { drawCimesSunrise, drawMyceliaLife } from '../ui/pilotWorlds';
 import { destinationTravelTip } from '../ui/travelTutorial';
 import { playSound } from '../../services/audio';
 import { drawForestVisitor, drawCityVisitor } from '../ui/souvenirVisitors';
+import { drawSeaVisitor } from '../ui/seaVisitor';
 import { addArchipelagoReflections, gatherArchipelagoLight } from '../ui/archipelagoReflections';
 import { addRuinsFish } from '../ui/ruinsFish';
 import { addBraiseColumns } from '../ui/braiseColumns';
@@ -50,10 +51,8 @@ export class ExplorationScene extends Phaser.Scene {
   private journalPage = 0;
   private returnTo: 'adventure' | undefined;
   private controls!: AdventureControls;
-  private offering = false;
   private justFound = false;
   private enter = true;
-  private waking = false;
   private celebrate = false;
   private lastTouched: number | undefined;
   private lastActivated = false;
@@ -81,13 +80,11 @@ export class ExplorationScene extends Phaser.Scene {
     this.fromJournal = session === undefined;
     this.journalPage = journalPage;
     this.returnTo = returnTo;
-    this.offering = false;
     this.justFound = false;
     this.reflectionReplay = undefined;
     this.souvenirArrival = false;
     this.souvenirInFlight = false;
     this.enter = !fromResult;
-    this.waking = false;
     this.celebrate = false;
     this.lastTouched = undefined;
     this.lastActivated = false;
@@ -167,10 +164,9 @@ export class ExplorationScene extends Phaser.Scene {
     const { sideX, sideW, stickerY: tagY, portrait, short } = stage;
     if (this.id === 'cimes_eternelles') drawCimesSunrise(this, stage.art, complete, this.celebrate,
       this.lastTouched, steps, this.lastActivated);
-    this.greet = this.id === 'mycelia' ? drawMyceliaLife(this, stage.art, awake, this.waking, steps,
+    this.greet = this.id === 'mycelia' ? drawMyceliaLife(this, stage.art, awake, false, steps,
       this.lastActivated ? this.lastTouched : undefined) : () => {};
     const marshWaking = this.id === 'marais_des_lucioles' && this.lastActivated ? this.lastTouched : undefined;
-    this.waking = false;
     this.celebrate = false;
     this.lastTouched = undefined;
     this.lastActivated = false;
@@ -202,7 +198,7 @@ export class ExplorationScene extends Phaser.Scene {
       : this.id === 'tempete_ecarlate' ? complete ? copy.stormCalm : steps.includes(0) ? copy.stormReturn : copy.stormMood
       : this.id === 'royaume_des_spores_celestes' ? complete ? copy.kingdomFlowing : copy.kingdomMood
       : this.id === 'sanctuaire_des_spores' ? complete ? copy.sanctuaryAwake : progress.sanctuaryPuzzle?.clueSeen ? copy.sanctuaryTune : copy.sanctuaryMood
-      : this.id === 'foret_du_silence' ? complete ? copy.forestDrawAgain : copy.forestMood : this.id === 'necropole_ardente' && !complete ? copy.necropoleMood : this.id === 'sylve_prismatique' && !complete ? copy.sylveMood : this.id === 'cite_immobile' && !complete ? copy.cityMood : this.id === 'jardins_du_zenith' && !complete ? copy.zenithMood : this.offering ? copy.placeBell : !complete
+      : this.id === 'foret_du_silence' ? complete ? copy.forestDrawAgain : copy.forestMood : this.id === 'necropole_ardente' && !complete ? copy.necropoleMood : this.id === 'sylve_prismatique' && !complete ? copy.sylveMood : this.id === 'cite_immobile' && !complete ? copy.cityMood : this.id === 'jardins_du_zenith' && !complete ? copy.zenithMood : !complete
       ? this.id === 'cimes_eternelles' ? copy.peaksMood : this.id === 'mycelia' ? copy.windowsMood : ''
       : awake ? copy.awakened : this.id === 'cimes_eternelles' ? copy.sunrise : copy.explored;
     mapText(this, sideX, stage.bodyY + 12, instruction, portrait || short ? 12 : 15, sideW - 15)
@@ -394,23 +390,16 @@ export class ExplorationScene extends Phaser.Scene {
 
     if (this.id === 'foret_du_silence') drawForestVisitor(this, stage.art);
     if (this.id === 'cite_immobile') drawCityVisitor(this, stage.art);
-    const canOffer = this.id === 'mycelia' && progressStore.unlockedSouvenirIds().includes('cimes_eternelles')
-      && !awake && this.session?.visitedDestinationIds.includes('mycelia');
-    if ((canOffer && this.offering) || awake) {
+    if (this.id === 'mer_figee') drawSeaVisitor(this, stage.art);
+    if (awake) {
       const bx = left + artW * 0.68, hook = top + artH * 0.53;
       const cord = this.add.graphics().setName('bell-cord').lineStyle(Math.max(1, artW * 0.0025), 0x735136);
       cord.beginPath().moveTo(left + artW * 0.705, top + artH * 0.505)
         .lineTo(left + artW * 0.697, top + artH * 0.518).lineTo(bx, hook).strokePath();
       cord.fillStyle(0xb9955f).fillCircle(bx, hook, Math.max(1, artW * 0.003));
       const bell = this.add.image(bx, hook, 'souvenir-cimes_eternelles').setOrigin(0.5, 0.07).setName('bell-in-world');
-      bell.setScale(artH * 0.11 / bell.height).setAlpha(awake ? 1 : 0.45);
-      if (this.offering || complete) this.controls.add('place-bell', bx, hook + artH * 0.05, 48, 44, () => {
-        if (!awake && !progressStore.offerBell()) return;
-        this.offering = false;
-        this.waking = !awake;
-        this.render();
-        if (awake) this.greet();
-      });
+      bell.setScale(artH * 0.11 / bell.height);
+      this.controls.add('place-bell', bx, hook + artH * 0.05, 48, 44, () => this.greet());
     }
     if (awake) this.controls.add('greet-mycelia', left + artW * 0.603, top + artH * 0.68, 48, 44, () => this.greet());
 
@@ -422,26 +411,9 @@ export class ExplorationScene extends Phaser.Scene {
       parts.forEach(part => part.setData('souvenir-part', true));
       parts.find(object => object.name === 'souvenir-name')?.setName('exploration-souvenir-name');
     }
-    if (canOffer) {
-      const panelW = Math.min(220, artW - 24), panelX = left + 12, panelY = top + artH - 50;
-      this.add.graphics().setName('offering-panel').fillStyle(0x4d3828, 0.15)
-        .fillRoundedRect(panelX + 2, panelY + 3, panelW, 46, 4)
-        .fillStyle(0xf6e4bf, 0.97).lineStyle(1, 0xad8e5b)
-        .fillRoundedRect(panelX, panelY, panelW, 46, 4).strokeRoundedRect(panelX, panelY, panelW, 46, 4);
-      const token = this.add.image(panelX + 24, panelY + 24, 'souvenir-cimes_eternelles');
-      token.setScale(Math.min(33 / token.width, 33 / token.height));
-      mapText(this, panelX + panelW / 2 + 14, panelY + 11, copy.travellingSouvenir, 9, panelW - 55, '#9b7948');
-      mapText(this, panelX + panelW / 2 + 14, panelY + 30,
-        this.offering ? copy.cancelOffer : copy.offerBell, 12, panelW - 55).setFontStyle('bold');
-      this.controls.add('offer-bell', panelX + panelW / 2, panelY + 23, panelW, 46,
-        () => { this.offering = !this.offering; this.render(); });
-    }
-    if (!canOffer) {
-      const hint = found && this.id === 'cimes_eternelles' && !progress.awakenedMycelia ? copy.bellWish
-        : this.justFound ? copy.found : copy.takeTime;
-      mapText(this, sideX, tagY - (portrait ? 58 : 66), hint, portrait || short ? 11 : 12, sideW - 12, '#a07f4b')
-        .setFontFamily('Georgia, serif').setFontStyle('italic').setName('exploration-hint');
-    }
+    mapText(this, sideX, tagY - (portrait ? 58 : 66), this.justFound ? copy.found : copy.takeTime,
+      portrait || short ? 11 : 12, sideW - 12, '#a07f4b')
+      .setFontFamily('Georgia, serif').setFontStyle('italic').setName('exploration-hint');
     this.controls.button('back-to-map', !this.fromJournal ? (short ? copy.mapShort : copy.backToMap) : getTexts().notebook.back,
       sideX, stage.secondaryY, Math.min(220, sideW - 15), () => this.back());
     if (this.souvenirInFlight) {

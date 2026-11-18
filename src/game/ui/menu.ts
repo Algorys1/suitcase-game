@@ -320,7 +320,7 @@ function renderPostcardMenu(scene: Phaser.Scene, content: MenuContent, postcard:
       const size = landscape && !short ? 98 : 68;
       drawTravelSpyglass(scene, artX + fittedWidth / 2 - size * 0.35,
         artY + artHeight - size * 0.43, size, () => { if (!bookBusy(scene)) button.action(); },
-        { focused: index === focusIndex });
+        { focused: index === focusIndex, explored: content.souvenirLocked === false });
       return;
     }
     const paperIndex = paperButtons.indexOf(button);

@@ -28,6 +28,7 @@ export class JournalEntryScene extends Phaser.Scene {
     if (!finishSceneLoading(this)) return;
     this.data.set('forest-visitor-arriving', welcome && id === 'foret_du_silence');
     this.data.set('city-visitor-arriving', welcome && id === 'cite_immobile');
+    this.data.set('sea-visitor-arriving', welcome && id === 'mer_figee');
     const texts = getTexts();
     const entry = id === undefined ? undefined : getDestinationTexts(id);
     if (id === undefined || !entry || !progressStore.read().discoveredDestinationIds.includes(id)) {
@@ -35,8 +36,6 @@ export class JournalEntryScene extends Phaser.Scene {
       return;
     }
     const postcard = destinations.findIndex(destination => destination.id === id);
-    const invitation = id === 'cimes_eternelles' && progressStore.unlockedSouvenirIds().includes(id)
-      && !progressStore.read().awakenedMycelia ? '\n\n' + texts.adventure.bellWish : '';
     const known = destinations.filter(destination => progressStore.read().discoveredDestinationIds.includes(destination.id));
     const position = known.findIndex(destination => destination.id === id);
     const navigate = (target: string | undefined, direction: PageDirection) => {
@@ -48,12 +47,12 @@ export class JournalEntryScene extends Phaser.Scene {
     createMenu(this, {
       title: entry.title,
       caption: texts.tutorial.discovered,
-      description: entry.story + invitation + (hasPostcard(this, postcard) ? '' : '\n\n' + texts.notebook.placeholder),
+      description: entry.story + (hasPostcard(this, postcard) ? '' : '\n\n' + texts.notebook.placeholder),
       postcard,
       souvenir: souvenirForDestination(id, progressStore.read().discoveredDestinationIds),
       souvenirLocked: !progressStore.unlockedSouvenirIds().includes(id),
       decoratePostcard: () => journalPouch(this, id, () => this.scene.restart({ id, page, returnTo,
-        welcome: id === 'foret_du_silence' || id === 'cite_immobile' })),
+        welcome: id === 'foret_du_silence' || id === 'cite_immobile' || id === 'mer_figee' })),
       buttons: [{ name: 'explore', label: texts.adventure.explore, spyglass: true,
         action: () => this.scene.start('exploration', { id, journalPage: page, returnTo }) },
       { name: 'back-to-journal', label: texts.notebook.backToContents, primary: true,

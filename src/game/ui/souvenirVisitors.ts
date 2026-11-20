@@ -1,3 +1,4 @@
+import { animateShoreVisitor, preloadShoreVisitors } from './shoreVisitors';
 import Phaser from 'phaser';
 import { progressStore } from '../../services/storage';
 import type { WorldFrame } from './pilotWorlds';
@@ -142,6 +143,7 @@ export function drawCityVisitor(scene: Phaser.Scene, frame: WorldFrame): Array<P
 }
 
 export function preloadHomeVisitors(scene: Phaser.Scene): void {
+  preloadShoreVisitors(scene);
   const progress = progressStore.read();
   for (const id of [progress.awakenedMycelia ? 'mycelia-resident' : '',
     progress.welcomedForestVisitor ? 'forest-resident' : '',
@@ -177,6 +179,9 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     progress.welcomedPalaceVisitor ? 'yeti-resident' : '',
     progress.welcomedVestigesVisitor ? 'griffin-resident' : '',
     progress.welcomedKingdomVisitor ? 'dragon-resident' : '',
+    progress.welcomedIslandVisitor ? 'hermit-resident' : '',
+    progress.welcomedAshVisitor ? 'salamander-resident' : '',
+    progress.welcomedDesertVisitor ? 'snail-resident' : '',
     progress.welcomedRuinsVisitor ? 'axolotl-resident' : '',
     progress.welcomedReefVisitor ? 'octopus-resident' : ''].filter(Boolean);
   if (!art.width || !art.height) return;
@@ -197,6 +202,9 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       [0.31, 0.52], [0.56, 0.34], [0.39, 0.22]], duration: 17400, hop: 0.09 },
     'sea-resident': { stops: [[0.22, lowerEdge], [0.40, lowerEdge, 'pause'], [0.40, lowerEdge],
       [0.51, 0.88], [0.35, 0.80, 'slide']], duration: 14900, hop: 0 },
+    'hermit-resident': { stops: [[0.10, lowerEdge], [leftEdge, 0.87], [0.18, 0.75], [0.29, lowerEdge]], duration: 14000, hop: 0.04 },
+    'salamander-resident': { stops: [[0.61, 0.48], [0.79, 0.34], [rightEdge, 0.44], [0.72, 0.57]], duration: 15800, hop: 0.05 },
+    'snail-resident': { stops: [[rightEdge, 0.83], [0.93, lowerEdge], [0.75, lowerEdge], [0.88, 0.75]], duration: 24100, hop: 0 },
     'axolotl-resident': { stops: [[0.34, 0.62], [0.22, 0.79], [0.35, lowerEdge, 'pause'],
       [0.35, lowerEdge], [0.47, 0.82], [0.47, 0.65]], duration: 18400, hop: 0 },
     'dragon-resident': { stops: [[0.42, 0.50], [0.57, 0.34], [0.76, upperEdge + 0.10, 'pause'],
@@ -224,7 +232,9 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     const route = path.stops;
     const visitor = scene.add.image(0, 0, key).setOrigin(0.5, 1).setName(`home-visitor-${id}`);
     const sizeFactor = id === 'frog-resident' ? 0.80 : id === 'sea-resident' || id === 'owl-resident' ? 0.92 : 1;
-    visitor.setScale(sizeFactor * Math.min(landscape ? 58 : 48, height * 0.15, art.height * 0.29) / visitor.height);
+    const crowdFactor = ids.length > 12 ? 0.87 : 1;
+    const sizeLimit = Math.min(landscape ? 58 : 48, height * 0.15, art.height * 0.29) * crowdFactor;
+    visitor.setScale(sizeFactor * Math.min(sizeLimit / visitor.height, sizeLimit * 1.13 / visitor.width));
     const size = visitor.displayHeight;
     const inset = Math.max(edgeInset, visitor.displayWidth * 0.55);
     const keepOnTable = (x: number) => Phaser.Math.Clamp(x, inset, width - inset);
@@ -261,6 +271,7 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       });
     };
     change();
+    animateShoreVisitor(scene, visitor, id);
     if (id === 'axolotl-resident') animateAxolotl(scene, visitor);
     if (id === 'dragon-resident') animateDragon(scene, visitor);
     if (id === 'griffin-resident') animateGriffin(scene, visitor);

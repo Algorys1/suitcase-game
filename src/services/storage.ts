@@ -30,6 +30,9 @@ export type Progress = {
   welcomedVestigesVisitor?: boolean;
   welcomedKingdomVisitor?: boolean;
   welcomedRuinsVisitor?: boolean;
+  welcomedIslandVisitor?: boolean;
+  welcomedAshVisitor?: boolean;
+  welcomedDesertVisitor?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
   sanctuaryPuzzle?: SanctuaryPuzzle;
@@ -51,6 +54,9 @@ const souvenirOfferings = [
   { souvenir: 'tempete_ecarlate', destination: 'vestiges_celestes', welcomed: 'welcomedVestigesVisitor' },
   { souvenir: 'jungle_incandescente', destination: 'royaume_des_spores_celestes', welcomed: 'welcomedKingdomVisitor' },
   { souvenir: 'vestiges_celestes', destination: 'ruines_englouties', welcomed: 'welcomedRuinsVisitor' },
+  { souvenir: 'recif_de_verre', destination: 'archipel_azur', welcomed: 'welcomedIslandVisitor' },
+  { souvenir: 'jardins_du_zenith', destination: 'ile_des_cendres', welcomed: 'welcomedAshVisitor' },
+  { souvenir: 'sylve_prismatique', destination: 'desert_de_cristal', welcomed: 'welcomedDesertVisitor' },
 ] as const;
 
 function canOffer(progress: Progress, offering: typeof souvenirOfferings[number]): boolean {
@@ -123,6 +129,15 @@ export function decodeProgress(serialized: string | null): Progress {
       ...('welcomedKingdomVisitor' in value && value.welcomedKingdomVisitor === true
         && discoveredDestinationIds.includes('royaume_des_spores_celestes') && discoveredDestinationIds.includes('jungle_incandescente')
         && !pending.includes('jungle_incandescente') ? { welcomedKingdomVisitor: true } : {}),
+      ...('welcomedIslandVisitor' in value && value.welcomedIslandVisitor === true
+        && discoveredDestinationIds.includes('archipel_azur') && discoveredDestinationIds.includes('recif_de_verre')
+        && !pending.includes('recif_de_verre') ? { welcomedIslandVisitor: true } : {}),
+      ...('welcomedAshVisitor' in value && value.welcomedAshVisitor === true
+        && discoveredDestinationIds.includes('ile_des_cendres') && discoveredDestinationIds.includes('jardins_du_zenith')
+        && !pending.includes('jardins_du_zenith') ? { welcomedAshVisitor: true } : {}),
+      ...('welcomedDesertVisitor' in value && value.welcomedDesertVisitor === true
+        && discoveredDestinationIds.includes('desert_de_cristal') && discoveredDestinationIds.includes('sylve_prismatique')
+        && !pending.includes('sylve_prismatique') ? { welcomedDesertVisitor: true } : {}),
       ...('welcomedRuinsVisitor' in value && value.welcomedRuinsVisitor === true
         && discoveredDestinationIds.includes('ruines_englouties') && discoveredDestinationIds.includes('vestiges_celestes')
         && !pending.includes('vestiges_celestes') ? { welcomedRuinsVisitor: true } : {}),

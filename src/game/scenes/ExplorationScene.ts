@@ -1,3 +1,4 @@
+import { drawShoreVisitor } from '../ui/shoreVisitors';
 import { drawAxolotlVisitor } from '../ui/axolotlVisitor';
 import { drawDragonVisitor } from '../ui/dragonVisitor';
 import { drawGriffinVisitor } from '../ui/griffinVisitor';
@@ -405,6 +406,7 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.id === 'palais_de_givre') drawYetiVisitor(this, stage.art);
     if (this.id === 'vestiges_celestes') drawGriffinVisitor(this, stage.art);
     if (this.id === 'royaume_des_spores_celestes') drawDragonVisitor(this, stage.art);
+    drawShoreVisitor(this, this.id, stage.art);
     if (this.id === 'ruines_englouties') drawAxolotlVisitor(this, stage.art);
     if (this.id === 'empire_des_sables') drawFennecVisitor(this, stage.art);
     if (this.id === 'observatoire_des_etoiles') drawOwlVisitor(this, stage.art);

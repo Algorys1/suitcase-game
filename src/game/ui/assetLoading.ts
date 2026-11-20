@@ -1,3 +1,4 @@
+import { preloadShoreVisitors } from './shoreVisitors';
 import type Phaser from 'phaser';
 import { getTexts } from '../../services/i18n';
 import { progressStore } from '../../services/storage';
@@ -98,6 +99,7 @@ export function queueWorldAssets(scene: Phaser.Scene, ids: readonly string[], ma
       scene.load.image('adventure-axolotl-gills', import.meta.env.BASE_URL + 'assets/adventure/axolotl-gills.webp');
     if (progressStore.read().welcomedRuinsVisitor) preloadSouvenirs(scene, ['vestiges_celestes']);
   }
+  preloadShoreVisitors(scene, ids);
   preloadAdventureArt(scene, ids, map);
   if (map) {
     const session = (scene.sys.settings.data as { session?: SessionState } | undefined)?.session

@@ -16,7 +16,7 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
   const frame = { left: bounds.x, top: bounds.y, width: bounds.width, height: bounds.height };
   // The spyglass has a generous rectangular target, including empty space above its shaft.
   // Residents painted in that space must receive the click before the instrument does.
-  for (const name of ['forest-visitor', 'city-visitor', 'sea-visitor', 'marsh-visitor', 'palace-visitor', 'vestiges-visitor', 'kingdom-visitor', 'ruins-visitor']) {
+  for (const name of ['forest-visitor', 'city-visitor', 'sea-visitor', 'marsh-visitor', 'palace-visitor', 'vestiges-visitor', 'kingdom-visitor', 'ruins-visitor', 'hermit-visitor', 'salamander-visitor', 'snail-visitor']) {
     const resident = scene.children.getByName(name);
     if (resident) scene.children.bringToTop(resident);
   }
@@ -27,6 +27,9 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
   if (destination === 'palais_de_givre' && progressStore.read().welcomedPalaceVisitor) return;
   if (destination === 'vestiges_celestes' && progressStore.read().welcomedVestigesVisitor) return;
   if (destination === 'royaume_des_spores_celestes' && progressStore.read().welcomedKingdomVisitor) return;
+  if (destination === 'archipel_azur' && progressStore.read().welcomedIslandVisitor) return;
+  if (destination === 'ile_des_cendres' && progressStore.read().welcomedAshVisitor) return;
+  if (destination === 'desert_de_cristal' && progressStore.read().welcomedDesertVisitor) return;
   if (destination === 'ruines_englouties' && progressStore.read().welcomedRuinsVisitor) return;
   if (destination === 'empire_des_sables' && progressStore.read().welcomedEmpireVisitor) return;
   if (destination === 'observatoire_des_etoiles' && progressStore.read().welcomedObservatoryVisitor) return;

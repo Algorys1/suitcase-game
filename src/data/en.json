@@ -430,14 +430,11 @@
     "panels": [
       "This suitcase seemed perfectly ordinary.",
       "Until the day its lid opened onto the impossible.",
-      "Ever since, every journey begins with a question: where would I like to go?"
+      "Ever since, every journey begins with a question: what world will I discover?"
     ],
-    "next": "Next panel",
-    "previous": "Previous panel",
-    "skip": "Skip intro",
-    "finish": "Enter",
-    "replay": "Replay intro",
-    "page": "Panel {page} / 3"
+    "next": "Continue",
+    "finish": "Travel",
+    "replay": "Replay intro"
   },
   "audio": {
     "on": "Mute audio",

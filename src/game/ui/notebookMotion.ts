@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { playSound } from '../../services/audio';
 import { notebookLayout } from './notebook';
 import { drawPreparationDesk } from './preparationArt';
 
@@ -38,6 +39,7 @@ function animation(scene: Phaser.Scene, build: (finish: () => void) => () => voi
 /** Lift the journal from its position in the home illustration toward the reader. */
 export function approachJournal(scene: Phaser.Scene, complete: (opening: boolean) => void): void {
   if (bookBusy(scene)) return;
+  playSound('paper');
   const mapBook = scene.children.getByName('map-journal-art');
   const hero = mapBook ?? scene.children.getByName('home-departure');
   if (reducedMotion() || !scene.textures.exists('journal-closed') || !(hero instanceof Phaser.GameObjects.Image)) {
@@ -105,9 +107,10 @@ export function openJournalCover(scene: Phaser.Scene): () => void {
   });
 }
 
-/** Snapshot before a scene change; no screenshot readbacks or persisted game state. */
+/** Turn the page audibly, then capture the outgoing spread if motion is enabled. */
 export function captureJournal(scene: Phaser.Scene): boolean {
   if (bookBusy(scene)) return false;
+  playSound('paper');
   if (scene.textures.exists(oldKey)) scene.textures.remove(oldKey);
   if (reducedMotion()) return false;
   const texture = scene.textures.addDynamicTexture(oldKey, scene.scale.width, scene.scale.height);

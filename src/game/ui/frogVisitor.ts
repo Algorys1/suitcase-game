@@ -40,9 +40,9 @@ export function drawFrogVisitor(scene: Phaser.Scene, { left, top, width, height 
   const fireflies = scene.add.graphics().setName('marsh-lantern-fireflies');
   const flower = scene.add.image(x, y, flowerKey).setOrigin(0.5, 1).setAngle(-9).setName('marsh-offered-flower');
   flower.setScale(height * 0.092 / flower.height);
-  const frog = scene.add.image(left + width * 0.383, top + height * 0.937, sprite)
+  const frog = scene.add.image(left + width * 0.384, top + height * 0.916, sprite)
     .setOrigin(0.5, 1).setName('marsh-visitor');
-  frog.setScale(height * 0.111 / frog.height);
+  frog.setScale(height * 0.064 / frog.height);
   const lanternX = left + width * 0.307, lanternY = top + height * 0.395;
   let phase = 0.2;
   let greeting = 0;

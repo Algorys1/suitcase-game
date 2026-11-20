@@ -16,7 +16,7 @@ Fichier local : `public/assets/audio/springly-sprigs.mp3`, 3 340 593 octets. [Cr
 
 ## Son dans le navigateur
 
-`services/audio.ts` utilise un seul lecteur HTMLAudio pour la musique, conservé entre les scènes, et un contexte Web Audio pour quelques effets brefs : cran de boussole, papier de l'intro, départ, arrivée, souvenir et Néant. Ces petits effets sont synthétisés localement, sans asset tiers ni service distant. Aucun son n'est ajouté aux cibles cachées pour les révéler.
+`services/audio.ts` utilise un seul lecteur HTMLAudio pour la musique, conservé entre les scènes, et un contexte Web Audio pour quelques effets brefs : cran de boussole, papier de l'intro et du carnet, départ, arrivée, souvenir et Néant. Le carnet reprend le froissement de l'intro à son ouverture et aux changements de page, y compris en mouvement réduit. Ces petits effets sont synthétisés localement, sans asset tiers ni service distant. Aucun son n'est ajouté aux cibles cachées pour les révéler.
 
 La musique n'est ni demandée ni jouée avant un geste. Les premières actions autorisent le son ; les touches de navigation système et Tab ne lancent pas la musique. Une languette papier avec haut-parleur reste accessible partout à la souris, au toucher et au clavier, avec intitulé FR/EN et état ARIA. Le choix de silence est sauvegardé. Le jeu suspend la lecture en arrière-plan et ne redémarre pas un second morceau lors d'un changement de scène. Une musique absente laisse le jeu utilisable.
 
@@ -24,7 +24,7 @@ Le gestionnaire audio Phaser reste délibérément désactivé pour éviter un s
 
 ## Intro BD
 
-Trois illustrations dédiées : valise ordinaire dans le grenier, ouverture de la valise-boussole, panorama des ailleurs possibles. Les textes FR/EN sont rendus par Phaser et ne figurent pas dans les images. Une case à la fois, avec narration, numéro, précédent/suivant et « Passer l'intro » toujours disponible. Pas de délai imposé ; flèches, Entrée/Espace et Échap sont pris en charge. Apparition douce de 280 ms, supprimée en mouvement réduit.
+Une planche réunit trois illustrations : valise ordinaire dans le grenier, ouverture de la valise-boussole et panorama des ailleurs possibles. En paysage, l’image alterne à gauche, à droite puis à gauche de sa légende ; en portrait, chaque légende reste sous son image. Un clic sur la planche, « La suite », Entrée/Espace ou la flèche droite révèle la prochaine case. Les précédentes restent visibles. « Voyager » rejoint l’accueil après la troisième case et Échap permet de passer l’intro à tout moment. Les légendes FR/EN sont rendues par Phaser. Chaque révélation apparaît en fondu, ou immédiatement en mouvement réduit.
 
 L'intro est présentée au premier lancement sans expédition en cours. La passer ou la terminer acquitte le champ optionnel `introSeen`. Une reprise existante mène directement à l'accueil ; la relecture reste accessible par « Revoir l'intro » et ne crée ni ne modifie une expédition. Si un asset de cette intro facultative manque, le jeu rejoint l'accueil. Le chargement d'attente illustré existant est conservé.
 

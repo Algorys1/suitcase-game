@@ -200,7 +200,7 @@ function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: n
   if (scene.textures.exists(artKey)) {
     const artTop = landscape ? height * 0.14 : description.y + description.height + 10;
     const artBottom = landscape ? height * 0.87 : startY - buttonHeight / 2 - 14;
-    const artWidth = landscape ? innerWidth * 0.55 : Math.min(innerWidth, 460);
+    const artWidth = landscape ? innerWidth * 0.55 : Math.min(innerWidth * 0.94, 460);
     const artX = landscape ? left + innerWidth * 0.735 : center;
     const art = scene.add.image(artX, (artTop + artBottom) / 2, artKey).setName('home-departure');
     art.setScale(Math.min(artWidth / art.width, Math.max(0, artBottom - artTop) / art.height));
@@ -210,8 +210,12 @@ function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: n
   if (departureArt) drawHomeVisitors(scene, departureArt.getBounds(), {
     menuRight: left + columnWidth,
     footerBottom: journalY + buttonHeight / 2 + 20,
+    title: title.getBounds(),
+    descriptionBottom: description.y + description.height,
+    primaryTop: startY - buttonHeight / 2,
   });
   title.setDepth(1);
+  description.setDepth(1);
   content.buttons.forEach((button, index) => createButton(scene,
     index >= 2 ? landscape ? left + innerWidth * (index === 2 ? 0.61 : 0.85) : width * (index === 2 ? 0.25 : 0.75) : center,
     positions[index] ?? settingsY,

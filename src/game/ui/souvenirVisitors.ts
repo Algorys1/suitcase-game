@@ -39,9 +39,9 @@ export function drawForestVisitor(scene: Phaser.Scene, frame: WorldFrame): Array
     .fillEllipse(x, y + height * 0.075, width * 0.20, height * 0.21);
   const lantern = scene.add.image(x, y, 'souvenir-mycelia').setOrigin(0.5, 0.04).setName('forest-offered-lantern');
   lantern.setScale(height * 0.14 / lantern.height);
-  const creature = scene.add.image(left + width * 0.86, top + height * 0.92, 'adventure-forest-resident')
+  const creature = scene.add.image(left + width * 0.857, top + height * 0.905, 'adventure-forest-resident')
     .setOrigin(0.5, 1).setName('forest-visitor');
-  creature.setScale(height * 0.21 / creature.height);
+  creature.setScale(height * 0.176 / creature.height);
   if (scene.data.get('forest-visitor-arriving')) {
     scene.data.set('forest-visitor-arriving', false);
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -104,12 +104,12 @@ export function drawCityVisitor(scene: Phaser.Scene, frame: WorldFrame): Array<P
         .fillStyle(0xffedbb, alpha).fillCircle(sx, sy, size);
     }
   };
-  const foxX = left + width * 0.70, foxY = top + height * 0.84;
+  const foxX = left + width * 0.695, foxY = top + height * 0.824;
   const shadow = scene.add.graphics().fillStyle(0x60494d, 0.15)
     .fillEllipse(foxX, foxY - height * 0.006, width * 0.11, height * 0.018);
   const fox = scene.add.image(foxX, foxY, 'adventure-city-resident').setOrigin(0.5, 1)
     .setName('city-visitor');
-  fox.setScale(height * 0.20 / fox.height);
+  fox.setScale(height * 0.164 / fox.height);
   const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
   let emberMotion: Phaser.Tweens.Tween | undefined;
   const animateEmbers = () => {
@@ -166,7 +166,8 @@ export function preloadHomeVisitors(scene: Phaser.Scene): void {
 
 /** Walks around the luggage and onto the clear areas of the departure table. */
 export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle,
-  menu: { menuRight: number; footerBottom: number }): void {
+  menu: { menuRight: number; footerBottom: number; title: Phaser.Geom.Rectangle;
+    descriptionBottom: number; primaryTop: number }): void {
   const progress = progressStore.read(), { width, height } = scene.scale;
   const landscape = width >= 600;
   const ids = [progress.awakenedMycelia ? 'mycelia-resident' : '',
@@ -186,6 +187,8 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     progress.welcomedReefVisitor ? 'octopus-resident' : ''].filter(Boolean);
   if (!art.width || !art.height) return;
   type Stop = readonly [x: number, y: number, gesture?: 'slide' | 'pause'];
+  const onTable = (x: number, y: number, gesture?: Stop[2]): Stop =>
+    [(x - art.left) / art.width, (y - art.top) / art.height, gesture];
   const edgeInset = landscape ? 27 : 24;
   const tableLeft = (landscape ? menu.menuRight + edgeInset : edgeInset) - art.left;
   const tableRight = width - edgeInset - art.left;
@@ -193,13 +196,30 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
   const lowerEdge = Math.min((height - (landscape ? 53 : 197) - art.top) / art.height, 1.22);
   const upperEdge = (Math.max(landscape ? 53 : art.top + 40, art.top - 5) - art.top) / art.height;
   const lowerWalk = landscape && height - 8 - menu.footerBottom >= 53;
+  const aboveTitle = Math.max(56, menu.title.top - 7);
+  const besideTitle = menu.title.right + 26;
+  const lowerTable = height - 9;
+  const introGap = menu.primaryTop - menu.descriptionBottom;
+  const titleGap = menu.primaryTop - 4;
+  const portraitTop = Math.min(art.centerY - 12, Math.max(art.top + 8, menu.descriptionBottom + 41));
+  const portraitBottom = menu.primaryTop - 9;
+  const portraitLeft = 26, portraitRight = width - 26;
+  const crown = Math.max(56, art.top + 5);
   const routes: Record<string, { stops: readonly Stop[]; duration: number; hop: number }> = {
-    'mycelia-resident': { stops: [[leftEdge, 0.58], [leftEdge, 0.81], [0.14, lowerEdge, 'pause'],
-      [0.14, lowerEdge], [0.35, 0.81], [0.12, 0.67]], duration: 16500, hop: 0.05 },
+    'mycelia-resident': { stops: lowerWalk
+      ? [onTable(width * 0.32, lowerTable), onTable(width * 0.27, lowerTable, 'pause'),
+        onTable(width * 0.27, lowerTable), onTable(menu.menuRight + 27, lowerTable),
+        [leftEdge, 0.78], onTable(menu.menuRight + 27, lowerTable)]
+      : [[leftEdge, 0.58], [leftEdge, 0.81], [0.14, lowerEdge, 'pause'],
+        [0.14, lowerEdge], [0.35, 0.81], [0.12, 0.67]], duration: 18700, hop: 0.05 },
     'forest-resident': { stops: [[rightEdge, 0.50], [rightEdge, 0.80], [0.80, lowerEdge],
       [0.61, 0.87, 'pause'], [0.61, 0.87], [0.80, 0.61]], duration: 15900, hop: 0.17 },
-    'city-resident': { stops: [[0.17, 0.22], [leftEdge, upperEdge], [leftEdge, 0.42],
-      [0.31, 0.52], [0.56, 0.34], [0.39, 0.22]], duration: 17400, hop: 0.09 },
+    'city-resident': { stops: landscape
+      ? [onTable(besideTitle, menu.title.centerY + 22), onTable(besideTitle, menu.title.bottom - 2, 'pause'),
+        onTable(besideTitle, menu.title.bottom - 2), onTable(besideTitle + 6, aboveTitle + 15),
+        [0.12, 0.31], [0.29, 0.46], onTable(besideTitle + 10, menu.title.centerY + 30)]
+      : [[0.17, 0.22], [leftEdge, upperEdge], [leftEdge, 0.42],
+        [0.31, 0.52], [0.56, 0.34], [0.39, 0.22]], duration: 17400, hop: 0.09 },
     'sea-resident': { stops: [[0.22, lowerEdge], [0.40, lowerEdge, 'pause'], [0.40, lowerEdge],
       [0.51, 0.88], [0.35, 0.80, 'slide']], duration: 14900, hop: 0 },
     'hermit-resident': { stops: [[0.10, lowerEdge], [leftEdge, 0.87], [0.18, 0.75], [0.29, lowerEdge]], duration: 14000, hop: 0.04 },
@@ -207,14 +227,18 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     'snail-resident': { stops: [[rightEdge, 0.83], [0.93, lowerEdge], [0.75, lowerEdge], [0.88, 0.75]], duration: 24100, hop: 0 },
     'axolotl-resident': { stops: [[0.34, 0.62], [0.22, 0.79], [0.35, lowerEdge, 'pause'],
       [0.35, lowerEdge], [0.47, 0.82], [0.47, 0.65]], duration: 18400, hop: 0 },
-    'dragon-resident': { stops: [[0.42, 0.50], [0.57, 0.34], [0.76, upperEdge + 0.10, 'pause'],
-      [0.76, upperEdge + 0.10], [0.57, 0.21], [0.35, 0.32]], duration: 15500, hop: 0.07 },
+    'dragon-resident': { stops: [[0.42, 0.50], [0.57, 0.26], onTable(Math.min(width - 76, art.right - 40), crown, 'pause'),
+      onTable(Math.min(width - 76, art.right - 40), crown), [0.57, 0.21], [0.35, 0.32]], duration: 15500, hop: 0.07 },
     'griffin-resident': { stops: [[0.57, 0.70], [0.79, 0.66], [rightEdge, 0.30, 'pause'],
       [rightEdge, 0.30], [0.70, 0.42], [0.53, 0.56]], duration: 16300, hop: 0.13 },
     'yeti-resident': { stops: [[0.81, 0.86], [rightEdge, lowerEdge], [rightEdge, 0.65, 'pause'],
       [rightEdge, 0.65], [0.72, 0.59], [0.69, 0.76]], duration: 17100, hop: 0.04 },
-    'frog-resident': { stops: [[0.08, 0.79], [leftEdge, 0.66], [leftEdge, 0.36, 'pause'],
-      [leftEdge, 0.36], [0.25, 0.44], [0.30, 0.66]], duration: 15100, hop: 0.16 },
+    'frog-resident': { stops: landscape && introGap >= 46
+      ? [onTable(menu.menuRight * 0.69, titleGap), onTable(menu.menuRight * 0.37, titleGap, 'pause'),
+        onTable(menu.menuRight * 0.37, titleGap), onTable(menu.menuRight + 27, titleGap),
+        [0.14, 0.63], onTable(menu.menuRight + 27, titleGap)]
+      : [[0.08, 0.79], [leftEdge, 0.66], [leftEdge, 0.36, 'pause'],
+        [leftEdge, 0.36], [0.25, 0.44], [0.30, 0.66]], duration: 15100, hop: 0.16 },
     'octopus-resident': { stops: [[0.53, lowerEdge], [0.69, lowerEdge], [rightEdge, 0.95],
       [0.84, 0.83, 'pause'], [0.84, 0.83], [0.62, 0.88]], duration: 14900, hop: 0 },
     'fennec-resident': { stops: lowerWalk
@@ -222,16 +246,44 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
         [(width * 0.16 - art.left) / art.width, (height - 8 - art.top) / art.height], [leftEdge, (height - 8 - art.top) / art.height]]
       : [[0.19, 0.67], [leftEdge, 0.89], [0.23, lowerEdge, 'pause'],
         [0.23, lowerEdge], [0.47, 0.87], [0.33, 0.72]], duration: 17800, hop: 0.11 },
-    'owl-resident': { stops: [[0.55, upperEdge], [0.33, upperEdge + 0.02], [0.13, upperEdge + 0.06, 'pause'],
-      [0.13, upperEdge + 0.06], [0.36, 0.25], [0.59, 0.25]], duration: 14800, hop: 0.035 },
+    'owl-resident': { stops: landscape
+      ? [onTable(menu.title.left + 23, aboveTitle), onTable(menu.title.left + 23, aboveTitle, 'pause'),
+        onTable(menu.title.left + 23, aboveTitle), onTable(32, aboveTitle - 6),
+        onTable(31, aboveTitle + 6, 'pause'), onTable(31, aboveTitle + 6)]
+      : [[0.55, upperEdge], [0.33, upperEdge + 0.02], [0.13, upperEdge + 0.06, 'pause'],
+        [0.13, upperEdge + 0.06], [0.36, 0.25], [0.59, 0.25]], duration: 17200, hop: 0.035 },
+  };
+  const portraitRoutes: Record<string, readonly Stop[]> = {
+    'owl-resident': [onTable(portraitLeft, menu.title.top + 25), onTable(portraitLeft, menu.title.bottom - 4, 'pause'),
+      onTable(portraitLeft, menu.title.bottom - 4), onTable(portraitLeft + 7, menu.title.top + 36)],
+    'city-resident': [onTable(portraitRight, menu.title.bottom + 20), onTable(portraitRight, portraitTop - 7),
+      onTable(portraitRight, art.centerY, 'pause'), onTable(portraitRight, art.centerY), onTable(portraitRight, portraitTop - 7)],
+    'mycelia-resident': [onTable(width * 0.31, portraitTop), onTable(width * 0.38, portraitTop, 'pause'),
+      onTable(width * 0.38, portraitTop), onTable(width * 0.24, portraitTop + 14)],
+    'dragon-resident': [onTable(width * 0.69, portraitTop + 2), onTable(width * 0.57, portraitTop + 3),
+      onTable(width * 0.55, portraitTop + 17), onTable(width * 0.75, portraitTop + 14)],
+    'forest-resident': [onTable(portraitRight, portraitBottom - 9), onTable(portraitRight, art.centerY + 24),
+      onTable(portraitRight - 6, art.centerY + 3, 'pause'), onTable(portraitRight - 6, art.centerY + 3),
+      onTable(portraitRight - 11, portraitBottom - 13)],
+    'sea-resident': [onTable(width * 0.64, portraitBottom), onTable(width * 0.84, portraitBottom, 'pause'),
+      onTable(width * 0.84, portraitBottom), onTable(width * 0.45, portraitBottom - 5, 'slide')],
+    'hermit-resident': [onTable(width * 0.14, portraitBottom), onTable(width * 0.29, portraitBottom - 6),
+      onTable(width * 0.37, portraitBottom, 'pause'), onTable(width * 0.37, portraitBottom), onTable(width * 0.20, portraitBottom)],
+    'frog-resident': [onTable(portraitLeft, art.centerY + 11), onTable(portraitLeft + 4, portraitTop + 20),
+      onTable(portraitLeft, portraitTop + 4, 'pause'), onTable(portraitLeft, portraitTop + 4), onTable(portraitLeft, art.centerY - 10)],
+    'snail-resident': [onTable(width * 0.45, portraitBottom - 6), onTable(width * 0.62, portraitBottom - 3, 'pause'),
+      onTable(width * 0.62, portraitBottom - 3), onTable(width * 0.49, portraitBottom - 15)],
+    'fennec-resident': [onTable(portraitLeft + 8, portraitBottom - 22), onTable(portraitLeft, portraitBottom - 37),
+      onTable(portraitLeft, art.centerY + 29, 'pause'), onTable(portraitLeft, art.centerY + 29), onTable(portraitLeft + 11, portraitBottom - 23)],
   };
   ids.forEach((id, index) => {
     const key = `adventure-${id}`;
     const path = routes[id];
     if (!path || !scene.textures.exists(key)) return;
-    const route = path.stops;
+    const route = landscape ? path.stops : portraitRoutes[id] ?? path.stops;
     const visitor = scene.add.image(0, 0, key).setOrigin(0.5, 1).setName(`home-visitor-${id}`);
-    const sizeFactor = id === 'frog-resident' ? 0.80 : id === 'sea-resident' || id === 'owl-resident' ? 0.92 : 1;
+    const sizeFactor = id === 'frog-resident' ? 0.84 : id === 'mycelia-resident' ? 1.06
+      : id === 'sea-resident' || id === 'owl-resident' ? 0.92 : 1;
     const crowdFactor = ids.length > 12 ? 0.87 : 1;
     const sizeLimit = Math.min(landscape ? 58 : 48, height * 0.15, art.height * 0.29) * crowdFactor;
     visitor.setScale(sizeFactor * Math.min(sizeLimit / visitor.height, sizeLimit * 1.13 / visitor.width));

@@ -7,9 +7,9 @@ import { AdventureControls, mapText, reducedMotion } from '../ui/adventureMap';
 import { playSound } from '../../services/audio';
 
 export class IntroScene extends Phaser.Scene {
-  private page = 0;
   private controls!: AdventureControls;
   private active = false;
+  private visiblePanels = 1;
   constructor() { super('intro'); }
 
   preload(): void {
@@ -28,7 +28,7 @@ export class IntroScene extends Phaser.Scene {
     if (!this.active) { this.scene.start('home'); return; }
     if (this.data.get('asset-load-failed')) { this.finish(); return; }
     if (!finishSceneLoading(this)) return;
-    this.page = 0;
+    this.visiblePanels = 1;
     this.controls = new AdventureControls(this);
     this.render(true);
     this.scale.on('resize', this.resize, this);
@@ -43,18 +43,20 @@ export class IntroScene extends Phaser.Scene {
   }
 
   private finish = (): void => { progressStore.acknowledgeIntro(); this.scene.start('home'); };
-  private next = (): void => {
+  private advance = (): void => {
     playSound('paper');
-    if (this.page === 2) { this.finish(); return; }
-    this.page++; this.render(true);
+    if (this.visiblePanels >= getTexts().intro.panels.length) { this.finish(); return; }
+    this.visiblePanels++;
+    this.render(true);
   };
-  private previous = (): void => { if (this.page > 0) { this.page--; playSound('paper'); this.render(true); } };
   private resize = (): void => this.render(false);
   private key = (event: KeyboardEvent): void => {
-    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.key === 'Escape') { event.preventDefault(); this.finish(); }
-    else if (event.key === 'ArrowRight' || event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.next(); }
-    else if (event.key === 'ArrowLeft') { event.preventDefault(); this.previous(); }
+    else if (event.key === 'Enter' || event.key === ' ' || (event.key === 'ArrowRight' && this.visiblePanels < 3)) {
+      event.preventDefault();
+      this.advance();
+    }
   };
 
   private render(animate: boolean): void {
@@ -71,29 +73,49 @@ export class IntroScene extends Phaser.Scene {
       .fillCircle(22 + i * 47 % (w - 44), 23 + i * 31 % (h - 46), 0.6);
     mapText(this, w / 2, short ? 33 : 42, copy.title, portrait || short ? 20 : 28, w - 94)
       .setFontStyle('bold').setName('intro-title');
-    const frame = this.textures.getFrame(`intro-panel-${this.page + 1}`);
-    const artW = Math.min(w - (portrait ? 52 : 86), (h - (short ? 222 : portrait ? 250 : 262)) * frame.width / frame.height);
-    const artH = artW * frame.height / frame.width;
-    const artY = portrait ? Math.max(100 + artH / 2, h * 0.40) : short ? 64 + artH / 2 : 78 + artH / 2;
-    const left = (w - artW) / 2, top = artY - artH / 2;
-    const border = this.add.graphics().setName('intro-comic-frame');
-    border.fillStyle(0x63452d, 0.20).fillRect(left - 4, top - 2, artW + 14, artH + 14)
-      .fillStyle(0xfffaf0).fillRect(left - 7, top - 7, artW + 14, artH + 14)
-      .lineStyle(3, 0x513a29).strokeRect(left - 3, top - 3, artW + 6, artH + 6);
-    const image = this.add.image(w / 2, artY, `intro-panel-${this.page + 1}`).setDisplaySize(artW, artH).setName('intro-panel');
-    const captionY = artY + artH / 2 + (short ? 16 : 24);
-    const caption = mapText(this, w / 2, captionY, copy.panels[this.page]!, portrait || short ? 16 : 20,
-      Math.min(w - 64, 760)).setOrigin(0.5, 0).setName('intro-caption');
-    let size = portrait || short ? 16 : 20;
-    while (caption.y + caption.height > h - 101 && size > 12) caption.setFontSize(--size);
-    mapText(this, w / 2, h - 83, copy.page.replace('{page}', String(this.page + 1)), 12, w - 60, '#8c704d');
-    this.controls.button('intro-next', this.page === 2 ? copy.finish : copy.next, w / 2, h - 44,
-      Math.min(180, w * 0.34), this.next, true);
-    this.controls.button('intro-skip', copy.skip, w - (portrait ? 54 : 100), h - 44,
-      portrait ? 88 : 160, this.finish);
-    if (this.page > 0) this.controls.button('intro-previous', '←', portrait ? 42 : 90, h - 44, 48, this.previous);
-    this.game.canvas.setAttribute('aria-label', `${copy.title}. ${copy.page.replace('{page}', String(this.page + 1))}. ${copy.panels[this.page]}`);
-    if (animate && !reducedMotion()) this.tweens.add({ targets: [image, caption],
-      alpha: { from: 0, to: 1 }, duration: 280, ease: 'Sine.Out' });
+    const gutter = portrait ? 9 : 12;
+    const boardTop = short ? 53 : 67;
+    const boardHeight = h - boardTop - 70;
+    const cellW = portrait ? w - 50 : Math.min(680, w - 70);
+    const cellH = (boardHeight - gutter * (copy.panels.length - 1)) / copy.panels.length;
+    const textW = portrait ? cellW - 12 : cellW * 0.43;
+    const captions = copy.panels.map((line, index) => {
+      return mapText(this, w / 2, 0, line, portrait ? 15 : short ? 16 : 19, textW, '#513a29')
+        .setOrigin(0.5, 0).setName(`intro-caption-${index + 1}`);
+    });
+    const captionHeight = Math.max(...captions.map(caption => caption.height));
+    const captionGap = 6;
+    captions.forEach((caption, index) => {
+      if (index >= this.visiblePanels) { caption.destroy(); return; }
+      const cy = boardTop + cellH / 2 + index * (cellH + gutter);
+      const key = `intro-panel-${index + 1}`;
+      const frame = this.textures.getFrame(key);
+      const artLimit = portrait ? cellW - 8 : cellW * 0.45;
+      const artSpace = cellH - (portrait ? captionHeight + captionGap + 10 : 5);
+      const artH = Math.max(1, Math.min(artLimit * frame.height / frame.width, artSpace));
+      const artW = artH * frame.width / frame.height;
+      const side = index % 2 === 0 ? 1 : -1;
+      const cx = portrait ? w / 2 : w / 2 - side * (artW / 2 + 16);
+      const top = portrait ? cy - (artH + captionGap + captionHeight) / 2 : cy - artH / 2;
+      const left = cx - artW / 2;
+      const border = this.add.graphics().setName(`intro-comic-frame-${index + 1}`);
+      border.fillStyle(0x63452d, 0.19).fillRect(left - 2, top - 1, artW + 8, artH + 8)
+        .fillStyle(0xfffaf0).fillRect(left - 4, top - 4, artW + 8, artH + 8)
+        .lineStyle(2, 0x513a29).strokeRect(left - 1, top - 1, artW + 2, artH + 2);
+      const image = this.add.image(cx, top + artH / 2, key).setDisplaySize(artW, artH)
+        .setName(key);
+      if (portrait) caption.setY(top + artH + captionGap);
+      else caption.setOrigin(side === 1 ? 0 : 1, 0.5).setAlign(side === 1 ? 'left' : 'right')
+        .setPosition(w / 2 + side * 12, cy);
+      if (animate && index === this.visiblePanels - 1 && !reducedMotion()) this.tweens.add({
+        targets: [border, image, caption], alpha: { from: 0, to: 1 }, duration: 300, ease: 'Sine.Out',
+      });
+    });
+    const complete = this.visiblePanels === copy.panels.length;
+    if (!complete) this.add.zone(w / 2, boardTop + boardHeight / 2, cellW, boardHeight)
+      .setInteractive({ useHandCursor: true }).on('pointerup', this.advance);
+    this.controls.button('intro-advance', complete ? copy.finish : copy.next, w / 2, h - 43,
+      Math.min(180, w * 0.48), this.advance, true);
+    this.game.canvas.setAttribute('aria-label', [copy.title, ...copy.panels.slice(0, this.visiblePanels)].join(' '));
   }
 }

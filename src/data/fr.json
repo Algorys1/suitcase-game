@@ -430,14 +430,11 @@
     "panels": [
       "Cette valise semblait tout à fait ordinaire.",
       "Jusqu’au jour où son couvercle s’est ouvert sur l’impossible.",
-      "Depuis, chaque départ commence par une question : où ai-je envie d’aller ?"
+      "Depuis, chaque départ commence par une question : quel monde vais-je découvrir ?"
     ],
     "next": "La suite",
-    "previous": "Case précédente",
-    "skip": "Passer l’intro",
-    "finish": "Entrer",
-    "replay": "Revoir l’intro",
-    "page": "Case {page} / 3"
+    "finish": "Voyager",
+    "replay": "Revoir l’intro"
   },
   "audio": {
     "on": "Couper le son",

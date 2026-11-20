@@ -107,6 +107,15 @@ export function drawTravelNote(scene: Phaser.Scene, step: TutorialStep | 'gestur
   scene.game.canvas.setAttribute('aria-description', [existing, copy[step]].filter(Boolean).join('. '));
 }
 
+export function offeringTravelTip(scene: Phaser.Scene, dismiss: () => void, button: NoteOptions['button']): void {
+  if (!needsTravelTip('offering') || !progressStore.hasAvailableOffering()) return;
+  const { width, height } = scene.scale;
+  drawTravelNote(scene, 'offering', dismiss, {
+    x: width / 2, top: Math.round(height * 0.48), width: Math.min(344, width - 36), height: 132, button,
+  });
+  progressStore.acknowledgeTutorial('offering');
+}
+
 /** Separate travel aid: the world's description always keeps its own place. */
 export function destinationTravelTip(scene: Phaser.Scene, controls: AdventureControls,
   step: TutorialStep, stage: { sideX: number; sideW: number; bodyY: number; stickerY: number; portrait: boolean; short: boolean;

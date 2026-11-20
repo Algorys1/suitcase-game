@@ -6,7 +6,7 @@ import { progressStore } from '../../services/storage';
 import { getTexts } from '../../services/i18n';
 import { AdventureControls, drawAdventureMap, mapText, mapInstruments } from '../ui/adventureMap';
 import { approachJournal } from '../ui/notebookMotion';
-import { drawTravelNote, needsTravelTip } from '../ui/travelTutorial';
+import { drawTravelNote, needsTravelTip, offeringTravelTip } from '../ui/travelTutorial';
 
 export class AdventureScene extends Phaser.Scene {
   private session: SessionState = createSession();
@@ -106,6 +106,6 @@ export class AdventureScene extends Phaser.Scene {
         query.addEventListener('change', stop);
         suitcase.once('destroy', () => { motion?.stop(); query.removeEventListener('change', stop); });
       }
-    }
+    } else offeringTravelTip(this, () => this.render(), (...args) => this.controls.button(...args));
   }
 }

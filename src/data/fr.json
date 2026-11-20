@@ -169,7 +169,7 @@
   },
   "destinations": {
     "archipel_azur": {
-      "title": "L'Archipel d'Azur",
+      "title": "L’Archipel d’Azur",
       "story": "Ici, les vagues rapportent des éclats de ciel. Sous les palmiers, on dit qu’en écoutant un coquillage, on entend la mer du prochain voyage."
     },
     "cimes_eternelles": {
@@ -209,7 +209,7 @@
       "story": "Les racines ont remplacé les marches, mais le temple accueille ceux qui ont le pied léger. Une amulette de bois porte le souvenir de tous ceux qui s’y sont reposés."
     },
     "ile_des_cendres": {
-      "title": "L'Île des cendres",
+      "title": "L’Île des cendres",
       "story": "La cendre tombe ici aussi doucement que la neige. Au pied des palmiers noirs, une graine rouge attend la première pluie pour recommencer le monde."
     },
     "grottes_sporiferes": {
@@ -249,7 +249,7 @@
       "story": "Dans les alcôves, des sphères recueillent les spores dorées des champignons. Un médaillon en garde quelques-unes, dont la douce lumière accompagne le voyageur."
     },
     "royaume_des_spores_celestes": {
-      "title": "Le Royaume des spores célestes",
+      "title": "Les Spores célestes",
       "story": "Des champignons légers voyagent de nuage en nuage. Leurs petites ombrelles ne protègent pas de la pluie : elles apprennent aux rêves à voler."
     },
     "tempete_ecarlate": {
@@ -257,11 +257,11 @@
       "story": "Les nuages rouges se racontent leurs colères à coups d’éclairs. Quand ils se taisent, il reste parfois une étincelle, tiède et douce au creux d’un flacon."
     },
     "atoll_boreal": {
-      "title": "L'Atoll boréal",
+      "title": "L’Atoll boréal",
       "story": "Les palmiers portent des franges de neige sous les aurores. Un bracelet tressé de lumière garde au poignet les couleurs de cette nuit impossible."
     },
     "vestiges_celestes": {
-      "title": "Les Vestiges célestes",
+      "title": "Les Vestiges éternels",
       "story": "Les escaliers montent encore, même là où les palais ont disparu. Un fragment de mosaïque montre une étoile : peut-être l’adresse de leurs anciens habitants."
     },
     "mer_figee": {
@@ -277,7 +277,7 @@
       "story": "Les jardiniers arrosent les champignons avec des reflets de lune. Au matin, une fleur de gemme a poussé : elle ne demande ni eau ni vase, seulement un peu de lumière."
     },
     "empire_des_sables": {
-      "title": "L'Empire des sables",
+      "title": "L’Empire des sables",
       "story": "Les dunes déplacent les rues pendant que la cité dort. Une petite lampe indique toujours la direction de l’oasis, même quand toutes les routes ont changé."
     },
     "faille_des_contraires": {
@@ -285,7 +285,7 @@
       "story": "D’un côté, la braise ; de l’autre, le givre. Au-dessus de la faille, deux rubans noués restent tièdes : les contraires savent parfois se tenir chaud."
     },
     "observatoire_des_etoiles": {
-      "title": "L'Observatoire des étoiles",
+      "title": "L’Observatoire des étoiles",
       "story": "Ici, les étoiles descendent assez bas pour regarder dans les télescopes. Une lentille de poche garde un coin de ciel, pour les soirs où les nuages cachent tout."
     }
   },
@@ -384,7 +384,8 @@
     "title": "Le guide du voyageur",
     "departure": "Tout commence dans cette valise. Ouvrez-la pour préparer votre départ.",
     "exploration": "Touchez ou cliquez dans le paysage pour essayer de résoudre son mystère. Observez ses réactions : vos essais sont gratuits.",
-    "souvenir": "Retrouvez vos souvenirs dans le carnet. Vous pouvez y essayer certains souvenirs dans d’autres mondes. Ils restent dans votre collection.",
+    "souvenir": "Votre premier souvenir rejoint le carnet. Vous pourrez le revoir quand vous voudrez.",
+    "offering": "Un de vos souvenirs a encore du chemin à faire ! Dans le carnet, ouvrez la pochette d’une escale, choisissez un souvenir et touchez l’illustration.",
     "continue": "Replier",
     "skip": "Voyager sans conseils",
     "close": "Refermer le guide",

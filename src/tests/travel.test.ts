@@ -49,7 +49,7 @@ describe('résolution des recettes', () => {
       expect(english[destination.id]?.title.trim()).toBeTruthy();
       expect(english[destination.id]?.story.trim()).toBeTruthy();
     }
-    expect(french.archipel_azur?.title).toBe("L'Archipel d'Azur");
+    expect(french.archipel_azur?.title).toBe('L’Archipel d’Azur');
     expect(french.coeur_de_braise?.title).toBe('Le Cœur de braise');
   });
 });

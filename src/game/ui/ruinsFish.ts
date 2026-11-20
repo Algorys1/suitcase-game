@@ -3,9 +3,9 @@ import { AdventureControls, reducedMotion } from './adventureMap';
 import type { WorldFrame } from './pilotWorlds';
 
 const schools = [
-  { key: 'near', width: 0.095, distantWidth: 0.060, from: { x: 0.381, y: 0.274 }, to: { x: 0.655, y: 0.399 },
+  { key: 'near', facesLeft: false, width: 0.095, distantWidth: 0.060, from: { x: 0.381, y: 0.274 }, to: { x: 0.655, y: 0.399 },
     a: { x: 0.48, y: 0.28 }, b: { x: 0.60, y: 0.37 } },
-  { key: 'far', width: 0.135, distantWidth: 0.060, from: { x: 0.872, y: 0.183 }, to: { x: 0.792, y: 0.367 },
+  { key: 'far', facesLeft: true, width: 0.135, distantWidth: 0.060, from: { x: 0.872, y: 0.183 }, to: { x: 0.792, y: 0.367 },
     a: { x: 0.76, y: 0.20 }, b: { x: 0.75, y: 0.32 } },
 ];
 
@@ -91,6 +91,9 @@ export function addRuinsFish(scene: Phaser.Scene, controls: AdventureControls, a
     const start = away ? other : home;
     const fish = scene.add.image(start.x, start.y, `adventure-ruins-fish-${school.key}`)
       .setName(`ruins-fish-${school.key}`).setData('swimming', false).setData('resting-place', away ? 1 : 0);
+    const face = (dx: number) => {
+      if (Math.abs(dx) > 0.000001) fish.setFlipX((dx < 0) !== school.facesLeft);
+    };
     fish.setScale(art.width * (away ? school.distantWidth : school.width) / fish.width);
     const name = `touch-fish-${school.key}`;
     if (visited.length === schools.length) {
@@ -99,17 +102,22 @@ export function addRuinsFish(scene: Phaser.Scene, controls: AdventureControls, a
       const rest = orbit(phase);
       fish.setName(`ruins-fish-${school.key}`).setData('circling', true);
       const circle = () => {
+        face(orbit(phase + 0.01).x - rest.x);
         if (reducedMotion()) return;
         const state = { angle: phase };
         scene.tweens.add({ targets: state, angle: phase + Math.PI * 2, duration: 7000,
           repeat: -1, onUpdate: () => {
             const p = orbit(state.angle);
-            fish.setPosition(p.x, p.y).setFlipX(Math.sin(state.angle) > 0);
+            face(p.x - fish.x);
+            fish.setPosition(p.x, p.y);
           } });
       };
       const scale = art.width * 0.055 / fish.width;
-      if (gathering && !reducedMotion()) scene.tweens.add({ targets: fish,
-        x: rest.x, y: rest.y, scaleX: scale, scaleY: scale, duration: 1000, ease: 'Sine.InOut', onComplete: circle });
+      if (gathering && !reducedMotion()) {
+        face(rest.x - fish.x);
+        scene.tweens.add({ targets: fish,
+          x: rest.x, y: rest.y, scaleX: scale, scaleY: scale, duration: 1000, ease: 'Sine.InOut', onComplete: circle });
+      }
       else { fish.setPosition(rest.x, rest.y).setScale(scale); circle(); }
       return;
     }
@@ -130,7 +138,6 @@ export function addRuinsFish(scene: Phaser.Scene, controls: AdventureControls, a
         return;
       }
       const destination = away ? home : other;
-      fish.setFlipX(away);
       const curve = new Phaser.Curves.CubicBezier(new Phaser.Math.Vector2(fish.x, fish.y),
         point(away ? school.b : school.a), point(away ? school.a : school.b), destination);
       const progress = { p: 0 };
@@ -140,6 +147,7 @@ export function addRuinsFish(scene: Phaser.Scene, controls: AdventureControls, a
         // rather than leaving fish permanently clipped by the stone columns.
         const depth = away ? 1 - progress.p : progress.p;
         fish.setScale(art.width * Phaser.Math.Linear(school.width, school.distantWidth, depth) / fish.width);
+        face(p.x - fish.x);
         fish.setPosition(p.x, p.y).setAngle(Math.sin(progress.p * Math.PI * 5) * 3);
         controls.move(name, p.x, p.y);
       }, onComplete: () => {

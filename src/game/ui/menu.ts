@@ -207,7 +207,10 @@ function renderHomeMenu(scene: Phaser.Scene, content: MenuContent, focusIndex: n
   }
 
   const departureArt = scene.children.getByName('home-departure') as Phaser.GameObjects.Image | null;
-  if (departureArt) drawHomeVisitors(scene, departureArt.getBounds());
+  if (departureArt) drawHomeVisitors(scene, departureArt.getBounds(), {
+    menuRight: left + columnWidth,
+    footerBottom: journalY + buttonHeight / 2 + 20,
+  });
   title.setDepth(1);
   content.buttons.forEach((button, index) => createButton(scene,
     index >= 2 ? landscape ? left + innerWidth * (index === 2 ? 0.61 : 0.85) : width * (index === 2 ? 0.25 : 0.75) : center,

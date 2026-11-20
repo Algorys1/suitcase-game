@@ -91,6 +91,13 @@ export function queueWorldAssets(scene: Phaser.Scene, ids: readonly string[], ma
       scene.load.image('adventure-dragon-resident', import.meta.env.BASE_URL + 'assets/adventure/dragon-resident.webp');
     if (progressStore.read().welcomedKingdomVisitor) preloadSouvenirs(scene, ['jungle_incandescente']);
   }
+  if (ids.includes('ruines_englouties')) {
+    if (!scene.textures.exists('adventure-axolotl-resident'))
+      scene.load.image('adventure-axolotl-resident', import.meta.env.BASE_URL + 'assets/adventure/axolotl-resident.webp');
+    if (!scene.textures.exists('adventure-axolotl-gills'))
+      scene.load.image('adventure-axolotl-gills', import.meta.env.BASE_URL + 'assets/adventure/axolotl-gills.webp');
+    if (progressStore.read().welcomedRuinsVisitor) preloadSouvenirs(scene, ['vestiges_celestes']);
+  }
   preloadAdventureArt(scene, ids, map);
   if (map) {
     const session = (scene.sys.settings.data as { session?: SessionState } | undefined)?.session

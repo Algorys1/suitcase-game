@@ -8,7 +8,7 @@ import type { SanctuaryPuzzle } from '../domain/sanctuaryPuzzle';
 
 export const PROGRESS_KEY = 'suitcase-game.progress.v1';
 export type Language = 'fr' | 'en';
-export const tutorialSteps = ['departure', 'needles', 'energy', 'arrival', 'exploration', 'souvenir', 'exhausted'] as const;
+export const tutorialSteps = ['departure', 'needles', 'energy', 'arrival', 'exploration', 'souvenir', 'exhausted', 'offering'] as const;
 export type TutorialStep = typeof tutorialSteps[number];
 export type Progress = {
   schemaVersion: 1;
@@ -29,6 +29,7 @@ export type Progress = {
   welcomedPalaceVisitor?: boolean;
   welcomedVestigesVisitor?: boolean;
   welcomedKingdomVisitor?: boolean;
+  welcomedRuinsVisitor?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
   sanctuaryPuzzle?: SanctuaryPuzzle;
@@ -36,6 +37,28 @@ export type Progress = {
 };
 type StorageAccess = () => Pick<Storage, 'getItem' | 'setItem'> & Partial<Pick<Storage, 'removeItem'>>;
 const knownIds = new Set(destinations.map(({ id }) => id));
+
+const souvenirOfferings = [
+  { souvenir: 'cimes_eternelles', destination: 'mycelia', welcomed: 'awakenedMycelia' },
+  { souvenir: 'mycelia', destination: 'foret_du_silence', welcomed: 'welcomedForestVisitor' },
+  { souvenir: 'coeur_de_braise', destination: 'cite_immobile', welcomed: 'welcomedCityVisitor' },
+  { souvenir: 'archipel_azur', destination: 'mer_figee', welcomed: 'welcomedSeaVisitor' },
+  { souvenir: 'iles_suspendues', destination: 'observatoire_des_etoiles', welcomed: 'welcomedObservatoryVisitor' },
+  { souvenir: 'temple_oublie', destination: 'empire_des_sables', welcomed: 'welcomedEmpireVisitor' },
+  { souvenir: 'grottes_sporiferes', destination: 'recif_de_verre', welcomed: 'welcomedReefVisitor' },
+  { souvenir: 'jardins_de_gemmes', destination: 'marais_des_lucioles', welcomed: 'welcomedMarshVisitor' },
+  { souvenir: 'atoll_boreal', destination: 'palais_de_givre', welcomed: 'welcomedPalaceVisitor' },
+  { souvenir: 'tempete_ecarlate', destination: 'vestiges_celestes', welcomed: 'welcomedVestigesVisitor' },
+  { souvenir: 'jungle_incandescente', destination: 'royaume_des_spores_celestes', welcomed: 'welcomedKingdomVisitor' },
+  { souvenir: 'vestiges_celestes', destination: 'ruines_englouties', welcomed: 'welcomedRuinsVisitor' },
+] as const;
+
+function canOffer(progress: Progress, offering: typeof souvenirOfferings[number]): boolean {
+  return !progress[offering.welcomed]
+    && progress.discoveredDestinationIds.includes(offering.destination)
+    && progress.discoveredDestinationIds.includes(offering.souvenir)
+    && !progress.pendingSouvenirIds?.includes(offering.souvenir);
+}
 
 function emptyProgress(): Progress {
   return { schemaVersion: 1, discoveredDestinationIds: [], language: 'fr' };
@@ -100,6 +123,9 @@ export function decodeProgress(serialized: string | null): Progress {
       ...('welcomedKingdomVisitor' in value && value.welcomedKingdomVisitor === true
         && discoveredDestinationIds.includes('royaume_des_spores_celestes') && discoveredDestinationIds.includes('jungle_incandescente')
         && !pending.includes('jungle_incandescente') ? { welcomedKingdomVisitor: true } : {}),
+      ...('welcomedRuinsVisitor' in value && value.welcomedRuinsVisitor === true
+        && discoveredDestinationIds.includes('ruines_englouties') && discoveredDestinationIds.includes('vestiges_celestes')
+        && !pending.includes('vestiges_celestes') ? { welcomedRuinsVisitor: true } : {}),
       ...('welcomedEmpireVisitor' in value && value.welcomedEmpireVisitor === true
         && discoveredDestinationIds.includes('empire_des_sables') && discoveredDestinationIds.includes('temple_oublie')
         && !pending.includes('temple_oublie') ? { welcomedEmpireVisitor: true } : {}),
@@ -260,92 +286,61 @@ export class ProgressStore {
     return { changed: true, collected };
   }
 
-  offerBell(): boolean {
+  hasAvailableOffering(): boolean {
     const progress = this.read();
-    if (progress.awakenedMycelia || !this.unlockedSouvenirIds().includes('cimes_eternelles')
-      || !progress.discoveredDestinationIds.includes('mycelia')) return false;
-    this.save({ ...progress, awakenedMycelia: true });
+    return souvenirOfferings.some(offering => canOffer(progress, offering));
+  }
+
+  offerSouvenir(souvenir: string, destination: string): boolean {
+    const offering = souvenirOfferings.find(entry => entry.destination === destination && entry.souvenir === souvenir);
+    const progress = this.read();
+    if (!offering || !canOffer(progress, offering)) return false;
+    this.save({ ...progress, [offering.welcomed]: true });
     return true;
+  }
+
+  offerBell(): boolean {
+    return this.offerSouvenir('cimes_eternelles', 'mycelia');
   }
 
   offerSporeLantern(): boolean {
-    const progress = this.read();
-    if (progress.welcomedForestVisitor || !this.unlockedSouvenirIds().includes('mycelia')
-      || !progress.discoveredDestinationIds.includes('foret_du_silence')) return false;
-    this.save({ ...progress, welcomedForestVisitor: true });
-    return true;
+    return this.offerSouvenir('mycelia', 'foret_du_silence');
   }
 
   offerEmber(): boolean {
-    const progress = this.read();
-    if (progress.welcomedCityVisitor || !this.unlockedSouvenirIds().includes('coeur_de_braise')
-      || !progress.discoveredDestinationIds.includes('cite_immobile')) return false;
-    this.save({ ...progress, welcomedCityVisitor: true });
-    return true;
+    return this.offerSouvenir('coeur_de_braise', 'cite_immobile');
   }
 
   offerSeashell(): boolean {
-    const progress = this.read();
-    if (progress.welcomedSeaVisitor || !this.unlockedSouvenirIds().includes('archipel_azur')
-      || !progress.discoveredDestinationIds.includes('mer_figee')) return false;
-    this.save({ ...progress, welcomedSeaVisitor: true });
-    return true;
+    return this.offerSouvenir('archipel_azur', 'mer_figee');
   }
 
   offerWeightlessPebble(): boolean {
-    const progress = this.read();
-    if (progress.welcomedObservatoryVisitor || !this.unlockedSouvenirIds().includes('iles_suspendues')
-      || !progress.discoveredDestinationIds.includes('observatoire_des_etoiles')) return false;
-    this.save({ ...progress, welcomedObservatoryVisitor: true });
-    return true;
+    return this.offerSouvenir('iles_suspendues', 'observatoire_des_etoiles');
   }
 
   offerRootAmulet(): boolean {
-    const progress = this.read();
-    if (progress.welcomedEmpireVisitor || !this.unlockedSouvenirIds().includes('temple_oublie')
-      || !progress.discoveredDestinationIds.includes('empire_des_sables')) return false;
-    this.save({ ...progress, welcomedEmpireVisitor: true });
-    return true;
+    return this.offerSouvenir('temple_oublie', 'empire_des_sables');
   }
 
   offerGemFlower(): boolean {
-    const progress = this.read();
-    if (progress.welcomedMarshVisitor || !this.unlockedSouvenirIds().includes('jardins_de_gemmes')
-      || !progress.discoveredDestinationIds.includes('marais_des_lucioles')) return false;
-    this.save({ ...progress, welcomedMarshVisitor: true });
-    return true;
+    return this.offerSouvenir('jardins_de_gemmes', 'marais_des_lucioles');
   }
 
   offerAuroraBracelet(): boolean {
-    const progress = this.read();
-    if (progress.welcomedPalaceVisitor || !this.unlockedSouvenirIds().includes('atoll_boreal')
-      || !progress.discoveredDestinationIds.includes('palais_de_givre')) return false;
-    this.save({ ...progress, welcomedPalaceVisitor: true });
-    return true;
+    return this.offerSouvenir('atoll_boreal', 'palais_de_givre');
   }
 
   offerBottledLightning(): boolean {
-    const progress = this.read();
-    if (progress.welcomedVestigesVisitor || !this.unlockedSouvenirIds().includes('tempete_ecarlate')
-      || !progress.discoveredDestinationIds.includes('vestiges_celestes')) return false;
-    this.save({ ...progress, welcomedVestigesVisitor: true });
-    return true;
+    return this.offerSouvenir('tempete_ecarlate', 'vestiges_celestes');
   }
 
   offerLanternFruit(): boolean {
-    const progress = this.read();
-    if (progress.welcomedKingdomVisitor || !this.unlockedSouvenirIds().includes('jungle_incandescente')
-      || !progress.discoveredDestinationIds.includes('royaume_des_spores_celestes')) return false;
-    this.save({ ...progress, welcomedKingdomVisitor: true });
-    return true;
+    return this.offerSouvenir('jungle_incandescente', 'royaume_des_spores_celestes');
   }
 
   offerLuminousGeode(): boolean {
-    const progress = this.read();
-    if (progress.welcomedReefVisitor || !this.unlockedSouvenirIds().includes('grottes_sporiferes')
-      || !progress.discoveredDestinationIds.includes('recif_de_verre')) return false;
-    this.save({ ...progress, welcomedReefVisitor: true });
-    return true;
+    return this.offerSouvenir('grottes_sporiferes', 'recif_de_verre');
   }
 
   finishSession(): void {

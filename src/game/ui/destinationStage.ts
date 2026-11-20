@@ -1,3 +1,4 @@
+import { drawAxolotlVisitor } from './axolotlVisitor';
 import { drawDragonVisitor } from './dragonVisitor';
 import { drawGriffinVisitor } from './griffinVisitor';
 import { drawYetiVisitor } from './yetiVisitor';
@@ -135,6 +136,8 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
     objects.push(...drawGriffinVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'royaume_des_spores_celestes' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawDragonVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
+  if (id === 'ruines_englouties' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawAxolotlVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'empire_des_sables' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawFennecVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'faille_des_contraires' && scene.sys.settings.key !== 'exploration')

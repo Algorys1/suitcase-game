@@ -249,7 +249,7 @@
       "story": "In the alcoves, spheres gather the mushrooms’ golden spores. A medallion holds a few of them, their gentle light accompanying the traveller."
     },
     "royaume_des_spores_celestes": {
-      "title": "The Skyspore Kingdom",
+      "title": "The Celestial Spores",
       "story": "Weightless mushrooms travel from cloud to cloud. Their little parasols do not keep out the rain: they teach dreams to fly."
     },
     "tempete_ecarlate": {
@@ -261,7 +261,7 @@
       "story": "The palms wear fringes of snow beneath the aurora. A bracelet woven from light keeps the colours of this impossible night around your wrist."
     },
     "vestiges_celestes": {
-      "title": "The Celestial Remains",
+      "title": "The Eternal Remains",
       "story": "The stairways still climb, even where the palaces have vanished. A mosaic fragment shows a star: perhaps the address of those who once lived here."
     },
     "mer_figee": {
@@ -384,7 +384,8 @@
     "title": "The traveller’s guide",
     "departure": "It all begins in this suitcase. Open it to prepare your journey.",
     "exploration": "Tap or click in the landscape to try to solve its mystery. Watch how it responds: experimenting is free.",
-    "souvenir": "Find your souvenirs in the journal. You can try using some of them in other worlds there. They stay in your collection.",
+    "souvenir": "Your first souvenir is safe in the journal. You can revisit it whenever you like.",
+    "offering": "One of your souvenirs has a little farther to travel! Open the pouch on a journal entry, choose a souvenir, and touch the illustration.",
     "continue": "Fold away",
     "skip": "Travel without tips",
     "close": "Close the guide",

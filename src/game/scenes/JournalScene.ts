@@ -8,7 +8,7 @@ import { drawNotebook, notebookLayout } from '../ui/notebook';
 import { bookBusy, captureJournal, openJournalCover, turnJournalPage } from '../ui/notebookMotion';
 import type { PageDirection } from '../ui/notebookMotion';
 import { AdventureControls } from '../ui/adventureMap';
-import { travelTutorial } from '../ui/travelTutorial';
+import { offeringTravelTip, travelTutorial } from '../ui/travelTutorial';
 
 type Control = { name: string; action: () => void };
 
@@ -168,5 +168,7 @@ export class JournalScene extends Phaser.Scene {
       : notice, progressStore.persistent ? 11 : 10, b.width - 40).setName('journal-page-number');
     this.game.canvas.setAttribute('aria-description', progressText + '. ' + notice);
     if (this.helpOpen) travelTutorial(this, this.helpControls, 'review', () => { this.helpOpen = false; this.render(); });
+    else offeringTravelTip(this, () => this.render(), (name, label, x, y, width, action) =>
+      this.button(x, y, width, 34, { name, label, action, stationery: true, fontSize: 12 }));
   }
 }

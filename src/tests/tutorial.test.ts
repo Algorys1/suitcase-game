@@ -3,6 +3,26 @@ import { decodeProgress, ProgressStore, tutorialSteps } from '../services/storag
 import { createSession } from '../domain/session';
 
 describe('conseils de voyage persistants', () => {
+  it('detects the first available offering in either discovery order', () => {
+    for (const worlds of [['jardins_de_gemmes'], ['jardins_de_gemmes', 'marais_des_lucioles']]) {
+      let value = JSON.stringify({ schemaVersion: 1, language: 'fr', discoveredDestinationIds: worlds,
+        pendingSouvenirIds: ['jardins_de_gemmes'] });
+      const storage = { getItem: () => value, setItem: (_key: string, next: string) => { value = next; } };
+      const store = new ProgressStore(() => storage);
+      expect(store.hasAvailableOffering()).toBe(false);
+      store.touchExploration('jardins_de_gemmes', 0);
+      store.touchExploration('jardins_de_gemmes', 1);
+      expect(store.hasAvailableOffering()).toBe(worlds.length === 2);
+      store.discover('marais_des_lucioles');
+      expect(store.hasAvailableOffering()).toBe(true);
+      expect(store.offerSouvenir('jardins_de_gemmes', 'mycelia')).toBe(false);
+      store.acknowledgeTutorial('offering');
+      expect(new ProgressStore(() => storage).read().tutorialSeen).toEqual(['offering']);
+      expect(store.offerSouvenir('jardins_de_gemmes', 'marais_des_lucioles')).toBe(true);
+      expect(store.hasAvailableOffering()).toBe(false);
+    }
+  });
+
   it('filtre les valeurs invalides sans toucher aux anciennes collections', () => {
     const base = { schemaVersion: 1, language: 'en', discoveredDestinationIds: ['mycelia'] };
     expect(decodeProgress(JSON.stringify(base))).toEqual(base);

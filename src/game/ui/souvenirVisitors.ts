@@ -1,6 +1,7 @@
-﻿import Phaser from 'phaser';
+import Phaser from 'phaser';
 import { progressStore } from '../../services/storage';
 import type { WorldFrame } from './pilotWorlds';
+import { animateAxolotl } from './axolotlVisitor';
 import { animateDragon } from './dragonVisitor';
 import { animateGriffin } from './griffinVisitor';
 import { animateYeti } from './yetiVisitor';
@@ -149,8 +150,10 @@ export function preloadHomeVisitors(scene: Phaser.Scene): void {
     progress.welcomedPalaceVisitor ? 'yeti-resident' : '',
     progress.welcomedVestigesVisitor ? 'griffin-resident' : '',
     progress.welcomedKingdomVisitor ? 'dragon-resident' : '',
+    progress.welcomedRuinsVisitor ? 'axolotl-resident' : '',
     progress.welcomedReefVisitor ? 'octopus-resident' : '',
     progress.welcomedEmpireVisitor ? 'fennec-resident' : '',
+    ...(progress.welcomedRuinsVisitor ? ['axolotl-gills'] : []),
     ...(progress.welcomedVestigesVisitor ? ['griffin-wings'] : []),
     ...(progress.welcomedObservatoryVisitor ? ['owl-resident', 'owl-resident-wings'] : []),
     ...(progress.welcomedSeaVisitor ? ['sea-resident', 'sea-resident-clap'] : [])].filter(Boolean)) {
@@ -159,8 +162,9 @@ export function preloadHomeVisitors(scene: Phaser.Scene): void {
   }
 }
 
-/** Visitors follow the painted luggage, above the portrait menu and beside the landscape menu. */
-export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle): void {
+/** Walks around the luggage and onto the clear areas of the departure table. */
+export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle,
+  menu: { menuRight: number; footerBottom: number }): void {
   const progress = progressStore.read(), { width, height } = scene.scale;
   const landscape = width >= 600;
   const ids = [progress.awakenedMycelia ? 'mycelia-resident' : '',
@@ -173,32 +177,45 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     progress.welcomedPalaceVisitor ? 'yeti-resident' : '',
     progress.welcomedVestigesVisitor ? 'griffin-resident' : '',
     progress.welcomedKingdomVisitor ? 'dragon-resident' : '',
+    progress.welcomedRuinsVisitor ? 'axolotl-resident' : '',
     progress.welcomedReefVisitor ? 'octopus-resident' : ''].filter(Boolean);
   if (!art.width || !art.height) return;
   type Stop = readonly [x: number, y: number, gesture?: 'slide' | 'pause'];
+  const edgeInset = landscape ? 27 : 24;
+  const tableLeft = (landscape ? menu.menuRight + edgeInset : edgeInset) - art.left;
+  const tableRight = width - edgeInset - art.left;
+  const leftEdge = tableLeft / art.width, rightEdge = tableRight / art.width;
+  const lowerEdge = Math.min((height - (landscape ? 53 : 197) - art.top) / art.height, 1.22);
+  const upperEdge = (Math.max(landscape ? 53 : art.top + 40, art.top - 5) - art.top) / art.height;
+  const lowerWalk = landscape && height - 8 - menu.footerBottom >= 53;
   const routes: Record<string, { stops: readonly Stop[]; duration: number; hop: number }> = {
-    'mycelia-resident': { stops: [[0.15, 0.91], [0.50, 0.91], [0.82, 0.86, 'pause'],
-      [0.82, 0.86], [0.51, 0.87], [0.18, 0.82]], duration: 16000, hop: 0.05 },
-    'forest-resident': { stops: [[0.78, 0.87], [0.92, 0.67], [0.80, 0.38],
-      [0.65, 0.32], [0.80, 0.60], [0.89, 0.86]], duration: 12700, hop: 0.17 },
-    'city-resident': { stops: [[0.52, 0.20], [0.26, 0.24], [landscape ? -0.17 : 0.19, 0.22],
-      [0.18, 0.45], [0.39, 0.51], [0.62, 0.42], [0.70, 0.26]], duration: 17400, hop: 0.09 },
-    'sea-resident': { stops: [[0.11, 0.91], [0.33, 0.87, 'pause'], [0.33, 0.87],
-      [0.25, 0.70], [0.18, 0.62, 'slide']], duration: 14500, hop: 0 },
-    'dragon-resident': { stops: [[0.30, 0.52], [0.42, 0.57], [0.54, 0.52, 'pause'],
-      [0.54, 0.52], [0.45, 0.48]], duration: 13300, hop: 0.07 },
-    'griffin-resident': { stops: [[0.54, 0.44], [0.72, 0.48], [0.88, 0.58, 'pause'],
-      [0.88, 0.58], [0.71, 0.52]], duration: 14800, hop: 0.13 },
-    'yeti-resident': { stops: [[0.64, 0.61], [0.74, 0.64], [0.82, 0.60, 'pause'],
-      [0.82, 0.60], [0.72, 0.63]], duration: 13900, hop: 0.04 },
-    'frog-resident': { stops: [[0.29, 0.69], [0.42, 0.72], [0.52, 0.70, 'pause'],
-      [0.52, 0.70], [0.33, 0.72]], duration: 11900, hop: 0.16 },
-    'octopus-resident': { stops: [[0.41, 0.91], [0.55, 0.87], [0.71, 0.88], [0.76, 0.95, 'pause'],
-      [0.76, 0.95], [0.56, 0.97]], duration: 11300, hop: 0 },
-    'fennec-resident': { stops: [[0.62, 0.94], [0.81, 0.95], [0.92, 0.78, 'pause'],
-      [0.92, 0.78], [0.76, 0.73], [0.52, 0.82]], duration: 10200, hop: 0.11 },
-    'owl-resident': { stops: [[0.86, 0.20], [0.67, 0.08], [0.43, 0.16, 'pause'],
-      [0.43, 0.16], [0.63, 0.29]], duration: 13300, hop: 0.035 },
+    'mycelia-resident': { stops: [[leftEdge, 0.58], [leftEdge, 0.81], [0.14, lowerEdge, 'pause'],
+      [0.14, lowerEdge], [0.35, 0.81], [0.12, 0.67]], duration: 16500, hop: 0.05 },
+    'forest-resident': { stops: [[rightEdge, 0.50], [rightEdge, 0.80], [0.80, lowerEdge],
+      [0.61, 0.87, 'pause'], [0.61, 0.87], [0.80, 0.61]], duration: 15900, hop: 0.17 },
+    'city-resident': { stops: [[0.17, 0.22], [leftEdge, upperEdge], [leftEdge, 0.42],
+      [0.31, 0.52], [0.56, 0.34], [0.39, 0.22]], duration: 17400, hop: 0.09 },
+    'sea-resident': { stops: [[0.22, lowerEdge], [0.40, lowerEdge, 'pause'], [0.40, lowerEdge],
+      [0.51, 0.88], [0.35, 0.80, 'slide']], duration: 14900, hop: 0 },
+    'axolotl-resident': { stops: [[0.34, 0.62], [0.22, 0.79], [0.35, lowerEdge, 'pause'],
+      [0.35, lowerEdge], [0.47, 0.82], [0.47, 0.65]], duration: 18400, hop: 0 },
+    'dragon-resident': { stops: [[0.42, 0.50], [0.57, 0.34], [0.76, upperEdge + 0.10, 'pause'],
+      [0.76, upperEdge + 0.10], [0.57, 0.21], [0.35, 0.32]], duration: 15500, hop: 0.07 },
+    'griffin-resident': { stops: [[0.57, 0.70], [0.79, 0.66], [rightEdge, 0.30, 'pause'],
+      [rightEdge, 0.30], [0.70, 0.42], [0.53, 0.56]], duration: 16300, hop: 0.13 },
+    'yeti-resident': { stops: [[0.81, 0.86], [rightEdge, lowerEdge], [rightEdge, 0.65, 'pause'],
+      [rightEdge, 0.65], [0.72, 0.59], [0.69, 0.76]], duration: 17100, hop: 0.04 },
+    'frog-resident': { stops: [[0.08, 0.79], [leftEdge, 0.66], [leftEdge, 0.36, 'pause'],
+      [leftEdge, 0.36], [0.25, 0.44], [0.30, 0.66]], duration: 15100, hop: 0.16 },
+    'octopus-resident': { stops: [[0.53, lowerEdge], [0.69, lowerEdge], [rightEdge, 0.95],
+      [0.84, 0.83, 'pause'], [0.84, 0.83], [0.62, 0.88]], duration: 14900, hop: 0 },
+    'fennec-resident': { stops: lowerWalk
+      ? [[0.02, 0.99], [0.04, lowerEdge], [leftEdge, lowerEdge], [(width * 0.16 - art.left) / art.width, (height - 8 - art.top) / art.height, 'pause'],
+        [(width * 0.16 - art.left) / art.width, (height - 8 - art.top) / art.height], [leftEdge, (height - 8 - art.top) / art.height]]
+      : [[0.19, 0.67], [leftEdge, 0.89], [0.23, lowerEdge, 'pause'],
+        [0.23, lowerEdge], [0.47, 0.87], [0.33, 0.72]], duration: 17800, hop: 0.11 },
+    'owl-resident': { stops: [[0.55, upperEdge], [0.33, upperEdge + 0.02], [0.13, upperEdge + 0.06, 'pause'],
+      [0.13, upperEdge + 0.06], [0.36, 0.25], [0.59, 0.25]], duration: 14800, hop: 0.035 },
   };
   ids.forEach((id, index) => {
     const key = `adventure-${id}`;
@@ -209,9 +226,11 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     const sizeFactor = id === 'frog-resident' ? 0.80 : id === 'sea-resident' || id === 'owl-resident' ? 0.92 : 1;
     visitor.setScale(sizeFactor * Math.min(landscape ? 58 : 48, height * 0.15, art.height * 0.29) / visitor.height);
     const size = visitor.displayHeight;
-    const restX = art.left + art.width * (0.15 + (ids.length === 1 ? 0.48 : index * 0.73 / (ids.length - 1)));
-    const restY = art.top + art.height * 0.91;
-    visitor.setPosition(restX, restY);
+    const inset = Math.max(edgeInset, visitor.displayWidth * 0.55);
+    const keepOnTable = (x: number) => Phaser.Math.Clamp(x, inset, width - inset);
+    const [restU, restV] = route[0]!;
+    const restX = keepOnTable(art.left + art.width * restU);
+    const restY = art.top + art.height * restV;
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let roam: Phaser.Tweens.Tween | undefined;
     let start: Phaser.Time.TimerEvent | undefined;
@@ -224,7 +243,7 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       const paused = gesture === 'pause';
       const blend = sliding ? t * t : (1 - Math.cos(t * Math.PI)) / 2;
       const hop = sliding || paused ? 0 : Math.abs(Math.sin(t * Math.PI * 4)) * size * path.hop;
-      const x = art.left + art.width * Phaser.Math.Linear(u, nextU, blend);
+      const x = keepOnTable(art.left + art.width * Phaser.Math.Linear(u, nextU, blend));
       const y = art.top + art.height * Phaser.Math.Linear(v, nextV, blend) - hop;
       visitor.setPosition(x, y);
       if (id !== 'owl-resident') visitor.setAngle(sliding ? -14 * Math.sin(Math.PI * t)
@@ -234,14 +253,15 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       start?.remove(); roam?.stop();
       visitor.setPosition(restX, restY).setAngle(0);
       if (motion.matches) return;
-      const offset = index * route.length / ids.length;
+      const offset = index * 0.61 % route.length;
       place(offset);
-      start = scene.time.delayedCall(450 + index * 650, () => {
+      start = scene.time.delayedCall(450 + index * 210, () => {
         roam = scene.tweens.addCounter({ from: 0, to: route.length, duration: path.duration,
           repeat: -1, onUpdate: tween => place(((tween.getValue() ?? 0) + offset) % route.length) });
       });
     };
     change();
+    if (id === 'axolotl-resident') animateAxolotl(scene, visitor);
     if (id === 'dragon-resident') animateDragon(scene, visitor);
     if (id === 'griffin-resident') animateGriffin(scene, visitor);
     if (id === 'yeti-resident') animateYeti(scene, visitor);

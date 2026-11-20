@@ -10,9 +10,10 @@ Refonte autorisée après la proposition de premier voyage accompagné. Impléme
 - Arrivée : note dans la marge, à la place du texte d'histoire jusqu'à repli, distinguant découverte du monde et exploration facultative.
 - Exploration : note d'ambiance dans la marge ; aucune cible, quantité, solution ou nature de souvenir révélée. Le paysage reste manipulable, avec curseur normal.
 - Premier souvenir : note de conservation dans la marge, après la séquence de collecte ; le souvenir reste visible. Mycélia attend aussi la fin de l'envol.
+- Première offrande possible : dès qu’un souvenir collecté peut être offert à une escale déjà découverte, le prochain passage sur la carte ou le sommaire du carnet présente la pochette. Le feuillet reste général et n’identifie ni le souvenir ni l’escale. Son affichage est enregistré dans `tutorialSeen`.
 - Zéro charge : note sur les visites encore possibles et le carnet permanent. L'itinéraire réserve temporairement la place du papier, puis reprend son cadrage habituel au repli.
 
-Les notes restent refermables immédiatement. « Voyager sans conseils » acquitte les sept étapes. Le champ optionnel `tutorialSeen` conserve les mêmes trois anciens identifiants et accueille quatre nouveaux ; aucune découverte ni langue effacée. Une ancienne sauvegarde à trois conseils vus conserve ces acquis et peut découvrir les nouvelles explications.
+Les notes restent refermables immédiatement. « Voyager sans conseils » acquitte les huit étapes. Le champ optionnel `tutorialSeen` conserve les conseils déjà vus, y compris lors du chargement d’une sauvegarde antérieure.
 
 ## Présentation et accès
 

@@ -280,7 +280,7 @@ export function drawAdventureMap(scene: Phaser.Scene, session: SessionState,
       const departure = mapDeparture(w, h, session);
       drawClosedSuitcase(scene, point.x, point.y - departure.height / 2, departure.width, departure.height);
       scene.children.getByName('suitcase-closed-art')?.setName('next-suitcase-art');
-      mapText(scene, point.x, point.y + departure.height / 2 + 15, route.length ? copy.nextStep : copy.firstStep,
+      if (route.length === 0) mapText(scene, point.x, point.y + departure.height / 2 + 15, copy.firstStep,
         portrait || short ? 10 : 12, portrait ? 100 : 150, '#8a7251').setName('next-step-label');
       controls?.add('next-world', point.x, point.y, Math.max(48, departure.width),
         Math.max(48, departure.height), () => onDepart?.(), true);

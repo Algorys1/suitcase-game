@@ -1,3 +1,6 @@
+import { drawGriffinVisitor } from '../ui/griffinVisitor';
+import { drawYetiVisitor } from '../ui/yetiVisitor';
+import { drawFrogVisitor } from '../ui/frogVisitor';
 import { drawOctopusVisitor } from '../ui/octopusVisitor';
 import { drawFennecVisitor } from '../ui/fennecVisitor';
 import { drawCollectedAtmosphere } from '../ui/collectedAtmosphere';
@@ -396,6 +399,9 @@ export class ExplorationScene extends Phaser.Scene {
     if (this.id === 'foret_du_silence') drawForestVisitor(this, stage.art);
     if (this.id === 'cite_immobile') drawCityVisitor(this, stage.art);
     if (this.id === 'recif_de_verre') drawOctopusVisitor(this, stage.art);
+    if (this.id === 'marais_des_lucioles') drawFrogVisitor(this, stage.art);
+    if (this.id === 'palais_de_givre') drawYetiVisitor(this, stage.art);
+    if (this.id === 'vestiges_celestes') drawGriffinVisitor(this, stage.art);
     if (this.id === 'empire_des_sables') drawFennecVisitor(this, stage.art);
     if (this.id === 'observatoire_des_etoiles') drawOwlVisitor(this, stage.art);
     if (this.id === 'mer_figee') drawSeaVisitor(this, stage.art);

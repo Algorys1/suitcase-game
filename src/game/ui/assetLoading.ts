@@ -69,6 +69,23 @@ export function queueWorldAssets(scene: Phaser.Scene, ids: readonly string[], ma
       scene.load.image('adventure-octopus-resident', import.meta.env.BASE_URL + 'assets/adventure/octopus-resident.webp');
     if (progressStore.read().welcomedReefVisitor) preloadSouvenirs(scene, ['grottes_sporiferes']);
   }
+  if (ids.includes('marais_des_lucioles')) {
+    if (!scene.textures.exists('adventure-frog-resident'))
+      scene.load.image('adventure-frog-resident', import.meta.env.BASE_URL + 'assets/adventure/frog-resident.webp');
+    if (progressStore.read().welcomedMarshVisitor) preloadSouvenirs(scene, ['jardins_de_gemmes']);
+  }
+  if (ids.includes('palais_de_givre')) {
+    if (!scene.textures.exists('adventure-yeti-resident'))
+      scene.load.image('adventure-yeti-resident', import.meta.env.BASE_URL + 'assets/adventure/yeti-resident.webp');
+    if (progressStore.read().welcomedPalaceVisitor) preloadSouvenirs(scene, ['atoll_boreal']);
+  }
+  if (ids.includes('vestiges_celestes')) {
+    if (!scene.textures.exists('adventure-griffin-resident'))
+      scene.load.image('adventure-griffin-resident', import.meta.env.BASE_URL + 'assets/adventure/griffin-resident.webp');
+    if (!scene.textures.exists('adventure-griffin-wings'))
+      scene.load.image('adventure-griffin-wings', import.meta.env.BASE_URL + 'assets/adventure/griffin-wings.webp');
+    if (progressStore.read().welcomedVestigesVisitor) preloadSouvenirs(scene, ['tempete_ecarlate']);
+  }
   preloadAdventureArt(scene, ids, map);
   if (map) {
     const session = (scene.sys.settings.data as { session?: SessionState } | undefined)?.session

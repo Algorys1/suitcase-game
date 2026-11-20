@@ -1,3 +1,6 @@
+import { drawGriffinVisitor } from './griffinVisitor';
+import { drawYetiVisitor } from './yetiVisitor';
+import { drawFrogVisitor } from './frogVisitor';
 import { drawOctopusVisitor } from './octopusVisitor';
 import { drawFennecVisitor } from './fennecVisitor';
 import { drawCollectedAtmosphere } from './collectedAtmosphere';
@@ -100,6 +103,18 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
       { left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
         width: picture.displayWidth, height: picture.displayHeight }, progressStore.explorationSteps('observatoire_des_etoiles').length === 2));
     if (destination.id === 'recif_de_verre') objects.push(...drawOctopusVisitor(scene, {
+      left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+      width: picture.displayWidth, height: picture.displayHeight,
+    }));
+    if (destination.id === 'marais_des_lucioles') objects.push(...drawFrogVisitor(scene, {
+      left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+      width: picture.displayWidth, height: picture.displayHeight,
+    }));
+    if (destination.id === 'palais_de_givre') objects.push(...drawYetiVisitor(scene, {
+      left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+      width: picture.displayWidth, height: picture.displayHeight,
+    }));
+    if (destination.id === 'vestiges_celestes') objects.push(...drawGriffinVisitor(scene, {
       left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
       width: picture.displayWidth, height: picture.displayHeight,
     }));

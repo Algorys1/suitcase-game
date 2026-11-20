@@ -1,3 +1,6 @@
+import { drawGriffinVisitor } from './griffinVisitor';
+import { drawYetiVisitor } from './yetiVisitor';
+import { drawFrogVisitor } from './frogVisitor';
 import { drawOctopusVisitor } from './octopusVisitor';
 import { drawFennecVisitor } from './fennecVisitor';
 import { drawCollectedAtmosphere } from './collectedAtmosphere';
@@ -123,6 +126,12 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
     objects.push(...drawOwlVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'recif_de_verre' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawOctopusVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
+  if (id === 'marais_des_lucioles' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawFrogVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
+  if (id === 'palais_de_givre' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawYetiVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
+  if (id === 'vestiges_celestes' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawGriffinVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'empire_des_sables' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawFennecVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'faille_des_contraires' && scene.sys.settings.key !== 'exploration')

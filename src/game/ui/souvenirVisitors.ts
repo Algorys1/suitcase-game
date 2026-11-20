@@ -1,6 +1,9 @@
 ﻿import Phaser from 'phaser';
 import { progressStore } from '../../services/storage';
 import type { WorldFrame } from './pilotWorlds';
+import { animateGriffin } from './griffinVisitor';
+import { animateYeti } from './yetiVisitor';
+import { animateFrog } from './frogVisitor';
 import { animateOctopus } from './octopusVisitor';
 import { animateFennec } from './fennecVisitor';
 import { animateOwl } from './owlVisitor';
@@ -141,8 +144,12 @@ export function preloadHomeVisitors(scene: Phaser.Scene): void {
   for (const id of [progress.awakenedMycelia ? 'mycelia-resident' : '',
     progress.welcomedForestVisitor ? 'forest-resident' : '',
     progress.welcomedCityVisitor ? 'city-resident' : '',
+    progress.welcomedMarshVisitor ? 'frog-resident' : '',
+    progress.welcomedPalaceVisitor ? 'yeti-resident' : '',
+    progress.welcomedVestigesVisitor ? 'griffin-resident' : '',
     progress.welcomedReefVisitor ? 'octopus-resident' : '',
     progress.welcomedEmpireVisitor ? 'fennec-resident' : '',
+    ...(progress.welcomedVestigesVisitor ? ['griffin-wings'] : []),
     ...(progress.welcomedObservatoryVisitor ? ['owl-resident', 'owl-resident-wings'] : []),
     ...(progress.welcomedSeaVisitor ? ['sea-resident', 'sea-resident-clap'] : [])].filter(Boolean)) {
     if (!scene.textures.exists(`adventure-${id}`)) scene.load.image(`adventure-${id}`,
@@ -160,6 +167,9 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     progress.welcomedSeaVisitor ? 'sea-resident' : '',
     progress.welcomedObservatoryVisitor ? 'owl-resident' : '',
     progress.welcomedEmpireVisitor ? 'fennec-resident' : '',
+    progress.welcomedMarshVisitor ? 'frog-resident' : '',
+    progress.welcomedPalaceVisitor ? 'yeti-resident' : '',
+    progress.welcomedVestigesVisitor ? 'griffin-resident' : '',
     progress.welcomedReefVisitor ? 'octopus-resident' : ''].filter(Boolean);
   if (!art.width || !art.height) return;
   type Stop = readonly [x: number, y: number, gesture?: 'slide' | 'pause'];
@@ -172,6 +182,12 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       [0.18, 0.45], [0.39, 0.51], [0.62, 0.42], [0.70, 0.26]], duration: 17400, hop: 0.09 },
     'sea-resident': { stops: [[0.11, 0.91], [0.33, 0.87, 'pause'], [0.33, 0.87],
       [0.25, 0.70], [0.18, 0.62, 'slide']], duration: 14500, hop: 0 },
+    'griffin-resident': { stops: [[0.54, 0.44], [0.72, 0.48], [0.88, 0.58, 'pause'],
+      [0.88, 0.58], [0.71, 0.52]], duration: 14800, hop: 0.13 },
+    'yeti-resident': { stops: [[0.64, 0.61], [0.74, 0.64], [0.82, 0.60, 'pause'],
+      [0.82, 0.60], [0.72, 0.63]], duration: 13900, hop: 0.04 },
+    'frog-resident': { stops: [[0.29, 0.69], [0.42, 0.72], [0.52, 0.70, 'pause'],
+      [0.52, 0.70], [0.33, 0.72]], duration: 11900, hop: 0.16 },
     'octopus-resident': { stops: [[0.41, 0.91], [0.55, 0.87], [0.71, 0.88], [0.76, 0.95, 'pause'],
       [0.76, 0.95], [0.56, 0.97]], duration: 11300, hop: 0 },
     'fennec-resident': { stops: [[0.62, 0.94], [0.81, 0.95], [0.92, 0.78, 'pause'],
@@ -185,7 +201,7 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     if (!path || !scene.textures.exists(key)) return;
     const route = path.stops;
     const visitor = scene.add.image(0, 0, key).setOrigin(0.5, 1).setName(`home-visitor-${id}`);
-    const sizeFactor = id === 'sea-resident' || id === 'owl-resident' ? 0.92 : 1;
+    const sizeFactor = id === 'frog-resident' ? 0.80 : id === 'sea-resident' || id === 'owl-resident' ? 0.92 : 1;
     visitor.setScale(sizeFactor * Math.min(landscape ? 58 : 48, height * 0.15, art.height * 0.29) / visitor.height);
     const size = visitor.displayHeight;
     const restX = art.left + art.width * (0.15 + (ids.length === 1 ? 0.48 : index * 0.73 / (ids.length - 1)));
@@ -221,6 +237,9 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       });
     };
     change();
+    if (id === 'griffin-resident') animateGriffin(scene, visitor);
+    if (id === 'yeti-resident') animateYeti(scene, visitor);
+    if (id === 'frog-resident') animateFrog(scene, visitor);
     if (id === 'octopus-resident') animateOctopus(scene, visitor);
     if (id === 'fennec-resident') animateFennec(scene, visitor);
     if (id === 'owl-resident') animateOwl(scene, visitor);

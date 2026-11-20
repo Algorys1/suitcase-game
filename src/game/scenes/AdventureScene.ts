@@ -71,7 +71,7 @@ export class AdventureScene extends Phaser.Scene {
       () => approachJournal(this, opening => this.scene.start('journal', { opening, returnTo: 'adventure' })));
     if (this.session.charges > 0 && width >= 600
       && (height >= 450 || this.session.visitedDestinationIds.length + this.session.voidTrips <= 6)) {
-      mapText(this, width / 2, height - 70,
+      mapText(this, width / 2, height - (height < 450 ? 43 : 54),
         copy.mapHelp, height < 450 ? 13 : 15,
         width - 270, '#65452e').setFontStyle('bold').setName('map-help');
     }

@@ -25,6 +25,9 @@ export type Progress = {
   welcomedObservatoryVisitor?: boolean;
   welcomedEmpireVisitor?: boolean;
   welcomedReefVisitor?: boolean;
+  welcomedMarshVisitor?: boolean;
+  welcomedPalaceVisitor?: boolean;
+  welcomedVestigesVisitor?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
   sanctuaryPuzzle?: SanctuaryPuzzle;
@@ -84,6 +87,15 @@ export function decodeProgress(serialized: string | null): Progress {
       ...('welcomedReefVisitor' in value && value.welcomedReefVisitor === true
         && discoveredDestinationIds.includes('recif_de_verre') && discoveredDestinationIds.includes('grottes_sporiferes')
         && !pending.includes('grottes_sporiferes') ? { welcomedReefVisitor: true } : {}),
+      ...('welcomedMarshVisitor' in value && value.welcomedMarshVisitor === true
+        && discoveredDestinationIds.includes('marais_des_lucioles') && discoveredDestinationIds.includes('jardins_de_gemmes')
+        && !pending.includes('jardins_de_gemmes') ? { welcomedMarshVisitor: true } : {}),
+      ...('welcomedPalaceVisitor' in value && value.welcomedPalaceVisitor === true
+        && discoveredDestinationIds.includes('palais_de_givre') && discoveredDestinationIds.includes('atoll_boreal')
+        && !pending.includes('atoll_boreal') ? { welcomedPalaceVisitor: true } : {}),
+      ...('welcomedVestigesVisitor' in value && value.welcomedVestigesVisitor === true
+        && discoveredDestinationIds.includes('vestiges_celestes') && discoveredDestinationIds.includes('tempete_ecarlate')
+        && !pending.includes('tempete_ecarlate') ? { welcomedVestigesVisitor: true } : {}),
       ...('welcomedEmpireVisitor' in value && value.welcomedEmpireVisitor === true
         && discoveredDestinationIds.includes('empire_des_sables') && discoveredDestinationIds.includes('temple_oublie')
         && !pending.includes('temple_oublie') ? { welcomedEmpireVisitor: true } : {}),
@@ -289,6 +301,30 @@ export class ProgressStore {
     if (progress.welcomedEmpireVisitor || !this.unlockedSouvenirIds().includes('temple_oublie')
       || !progress.discoveredDestinationIds.includes('empire_des_sables')) return false;
     this.save({ ...progress, welcomedEmpireVisitor: true });
+    return true;
+  }
+
+  offerGemFlower(): boolean {
+    const progress = this.read();
+    if (progress.welcomedMarshVisitor || !this.unlockedSouvenirIds().includes('jardins_de_gemmes')
+      || !progress.discoveredDestinationIds.includes('marais_des_lucioles')) return false;
+    this.save({ ...progress, welcomedMarshVisitor: true });
+    return true;
+  }
+
+  offerAuroraBracelet(): boolean {
+    const progress = this.read();
+    if (progress.welcomedPalaceVisitor || !this.unlockedSouvenirIds().includes('atoll_boreal')
+      || !progress.discoveredDestinationIds.includes('palais_de_givre')) return false;
+    this.save({ ...progress, welcomedPalaceVisitor: true });
+    return true;
+  }
+
+  offerBottledLightning(): boolean {
+    const progress = this.read();
+    if (progress.welcomedVestigesVisitor || !this.unlockedSouvenirIds().includes('tempete_ecarlate')
+      || !progress.discoveredDestinationIds.includes('vestiges_celestes')) return false;
+    this.save({ ...progress, welcomedVestigesVisitor: true });
     return true;
   }
 

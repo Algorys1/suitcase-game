@@ -52,6 +52,25 @@ export function addFrostBranches(scene: Phaser.Scene, controls: AdventureControl
   const reduced = reducedMotion(), lit = new Set(steps), busy = new Set<number>();
   const px = (x: number) => art.left + art.width * x;
   const py = (y: number) => art.top + art.height * y;
+  const lightRose = () => {
+    if (lit.size !== landings.length || scene.children.getByName('frost-rose-glint-0')) return;
+    // Follow the inner petals of the large rose on the right.
+    const petals = [[0.824, 0.495], [0.781, 0.526], [0.869, 0.556], [0.815, 0.592]] as const;
+    petals.forEach(([x, y], i) => {
+      const r = Math.max(2, art.width * (i === 0 ? 0.012 : 0.008));
+      const glint = scene.add.graphics().setPosition(px(x), py(y)).setName(`frost-rose-glint-${i}`)
+        .setBlendMode(Phaser.BlendModes.ADD).setAlpha(reduced ? 0.5 : 0.16);
+      glint.fillStyle(0xe4c5ff, 0.17).fillCircle(0, 0, r * 1.35)
+        .fillStyle(0xfff7ff, 0.95)
+        .fillTriangle(0, -r, -r * 0.23, 0, 0, r)
+        .fillTriangle(0, -r, r * 0.23, 0, 0, r)
+        .fillTriangle(-r * 0.7, 0, 0, -r * 0.23, r * 0.7, 0)
+        .fillTriangle(-r * 0.7, 0, 0, r * 0.23, r * 0.7, 0);
+      if (!reduced) scene.tweens.add({ targets: glint, alpha: 1, scale: { from: 0.65, to: 1 },
+        duration: 560, delay: i * 290, hold: 115, yoyo: true, repeat: -1, repeatDelay: 1900,
+        ease: 'Sine.InOut' });
+    });
+  };
   const light = (index: number) => {
     if (scene.children.getByName(`frost-pearl-${index}`)) return;
     const glow = scene.add.image(art.left, art.top, pearlPaint(scene, index)).setOrigin(0)
@@ -75,6 +94,7 @@ export function addFrostBranches(scene: Phaser.Scene, controls: AdventureControl
     });
   };
   steps.forEach(light);
+  lightRose();
   pilotTargets.palais_de_givre.forEach((branch, index) => {
     const w = Math.max(38, art.width * 0.13), h = Math.max(32, art.height * 0.095);
     const x = Phaser.Math.Clamp(px(branch.x), art.left + w / 2, art.left + art.width - w / 2);
@@ -85,7 +105,11 @@ export function addFrostBranches(scene: Phaser.Scene, controls: AdventureControl
       const landing = landings[index]!;
       const finish = () => {
         busy.delete(index); light(index);
-        if (!lit.has(index)) { lit.add(index); onWatered(index, px(landing.x), py(landing.y)); }
+        if (!lit.has(index)) {
+          lit.add(index);
+          lightRose();
+          onWatered(index, px(landing.x), py(landing.y));
+        }
       };
       if (reduced) { finish(); return; }
       // Faceted, translucent frozen drops fall with a small lateral drift, no targeting beam.

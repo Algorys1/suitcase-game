@@ -16,7 +16,7 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
   const frame = { left: bounds.x, top: bounds.y, width: bounds.width, height: bounds.height };
   // The spyglass has a generous rectangular target, including empty space above its shaft.
   // Residents painted in that space must receive the click before the instrument does.
-  for (const name of ['forest-visitor', 'city-visitor', 'sea-visitor', 'marsh-visitor', 'palace-visitor', 'vestiges-visitor']) {
+  for (const name of ['forest-visitor', 'city-visitor', 'sea-visitor', 'marsh-visitor', 'palace-visitor', 'vestiges-visitor', 'kingdom-visitor']) {
     const resident = scene.children.getByName(name);
     if (resident) scene.children.bringToTop(resident);
   }
@@ -26,6 +26,7 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
   if (destination === 'marais_des_lucioles' && progressStore.read().welcomedMarshVisitor) return;
   if (destination === 'palais_de_givre' && progressStore.read().welcomedPalaceVisitor) return;
   if (destination === 'vestiges_celestes' && progressStore.read().welcomedVestigesVisitor) return;
+  if (destination === 'royaume_des_spores_celestes' && progressStore.read().welcomedKingdomVisitor) return;
   if (destination === 'empire_des_sables' && progressStore.read().welcomedEmpireVisitor) return;
   if (destination === 'observatoire_des_etoiles' && progressStore.read().welcomedObservatoryVisitor) return;
   if (destination === 'mer_figee' && progressStore.read().welcomedSeaVisitor) return;
@@ -63,7 +64,8 @@ export function journalPouch(scene: Phaser.Scene, destination: string, refresh: 
       : destination === 'recif_de_verre' && selected === 'grottes_sporiferes' ? progressStore.offerLuminousGeode()
       : destination === 'marais_des_lucioles' && selected === 'jardins_de_gemmes' ? progressStore.offerGemFlower()
       : destination === 'palais_de_givre' && selected === 'atoll_boreal' ? progressStore.offerAuroraBracelet()
-      : destination === 'vestiges_celestes' && selected === 'tempete_ecarlate' ? progressStore.offerBottledLightning() : false;
+      : destination === 'vestiges_celestes' && selected === 'tempete_ecarlate' ? progressStore.offerBottledLightning()
+      : destination === 'royaume_des_spores_celestes' && selected === 'jungle_incandescente' ? progressStore.offerLanternFruit() : false;
     selected = undefined;
     target.disableInteractive();
     if (accepted) refresh();

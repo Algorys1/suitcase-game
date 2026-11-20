@@ -1,3 +1,4 @@
+import { drawDragonVisitor } from './dragonVisitor';
 import { drawGriffinVisitor } from './griffinVisitor';
 import { drawYetiVisitor } from './yetiVisitor';
 import { drawFrogVisitor } from './frogVisitor';
@@ -132,6 +133,8 @@ export function drawDestinationStage(scene: Phaser.Scene, id: string, session?: 
     objects.push(...drawYetiVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'vestiges_celestes' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawGriffinVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
+  if (id === 'royaume_des_spores_celestes' && scene.sys.settings.key !== 'exploration')
+    objects.push(...drawDragonVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'empire_des_sables' && scene.sys.settings.key !== 'exploration')
     objects.push(...drawFennecVisitor(scene, { left: artLeft, top: artUpper, width: artW, height: artH }));
   if (id === 'faille_des_contraires' && scene.sys.settings.key !== 'exploration')

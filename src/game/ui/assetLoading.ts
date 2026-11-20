@@ -86,6 +86,11 @@ export function queueWorldAssets(scene: Phaser.Scene, ids: readonly string[], ma
       scene.load.image('adventure-griffin-wings', import.meta.env.BASE_URL + 'assets/adventure/griffin-wings.webp');
     if (progressStore.read().welcomedVestigesVisitor) preloadSouvenirs(scene, ['tempete_ecarlate']);
   }
+  if (ids.includes('royaume_des_spores_celestes')) {
+    if (!scene.textures.exists('adventure-dragon-resident'))
+      scene.load.image('adventure-dragon-resident', import.meta.env.BASE_URL + 'assets/adventure/dragon-resident.webp');
+    if (progressStore.read().welcomedKingdomVisitor) preloadSouvenirs(scene, ['jungle_incandescente']);
+  }
   preloadAdventureArt(scene, ids, map);
   if (map) {
     const session = (scene.sys.settings.data as { session?: SessionState } | undefined)?.session

@@ -28,6 +28,7 @@ export type Progress = {
   welcomedMarshVisitor?: boolean;
   welcomedPalaceVisitor?: boolean;
   welcomedVestigesVisitor?: boolean;
+  welcomedKingdomVisitor?: boolean;
   pilotSteps?: PilotSteps;
   tutorialSeen?: TutorialStep[];
   sanctuaryPuzzle?: SanctuaryPuzzle;
@@ -96,6 +97,9 @@ export function decodeProgress(serialized: string | null): Progress {
       ...('welcomedVestigesVisitor' in value && value.welcomedVestigesVisitor === true
         && discoveredDestinationIds.includes('vestiges_celestes') && discoveredDestinationIds.includes('tempete_ecarlate')
         && !pending.includes('tempete_ecarlate') ? { welcomedVestigesVisitor: true } : {}),
+      ...('welcomedKingdomVisitor' in value && value.welcomedKingdomVisitor === true
+        && discoveredDestinationIds.includes('royaume_des_spores_celestes') && discoveredDestinationIds.includes('jungle_incandescente')
+        && !pending.includes('jungle_incandescente') ? { welcomedKingdomVisitor: true } : {}),
       ...('welcomedEmpireVisitor' in value && value.welcomedEmpireVisitor === true
         && discoveredDestinationIds.includes('empire_des_sables') && discoveredDestinationIds.includes('temple_oublie')
         && !pending.includes('temple_oublie') ? { welcomedEmpireVisitor: true } : {}),
@@ -325,6 +329,14 @@ export class ProgressStore {
     if (progress.welcomedVestigesVisitor || !this.unlockedSouvenirIds().includes('tempete_ecarlate')
       || !progress.discoveredDestinationIds.includes('vestiges_celestes')) return false;
     this.save({ ...progress, welcomedVestigesVisitor: true });
+    return true;
+  }
+
+  offerLanternFruit(): boolean {
+    const progress = this.read();
+    if (progress.welcomedKingdomVisitor || !this.unlockedSouvenirIds().includes('jungle_incandescente')
+      || !progress.discoveredDestinationIds.includes('royaume_des_spores_celestes')) return false;
+    this.save({ ...progress, welcomedKingdomVisitor: true });
     return true;
   }
 

@@ -1,6 +1,7 @@
 ﻿import Phaser from 'phaser';
 import { progressStore } from '../../services/storage';
 import type { WorldFrame } from './pilotWorlds';
+import { animateDragon } from './dragonVisitor';
 import { animateGriffin } from './griffinVisitor';
 import { animateYeti } from './yetiVisitor';
 import { animateFrog } from './frogVisitor';
@@ -147,6 +148,7 @@ export function preloadHomeVisitors(scene: Phaser.Scene): void {
     progress.welcomedMarshVisitor ? 'frog-resident' : '',
     progress.welcomedPalaceVisitor ? 'yeti-resident' : '',
     progress.welcomedVestigesVisitor ? 'griffin-resident' : '',
+    progress.welcomedKingdomVisitor ? 'dragon-resident' : '',
     progress.welcomedReefVisitor ? 'octopus-resident' : '',
     progress.welcomedEmpireVisitor ? 'fennec-resident' : '',
     ...(progress.welcomedVestigesVisitor ? ['griffin-wings'] : []),
@@ -170,6 +172,7 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
     progress.welcomedMarshVisitor ? 'frog-resident' : '',
     progress.welcomedPalaceVisitor ? 'yeti-resident' : '',
     progress.welcomedVestigesVisitor ? 'griffin-resident' : '',
+    progress.welcomedKingdomVisitor ? 'dragon-resident' : '',
     progress.welcomedReefVisitor ? 'octopus-resident' : ''].filter(Boolean);
   if (!art.width || !art.height) return;
   type Stop = readonly [x: number, y: number, gesture?: 'slide' | 'pause'];
@@ -182,6 +185,8 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       [0.18, 0.45], [0.39, 0.51], [0.62, 0.42], [0.70, 0.26]], duration: 17400, hop: 0.09 },
     'sea-resident': { stops: [[0.11, 0.91], [0.33, 0.87, 'pause'], [0.33, 0.87],
       [0.25, 0.70], [0.18, 0.62, 'slide']], duration: 14500, hop: 0 },
+    'dragon-resident': { stops: [[0.30, 0.52], [0.42, 0.57], [0.54, 0.52, 'pause'],
+      [0.54, 0.52], [0.45, 0.48]], duration: 13300, hop: 0.07 },
     'griffin-resident': { stops: [[0.54, 0.44], [0.72, 0.48], [0.88, 0.58, 'pause'],
       [0.88, 0.58], [0.71, 0.52]], duration: 14800, hop: 0.13 },
     'yeti-resident': { stops: [[0.64, 0.61], [0.74, 0.64], [0.82, 0.60, 'pause'],
@@ -237,6 +242,7 @@ export function drawHomeVisitors(scene: Phaser.Scene, art: Phaser.Geom.Rectangle
       });
     };
     change();
+    if (id === 'dragon-resident') animateDragon(scene, visitor);
     if (id === 'griffin-resident') animateGriffin(scene, visitor);
     if (id === 'yeti-resident') animateYeti(scene, visitor);
     if (id === 'frog-resident') animateFrog(scene, visitor);

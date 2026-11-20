@@ -30,6 +30,7 @@ export class JournalEntryScene extends Phaser.Scene {
     this.data.set('frog-arriving', welcome && id === 'marais_des_lucioles');
     this.data.set('yeti-arriving', welcome && id === 'palais_de_givre');
     this.data.set('griffin-arriving', welcome && id === 'vestiges_celestes');
+    this.data.set('dragon-arriving', welcome && id === 'royaume_des_spores_celestes');
     this.data.set('fennec-arriving', welcome && id === 'empire_des_sables');
     this.data.set('forest-visitor-arriving', welcome && id === 'foret_du_silence');
     this.data.set('city-visitor-arriving', welcome && id === 'cite_immobile');
@@ -57,7 +58,7 @@ export class JournalEntryScene extends Phaser.Scene {
       souvenir: souvenirForDestination(id, progressStore.read().discoveredDestinationIds),
       souvenirLocked: !progressStore.unlockedSouvenirIds().includes(id),
       decoratePostcard: () => journalPouch(this, id, () => this.scene.restart({ id, page, returnTo,
-        welcome: id === 'foret_du_silence' || id === 'cite_immobile' || id === 'mer_figee' || id === 'empire_des_sables' || id === 'recif_de_verre' || id === 'marais_des_lucioles' || id === 'palais_de_givre' || id === 'vestiges_celestes' })),
+        welcome: id === 'foret_du_silence' || id === 'cite_immobile' || id === 'mer_figee' || id === 'empire_des_sables' || id === 'recif_de_verre' || id === 'marais_des_lucioles' || id === 'palais_de_givre' || id === 'vestiges_celestes' || id === 'royaume_des_spores_celestes' })),
       buttons: [{ name: 'explore', label: texts.adventure.explore, spyglass: true,
         action: () => this.scene.start('exploration', { id, journalPage: page, returnTo }) },
       { name: 'back-to-journal', label: texts.notebook.backToContents, primary: true,

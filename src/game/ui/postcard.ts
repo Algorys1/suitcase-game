@@ -1,3 +1,4 @@
+import { drawDragonVisitor } from './dragonVisitor';
 import { drawGriffinVisitor } from './griffinVisitor';
 import { drawYetiVisitor } from './yetiVisitor';
 import { drawFrogVisitor } from './frogVisitor';
@@ -115,6 +116,10 @@ export function drawPostcard(scene: Phaser.Scene, x: number, y: number, width: n
       width: picture.displayWidth, height: picture.displayHeight,
     }));
     if (destination.id === 'vestiges_celestes') objects.push(...drawGriffinVisitor(scene, {
+      left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
+      width: picture.displayWidth, height: picture.displayHeight,
+    }));
+    if (destination.id === 'royaume_des_spores_celestes') objects.push(...drawDragonVisitor(scene, {
       left: picture.x - picture.displayWidth / 2, top: picture.y - picture.displayHeight / 2,
       width: picture.displayWidth, height: picture.displayHeight,
     }));
